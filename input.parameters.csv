@@ -1,0 +1,53 @@
+Input,Curtis Fig 2 Comb - calibration,DDT high,DDT high,DDT high,HCH high,HCH high,HCH high
+Calibration (100 default),100,100,100,100,100,100,100
+Number of generations ,160,1000,1000,1000,1000,1000,1000
+Collect fitness scores in matrix (1/0),1,1,1,1,1,1,1
+Export fitness scores matrix to .csv (1/0),0,0,0,0,0,0,0
+Frequency of R at locus 1,0.01,0.01,0.01,0.01,0.0001,0.00001,0.000001
+Frequency of R at locus 2,0.01,0.0001,0.00001,0.000001,0.01,0.01,0.01
+Recombination Rate,0.15,0.15,0.15,0.15,0.15,0.15,0.15
+"Exposure Males -,-",0.1,0.1,0.1,0.1,0.1,0.1,0.1
+"Exposure Males a,-",0,0,0,0,0,0,0
+"Exposure Males A,-",0,0,0,0,0,0,0
+"Exposure Males -,b",0,0,0,0,0,0,0
+"Exposure Males -,B",0,0,0,0,0,0,0
+"Exposure males a,b",0,0,0,0,0,0,0
+"Exposure Males A,B",0.9,0.9,0.9,0.9,0.9,0.9,0.9
+"Exposure Males A,b",0,0,0,0,0,0,0
+"Exposure Males a,B",0,0,0,0,0,0,0
+"Exposure Females -,-",0.1,0.1,0.1,0.1,0.1,0.1,0.1
+"Exposure Females a,-",0,0,0,0,0,0,0
+"Exposure Females A,-",0,0,0,0,0,0,0
+"Exposure Females -,b",0,0,0,0,0,0,0
+"Exposure Females -,B",0,0,0,0,0,0,0
+"Exposure Females a,b",0,0,0,0,0,0,0
+"Exposure Females A,B",0.9,0.9,0.9,0.9,0.9,0.9,0.9
+"Exposure Females A,b",0,0,0,0,0,0,0
+"Exposure Females a,B",0,0,0,0,0,0,0
+"Baseline fitness of SS1 in a,-",0,0,0,0,0,0,0
+"Baseline fitness of SS1 in A,-",0.73,0.73,0.73,0.73,0.73,0.73,0.73
+"Baseline fitness of SS2 in -,b",0,0,0,0,0,0,0
+"Baseline fitness of SS2 in -,B",1,1,1,1,1,1,1
+"Fitness of SS1 in -,-",1,1,1,1,1,1,1
+"Fitness of SS2 in -,-",1,1,1,1,1,1,1
+"Dominance coefficient L1 in -,-",0,0,0,0,0,0,0
+"Dominance coefficient L1 in a,-",0,0,0,0,0,0,0
+"Dominance coefficient L1 in A,-",0.17,0.17,0.17,0.17,0.17,0.17,0.17
+"Dominance coefficient L2 in -,-",0,0,0,0,0,0,0
+"Dominance coefficient L2 in -,b",0,0,0,0,0,0,0
+"Dominance coefficient L2 in -,B",0.0016,0.0016,0.0016,0.0016,0.0016,0.0016,0.0016
+Selection coefficient L1 in a,0,0,0,0,0,0,0
+Selection coefficient L1 in A,0.23,0.23,0.23,0.23,0.23,0.23,0.23
+Selection coefficient L2 in b,0,0,0,0,0,0,0
+Selection coefficient L2 in B,0.43,0.43,0.43,0.43,0.43,0.43,0.43
+"Fitness cost of R at L1 in -,-",0,0,0,0,0,0,0
+"Fitness cost of R at L2 in -,-",0,0,0,0,0,0,0
+"Niche -,- on (1/0)",1,1,1,1,1,1,1
+"Niche a,- on",0,0,0,0,0,0,0
+"Niche A,- on",0,0,0,0,0,0,0
+"Niche -,b on",0,0,0,0,0,0,0
+"Niche -,B on",0,0,0,0,0,0,0
+"Niche a,b on",0,0,0,0,0,0,0
+"Niche A,B on",1,1,1,1,1,1,1
+"Niche A,b on",0,0,0,0,0,0,0
+"Niche a,B on ",0,0,0,0,0,0,0

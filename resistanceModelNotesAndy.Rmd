@@ -1,0 +1,62 @@
+---
+title: "resistanceModelNotesAndy"
+output: html_document
+---
+
+Notes on insecticide resistance model for liverpool.
+andy south 27/1/15
+
+My first go at keeping notes like this as an rmarkdown file.
+
+**27/1/15**  7.5hrs
+
+Editing `malaria_code_andy2.r`, indenting functions etc.
+
+Much of the script from line 464 is setting up parameters for example runs.
+
+input[a,b] : a=parameter number and b=scenario number
+
+464         set input params
+1058-2716   run model
+2718        Actions needing full results.list (e.g. curtis plots use multiple scenarios) 
+
+edited bookmarks to navigate around the file in RStudio.
+
+**9/3/15** 4-5 1hr
+
+
+**10/3/15** 4.15 -
+
+```{r}
+listFunctions <- function(filename) {
+  temp.env <- new.env()
+  sys.source(filename, envir = temp.env)
+  functions <- lsf.str(envir=temp.env)
+  rm(temp.env)
+  return(functions)
+}
+
+listFunctions("malaria_code_andy.R")
+```
+
+So there are only 11 functions.
+
+I can create an initial github repo for the files from Beth (&this notes file)
+That means I will have version control for my initial restructuring. Later I may want to create a new repo for the reformatted code as a package.
+
+What to call the first repo ? resistance
+
+1. created repo on github
+1. created RStudio project from github repo
+
+
+
+
+### TO DO  
+
+1. create a Github repo and just put my edited file from Beth in to start
+1. create a readme.md file
+1. ? create an RStudio project for the initial version
+1. later, structure as R package, maybe move to a new github repo
+
+
