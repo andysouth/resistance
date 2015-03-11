@@ -10,7 +10,7 @@ My first go at keeping notes like this as an rmarkdown file.
 
 **27/1/15**  7.5hrs
 
-Editing `malaria_code_andy2.r`, indenting functions etc.
+Editing `malaria_code_andy.r`, indenting functions etc.
 
 Much of the script from line 464 is setting up parameters for example runs.
 
@@ -25,7 +25,7 @@ edited bookmarks to navigate around the file in RStudio.
 **9/3/15** 4-5 1hr
 
 
-**10/3/15** 4.15 -
+**10/3/15** 4.15 - 7.15 3hrs
 
 ```{r}
 listFunctions <- function(filename) {
@@ -36,10 +36,23 @@ listFunctions <- function(filename) {
   return(functions)
 }
 
-listFunctions("malaria_code_andy.R")
+listFunctions("malaria_code_fromBeth.R")
 ```
 
 So there are only 11 functions.
+
+allele.freq : function (mat)  
+curtis_f1 : function (nrelaxmat, relaxmat, gencol, r1col)  
+curtis_f2 : function (combmat, bmat, amat, gencol, r1col, r2col)  
+curtis_ld : function (resultsmat, relaxedmat, gencol, ldcol)  
+haplotype : function (mat)  
+HW : function (P, mat)  
+linkage : function (mat)  
+make.genotypemat : function (P_1, P_2)  
+make.matrix : function (mat, rnames)  
+singlealleleFrequency : function (locus, max_gen, results.list, input)  
+timetoFifty : function (locus, max_gen, results.list, input
+
 
 I can create an initial github repo for the files from Beth (&this notes file)
 That means I will have version control for my initial restructuring. Later I may want to create a new repo for the reformatted code as a package.
@@ -48,15 +61,22 @@ What to call the first repo ? resistance
 
 1. created repo on github
 1. created RStudio project from github repo
++ To get ssh push working.
++ RStudio Tools, Shell
++ git remote set-url origin git@github.com:AndySouth/resistance.git
+
+**11/3/15** 9.30
+
+moved my dropbox folder back to C.
+
 
 
 
 
 ### TO DO  
 
-1. create a Github repo and just put my edited file from Beth in to start
-1. create a readme.md file
-1. ? create an RStudio project for the initial version
+1. copy R functions out of `malaria_code_andy` into their own files in an R folder
+1. add roxygen documentation for functions
 1. later, structure as R package, maybe move to a new github repo
 
 
