@@ -18,6 +18,7 @@
 # calibration <- 100	## If inputting through a .csv, this will be overwritten by calibration row of input file
 
 #andy trying to run an inbuilt scenario
+tempDisabled <- TRUE
 #if( !tempDisabled ) input <- read.csv( "input.parameters.col1.csv", header=T, stringsAsFactors=F ) 
 
 
@@ -32,7 +33,7 @@ calibration <- 102
 
 ## Beth to run in built hard coded scenario to recreate curtis' plots
 params.csv <- FALSE
-produce.plots <- FALSE	## If true, will automatically produce the plots listed below and save to same directory as code is stored
+produce.plots <- TRUE	## If true, will automatically produce the plots listed below and save to same directory as code is stored
 ## could leave this line here, it should be overwritten later on. 
 if( !tempDisabled ) input <- read.csv( "input.parameters.csv", header=T, stringsAsFactors=F )
 ## And then select scenario here
@@ -84,28 +85,12 @@ calibration <- 1012
 # select.gen.f <- fs.f.SS1RS2 # set for male and female form
 
 
-#### FUNCTIONS TO RUN THE MODEL ####
-	
-
-
-
-
-
-### Plots ###
+#### FUNCTIONS TO RUN THE MODEL ###
 
 	
 
 
-# plot Linkage Disequilibrium over generations
-linkage <- function ( mat ){	
-  
-  par(pty="s") 		
-  LD <- mat[,4]	 ## set LD column as vector (m LD = f LD)	
-  gens <- mat[,1]									
-  plot( gens, LD, type="l", axes=T,						## Blank square 1,1 plot
-  	xlim=c(1,(max(gens))), ylim=c(min(LD),max(LD)),
-  	xlab="Generation", ylab="Linkage Disequilibrium (D)", main="Linkage disequilibrium over generations.")	
-}	
+
 
 
 ######## Recreates plots as in Curtis (1985) #########	
@@ -2391,7 +2376,7 @@ for (i in 1:ncol( input ) ){
   dev.off()
   
   # Plot of LD over time
-  genplot <- linkage( results.list[[i]] )
+  genplot <- plotlinkage( results.list[[i]] )
   # Saves plot into same directory as code documents
   dev.copy(png,(paste(i,'LD.png')))		## WARNING: this will overwrite every time, move or rename files! ##
   dev.off()
