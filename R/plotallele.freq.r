@@ -6,7 +6,7 @@
 
 #' @param mat results matrix
 #' 
-#' @return 
+#' @return list of plot components
 #' @export
 
 plotallele.freq <- function ( mat ){
