@@ -86,16 +86,6 @@ calibration <- 1012
 
 #### FUNCTIONS TO RUN THE MODEL ####
 	
-## Make matrix ##
-## Makes data.frame into a matrix with parameters as rownames, takes data frame as dat, 
-## and column in data frame containing parameters as rnames.
-## this produces NA generation errors due to coercing location column, this column of NA's is however removed.  
-make.matrix <- function(mat, rnames){
-	dat.m <- data.matrix(mat)				#converts to data.matrix
-	dat.m <- dat.m[ ,2:ncol(dat.m)]			#removes column of parameter names (will be NA's)
-	rownames(dat.m) <- rnames				#uses data in column of original data frame given by datlocs to rename matrix rows
-	return(dat.m)
-	}
 
 ## Function - HW
 ## Finds proportion of genotypes pp, pq and qq, given P (i.e. sqrt(pp))
