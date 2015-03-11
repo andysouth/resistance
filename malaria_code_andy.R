@@ -15,7 +15,8 @@
 
 #andy this allows me to disable bits that stop my file listing from working
 tempDisabled <- TRUE
-if( !tempDisabled ) setwd( "C:\\Dropbox\\Ian and Andy\\andy\\malaria\\")
+#if( !tempDisabled ) setwd( "C:\\Dropbox\\Ian and Andy\\andy\\malaria\\")
+
 
 #### INPUT PARAMETERS ####
 #Enter file name containing parameters before saving code document 
@@ -32,7 +33,7 @@ params.csv <- TRUE
 produce.plots <- TRUE	## If true, will automatically produce the plots listed below and save to same directory as code is stored
 calibration <- 102	## If inputting through a .csv, this will be overwritten by calibration row of input file
 #input <- read.csv( "input.parameters.csv", header=T, stringsAsFactors=F )  
-if( !tempDisabled ) input <- read.csv( "input.parameters.col1.csv", header=T, stringsAsFactors=F ) 
+#if( !tempDisabled ) input <- read.csv( "input.parameters.col1.csv", header=T, stringsAsFactors=F ) 
 
 #BUT object 'input' not found
 #so I tried reading first the input csv and then just the saved first column
