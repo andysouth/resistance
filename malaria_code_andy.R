@@ -7,17 +7,6 @@
 
 
 
-#### SET WORKING DRIVE  ####
-# If using .csv file to enter parameters, ensure file is stored in same directory as this document
-# Graphical outputs and the fitness parameter matrices will also be stored in this directory
-# Copy and paste this line into the R console, save the code document, then enter the source line 
-# setwd( "C:/Users/Bethany/Dropbox/Levick et al manuscript/")  
-
-#andy this allows me to disable bits that stop my file listing from working
-tempDisabled <- TRUE
-#if( !tempDisabled ) setwd( "C:\\Dropbox\\Ian and Andy\\andy\\malaria\\")
-
-
 #### INPUT PARAMETERS ####
 #Enter file name containing parameters before saving code document 
 #If not using input file, set params.csv to FALSE, and enter a calibration number
@@ -28,22 +17,9 @@ tempDisabled <- TRUE
 # produce.plots <- FALSE	## If true, will automatically produce the plots listed below and save to same directory as code is stored
 # calibration <- 100	## If inputting through a .csv, this will be overwritten by calibration row of input file
 
-#andy to run an inbuilt scenario
-params.csv <- TRUE
-produce.plots <- TRUE	## If true, will automatically produce the plots listed below and save to same directory as code is stored
-calibration <- 102	## If inputting through a .csv, this will be overwritten by calibration row of input file
-#input <- read.csv( "input.parameters.csv", header=T, stringsAsFactors=F )  
+#andy trying to run an inbuilt scenario
 #if( !tempDisabled ) input <- read.csv( "input.parameters.col1.csv", header=T, stringsAsFactors=F ) 
 
-#BUT object 'input' not found
-#so I tried reading first the input csv and then just the saved first column
-#then with params.csv <- FALSE
-#Error in matrix(nrow = max_gen, ncol = 11) : non-numeric matrix extent
-#with params.csv <- TRUE
-#Error in `rownames<-`(`*tmp*`, value = c("Calibration (100 default)",  : 
-#                                           attempt to set 'rownames' on an object with no dimensions
-#                                         In addition: Warning message:
-#                                           In data.matrix(mat) : NAs introduced by coercion
 
 ## Beth to run in calibration mode to check behaviour
 params.csv <- TRUE
