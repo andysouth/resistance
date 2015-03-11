@@ -65,7 +65,7 @@ What to call the first repo ? resistance
 + RStudio Tools, Shell
 + git remote set-url origin git@github.com:AndySouth/resistance.git
 
-**11/3/15** 9.30
+**11/3/15** 9.30-12.30 3hrs 2.15-6.45 7.5hrs
 
 moved my dropbox folder back to C.
 
@@ -74,6 +74,10 @@ Plan
 1. edit Beths commments into roxygen format
 1. only later think about changing functions and documentation to follow best practice
 
+Changed plan slightly by appending plot onto start of plot functions.
+
+To source files in the R folder
+`lapply(dir("R"),function(x) source(paste0("R//",x)))`
 
 
 
@@ -83,4 +87,9 @@ Plan
 1. add roxygen documentation for functions
 1. later, structure as R package, maybe move to a new github repo
 
-
+### suggestion from Beth
+looking at it now I realise this is not ideal
+a solution may be to provide a .csv file with the Curtis scenarios set up
+and then the need to set the calibration number and params.csv in the R script can be removed altogether
+so it is all set up in the .csv file - I think similar can be done with produce.plots
+so the only bit of R code the user will need to change is the setwd() and the read.csv()
