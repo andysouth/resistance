@@ -1,6 +1,6 @@
 # malaria_code_andy.r 
 # andy south 10/3/2015
-# a few edits from :
+# working version modifying from:
 
 # Malaria insecticide resistance model ###
 # Bethany Levick, LSTM 2013 ##
@@ -87,60 +87,7 @@ calibration <- 1012
 
 #### FUNCTIONS TO RUN THE MODEL ###
 
-	
 
-
-
-
-
-
-	
-
-
-
-## Linkage disequilibrium over time
-## uses results matrices from list
-# Plot of index of linkage disequilibrium, D 
-# Points plotted in purple indicate generations where selection is relaxed
-# takes results matrix without relaxation (nrelaxmat) and with relaxation (relaxmat) of selection
-# and column numbers in these matrices for the generation (1) and linkage disequilibrium (4)
-curtis_ld <- function(resultsmat, relaxedmat, gencol, ldcol){
-
-  par(pty="s") ##, mfrow=c(2,1))		# two rows, one column 
-  
-  ## LD plot at top
-  ymin <- log10(0.000001)
-  ymax <- log10(0.01)
-  
-  res <- log10( resultsmat[,ldcol])
-  rel <- log10( relaxedmat[,ldcol])
-  
-  gens <- resultsmat[,gencol]
-  
-  plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
-  	xlim=c(1,(max(resultsmat[,gencol]))), ylim=c(ymin,ymax),
-  	xlab="Generation", ylab="Index of Linkage Disequilibrium - D", main="Linkage Disequilibrium")
-  
-  lines( gens, res )		#plot log10 LD against generation
-  lines( gens, rel )
-  
-  points( c(3:12), rel[3:12], col="darkviolet", pch=16 )		# add purple points on relaxed line to indicate relaxed generations
-  points( c(15:18), rel[15:18], col="darkviolet", pch=16 )
-  
-  axis( side=1, at=c(0,2,4,6,8,10,12,14,16,18), labels=c(0,2,4,6,8,10,12,14,16,18), tick=T )
-  
-  labs <- c(0.000001,0.00001,0.0001,0.001,0.01)
-  labpos <- log10(labs)
-  
-  axis( side=2, at=labpos, labels=labs, tick=T )
-  
-  pos <- log10( 0.01 )
-  legend( 9, pos , legend=c("Linkage disequilbrium","With relaxed selection"), 
-  			col=c("black", "darkviolet"), pch=c(16,16), bty="n" )
-  
-  box()
-
-}
 
 ### Lists to store results ####
 results.list <- list()			# list storing results (R allele freq) matrices for each run
@@ -2396,7 +2343,7 @@ for (i in 1:ncol( input ) ){
 ## Linkage Disequilibrium - top half of figure one
 if( produce.plots == TRUE ){
 if( calibration == 1011 ){
-plot <- curtis_ld( results.list[[1]], results.list[[2]], 1, 4 )
+plot <- plotcurtis_ld( results.list[[1]], results.list[[2]], 1, 4 )
 dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
 dev.off()
 }
