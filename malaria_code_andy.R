@@ -87,20 +87,7 @@ calibration <- 1012
 #### FUNCTIONS TO RUN THE MODEL ####
 	
 
-## Function - HW
-## Finds proportion of genotypes pp, pq and qq, given P (i.e. sqrt(pp))
-## Takes P and matrix to print results to, returning matrix
-HW <- function ( P, mat ){
-  R <- P
-  S <- 1 - R
-  r <- R*R
-  s <- S*S
-  rs <- 2*(R*S)
-  mat[1,] <- s
-  mat[2,] <- rs
-  mat[3,] <- r
-  return( mat )
-}
+
 
 ## Function - make.genotypemat
 ## Uses HW function to make matrix of genotype values per matrix
