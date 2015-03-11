@@ -69,6 +69,10 @@ What to call the first repo ? resistance
 
 moved my dropbox folder back to C.
 
+Plan
+1. move Beths functions out into a single file for each in an R folder
+1. edit Beths commments into roxygen format
+1. only later think about changing functions and documentation to follow best practice
 
 
 
