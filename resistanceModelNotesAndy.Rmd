@@ -10,6 +10,12 @@ My first go at keeping notes like this as an rmarkdown file.
 
 **27/1/15**  7.5hrs
 
+```
+#working version of Beths code
+#run it outside of this project because it changes wd
+source("C:\\Dropbox\\Ian and Andy\\andy\\malaria\\Beth code\\malaria_code_beth.r")
+```
+
 Editing `malaria_code_andy.r`, indenting functions etc.
 
 Much of the script from line 464 is setting up parameters for example runs.
@@ -79,13 +85,168 @@ Changed plan slightly by appending plot onto start of plot functions.
 To source files in the R folder
 `lapply(dir("R"),function(x) source(paste0("R//",x)))`
 
+**12/3/15** 9.30-14 4.5hrs 3-5 6-7 7.5hrs
+
+The model generates 3 matrices : results, genotype, fitness
+1. Results : freq of R allele at each loci in each sex and linkage disequilibrium of R allele in each sex, per generation
+2. Genotype : frequencies of each of the ten genotypes, per generation
+3. Fitness : fitness scores of each genotype/niche combination (table 4. of Main Document)
+
+When a file is input with multiple scenarios, each of the three matrices is stored in a list, where scenario number gives position of the matrix in the list.
+
+results.list : 
+fitness.list : 
+genotype.list : 
+
+Can I put these into a single list so that they can be returned from a single function ?
+
+done ~ put input object creation into a function
+But there is still a fair bit of code that reads parameter values out of the input matrix and into named variables.
+
+I might be able to restructure these collections of single variables into arrays.
+e.g. for the exposure levels of m&f
+
+```{r}
+#to create an array a[sex][locus1][locus2]
+sex <- c("F","M")
+locus1 <- c("0","A","a")
+locus2 <- c("0","B","b")
+dimnames1 <- list( sex=sex, locus1=locus1, locus2=locus2 )
+dim1 <- sapply(dimnames1, function(x) length(x))
+a <- array(0,dim=dim1, dimnames=dimnames1)
+a
+length(a)
+#to access one element
+a['M','a','b']
+#to check that male exposures total 1
+sum(a['M',,])
+```
+
+
+```
+  ## Exposure levels of males and females to each insecticide niche ##
+  # males
+  a.m_00 <- input[8,i]
+  
+  a.m_a0 <- input[9,i]
+  a.m_A0 <- input[10,i]
+  
+  a.m_0b <- input[11,i]
+  a.m_0B <- input[12,i]
+  
+  a.m_ab <- input[13,i]
+  a.m_AB <- input[14,i]
+  
+  a.m_Ab <- input[15,i]
+  a.m_aB <- input[16,i]
+  
+  #a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
+  #if ( a.m != 1 ){		 
+  #	print( paste("Error in male exposures: must total one: ", a.m) )
+  	
+  #	}else{
+  #		print( paste( "Male exposures total 1: ", a.m ))
+  #		}
+  		
+  
+  # females
+  a.f_00 <- input[17,i]
+  
+  a.f_a0 <- input[18,i]
+  a.f_A0 <- input[19,i]
+  
+  a.f_0b <- input[20,i]
+  a.f_0B <- input[21,i]
+  
+  a.f_ab <- input[22,i]
+  a.f_AB <- input[23,i]
+  
+  a.f_Ab <- input[24,i]
+  a.f_aB <- input[25,i]
+```
+
+I should check that what we are doing fits in with what others are doing. We may be able to capitalise on existing tools.
+
+[popgen on CRAN](http://cran.r-project.org/web/packages/popgen/popgen.pdf)
+seems a bit old and doesn't do a huge amount, no vignette.
+
+[gstudio](http://cran.r-project.org/web/packages/gstudio/) looks more promising. e.g. it defines locus objects.
+[gstudio documentation](http://dyerlab.github.io/gstudio/)
+A locus object is set like this, but I'm not sure if this would help us.
+It does have some stuff on drift at end of help.
+```
+require(gstudio)
+loc <- locus(c("C", "A"))
+loc
+```
+
+pegas provides functions for the analysis of allelic data and of haplotype data from DNA sequences.
+It requires and complements two other R-packages: ape and adegenet.
+[pegas](http://ape-package.ird.fr/pegas.html)
+[pegas data structures](http://ape-package.ird.fr/pegas/DefinitionDataClassesPegas.pdf)
+includes a class called loci. : An object of class "loci" is a data frame where rows represent individuals
+and columns are loci and optional additional variables.
+Again I can't quite see how it would be useful for us.
+
+There is a [HardyWeinberg](http://cran.r-project.org/web/packages/HardyWeinberg/vignettes/HardyWeinberg.pdf) package on CRAN. "The HardyWeinberg package consists of a set of tools for analyzing diallelic
+genetic markers, and is particularly focused on the graphical representation of their (dis)equilibrium condition in various ways."
+
+There is a CRAN [genetics task view](http://cran.r-project.org/web/views/Genetics.html).
+
+The [genetics package](http://cran.r-project.org/web/packages/genetics/genetics.pdf) which also has a locus class, seems to be more detailed, about chromosomes etc. and probably not of use to us.
+
+#### Structure of the results matrices
+
+```{r}
+max_gen <- 2 #just as exampel
+
+# Set up results matrix - prints overall freq of R and S allele per locus per sex, LD and overall allele freq (i.e. 1)
+results <- matrix ( nrow = max_gen, ncol = 11 )
+colnames( results ) <- c( "Gen", "m.R1", "m.R2", "m.LD","f.R1", "f.R2", "f.LD", "M", "F", "dprime", "r2" )
+
+# set up fitness by niche matrix - records fitness scores for each niche for each genotype
+fitness <- matrix ( nrow = 10, ncol = 9, c(rep(0,90)))
+colnames(fitness) <- c( "-,-", "a,-", "A,-", "b,-", "B,-", "a,b", "A,B", "A,b", "a,B" )
+rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2", 
+						"RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+						"RR1SS2", "RR1RS2", "RR1RR2")
+
+# set up genotype matrix - records frequencies of each of the 9 two locus genotypes each generation
+genotype <- matrix( nrow=max_gen, ncol=11 )
+colnames(genotype) <- c("gen", "SS1SS2", "SS2RS2", "SS1RR2", 
+						"RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+						"RR1SS2", "RR1RS2", "RR1RR2")
+
+
+```
+
+Somehow it seems I've broken it, I'm getting NAs in results matrix.
+
+The input files are different (but same structure) between Beths version that works and my new version ...
+calibration is 100 in my failing version and 1012 in Beths, i think this is because I'm reading in the csv when I shouldn't.
+
+I seem not to get to line 889 in my version
+  	# male
+  	f.m.SS1SS2 <- genotype.freq[1,]
+
+Then suddenly it seemed to start working when I put a browser in.
+It's something tricky around line 711, if it doesn't get to 889 it doesn't fill in the results matrix ??
+
+Aha! It seems to have been this without the comments before the tilde's that stoppped it from working
+```
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 		
+  ### Loop to run the model from the initial conditions generated above ####
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+```
 
 
 ### TO DO  
 
-1. copy R functions out of `malaria_code_andy` into their own files in an R folder
-1. add roxygen documentation for functions
+1. check what the tilde does in R
+1. copy the 'run' bit out of `malaria_code_andy.r` into a function 
 1. later, structure as R package, maybe move to a new github repo
+1. re-look at R popgen packages when I've got more of a handle on what we are doing.
+
 
 ### suggestion from Beth
 looking at it now I realise this is not ideal
