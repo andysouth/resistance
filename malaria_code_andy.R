@@ -8,13 +8,13 @@
 
 
 #### INPUT PARAMETERS ####
-#Enter file name containing parameters before saving code document 
+#Enter file name containing parameters 
 #If not using input file, set params.csv to FALSE, and enter a calibration number
 #Save file once these are set, and then run code
-#andy commented out next 4 lines & replaced with below to run inbuilt scenario
+
 # params.csv <- TRUE
-#input <- read.csv( "full-dom_SD.csv", header=T, stringsAsFactors=F )	
-# produce.plots <- FALSE	## If true, will automatically produce the plots listed below and save to same directory as code is stored
+# input <- read.csv( "full-dom_SD.csv", header=T, stringsAsFactors=F )	
+# produce.plots <- FALSE
 # calibration <- 100	## If inputting through a .csv, this will be overwritten by calibration row of input file
 
 #andy trying to run an inbuilt scenario
@@ -84,8 +84,6 @@ calibration <- 1012
 # select.gen.m <- fs.m.SS1RS2  ## two locus genotype to select on MUST be fs not f, unhash to run
 # select.gen.f <- fs.f.SS1RS2 # set for male and female form
 
-
-#### FUNCTIONS TO RUN THE MODEL ###
 
 
 
