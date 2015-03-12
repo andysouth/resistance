@@ -8,36 +8,23 @@
 
 
 #### INPUT PARAMETERS ####
-#Enter file name containing parameters 
-#If not using input file, set params.csv to FALSE, and enter a calibration number
-#Save file once these are set, and then run code
-
-# params.csv <- TRUE
-# input <- read.csv( "full-dom_SD.csv", header=T, stringsAsFactors=F )	
-# produce.plots <- FALSE
-# calibration <- 100	## If inputting through a .csv, this will be overwritten by calibration row of input file
-
-#andy trying to run an inbuilt scenario
-tempDisabled <- TRUE
-#input <- read.csv( "input.parameters.col1.csv", header=T, stringsAsFactors=F ) 
-
-
-## Beth to run in calibration mode to check behaviour
 params.csv <- TRUE
-produce.plots <- TRUE	## If true, will automatically produce the plots listed below and save to same directory as code is stored
-## either go into this file and manually edit the calibration number
-## this would allow for multiple runs with different calibrations
+produce.plots <- FALSE	
+
+#inFile <- "full-dom_SD.csv"
+#inFile <- "input.parameters.col1.csv" 
+
+## manually editing the calibration number in a file
+## allows for multiple runs with different calibrations
 inFile <- "input.parameters.csv"
 ## or hard code it here
 calibration <- 102	
 
-## Beth to run in built hard coded scenario to recreate curtis' plots
+## Beth to run scenario to recreate curtis' plots
 params.csv <- FALSE
-## And then select scenario here
 calibration <- 1012
 
-## looking at it now I realise this is not ideal
-## a solution may be to provide a .csv file with the Curtis scenarios set up
+## Beth : a solution may be to provide a .csv file with the Curtis scenarios set up
 ## and then the need to set the calibration number and params.csv in the R script can be removed altogether
 ## so it is all set up in the .csv file - I think similar can be done with produce.plots
 ## so the only bit of R code the user will need to change is the setwd() and the read.csv()
@@ -71,7 +58,6 @@ calibration <- 1012
 ## To recreate plots in Curtis (1985)
 ## Calibration 1011 runs the full dominance insecticide scenario given in Curtis (1985) Fig 1.
 ## Calibration 1012 runs the single insecticide and combination scenarios given in Curtis (1985) Fig 2. 
-
 
 ## For bug identifying/fixing
 ## Calibration 102 runs with no random mating
@@ -107,8 +93,8 @@ for (i in 1:ncol( input ) ){
   # To save parameters in a matrix, set coll.fitvals to 1 ##
   coll.fitvals <- input[3,i]
   # To save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
-  save.fitvals <- input[4,i]		## please note this will OVERWRITE every time the matrix runs
-  						## so files will need to be renamed/moved to be kept.
+  save.fitvals <- input[4,i]		## will OVERWRITE every time the matrix runs
+  						                  ## so files will need to be renamed/moved to be kept.
   
   
   ### Genotype Frequencies ###
