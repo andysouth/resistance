@@ -17,6 +17,7 @@ createInputMatrix <- function(params.csv,
   #todo may be able to combine params.csv and file arguments
   
   ## if parameters from input file - 
+  #params.csv <- TRUE #testing whether this always needs to be done
   if( params.csv )
   {
     #todo add check that file exists
