@@ -9,7 +9,7 @@
 
 #### INPUT PARAMETERS ####
 params.csv <- TRUE
-produce.plots <- FALSE	
+produce.plots <- TRUE	
 
 #inFile <- "full-dom_SD.csv"
 #inFile <- "input.parameters.col1.csv" 
@@ -224,8 +224,7 @@ for (i in 1:ncol( input ) ){
   niche_aB <- input[52,i]
   
   
-  
-  #### USER INPUT ENDS HERE ####
+  #### end of reading inputs into parameters ####
 
   ## Set up matrices to print results to ####
   # Set up results matrix - prints overall freq of R and S allele per locus per sex, LD and overall allele freq (i.e. 1)
@@ -703,20 +702,21 @@ for (i in 1:ncol( input ) ){
   			  (a.f_Ab * W.RR1RR2_Ab) + (a.f_aB * W.RR1RR2_aB)
    
   			  
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 		
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 		
   ### Loop to run the model from the initial conditions generated above ####
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
 
+    #browser()
   
   	for (k in 1:max_gen){
   	
   	# In calibration 1011, between generations 5 and 12 selection is relaxed
   	# fitnesses use relaxed selection fitnesses calculated above
   	if( calibration == 1011 & i==2 ){
-  	relax <- TRUE
-  		}else{
+  	  relax <- TRUE
+  	}else{
   		relax <- FALSE
-  		}
+  	}
   	
   	if( relax == TRUE & (2<k) & (k<12)){
   		# relaxed selection fitnesses
