@@ -40,7 +40,7 @@ calibration <- 1012
 # Fitness details the fitness scores of each genotype/niche combination (table 4. of Main Document)
 
 # Where a file is inputted containing multiple scenarios, each of the three matrices is stored in a corresponding list
-# ie results.list, genotype.list, fitness.list, where the number of the scenario gives the position of the matrix in the list
+# ie listOut$results, listOut$genotype, listOut$fitness, where the number of the scenario gives the position of the matrix in the list
 
 # If save.fitvals is set to 1 (i.e., true) then a .csv file will be generated
 # containing the fitness values of each double genotype in each possible niche
@@ -70,11 +70,18 @@ calibration <- 1012
 
 
 
-
 ### Lists to store results ####
-results.list <- list()			# list storing results (R allele freq) matrices for each run
-fitness.list <- list()			# list storing fitness values for each niche/genotype combination for each run
-genotype.list <- list()			# list storing genotype frequency matrices for each run
+#results.list <- list()			# list storing results (R allele freq) matrices for each run
+#fitness.list <- list()			# list storing fitness values for each niche/genotype combination for each run
+#genotype.list <- list()			# list storing genotype frequency matrices for each run
+
+#replacing 3 results lists with a list of 3 lists
+listOut <- list( results=list(), fitness=list(), genotype=list() )
+#can then access matrices like this 
+#head(listOut$results[[2]])
+#head(listOut$genotype[[2]])
+#head(listOut$fitness[[2]])
+
 
 #calling new function to create input matrix
 input <- createInputMatrix( params.csv=params.csv, inFile=inFile, calibration=calibration)
@@ -1588,8 +1595,11 @@ for (i in 1:ncol( input ) ){
 
   
   ## Assign results matrices to lists for multiple runs
-  results.list[[i]] <- results
-  genotype.list[[i]] <- genotype
+  listOut$results[[i]] <- results
+  listOut$genotype[[i]] <- genotype
+  
+  #replacing 3 output lists with a single one
+  listOut$results[[i]] <- results
   
   
   ## Plots ####
@@ -1597,7 +1607,7 @@ for (i in 1:ncol( input ) ){
   # Plot of R and S allele frequencies over generations
   # Prints male frequency of R allele at locus 1 (blue) and locus 2 (green)
   # and same in female at locus 1 (red) and locus 2 (orange)
-  genplot <- plotallele.freq( results.list[[i]] )
+  genplot <- plotallele.freq( listOut$results[[i]] )
   # Saves plot into same directory as code documents
   dev.copy(png, (paste(i,'freq-Rallele-bygender.png')))		## WARNING: this will overwrite every time, move or rename files! ##
   dev.off()
@@ -1605,13 +1615,13 @@ for (i in 1:ncol( input ) ){
   # Plot of RR, RS and SS at each locus over generations
   # locus 1: SS in pink, RS in orange, RR in red
   # locus 2: SS in cyan, RS in dark blue, RR in green
-  genplot <- plothaplotype( genotype.list[[i]] )
+  genplot <- plothaplotype( listOut$genotype[[i]] )
   # Saves plot into same directory as code documents
   dev.copy(png,(paste(i,'haplotype-frequencies.png')))		## WARNING: this will overwrite every time, move or rename files! ##
   dev.off()
   
   # Plot of LD over time
-  genplot <- plotlinkage( results.list[[i]] )
+  genplot <- plotlinkage( listOut$results[[i]] )
   # Saves plot into same directory as code documents
   dev.copy(png,(paste(i,'LD.png')))		## WARNING: this will overwrite every time, move or rename files! ##
   dev.off()
@@ -1717,7 +1727,7 @@ for (i in 1:ncol( input ) ){
   	fbn[9,8] <- W.RR1RR2_Ab
   	fbn[9,9] <- W.RR1RR2_aB						  
 
-  	fitness.list[[i]] <- fbn
+  	listOut$fitness[[i]] <- fbn
   	
   	}					  
   	if( save.fitvals==1 ){
@@ -1728,7 +1738,7 @@ for (i in 1:ncol( input ) ){
 }		### loop through columns of parameter input table - produces results lists ###
 	
 
-### Actions needing the full results.list ####
+### Actions needing the full listOut$results ####
 
 ### Conditional plot commands for calibrations to Curtis paper ####
 
@@ -1736,7 +1746,7 @@ for (i in 1:ncol( input ) ){
 ## Linkage Disequilibrium - top half of figure one
 if( produce.plots == TRUE ){
 if( calibration == 1011 ){
-plot <- plotcurtis_ld( results.list[[1]], results.list[[2]], 1, 4 )
+plot <- plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
 dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
 dev.off()
 }
@@ -1745,14 +1755,14 @@ dev.off()
 # Plot of total frequency of R allele over time
 # as fig.2 of Curtis (1985)
 if( calibration == 1011 ){
-genplot <- plotcurtis_f1( results.list[[1]], results.list[[2]], 1, 2 )
+genplot <- plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
 dev.copy(png,('curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
 dev.off()
 }
 
 ## Fig 2 - plots sequential and combination, as in Curtis fig 2
 if( calibration == 1012 ){
-	curtis <- plotcurtis_f2( results.list[[3]], results.list[[1]], results.list[[2]], 1, 2, 3 )
+	curtis <- plotcurtis_f2( listOut$results[[3]], listOut$results[[1]], listOut$results[[2]], 1, 2, 3 )
 	dev.copy(png,('curtis-fig2.png'))		## WARNING: this will overwrite every time, move or rename files! ##
 	dev.off()
 	}
@@ -1760,5 +1770,5 @@ if( calibration == 1012 ){
 	
 
 ### Finding generations taken to reach a frequency of R of 0.5 at each locus ####
-loc1_0.5 <- timetoFifty( 1, max_gen, results.list, input )
-loc2_0.5 <- timetoFifty( 2, max_gen, results.list, input )
+loc1_0.5 <- timetoFifty( 1, max_gen, listOut$results, input )
+loc2_0.5 <- timetoFifty( 2, max_gen, listOut$results, input )
