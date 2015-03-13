@@ -5,7 +5,8 @@
 # Malaria insecticide resistance model ###
 # Bethany Levick, LSTM 2013 ##
 
-
+##temporary to source functions
+lapply(dir("R"),function(x) source(paste0("R//",x)))
 
 #### INPUT PARAMETERS ####
 params.csv <- TRUE
