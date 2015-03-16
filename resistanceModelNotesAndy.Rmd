@@ -198,7 +198,7 @@ The [genetics package](http://cran.r-project.org/web/packages/genetics/genetics.
 #### Structure of the results matrices
 
 ```{r}
-max_gen <- 2 #just as exampel
+max_gen <- 2 #just as example
 
 # Set up results matrix - prints overall freq of R and S allele per locus per sex, LD and overall allele freq (i.e. 1)
 results <- matrix ( nrow = max_gen, ncol = 11 )
@@ -239,11 +239,47 @@ Aha! It seems to have been this without the comments before the tilde's that sto
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 ```
 
+**13/3/15** 9.15-12.15 3hrs
+
+A reproducible version of yesterdays bug.
+
+```
+x<-1
+~
+for(i in 1:10) x<-x+1
+cat(x)
+```
+[R bug reporting](https://bugs.r-project.org/bugzilla3/enter_bug.cgi) 
+
+1. can I create a list of the 3 lists for results ?
+Yes
+Replace this  
+results.list <- list()			
+fitness.list <- list()
+genotype.list <- list()	
+with  
+listOut <- list( results=list(), fitness=list(), genotype=list() )
+
+Then find & replace  
+results.list with listOut$results  
+fitness.list with listOut$fitness
+genotype.list with listOut$genotype
+
+
+**16/3/15** monday 18.30
+
+cut out lines 92 to 1740 into a runModel() function, later can subdivide it up
+
+In max(combmat[, gencol]) : no non-missing arguments to max; returning -Inf
+fixed by returning listOut from runModel()
+
+
+
 
 ### TO DO  
-
-1. check what the tilde does in R
-1. copy the 'run' bit out of `malaria_code_andy.r` into a function 
+ 
+1. add a savePlots argument, to enable plotting without saving
+1. submit tilde bug report
 1. later, structure as R package, maybe move to a new github repo
 1. re-look at R popgen packages when I've got more of a handle on what we are doing.
 
