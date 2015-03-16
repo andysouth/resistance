@@ -5,7 +5,7 @@
 #' 
 #' @param params.csv whether parameters are defined in an input file TRUE/FALSE
 #' @param inFile parameters filename
-#' @param calibration 
+#' @param calibration one of a limited set of integers effecting how scenarios are run 
 #' 
 #' @return matrix
 #' @export
