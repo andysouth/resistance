@@ -11,6 +11,9 @@
 
 plotallele.freq <- function ( mat ){
   
+  #andy added
+  max_gen = nrow( mat )
+  
   par(pty="s")   		
   plot( 1, 1, type="n", axes=T,						## Blank square 1,1 plot
         xlim=c(1,max_gen), ylim=c(0,1),

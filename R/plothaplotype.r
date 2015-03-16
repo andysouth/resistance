@@ -11,12 +11,15 @@
 
 
 plothaplotype <- function( mat ){
-  
+
+  #andy moved
+  max_gen = nrow( mat )
+    
   par(pty="s")   		
   plot( 1,1, type="n", axes=T,						## Blank square 1,1 plot
         xlim=c(0,max_gen), ylim=c(0,1),
         xlab="Generation", ylab="Frequency of haplotype", main="Frequency of haplotypes across 2 loci by generation.")
-  max_gen = nrow( mat )
+
   toplot <- matrix( nrow = max_gen, ncol=7 )			## matrix of generation and haplotype frequency 
   
   for (k in 1:nrow(mat)){			
