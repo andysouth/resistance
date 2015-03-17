@@ -4,12 +4,14 @@
 #' 
 #' @param input a matrix with parameters in rows and scenarios in columns
 #' @param calibration one of a limited set of integers effecting how scenarios are run
-#' 
+#' @param savePlots whether to save plots to hardcoded filenames
+
 #' @return a list of 3 lists: results, genotype and fitness
 #' @export
 
 runModel <- function(input,
-                     calibration){
+                     calibration,
+                     savePlots=FALSE){
  
   ## Run through columns of matrix "input" to run model for each scenario set
   for (i in 1:ncol( input ) ){
@@ -1528,23 +1530,33 @@ runModel <- function(input,
       # Prints male frequency of R allele at locus 1 (blue) and locus 2 (green)
       # and same in female at locus 1 (red) and locus 2 (orange)
       genplot <- plotallele.freq( listOut$results[[i]] )
-      # Saves plot into same directory as code documents
-      dev.copy(png, (paste(i,'freq-Rallele-bygender.png')))		## WARNING: this will overwrite every time, move or rename files! ##
-      dev.off()
+      if (savePlots)
+      {
+        # Saves plot into same directory as code documents
+        dev.copy(png, (paste(i,'freq-Rallele-bygender.png')))		## WARNING: this will overwrite every time, move or rename files! ##
+        dev.off()
+      }
       
       # Plot of RR, RS and SS at each locus over generations
       # locus 1: SS in pink, RS in orange, RR in red
       # locus 2: SS in cyan, RS in dark blue, RR in green
       genplot <- plothaplotype( listOut$genotype[[i]] )
-      # Saves plot into same directory as code documents
-      dev.copy(png,(paste(i,'haplotype-frequencies.png')))		## WARNING: this will overwrite every time, move or rename files! ##
-      dev.off()
+      
+      if (savePlots)
+      {
+        # Saves plot into same directory as code documents
+        dev.copy(png,(paste(i,'haplotype-frequencies.png')))		## WARNING: this will overwrite every time, move or rename files! ##
+        dev.off()
+      }
       
       # Plot of LD over time
       genplot <- plotlinkage( listOut$results[[i]] )
-      # Saves plot into same directory as code documents
-      dev.copy(png,(paste(i,'LD.png')))		## WARNING: this will overwrite every time, move or rename files! ##
-      dev.off()
+      if (savePlots)
+      {
+        # Saves plot into same directory as code documents
+        dev.copy(png,(paste(i,'LD.png')))		## WARNING: this will overwrite every time, move or rename files! ##
+        dev.off()
+      }
     }
     
     #### Prints fitnesses caluclated by niche by genotype to matrix ####

@@ -11,6 +11,7 @@ lapply(dir("R"),function(x) source(paste0("R//",x)))
 #### INPUT PARAMETERS ####
 params.csv <- TRUE
 produce.plots <- TRUE	
+savePlots <- FALSE
 
 #inFile <- "full-dom_SD.csv"
 #inFile <- "input.parameters.col1.csv" 
@@ -102,8 +103,12 @@ listOut <- runModel( input, calibration )
 if( produce.plots == TRUE ){
 if( calibration == 1011 ){
 plot <- plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
-dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
-dev.off()
+if (savePlots)
+{
+  dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
+  dev.off()  
+}
+
 }
 
 # Bottom half of figure one
@@ -111,15 +116,21 @@ dev.off()
 # as fig.2 of Curtis (1985)
 if( calibration == 1011 ){
 genplot <- plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
+if (savePlots)
+{
 dev.copy(png,('curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
 dev.off()
+}
 }
 
 ## Fig 2 - plots sequential and combination, as in Curtis fig 2
 if( calibration == 1012 ){
 	curtis <- plotcurtis_f2( listOut$results[[3]], listOut$results[[1]], listOut$results[[2]], 1, 2, 3 )
+	if (savePlots)
+	{
 	dev.copy(png,('curtis-fig2.png'))		## WARNING: this will overwrite every time, move or rename files! ##
 	dev.off()
+	}
 	}
 	}
 	
