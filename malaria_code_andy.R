@@ -91,39 +91,34 @@ listOut <- runModel( input, calibration )
 
 ### Curtis Figures require multiple results matrices, so are called outside of looping through the input matrix
 ## Linkage Disequilibrium - top half of figure one
-if( produce.plots == TRUE ){
-if( calibration == 1011 ){
-plot <- plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
-if (savePlots)
+if( produce.plots & calibration == 1011){
+    
+  plot <- plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
+  if (savePlots)
+    {
+      dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
+      dev.off()  
+    }
+  # Bottom half of figure one
+  # Plot of total frequency of R allele over time, as fig.2 of Curtis (1985)
+  genplot <- plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
+  if (savePlots)
   {
-    dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
-    dev.off()  
+    dev.copy(png,('curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
+    dev.off()
   }
-
 }
 
-# Bottom half of figure one
-# Plot of total frequency of R allele over time
-# as fig.2 of Curtis (1985)
-if( calibration == 1011 ){
-genplot <- plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
-if (savePlots)
-{
-dev.copy(png,('curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
-dev.off()
-}
-}
 
 ## Fig 2 - plots sequential and combination, as in Curtis fig 2
 if( calibration == 1012 ){
 	curtis <- plotcurtis_f2( listOut$results[[3]], listOut$results[[1]], listOut$results[[2]], 1, 2, 3 )
 	if (savePlots)
 	{
-	dev.copy(png,('curtis-fig2.png'))		## WARNING: this will overwrite every time, move or rename files! ##
-	dev.off()
+  	dev.copy(png,('curtis-fig2.png'))		## WARNING: this will overwrite every time, move or rename files! ##
+  	dev.off()
 	}
-	}
-	}
+}
 	
 
 ### Finding generations taken to reach a frequency of R of 0.5 at each locus ####
