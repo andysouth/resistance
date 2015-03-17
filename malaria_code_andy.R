@@ -27,32 +27,28 @@ params.csv <- FALSE
 calibration <- 1012
 
 ## Beth : a solution may be to provide a .csv file with the Curtis scenarios set up
-## and then the need to set the calibration number and params.csv in the R script can be removed altogether
-## so it is all set up in the .csv file - I think similar can be done with produce.plots
+## then no need to set calibration number and params.csv in the R script
+## produce.plots etc. could also be set in csv
 ## so the only bit of R code the user will need to change is the setwd() and the read.csv()
 
-#### RUN CODE ####
-# source("malaria_code.r")
-
 ### OUTPUT - DATA MATRICES ####		
-# Both methods will run the model, generating 3 matrices of results; results, genotype, fitness
 # Results details freq of R allele at each loci in each sex and linkage disequilbrium of R allele in each sex, per generation
 # Genotype details frequencies of each of the ten genotypes, per generation
 # Fitness details the fitness scores of each genotype/niche combination (table 4. of Main Document)
 
-# Where a file is inputted containing multiple scenarios, each of the three matrices is stored in a corresponding list
-# ie listOut$results, listOut$genotype, listOut$fitness, where the number of the scenario gives the position of the matrix in the list
+# for multiple scenarios, each of the three matrices is stored in a list
+# ie listOut$results, listOut$genotype, listOut$fitness, where scenario number gives position in list
 
-# If save.fitvals is set to 1 (i.e., true) then a .csv file will be generated
+# If save.fitvals is set to 1 then a .csv file will be generated
 # containing the fitness values of each double genotype in each possible niche
 # as in table three of brief document
 
 ### OUTPUT - GRAPHICS ###
 # For each scenario run, four graphs will also be saved to the same drive as this document is located
-# One details changing frequency of R allele over time by sex (results table "results")
-# One details changing frequency of haplotypes over time by locus (results table "genotype")
-# One details changing linkage disequilibrium over time (results table "results")
-# One details changing frequency of R allele over time, but using the log percentage scale as in Curtis (1985) Fig 2
+# frequency of R allele over time by sex (results table "results")
+# frequency of haplotypes over time by locus (results table "genotype")
+# linkage disequilibrium over time (results table "results")
+# frequency of R allele over time, but using the log percentage scale as in Curtis (1985) Fig 2
 # Where calibration 1013 (see below) is set, the latter is replaced with a plot of similar scale but more restricted axis limits
 
 ### CALIBRATIONS ####
@@ -70,18 +66,13 @@ calibration <- 1012
 # select.gen.f <- fs.f.SS1RS2 # set for male and female form
 
 
-
 ### Lists to store results ####
-#results.list <- list()			# list storing results (R allele freq) matrices for each run
-#fitness.list <- list()			# list storing fitness values for each niche/genotype combination for each run
-#genotype.list <- list()			# list storing genotype frequency matrices for each run
 
 #replacing 3 results lists with a list of 3 lists
 listOut <- list( results=list(), fitness=list(), genotype=list() )
 #can then access matrices like this 
 #head(listOut$results[[2]])
 #head(listOut$genotype[[2]])
-#head(listOut$fitness[[2]])
 
 
 #calling new function to create input matrix
@@ -104,10 +95,10 @@ if( produce.plots == TRUE ){
 if( calibration == 1011 ){
 plot <- plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
 if (savePlots)
-{
-  dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
-  dev.off()  
-}
+  {
+    dev.copy(png,('LD_curtis-fig1.png'))		## WARNING: this will overwrite every time, move or rename files! ##
+    dev.off()  
+  }
 
 }
 
