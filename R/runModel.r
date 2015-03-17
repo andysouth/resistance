@@ -1521,9 +1521,6 @@ runModel <- function(input,
     listOut$results[[i]] <- results
     listOut$genotype[[i]] <- genotype
     
-    #replacing 3 output lists with a single one
-    listOut$results[[i]] <- results
-    
     
     ## Plots ####
     if( produce.plots == TRUE ){
