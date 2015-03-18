@@ -83,7 +83,6 @@ input <- createInputMatrix( params.csv=params.csv, inFile=inFile, calibration=ca
 
 listOut <- runModel( input, calibration )
 
-	
 
 ### Actions needing the full listOut$results ####
 
