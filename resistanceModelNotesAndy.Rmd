@@ -266,19 +266,155 @@ fitness.list with listOut$fitness
 genotype.list with listOut$genotype
 
 
-**16/3/15** monday 18.30
+**16/3/15** mon 18.30-19.30 1hr
 
 cut out lines 92 to 1740 into a runModel() function, later can subdivide it up
 
 In max(combmat[, gencol]) : no non-missing arguments to max; returning -Inf
 fixed by returning listOut from runModel()
 
+**17/3/15** tues to liverpool 8.30-5.30 9hrs
 
+done: add a savePlots argument, to enable plotting without saving
 
+Assuming that resistance to each insecticide was encoded at one locus respectively, and that these can either have a homozygous susceptible (SS), heterozygous (RS) or homozygous resistant (RR) genotypes at each locus, there are then ten possible genotypes (including cis & trans forms of the double heterozygous).
 
-### TO DO  
+We consider two insecticides (A and B) at three possible levels; absent, low(ab) and high(AB), resulting in 9 niches;
+
+Locus1 relates to resistance for insecticide A, and locus2 for B. Locus2 does not effect fitness under exposure to A.
+
+Males and females can be exposed differently.
+
+Curtis states that if resistance to one insecticide is present at very low levels in the population, then resistance will rise slower if this insecticide is used on its own, rather than in a combination with a more established insecticide. 
+
+This is the important Curtis statement “the use of a mixture where the initial gene frequencies are unequal leads to more rapid increase in the frequency of the rarer of the genes”
+
+A key aspect of Curtis’ prediction was that this relationship would be determined by an increasing association between the presence of the two resistance alleles, measured as high levels of linkage disequilibrium.
+
+The results given above seem to be in contrast with Curtis’ assumption, and suggest that in fact using the insecticides in combination can slow the spread of resistance.
+
+My summary :
+Curtis suggests resistance spreads more quickly with 2 insecticides, due to  increasing association between the alleles. Beths work suggests that combination can slow spread of resistance. 
+
+Good figure 1 in manuscript :
+The rate of spread of IR depends on whether the resistance mutation is dominant, semi-dominant, or recessive.
+
+**aha! I've only just understood this bit**
+**At high concentrations only the RR individuals survive so resistance is recessive; as concentrations decline some RS mosquitoes survive making resistance semi-dominant; at low concentration both RR and RS mosquitoes survive, making resistance dominant.** 
+**so main problems of resistance arise when insecticide concentrations decline**
+
+From manuscript about scenarios to run:
+**row in params csv**
+
+Insecticide coverage for females: 0.1, 0.2, 0.6, 0.8, 0.9 (n=5) **9 & 15**  
+Insecticide coverage for males: as for females, or half that of females (n=2) **18 & 24**  
+‘New’ insecticide resistance starting freq: 0.0001, 0.001, 0.01 (n=3) **6**  
+‘Old’ insecticide resistance starting freq: 0.05, 0.1, 0.2, 0.5, 0.8 (n=5) **7**  
+Resistance heterozygous fitness: 0.5, 0.75. 1    (n=3 for each insecticide) **?28 & 30**  
+Sensitive heterozygous fitness:0, 0.2, 0.4 (n=3 for each insecticide) **?27 & 29**  
+Resistance allele dominance: 0, 0.2, 0.5, 0.9, 1 for each locus (n=5 for each locus) **35,38 do to start**  
+Fitness costs: 0, 0.05, 0.1 (n=3) **43&44**  
+Fitness dominance: 0, 0.5, 1 (n=3) **33&36**  
+
+BUT now we are going to do it by sampling from a uniform distribution before doing decision trees. Then you can progressively add results to a file.
+
+I could start by creating a document with the results at the extremes of the parameter space.
+
+Send Ian & Beth devtools installation instructions and a document.
+
+~60,000 combinations…. Too many???  
+
+would latin cube hypersampling be better?  
+
+The simulation output was the ratio of  the time (in generation) for resistance  to the ‘new’ insecticide  to reach a given allele threshold frequency when the ‘new’ insecticide was deployed as combination, compared to the time taken to reach the same threshold if deployed on its own; a ratio >1 indicates that combination is better. Three threshold frequencies were investigated: 0.1, 0.25, 0.5.
+
+These ratios was then analysed by regression to find out how the input parameters alter the ratio, and hence under what circumstance combination would be best/worst. Classification tress can also be done….
+
+The intention was not to consider particular plausible deployment situations, but was to systematically investigate a wide range of parameter space to determine whether CD was better than single-insecticide deployment at reducing the rate at which the minor resistance form spreads.
  
-1. add a savePlots argument, to enable plotting without saving
+Show my progress :
+
+1. github repo
+1. move functions to their own files and structure documentation
+1. move parts of main file into functions
+1. combine 3 outputs to a single list so that can be returned from a function
+1. nearly able to create a package with structured documentation etc.
+
+Questions for Beth & Ian
+
+1. Curtis Table1 vi that shows resistance spreading faster with mixture.
+1. is coverage same as exposure ? yes
+1. what subset of parameters would they like me to vary to start
+1. locations of sensitivity params in params.csv
+1. what outputs are wanted for sensitivity scenarios ? num generations until resistance reaches threshold (0.1, 0.25 & 0.5) Curtis just used 0.5.
+ 
+Talking with Ian & Beth
+
+Sequential use.
+ 
+For some scenarios, we'll need to run with one insecticide and then stop and start other. 
+ 
+When does mixture fail, until one resistance allele reaches critical point, then continue using 2nd insecticide until resistance for that one reaches critical point too. 
+ 
+Could create a version of timetoFifty that accepts threshold param.
+ 
+Ian has created list of defaults in most recent manuscript.
+ 
+The Curtis version is going to be simpler. Because not all param variations are included.
+
+**17/3/15** weds in liverpool 8.45-
+
+Ian created `suggested_sensitivity_analysis.doc`
+ 
+I created a variables table in there with Ians parameter ranges.
+
+My poor paraphrasing of what I think Ian said about the sequential scenarios. The starting conditions from after one insecticide has 'failed' are the same as starting from scratch for the other insecticide because the insecticides to do effect selection on the other locus.
+ 
+moving `malaria_code_andy.r` into a function resistanceMaster()
+exposed a couple of variable scoping problems.
+
+plus now the graphs look different and I get :
+Warning message: In data.matrix(mat) : NAs introduced by coercion
+
+this is from createInputMatrix()
+input <- make.matrix(input, input$Input)
+ 
+this might be something to do with the location of "input.parameters.csv" which I need to sort ...
+ 
+ 
+ 
+devtools commands for setting up a package :
+create requires that the directory doesn't exist yet; it will be created. 
+setup assumes an existing directory from which it will infer the package name.
+ 
+probably need to set rstudio rg to false because mine is already a rs project.
+
+setup(rstudio=FALSE)
+ 
+Then in RStudio I had to set project options, build tools to package
+(so maybe I should have done just done detools::setup())
+
+but on build :
+ERROR: The build directory does not contain a DESCRIPTION
+file so cannot be built as a package.
+Build directory: C:/rsprojects/resistance
+
+but there is a DESCRIPTION there ???
+
+devtools::load_all(".")
+Error: Line starting 'person("Bethany", "L ...' is malformed!
+sorted, just needed tab before 2ry authors
+ 
+
+ 
+ 
+ 
+### TO DO  
+1. add myself as maintainer in DESCRIPTION
+1. sort location in package of "input.parameters.csv" functions should be able to run without it
+1. check out the part about running sequential insecticide scenarios
+1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
+1. spend some time developing my understanding of how the model works
 1. submit tilde bug report
 1. later, structure as R package, maybe move to a new github repo
 1. re-look at R popgen packages when I've got more of a handle on what we are doing.
