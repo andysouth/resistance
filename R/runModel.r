@@ -4,6 +4,7 @@
 #' 
 #' @param input a matrix with parameters in rows and scenarios in columns
 #' @param calibration one of a limited set of integers effecting how scenarios are run
+#' @param produce.plots whether to produce plots
 #' @param savePlots whether to save plots to hardcoded filenames
 
 #' @return a list of 3 lists: results, genotype and fitness
@@ -11,6 +12,7 @@
 
 runModel <- function(input,
                      calibration,
+                     produce.plots = TRUE,
                      savePlots=FALSE){
  
   ### Lists to store results ####
