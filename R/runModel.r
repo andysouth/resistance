@@ -13,6 +13,11 @@ runModel <- function(input,
                      calibration,
                      savePlots=FALSE){
  
+  ### Lists to store results ####
+  #replacing 3 results lists with a list of 3 lists
+  listOut <- list( results=list(), fitness=list(), genotype=list() )
+
+  
   ## Run through columns of matrix "input" to run model for each scenario set
   for (i in 1:ncol( input ) ){
     ### Calibrations ###

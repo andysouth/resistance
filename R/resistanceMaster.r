@@ -64,21 +64,13 @@ resistanceMaster <- function(params.csv = TRUE,
   # select.gen.f <- fs.f.SS1RS2 # set for male and female form
   
   
-  ### Lists to store results ####
-  
-  #replacing 3 results lists with a list of 3 lists
-  listOut <- list( results=list(), fitness=list(), genotype=list() )
-  #can then access matrices like this 
-  #head(listOut$results[[2]])
-  #head(listOut$genotype[[2]])
-  
   
   #calling new function to create input matrix
   input <- createInputMatrix( params.csv=params.csv, inFile=inFile, calibration=calibration)
   
   
   #### Run Model ####
-  
+  #creates listOut$results, listOut$genotype & listOut$fitness
   listOut <- runModel( input, calibration )
   
   
