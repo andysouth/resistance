@@ -42,7 +42,7 @@ listFunctions <- function(filename) {
   return(functions)
 }
 
-listFunctions("malaria_code_fromBeth.R")
+#listFunctions("C:\\Dropbox\\Ian and Andy\\andy\\malaria\\Beth code\\malaria_code_beth.r")
 ```
 
 So there are only 11 functions.
@@ -362,7 +362,7 @@ Ian has created list of defaults in most recent manuscript.
  
 The Curtis version is going to be simpler. Because not all param variations are included.
 
-**17/3/15** weds in liverpool 8.45-
+**17/3/15** weds in liverpool 8.30-6 9.5hrs
 
 Ian created `suggested_sensitivity_analysis.doc`
  
@@ -405,13 +405,100 @@ devtools::load_all(".")
 Error: Line starting 'person("Bethany", "L ...' is malformed!
 sorted, just needed tab before 2ry authors
  
-
+package does build now
  
+ 
+potential refactoring of code, if i think carefully, using arrays I should be able to replace this :
+```
+    if(calibration==103){		## no selection calibration
+        ## male
+        # SS1
+        fs.m.SS1SS2 <- f.m.SS1SS2
+        fs.m.SS1RS2 <- f.m.SS1RS2
+        fs.m.SS1RR2 <- f.m.SS1RR2
+        # RS1
+        fs.m.RS1SS2 <- f.m.RS1SS2 
+        fs.m.RS1RS2_cis <- f.m.RS1RS2_cis
+        fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
+        fs.m.RS1RR2 <- f.m.RS1RR2
+        # RR2 
+        fs.m.RR1SS2 <- f.m.RR1SS2
+        fs.m.RR1RS2 <- f.m.RR1RS2
+        fs.m.RR1RR2 <- f.m.RR1RR2
+        
+        ## female
+        # SS1
+        fs.f.SS1SS2 <- f.f.SS1SS2
+        fs.f.SS1RS2 <- f.f.SS1RS2
+        fs.f.SS1RR2 <- f.f.SS1RR2
+        # RS1
+        fs.f.RS1SS2 <- f.f.RS1SS2 
+        fs.f.RS1RS2_cis <- f.f.RS1RS2_cis
+        fs.f.RS1RS2_trans <- f.f.RS1RS2_trans
+        fs.f.RS1RR2 <- f.f.RS1RR2
+        # RR2 
+        fs.f.RR1SS2 <- f.f.RR1SS2
+        fs.f.RR1RS2 <- f.f.RR1RS2
+        fs.f.RR1RR2 <- f.f.RR1RR2
+```
+
+with something like :
+`fs <- f`
+
+where arrays are set up as :
+```{r}
+#to create an array a[sex][locus1][locus2]
+namesLoci <- c('SS','RS','RR')
+locus1 <- paste0(namesLoci,'1')
+locus2 <- paste0(namesLoci,'2')
+sex <- c("F","M")
+
+dimnames1 <- list( sex=sex, locus1=locus1, locus2=locus2 )
+dim1 <- sapply(dimnames1, function(x) length(x))
+a <- array(0,dim=dim1, dimnames=dimnames1)
+a
+length(a)
+#to access one element
+a['M','SS1','RR2']
+#to check that males total 1
+sum(a['M',,])
+```
+
+Just need to work out how best to deal with cis & trans.
+This would be a less pleasing alternative
+```{r}
+
+namesLoci <- c('SS1SS2','SS1RS2','SS1RR2',
+               'RS1SS2','RS1RS2','RS1RR2',
+               'RR1SS2','RR1RS2','RR1RR2')
+
+#adding cis & trans
+namesLoci <- c('SS1SS2','SS1RS2','SS1RR2',
+               'RS1SS2','RS1RS2cis','RS1RS2trans','RS1RR2',
+               'RR1SS2','RR1RS2','RR1RR2')
+
+sex <- c("F","M")
+
+dimnames1 <- list( sex=sex, namesLoci=namesLoci )
+
+dim1 <- sapply(dimnames1, function(x) length(x))
+a <- array(0,dim=dim1, dimnames=dimnames1)
+a
+length(a)
+#to access one element
+a['M','SS1SS2']
+#to check that males total 1
+sum(a['M',])
+str(a)
+```
  
  
 ### TO DO  
 1. add myself as maintainer in DESCRIPTION
-1. sort location in package of "input.parameters.csv" functions should be able to run without it
+1. sort licence in description
+1. put back in checks for things that should sum to 1
+1. edit runModel carefully
+1. check whether functions can run without "input.parameters.csv" 
 1. check out the part about running sequential insecticide scenarios
 1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
 1. spend some time developing my understanding of how the model works
