@@ -4,7 +4,8 @@
 \alias{createInputMatrix}
 \title{create input parameters matrix}
 \usage{
-createInputMatrix(params.csv, inFile = "input.parameters.csv", calibration)
+createInputMatrix(params.csv, inFile = system.file("extdata",
+  "input.parameters.csv", package = "resistance"), calibration)
 }
 \arguments{
 \item{params.csv}{whether parameters are defined in an input file TRUE/FALSE}

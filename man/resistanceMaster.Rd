@@ -4,8 +4,9 @@
 \alias{resistanceMaster}
 \title{master function to setup and run resistance model scenarios}
 \usage{
-resistanceMaster(params.csv = TRUE, inFile = "input.parameters.csv",
-  calibration = 100, produce.plots = TRUE, savePlots = FALSE)
+resistanceMaster(params.csv = TRUE, inFile = system.file("extdata",
+  "input.parameters.csv", package = "resistance"), calibration = 100,
+  produce.plots = TRUE, savePlots = FALSE)
 }
 \arguments{
 \item{params.csv}{whether parameters are defined in an input file TRUE/FALSE}
