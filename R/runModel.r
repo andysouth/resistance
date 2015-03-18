@@ -658,162 +658,87 @@ runModel <- function(input,
       if( relax == TRUE & (2<k) & (k<12)){
         # relaxed selection fitnesses
         ## Males
-        ## SS1
-        # SS2
         W.m.SS1SS2 <- 0.1 
-        # RS2
         W.m.SS1RS2 <- 0.1
-        # RR2
         W.m.SS1RR2 <- 0.1
         
-        ## RS1
-        # SS2
         W.m.RS1SS2 <- 0.1
-        # RS2
         W.m.RS1RS2 <- 0.1  
-        # RR2
         W.m.RS1RR2 <- 0.1  
         
-        ## RR1
-        # SS2
         W.m.RR1SS2 <- 0.1 
-        # RS2
         W.m.RR1RS2 <- 0.1 
-        # RR2
         W.m.RR1RR2 <- 0.1  
         
-        
-        
         ## Female
-        ## SS1
-        # SS2
-        # SS2
         W.f.SS1SS2 <- 0.1
-        # RS2
         W.f.SS1RS2 <- 0.1
-        # RR2
         W.f.SS1RR2 <- 0.1
         
-        ## RS1
-        # SS2
         W.f.RS1SS2 <- 0.1
-        # RS2
         W.f.RS1RS2 <- 0.1 
-        # RR2
         W.f.RS1RR2 <- 0.1 
         
-        ## RR1
-        # SS2
         W.f.RR1SS2 <- 0.1
-        # RS2
         W.f.RR1RS2 <- 0.1 
-        # RR2
         W.f.RR1RR2 <- 0.1
+        
       } else if( relax == TRUE & (k>11) & (k<15)){
+        
         # non relaxed fitnesses
         ## Males
-        ## SS1
-        # SS2
         W.m.SS1SS2 <- 0.1
-        # RS2
         W.m.SS1RS2 <- 0.1
-        # RR2
         W.m.SS1RR2 <- 0.1
         
-        ## RS1
-        # SS2
         W.m.RS1SS2 <- 0.1
-        # RS2
         W.m.RS1RS2 <- 1  
-        # RR2
         W.m.RS1RR2 <- 1  
         
-        ## RR1
-        # SS2
         W.m.RR1SS2 <- 0.1
-        # RS2
         W.m.RR1RS2 <- 1 
-        # RR2
         W.m.RR1RR2 <- 1 
         
         ## Female
-        ## SS1
-        # SS2
-        # SS2
         W.f.SS1SS2 <- 0.1
-        # RS2
         W.f.SS1RS2 <- 0.1
-        # RR2
         W.f.SS1RR2 <- 0.1
         
-        ## RS1
-        # SS2
         W.f.RS1SS2 <- 0.1
-        # RS2
         W.f.RS1RS2 <- 1 
-        # RR2
         W.f.RS1RR2 <- 1 
         
-        ## RR1
-        # SS2
         W.f.RR1SS2 <- 0.1
-        # RS2
         W.f.RR1RS2 <- 1 
-        # RR2
         W.f.RR1RR2 <- 1
+        
       } else if( relax == TRUE & (k>14) ){
+        
         # relaxed selection fitnesses
         ## Males
-        ## SS1
-        # SS2
         W.m.SS1SS2 <- 0.1 
-        # RS2
         W.m.SS1RS2 <- 0.1
-        # RR2
         W.m.SS1RR2 <- 0.1
         
-        ## RS1
-        # SS2
         W.m.RS1SS2 <- 0.1
-        # RS2
         W.m.RS1RS2 <- 0.1  
-        # RR2
         W.m.RS1RR2 <- 0.1  
         
-        ## RR1
-        # SS2
         W.m.RR1SS2 <- 0.1 
-        # RS2
         W.m.RR1RS2 <- 0.1 
-        # RR2
         W.m.RR1RR2 <- 0.1  
         
-        
-        
         ## Female
-        ## SS1
-        # SS2
-        # SS2
         W.f.SS1SS2 <- 0.1
-        # RS2
         W.f.SS1RS2 <- 0.1
-        # RR2
         W.f.SS1RR2 <- 0.1
         
-        ## RS1
-        # SS2
         W.f.RS1SS2 <- 0.1
-        # RS2
         W.f.RS1RS2 <- 0.1 
-        # RR2
         W.f.RS1RR2 <- 0.1 
         
-        ## RR1
-        # SS2
         W.f.RR1SS2 <- 0.1
-        # RS2
         W.f.RR1RS2 <- 0.1 
-        # RR2
         W.f.RR1RR2 <- 0.1
       }
       
