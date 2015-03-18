@@ -13,7 +13,7 @@
 #' @export
 #' 
 resistanceMaster <- function(params.csv = TRUE,
-                             inFile = "input.parameters.csv",
+                             inFile = system.file("extdata","input.parameters.csv", package="resistance"),
                              calibration = 100,
                              produce.plots = TRUE,
                              savePlots = FALSE)

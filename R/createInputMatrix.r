@@ -11,7 +11,7 @@
 #' @export
 
 createInputMatrix <- function(params.csv,
-                        inFile = "input.parameters.csv",
+                        inFile = system.file("extdata","input.parameters.csv", package="resistance"),
                         calibration){
   
   #todo may be able to combine params.csv and file arguments
