@@ -3,8 +3,8 @@
 #' takes data frame as dat, and column in data frame containing parameters as rnames.
 #' this produces NA generation errors due to coercing location column, this column of NA's is however removed.
 
-#' @param mat
-#' @param rnames
+#' @param mat matrix
+#' @param rnames rownames
 #' 
 #' @return ? dat.m
 #' @export

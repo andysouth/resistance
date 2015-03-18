@@ -7,9 +7,9 @@
 make.matrix(mat, rnames)
 }
 \arguments{
-\item{mat}{}
+\item{mat}{matrix}
 
-\item{rnames}{}
+\item{rnames}{rownames}
 }
 \value{
 ? dat.m
