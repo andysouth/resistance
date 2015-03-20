@@ -1,10 +1,10 @@
 Package: resistance
 Title: an insecticide resistance population genetics model with 2 loci and 2 insecticides.
-Version: 0.0.0.9000
-Authors@R: person("Andy", "South", , "southandy@gmail.com", role = c("aut", "cre"))
-  person("Bethany", "Levick", , "B.A.Levick@liverpool.ac.uk", role = c("aut", "cre"))
-  person("Ian", "Hastings", , "Ian.Hastings@lstmed.ac.uk", role = c("aut", "cre"))
+Version: 0.0.1
+Authors@R: c( person("Andy", "South", , "southandy@gmail.com", role = c("aut", "cre")),
+              person("Bethany", "Levick", , "B.A.Levick@liverpool.ac.uk", role = c("aut")),
+              person("Ian", "Hastings", , "Ian.Hastings@lstmed.ac.uk", role = c("aut")) )
 Description: enables running of multiple insecticide resistance scenarios. 
 Depends: R (>= 3.1.2)
-License: What license is it under?
+License: GPL-2
 LazyData: true
