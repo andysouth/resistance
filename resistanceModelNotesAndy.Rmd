@@ -267,15 +267,9 @@ genotype.list with listOut$genotype
 
 
 **16/3/15** mon 18.30-19.30 1hr
-
 cut out lines 92 to 1740 into a runModel() function, later can subdivide it up
 
-In max(combmat[, gencol]) : no non-missing arguments to max; returning -Inf
-fixed by returning listOut from runModel()
-
 **17/3/15** tues to liverpool 8.30-5.30 9hrs
-
-done: add a savePlots argument, to enable plotting without saving
 
 Assuming that resistance to each insecticide was encoded at one locus respectively, and that these can either have a homozygous susceptible (SS), heterozygous (RS) or homozygous resistant (RR) genotypes at each locus, there are then ten possible genotypes (including cis & trans forms of the double heterozygous).
 
@@ -322,13 +316,13 @@ I could start by creating a document with the results at the extremes of the par
 
 Send Ian & Beth devtools installation instructions and a document.
 
-~60,000 combinations…. Too many???  
+Approx. 60,000 combinations. Too many???  
 
 would latin cube hypersampling be better?  
 
 The simulation output was the ratio of  the time (in generation) for resistance  to the ‘new’ insecticide  to reach a given allele threshold frequency when the ‘new’ insecticide was deployed as combination, compared to the time taken to reach the same threshold if deployed on its own; a ratio >1 indicates that combination is better. Three threshold frequencies were investigated: 0.1, 0.25, 0.5.
 
-These ratios was then analysed by regression to find out how the input parameters alter the ratio, and hence under what circumstance combination would be best/worst. Classification tress can also be done….
+These ratios was then analysed by regression to find out how the input parameters alter the ratio, and hence under what circumstance combination would be best/worst. Classification tress can also be done.
 
 The intention was not to consider particular plausible deployment situations, but was to systematically investigate a wide range of parameter space to determine whether CD was better than single-insecticide deployment at reducing the rate at which the minor resistance form spreads.
  
@@ -491,14 +485,51 @@ a['M','SS1SS2']
 sum(a['M',])
 str(a)
 ```
+
+**19/3/15** fri 9.45-14 4.25hrs 3.30-7 3.5hrs 7.75hrs
  
+checking whether I can run without the input file. Fixed now.
+
+```{r}
+resistanceMaster(params.csv = FALSE)
+``` 
+
+This is what the fitness scores that can be saved for each scenario as *two-locus_fitness-scores.csv look like :
+```
+	-,-	a,-	A,-	-,b	-,B	a,b	A,B	A,b	a,B
+SS1SS2	1	0	0	0	0	0	0	0	0
+SS1RS2	1	0	0	0	0	0	1.86E-05	0	0
+SS1RR2	1	0	0	0	0	0	0.1161	0	0
+RS1SS2	1	0	0	0	0	0	0	0	0
+RS1RS2	1	0	0	0	0	0	2.13E-05	0	0
+RS1RR2	1	0	0	0	0	0	0.132913	0	0
+RR1SS2	1	0	0	0	0	0	0	0	0
+RR1RS2	1	0	0	0	0	0	3.44E-05	0	0
+RR1RR2	1	0	0	0	0	0	0.215	0	0
+```
+
+Starting resistSimple() to be able to run single simpleScenarios.
+
+
  
 ### TO DO  
-1. add myself as maintainer in DESCRIPTION
-1. sort licence in description
+
+1. check whether setting input[13,1] <- to the next line at 58 in createInputMatrix() was a bug
+
+1. finish tidying documentation of reading in input vars in createInputMatrix() add avr names from runModel()
++ can use these later for roxygen doc of function inputs to resistSimple
++ and I could use find&replace to rename later if needed
+
+1. sort that resistSimple will only work with calibration of 1012
+
+1. make it easier to run a single scenario and default scenarios
++ might do this by first adding a function rather than changing existing stuff
+1. i think the main visual output is the frequency of resistance over time
+1. start creating a vignette to help me understand how the model works
+
+1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
 1. put back in checks for things that should sum to 1
 1. edit runModel carefully
-1. check whether functions can run without "input.parameters.csv" 
 1. check out the part about running sequential insecticide scenarios
 1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
 1. spend some time developing my understanding of how the model works
@@ -508,8 +539,21 @@ str(a)
 
 
 ### suggestion from Beth
-looking at it now I realise this is not ideal
 a solution may be to provide a .csv file with the Curtis scenarios set up
 and then the need to set the calibration number and params.csv in the R script can be removed altogether
-so it is all set up in the .csv file - I think similar can be done with produce.plots
-so the only bit of R code the user will need to change is the setwd() and the read.csv()
+the only bit of R code the user will need to change is the setwd() and the read.csv()
+
+### variable naming conventions
+**SS1, RS1, RR1** homozygous susceptible, heterozygous or homozygous resistant genotypes at each locus.   
+With 2 loci there are ten possible genotypes (including cis & trans forms of the double heterozygous).  
+
+** A, B, a, b, -** 2 insecticides at 3 levels; low(ab), high(AB), absent(--) resulting in 9 niches.  
+
+Locus1 relates to resistance for insecticide A, and locus2 for B. Locus2 does not effect exposure to A.  
+
+```
+colnames(fitness) <- c( "-,-", "a,-", "A,-", "b,-", "B,-", "a,b", "A,B", "A,b", "a,B" )
+rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2", 
+                        "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+                        "RR1SS2", "RR1RS2", "RR1RR2")
+```
