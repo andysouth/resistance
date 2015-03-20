@@ -30,7 +30,7 @@ createInputMatrix <- function(params.csv,
 
 
   ## Scenario 1 Calibration 1011 - Fig 1 Curtis ####
-  if( params.csv == FALSE && calibration == 1011 ){  
+  if( !params.csv && calibration == 1011 ){  
     input <- matrix( ncol=2, nrow=52 )
     input[1,1] <- calibration
     
@@ -175,7 +175,7 @@ createInputMatrix <- function(params.csv,
   }
   
   # Calibration 1012 - Fig 2 Curtis: Sequential (B,A) and then combination treatments
-  if( params.csv == FALSE && calibration == 1012 ){
+  if( !params.csv && calibration == 1012 ){
     input <- matrix( ncol=3, nrow=52 )
     colnames(input) <- c("B (HCH)", "A (DDT)","Combination")
     ### Sequential Treatment 
@@ -601,7 +601,7 @@ createInputMatrix <- function(params.csv,
     input[52,3] <- 0
   }
   
-  if( params.csv == FALSE ){
+  if( !params.csv ){
     rownames(input) <- c( "Calibration (100 default)","Number of generations ",                    
                           "Collect fitness scores in matrix (1/0)","Export fitness scores matrix to .csv (1/0)",
                           "Frequency of R at locus 1","Frequency of R at locus 2","Recombination Rate","Exposure Males -,-","Exposure Males a,-",                      
