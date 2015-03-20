@@ -51,10 +51,8 @@ runModel <- function(input,
     c <- input[7,i]		# recombination rate
     
     
-    ### Insecticides are represented as a and b ###
     ### small case = low concentration, upper case = high concentration, 0 = absence (zero not UC o). ###
-    
-    ### Exposure Values ###
+
     ## Exposure levels of males and females to each insecticide niche ##
     # males
     a.m_00 <- input[8,i]
@@ -74,11 +72,7 @@ runModel <- function(input,
     #a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
     #if ( a.m != 1 ){		 
     #	print( paste("Error in male exposures: must total one: ", a.m) )
-    
-    #	}else{
-    #		print( paste( "Male exposures total 1: ", a.m ))
-    #		}
-    
+    #	}
     
     # females
     a.f_00 <- input[17,i]
@@ -98,10 +92,7 @@ runModel <- function(input,
     #a.f <- sum(a.f_00, a.f_a0, a.f_A0, a.f_0b, a.f_0B, a.f_ab, a.f_AB, a.f_Ab, a.f_aB)
     #if ( a.f != 1 ){		 
     #	print( paste("Error in female exposures: must total one: ", a.f) )
-    #	
-    #	}else{
-    #		print( paste( "female exposures total 1: ", a.f ))
-    #		}
+    #	}
     
     
     ### Selection from distributions ###
@@ -117,7 +108,6 @@ runModel <- function(input,
     phi.SS2_0B <- input[29,i]
     
     # fitness of SS in environment with no insecticide are set to 1
-    # W = fitness value
     W.SS1_00 <- input[30,i]
     W.SS2_00 <- input[31,i]
     
@@ -125,12 +115,10 @@ runModel <- function(input,
     ## needed to find fitness values of genotype in exposure to relating insecticide 
     # h = dominance coefficient
     h.RS1_00 <- input[32,i]
-    
     h.RS1_a0 <- input[33,i]
     h.RS1_A0 <- input[34,i]
     
     h.RS2_00 <- input[35,i]
-    
     h.RS2_0b <- input[36,i]
     h.RS2_0B <- input[37,i]
     
