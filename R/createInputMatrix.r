@@ -12,7 +12,7 @@
 
 createInputMatrix <- function(params.csv,
                         inFile = system.file("extdata","input.parameters.csv", package="resistance"),
-                        calibration){
+                        calibration = 1012){
   
   #todo may be able to combine params.csv and file arguments
   
@@ -28,6 +28,8 @@ createInputMatrix <- function(params.csv,
     return(input)
   }
 
+  #seeing if I need to initialise the matrix outside of the callibration loops below
+  #input <- matrix()
 
   ## Scenario 1 Calibration 1011 - Fig 1 Curtis ####
   if( !params.csv && calibration == 1011 ){  

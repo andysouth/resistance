@@ -14,7 +14,7 @@
 #' 
 resistanceMaster <- function(params.csv = TRUE,
                              inFile = system.file("extdata","input.parameters.csv", package="resistance"),
-                             calibration = 100,
+                             calibration = 1012,
                              produce.plots = TRUE,
                              savePlots = FALSE)
 {
