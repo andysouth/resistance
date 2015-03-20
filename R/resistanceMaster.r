@@ -8,6 +8,7 @@
 #' @param calibration one of a limited set of integers effecting how scenarios are run 
 #' @param produce.plots whether to produce plots
 #' @param savePlots whether to save plots to hardcoded filenames
+#' @param save.fitvals whether to save fitness scores to csv 0=no, 1=yes 
 #' 
 #' @return nothing yet
 #' @export
@@ -16,7 +17,8 @@ resistanceMaster <- function(params.csv = TRUE,
                              inFile = system.file("extdata","input.parameters.csv", package="resistance"),
                              calibration = 1012,
                              produce.plots = TRUE,
-                             savePlots = FALSE)
+                             savePlots = FALSE,
+                             save.fitvals = 0)
 {
   
   #inFile <- "full-dom_SD.csv"
@@ -66,7 +68,7 @@ resistanceMaster <- function(params.csv = TRUE,
   
   
   #calling new function to create input matrix
-  input <- createInputMatrix( params.csv=params.csv, inFile=inFile, calibration=calibration)
+  input <- createInputMatrix( params.csv=params.csv, inFile=inFile, calibration=calibration, save.fitvals=save.fitvals)
   
   
   #### Run Model ####

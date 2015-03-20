@@ -5,7 +5,8 @@
 \title{create input parameters matrix}
 \usage{
 createInputMatrix(params.csv, inFile = system.file("extdata",
-  "input.parameters.csv", package = "resistance"), calibration)
+  "input.parameters.csv", package = "resistance"), calibration = 1012,
+  save.fitvals = 0)
 }
 \arguments{
 \item{params.csv}{whether parameters are defined in an input file TRUE/FALSE}
@@ -13,6 +14,8 @@ createInputMatrix(params.csv, inFile = system.file("extdata",
 \item{inFile}{parameters filename}
 
 \item{calibration}{one of a limited set of integers effecting how scenarios are run}
+
+\item{save.fitvals}{whether to save fitness scores to csv 0=no, 1=yes}
 }
 \value{
 matrix

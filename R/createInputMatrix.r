@@ -6,13 +6,15 @@
 #' @param params.csv whether parameters are defined in an input file TRUE/FALSE
 #' @param inFile parameters filename
 #' @param calibration one of a limited set of integers effecting how scenarios are run 
+#' @param save.fitvals whether to save fitness scores to csv 0=no, 1=yes 
 #' 
 #' @return matrix
 #' @export
 
 createInputMatrix <- function(params.csv,
                         inFile = system.file("extdata","input.parameters.csv", package="resistance"),
-                        calibration = 1012){
+                        calibration = 1012,
+                        save.fitvals = 0 ){
   
   #todo may be able to combine params.csv and file arguments
   
@@ -43,10 +45,8 @@ createInputMatrix <- function(params.csv,
     ### Saving Parameters ###
     # To save parameters in a matrix, set coll.fitvals to 1 ##
     input[3,1] <- 1
-    # To save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
-    input[4,1] <- 1		## please note this will OVERWRITE every time the matrix runs
-    ## so files will need to be renamed/moved to be kept.
-    
+    # to save this matrix to an external .csv set to 1, will overwrite ##
+    input[4,1] <- save.fitvals		
     
     ### Genotype Frequencies ###
     ## setting up to get proportions of genotypes in population
@@ -191,10 +191,8 @@ createInputMatrix <- function(params.csv,
     ### Saving Parameters ###
     # To save parameters in a matrix, set coll.fitvals to 1 ##
     input[3,1] <- 1
-    # To save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
-    input[4,1] <- 1		## please note this will OVERWRITE every time the matrix runs
-    ## so files will need to be renamed/moved to be kept.
-    
+    # to save this matrix to an external .csv set to 1, will overwrite ##
+    input[4,1] <- save.fitvals
     
     ### Genotype Frequencies ###
     ## setting up to get proportions of genotypes in population
@@ -331,10 +329,8 @@ createInputMatrix <- function(params.csv,
     ### Saving Parameters ###
     # To save parameters in a matrix, set coll.fitvals to 1 ##
     input[3,2] <- 1
-    # To save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
-    input[4,2] <- 1		## please note this will OVERWRITE every time the matrix runs
-    ## so files will need to be renamed/moved to be kept.
-    
+    # to save this matrix to an external .csv set to 1, will overwrite ##
+    input[4,2] <- save.fitvals		
     
     ### Genotype Frequencies ###
     ## setting up to get proportions of genotypes in population
@@ -471,10 +467,8 @@ createInputMatrix <- function(params.csv,
     ### Saving Parameters ###
     # To save parameters in a matrix, set coll.fitvals to 1 ##
     input[3,3] <- 1
-    # To save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
-    input[4,3] <- 1		## please note this will OVERWRITE every time the matrix runs
-    ## so files will need to be renamed/moved to be kept.
-    
+    # to save this matrix to an external .csv set to 1, will overwrite ##
+    input[4,3] <- save.fitvals
     
     ### Genotype Frequencies ###
     ## setting up to get proportions of genotypes in population

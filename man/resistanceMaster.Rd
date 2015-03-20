@@ -5,8 +5,8 @@
 \title{master function to setup and run resistance model scenarios}
 \usage{
 resistanceMaster(params.csv = TRUE, inFile = system.file("extdata",
-  "input.parameters.csv", package = "resistance"), calibration = 100,
-  produce.plots = TRUE, savePlots = FALSE)
+  "input.parameters.csv", package = "resistance"), calibration = 1012,
+  produce.plots = TRUE, savePlots = FALSE, save.fitvals = 0)
 }
 \arguments{
 \item{params.csv}{whether parameters are defined in an input file TRUE/FALSE}
@@ -18,6 +18,8 @@ resistanceMaster(params.csv = TRUE, inFile = system.file("extdata",
 \item{produce.plots}{whether to produce plots}
 
 \item{savePlots}{whether to save plots to hardcoded filenames}
+
+\item{save.fitvals}{whether to save fitness scores to csv 0=no, 1=yes}
 }
 \value{
 nothing yet
