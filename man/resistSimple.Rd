@@ -5,7 +5,7 @@
 \title{to run one simple scenario without an input file, experimental}
 \usage{
 resistSimple(calibration = 1012, produce.plots = TRUE, savePlots = FALSE,
-  save.fitvals = 0)
+  save.fitvals = 0, ...)
 }
 \arguments{
 \item{calibration}{one of a limited set of integers effecting how scenarios are run}
@@ -15,6 +15,8 @@ resistSimple(calibration = 1012, produce.plots = TRUE, savePlots = FALSE,
 \item{savePlots}{whether to save plots to hardcoded filenames}
 
 \item{save.fitvals}{whether to save fitness scores to csv 0=no, 1=yes}
+
+\item{...}{extra arguments passed to setInputOneScenario()}
 }
 \value{
 nothing yet
