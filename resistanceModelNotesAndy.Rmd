@@ -508,17 +508,32 @@ RR1RS2	1	0	0	0	0	0	3.44E-05	0	0
 RR1RR2	1	0	0	0	0	0	0.215	0	0
 ```
 
-Starting resistSimple() to be able to run single simpleScenarios.
+Starting resistSimple() to be able to run single simple Scenarios.
+
+**19/3/15** sat 10.15
+
+[recent popgen hack](https://github.com/NESCent/r-popgen-hackathon/wiki)
+Doesn't seem that useful for this project.
+
+Good progress :
+check out e.g.
+`resistSimple(P_1=0.01,P_2=0.3)`
 
 
  
 ### TO DO  
 
-1. check whether setting input[13,1] <- to the next line at 58 in createInputMatrix() was a bug
+1. create setInputOneScenario to enable setting inputs for a single scenario
++ sensible defaults
++ later will allow customised scenarios e.g. setInputCurtisFig1
++ will reduce code volume and repetition in createInputMatrix
+
 
 1. finish tidying documentation of reading in input vars in createInputMatrix() add avr names from runModel()
 + can use these later for roxygen doc of function inputs to resistSimple
 + and I could use find&replace to rename later if needed
+
+1. check whether setting input[13,1] <- to the next line at 58 in createInputMatrix() was a bug
 
 1. sort that resistSimple will only work with calibration of 1012
 
