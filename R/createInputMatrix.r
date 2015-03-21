@@ -38,33 +38,24 @@ createInputMatrix <- function(params.csv,
     
     input <- matrix( ncol=2, nrow=52 )
     
-    input[1,1] <- calibration
-    input[2,1] <- 18            # number of generations
-    input[3,1] <- 1             # save parameters in a matrix, set coll.fitvals to 1
-    input[4,1] <- save.fitvals	# save matrix to an external .csv set to 1
+    input[1,1] <- calibration   # calibration a code to run specific set of scenarios
+    input[2,1] <- 18            # max_gen number of generations
+    input[3,1] <- 1             # coll.fitvals save fitness values in a matrix 0/1
+    input[4,1] <- save.fitvals	# save.fitvals save fitness values to an external .csv 0/1
     input[5,1] <- 0.001	        # P_1 locus 1 frequency of resistance allele
     input[6,1] <- 0.001	        # P_2 locus 2 frequency of resistance allele
     input[7,1] <- 0.5		        # c recombination rate
     
-    ## Exposure levels of males and females to each insecticide niche ##
-    # males
     input[8,1] <- 0.1  	# a.m_00 insecticide exposure male no1 no2
     input[9,1] <- 0     # a.m_a0 insecticide exposure male lo1 no2
     input[10,1] <- 0    # a.m_A0 insecticide exposure male hi1 no2
     input[11,1] <- 0    # a.m_0b insecticide exposure male no1 lo2
     input[12,1] <- 0    # a.m_0B insecticide exposure male no1 hi2
-    #andy previously there was no value here, was that a bug ?
     input[13,1] <- 0    # a.m_ab insecticide exposure male lo1 lo2 
     input[14,1] <- 0.9	# a.m_AB insecticide exposure male hi1 hi2
     input[15,1] <- 0    # a.m_Ab insecticide exposure male hi1 lo2 
-    input[16,1] <- 0    # a.m_ab insecticide exposure male lo1 lo2 
-    
-    #a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
-    #if ( a.m != 1 ){		 
-    #	print( paste("Error in male exposures: must total one: ", a.m) )
-    #	}
+    input[16,1] <- 0    # a.m_aB insecticide exposure male lo1 hi2 
 
-    # females
     input[17,1] <- 0.1  	# a.f_00 insecticide exposure female no1 no2
     input[18,1] <- 0     # a.f_a0 insecticide exposure female lo1 no2
     input[19,1] <- 0    # a.f_A0 insecticide exposure female hi1 no2
@@ -73,69 +64,52 @@ createInputMatrix <- function(params.csv,
     input[22,1] <- 0    # a.f_ab insecticide exposure female lo1 lo2 
     input[23,1] <- 0.9	# a.f_AB insecticide exposure female hi1 hi2
     input[24,1] <- 0    # a.f_Ab insecticide exposure female hi1 lo2 
-    input[25,1] <- 0    # a.f_ab insecticide exposure female lo1 lo2         
+    input[25,1] <- 0    # a.f_aB insecticide exposure female lo1 hi2         
+
+    input[26,1] <- 0  # phi.SS1_a0 Baseline fitness of SS1 in a0
+    input[27,1] <- 1	# phi.SS1_A0 Baseline fitness of SS1 in A0
+    input[28,1] <- 0  # phi.SS2_0b Baseline fitness of SS2 in 0b
+    input[29,1] <- 1	# phi.SS2_0B Baseline fitness of SS2 in 0B
+    
+    input[30,1] <- 1  # W.SS1_00 Fitness of SS1 in 00 (no insecticide)
+    input[31,1] <- 1  # W.SS2_00 Fitness of SS2 in 00 (no insecticide)
+    
+    input[32,1] <- 0  # h.RS1_00 Dominance coefficient locus1 in 00
+    input[33,1] <- 0  # h.RS1_a0 Dominance coefficient locus1 in a0
+    input[34,1] <- 1	# h.RS1_A0 Dominance coefficient locus1 in A0
+    input[35,1] <- 0  # h.RS2_00 Dominance coefficient locus2 in 00
+    input[36,1] <- 0  # h.RS2_0b Dominance coefficient locus2 in 0b
+    input[37,1] <- 1  # h.RS2_0B Dominance coefficient locus2 in 0B
+    
+    input[38,1] <- 0  # s.RR1_a0 Selection coefficient locus1 in a
+    input[39,1] <- 1	# s.RR1_A0 Selection coefficient locus1 in A
+    input[40,1] <- 0  # s.RR2_0b Selection coefficient locus2 in b
+    input[41,1] <- 1	# s.RR2_0B Selection coefficient locus2 in B
+
+    input[42,1] <- 0  # z.RR1_00 fitness cost of resistance allele 1 in insecticide free environment
+    input[43,1] <- 0  # z.RR2_00 fitness cost of resistance allele 2 in insecticide free environment
+    
+    input[44,1] <- 1	# niche_00 insecticide niche toggle no1 no2 0=off 1=on
+    input[45,1] <- 0  # niche_a0 insecticide niche toggle no1 no2 0=off 1=on
+    input[46,1] <- 0  # niche_A0 insecticide niche toggle hi1 no2 0=off 1=on
+    input[47,1] <- 0  # niche_0b insecticide niche toggle no1 lo2 0=off 1=on
+    input[48,1] <- 0  # niche_0B insecticide niche toggle no1 hi2 0=off 1=on
+    input[49,1] <- 0  # niche_ab insecticide niche toggle lo1 lo2 0=off 1=on
+    input[50,1] <- 1  # niche_AB insecticide niche toggle hi1 hi2 0=off 1=on
+    input[51,1] <- 0  # niche_Ab insecticide niche toggle hi1 lo2 0=off 1=on
+    input[52,1] <- 0  # niche_aB insecticide niche toggle lo1 hi2 0=off 1=on
+ 
+    
+    #a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
+    #if ( a.m != 1 ){		 
+    #	print( paste("Error in male exposures: must total one: ", a.m) )
+    #	}
     
     #a.f <- sum(a.f_00, a.f_a0, a.f_A0, a.f_0b, a.f_0B, a.f_ab, a.f_AB, a.f_Ab, a.f_aB)
     #if ( a.f != 1 ){		 
     #	print( paste("Error in female exposures: must total one: ", a.f) )
     #	}
     
-    ### Selection from distributions ###
-    ### Fitness Values ###
-    ## Baseline of SS in each insecticide/concentration (NOT niche, see Table 3. of brief)
-    ## User entered fitness values to allow some survival of homozygote susceptible due to chance
-    # set as variables to be used in function calls/equations
-    # phi = baseline fitness value
-    input[26,1] <- 0  # phi.SS1_a0
-    input[27,1] <- 1	# phi.SS1_A0
-    
-    input[28,1] <- 0  # phi.SS2_0b
-    input[29,1] <- 1	# phi.SS2_0B
-    
-    # fitness of SS in environment with no insecticide are set to 1
-    # W = fitness value
-    input[30,1] <- 1  # W.SS1_00
-    input[31,1] <- 1  # W.SS2_00
-    
-    ## Dominance and selection coefficients
-    ## needed to find fitness values of genotype in exposure to relating insecticide 
-    # h = dominance coefficient
-    input[32,1] <- 0  # h.RS1_00
-    input[33,1] <- 0  # h.RS1_a0
-    input[34,1] <- 1	# h.RS1_A0
-    
-    input[35,1] <- 0  # h.RS1_00
-    input[36,1] <- 0  # h.RS1_0b
-    input[37,1] <- 1  # h.RS1_0B
-    
-    # s = selection coefficient
-    input[38,1] <- 0  # s.RR1_a0
-    input[39,1] <- 1	# s.RR1_A0
-    
-    input[40,1] <- 0  # s.RR2_0b
-    input[41,1] <- 1	# s.RR2_0B
-    
-    input[42,1] <- 0  # z.RR1_00 fitness cost of resistance allele 1 in insecticide free environment
-    input[43,1] <- 0  # z.RR2_00 fitness cost of resistance allele 2 in insecticide free environment
-    
-    ### Toggle Insecticide Niches on and off ###
-    ## Allows for setting of specific combinations of insecticide niches to be used
-    ## if 0 the calculation of fitness in that niche is cancelled and results printed as 0
-    ## calibration == 1011||1012 will change the correct ones to 0 to run Curtis/Comparator
-    input[44,1] <- 1	# niche_00 insecticide niche toggle no1 no2 0=off 1=on
-    
-    input[45,1] <- 0  # niche_a0 insecticide niche toggle no1 no2 0=off 1=on
-    input[46,1] <- 0  # niche_A0 insecticide niche toggle hi1 no2 0=off 1=on
-    
-    input[47,1] <- 0  # niche_0b insecticide niche toggle no1 lo2 0=off 1=on
-    input[48,1] <- 0  # niche_0B insecticide niche toggle no1 hi2 0=off 1=on
-    
-    input[49,1] <- 0  # niche_ab insecticide niche toggle lo1 lo2 0=off 1=on
-    input[50,1] <- 1  # niche_AB insecticide niche toggle hi1 hi2 0=off 1=on
-    
-    input[51,1] <- 0  # niche_Ab insecticide niche toggle hi1 lo2 0=off 1=on
-    input[52,1] <- 0  # niche_aB insecticide niche toggle lo1 hi2 0=off 1=on
- 
     #todo check setting of all scenario2 params to scenario1
     input[,2] <- input[,1]
   }
