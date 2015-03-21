@@ -120,21 +120,21 @@ createInputMatrix <- function(params.csv,
     
     ### Toggle Insecticide Niches on and off ###
     ## Allows for setting of specific combinations of insecticide niches to be used
-    ## if toggled FALSE the calculation of fitness in that niche is cancelled and results printed as 0
-    ## even if all set to TRUE, calibration == 1011||1012 will change the correct ones to OFF to run Curtis/Comparator
-    input[44,1] <- 1	# niche_00
+    ## if 0 the calculation of fitness in that niche is cancelled and results printed as 0
+    ## calibration == 1011||1012 will change the correct ones to 0 to run Curtis/Comparator
+    input[44,1] <- 1	# niche_00 insecticide niche toggle no1 no2 0=off 1=on
     
-    input[45,1] <- 0  # niche_a0
-    input[46,1] <- 0  # niche_A0
+    input[45,1] <- 0  # niche_a0 insecticide niche toggle no1 no2 0=off 1=on
+    input[46,1] <- 0  # niche_A0 insecticide niche toggle hi1 no2 0=off 1=on
     
-    input[47,1] <- 0  # niche_0b
-    input[48,1] <- 0  # niche_0B
+    input[47,1] <- 0  # niche_0b insecticide niche toggle no1 lo2 0=off 1=on
+    input[48,1] <- 0  # niche_0B insecticide niche toggle no1 hi2 0=off 1=on
     
-    input[49,1] <- 0  # niche_ab
-    input[50,1] <- 1  # niche_AB
+    input[49,1] <- 0  # niche_ab insecticide niche toggle lo1 lo2 0=off 1=on
+    input[50,1] <- 1  # niche_AB insecticide niche toggle hi1 hi2 0=off 1=on
     
-    input[51,1] <- 0  # niche_Ab
-    input[52,1] <- 0  # niche_aB
+    input[51,1] <- 0  # niche_Ab insecticide niche toggle hi1 lo2 0=off 1=on
+    input[52,1] <- 0  # niche_aB insecticide niche toggle lo1 hi2 0=off 1=on
  
     #todo check setting of all scenario2 params to scenario1
     input[,2] <- input[,1]
