@@ -36,7 +36,7 @@ resistSimple <- function( calibration = 1012,
   listOut <- runModel( input, calibration, produce.plots = FALSE )
   
   # Plot R and S allele frequencies over generations by M&F
-  genplot <- plotallele.freq( listOut$results[[1]] ) 
+  genplot <- plotallele.freq.andy( listOut$results[[1]] ) 
 
   
 }
