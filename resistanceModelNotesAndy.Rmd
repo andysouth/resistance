@@ -510,7 +510,7 @@ RR1RR2	1	0	0	0	0	0	0.215	0	0
 
 Starting resistSimple() to be able to run single simple Scenarios.
 
-**19/3/15** sat 10.15-2.15 4hrs
+**20/3/15** sat 10.15-2.15 4hrs
 
 [recent popgen hack](https://github.com/NESCent/r-popgen-hackathon/wiki)
 Doesn't seem that useful for this project.
@@ -520,8 +520,22 @@ check out e.g.
 `resistSimple(P_1=0.01,P_2=0.3)`
 
 
+**22/3/15** mon 9.45
+
+
+
  
 ### TO DO  
+
+sort this
+To git@github.com:AndySouth/resistance.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'git@github.com:AndySouth/resistance.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
 
 1. create setInputOneScenario to enable setting inputs for a single scenario
 + sensible defaults
