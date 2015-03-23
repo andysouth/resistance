@@ -306,7 +306,7 @@ Insecticide coverage for males: as for females, or half that of females (n=2) **
 ‘Old’ insecticide resistance starting freq: 0.05, 0.1, 0.2, 0.5, 0.8 (n=5) **7**  
 Resistance heterozygous fitness: 0.5, 0.75. 1    (n=3 for each insecticide) **?28 & 30**  
 Sensitive heterozygous fitness:0, 0.2, 0.4 (n=3 for each insecticide) **?27 & 29**  
-Resistance allele dominance: 0, 0.2, 0.5, 0.9, 1 for each locus (n=5 for each locus) **35,38 do to start**  
+Resistance allele dominance: 0, 0.2, 0.5, 0.9, 1 for each locus (n=5 for each locus) **32, 35 do to start**  
 Fitness costs: 0, 0.05, 0.1 (n=3) **43&44**  
 Fitness dominance: 0, 0.5, 1 (n=3) **33&36**  
 
@@ -491,6 +491,9 @@ str(a)
 checking whether I can run without the input file. Fixed now.
 
 ```{r}
+require(devtools)    
+install_github('AndySouth/resistance') 
+library(resistance)
 resistanceMaster(params.csv = FALSE)
 ``` 
 
@@ -516,26 +519,84 @@ Starting resistSimple() to be able to run single simple Scenarios.
 [recent popgen hack](https://github.com/NESCent/r-popgen-hackathon/wiki)
 Doesn't seem that useful for this project.
 
+Created setInputOneScenario to enable setting inputs for a single scenario
++ sensible defaults
++ later will allow customised scenarios e.g. setInputCurtisFig1
++ will reduce code volume and repetition in createInputMatrix
+
 Good progress :
 check out e.g.
 `resistSimple(P_1=0.01,P_2=0.3)`
 
 
+**22/3/15** mon 9.45-11.45 2hrs 5-6
 
-**22/3/15** mon 9.45
+created a modified plot allele freq function to be able to see overlapping lines
 
+Default settings :
+```{r}
+resistSimple()
+```
+
+Reducing dominance coefficient of locus1 from 1 shifts curves to right & separates locus 1 & 2
+```{r}
+resistSimple(h.RS1_A0=0.17)
+```
+
+But then setting dominance coefficient of locus2 to anything less than 0.7 grounds the curves (actually by pushing them further to right).
+```{r}
+resistSimple(h.RS1_A0=0.17,h.RS2_0B=0.7)
+```
+
+Reducing the selection coefficient for locus1 in A (from 1) pushes curves to right, but strangely doesn't separate locus 1 & 2 ??
+```{r}
+resistSimple(s.RR1_A0=0.17)
+```
+
+Put variable names into the suggested sensitivity analysis table.
+ 
+Thinking about creating a shiny app(s) within the resistance package.
+[Advice from RStudio](http://rstudio.github.io/shiny/tutorial/#deployment-local)
+
+Put your Shiny application directory under the package’s inst directory, then create and export a function that contains something like this:
+
+`shiny::runApp(system.file('appdir', package='packagename'))`
+
+I might be able to use something like [this](http://shiny.rstudio.com/gallery/plot-plus-three-columns.html) to put inputs in columns.
+
+Or perhaps better to keep it to a single column to start ?
+
+Starting frequency of resistance
+Locus1
+Locus2
+
+Exposure to insecticide (same for M&F & in Curtis for both insecticides)
+
+Fitness of susceptibles in presence of insecticide.
+Insecticide1
+Insecticide2
+
+Dominance of resistance
+Locus1
+Locus2
+
+Selective advantage of resistance
+Locus1
+Locus2
+
+It could perhaps be 2 columns, Locus1 & Locus2
+
+Or to fit better with widget titles, 2 rows (l1&2) with 5 columns.
 
 
 
  
 ### TO DO  
 
+1. look at modifying other parameters
 
-1. create setInputOneScenario to enable setting inputs for a single scenario
-+ sensible defaults
-+ later will allow customised scenarios e.g. setInputCurtisFig1
-+ will reduce code volume and repetition in createInputMatrix
 
+1. start creating a shinyapp and/or vignette to help me understand how the model works
 
 1. finish tidying documentation of reading in input vars in createInputMatrix() add avr names from runModel()
 + can use these later for roxygen doc of function inputs to resistSimple
@@ -543,12 +604,10 @@ check out e.g.
 
 1. check whether setting input[13,1] <- to the next line at 58 in createInputMatrix() was a bug
 
-1. sort that resistSimple will only work with calibration of 1012
 
 1. make it easier to run a single scenario and default scenarios
 + might do this by first adding a function rather than changing existing stuff
 1. i think the main visual output is the frequency of resistance over time
-1. start creating a vignette to help me understand how the model works
 
 1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
 1. put back in checks for things that should sum to 1
