@@ -8,4 +8,10 @@ Development by Andy South, Beth Levick and Ian Hastings in 2015.
 ### Installation
 
     require(devtools)    
-    install_github('AndySouth/resistance')   
+    install_github('AndySouth/resistance')  
+    require(resistance)
+    
+### To run a demonstration user interface
+
+    require(shiny)    
+    runUI1() 
