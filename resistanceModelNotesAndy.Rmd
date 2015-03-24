@@ -589,25 +589,26 @@ It could perhaps be 2 columns, Locus1 & Locus2
 Or to fit better with widget titles, 2 rows (l1&2) with 5 columns.
 
 
+**23/3/15** tue 9.45-
+
+created function to run shiny UI from package, and add it to readme
+
+there was a bug that dominance had no effect, because I was setting `h.RS1_00` rather than `h.RS1_A0 & h.RS1_0B` 
+
+Cool! Seems to be working well now.
+
+
 
  
 ### TO DO  
 
-1. look at modifying other parameters
 
 
-1. start creating a shinyapp and/or vignette to help me understand how the model works
 
-1. finish tidying documentation of reading in input vars in createInputMatrix() add avr names from runModel()
-+ can use these later for roxygen doc of function inputs to resistSimple
-+ and I could use find&replace to rename later if needed
+1. create a vignette from first shiny app documenting how the model works
 
-1. check whether setting input[13,1] <- to the next line at 58 in createInputMatrix() was a bug
+1. finish tidying documentation of reading in input vars in createInputMatrix()
 
-
-1. make it easier to run a single scenario and default scenarios
-+ might do this by first adding a function rather than changing existing stuff
-1. i think the main visual output is the frequency of resistance over time
 
 1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
 1. put back in checks for things that should sum to 1
@@ -616,7 +617,6 @@ Or to fit better with widget titles, 2 rows (l1&2) with 5 columns.
 1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
 1. spend some time developing my understanding of how the model works
 1. submit tilde bug report
-1. later, structure as R package, maybe move to a new github repo
 1. re-look at R popgen packages when I've got more of a handle on what we are doing.
 
 
