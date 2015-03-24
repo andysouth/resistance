@@ -589,7 +589,7 @@ It could perhaps be 2 columns, Locus1 & Locus2
 Or to fit better with widget titles, 2 rows (l1&2) with 5 columns.
 
 
-**23/3/15** tue 9.45-
+**23/3/15** tue 9.45-2.15 4.5hrs
 
 created function to run shiny UI from package, and add it to readme
 
@@ -597,24 +597,24 @@ there was a bug that dominance had no effect, because I was setting `h.RS1_00` r
 
 Cool! Seems to be working well now.
 
+Sent message to Ian & Beth to test installing from Github and the shinyUI.
 
 
  
 ### TO DO  
 
+1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
 
-
+1. submit travel claim & maybe first invoice after creating hours spreadsheet
 
 1. create a vignette from first shiny app documenting how the model works
 
 1. finish tidying documentation of reading in input vars in createInputMatrix()
 
-
 1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
-1. put back in checks for things that should sum to 1
 1. edit runModel carefully
 1. check out the part about running sequential insecticide scenarios
-1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
+
 1. spend some time developing my understanding of how the model works
 1. submit tilde bug report
 1. re-look at R popgen packages when I've got more of a handle on what we are doing.
