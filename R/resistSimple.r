@@ -22,6 +22,11 @@ resistSimple <- function(...)
 #   savePlots = FALSE,
 #   save.fitvals = 0,
   
+  #can I use this to output what args were passed ?
+  #nearly but from shiny it has the varnames not their values
+  #dput(match.call())
+  #this fails too
+  #cat(as.character(mget(names(formals()),sys.frame(sys.nframe()))))
   
   #calling new function to create input matrix
   #input <- createInputMatrix( params.csv=FALSE, calibration=calibration, save.fitvals=save.fitvals)
