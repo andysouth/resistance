@@ -6,5 +6,6 @@ Authors@R: c( person("Andy", "South", , "southandy@gmail.com", role = c("aut", "
               person("Ian", "Hastings", , "Ian.Hastings@lstmed.ac.uk", role = c("aut")) )
 Description: enables running of multiple insecticide resistance scenarios. 
 Depends: R (>= 3.1.2)
+Suggests: shiny
 License: GPL-2
 LazyData: true
