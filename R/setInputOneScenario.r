@@ -61,7 +61,7 @@
 setInputOneScenario <- function( calibration = 100,
                                  max_gen = 100,
                                  coll.fitvals = 1,
-                                 save.fitvals = 1,
+                                 save.fitvals = 0,
                                  P_1 = 0.001,
                                  P_2 = 0.001,
                                  c = 0.5,

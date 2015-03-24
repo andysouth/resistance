@@ -5,7 +5,7 @@
 \title{set inputs for one scenario}
 \usage{
 setInputOneScenario(calibration = 100, max_gen = 100, coll.fitvals = 1,
-  save.fitvals = 1, P_1 = 0.001, P_2 = 0.001, c = 0.5, a.m_00 = 0.1,
+  save.fitvals = 0, P_1 = 0.001, P_2 = 0.001, c = 0.5, a.m_00 = 0.1,
   a.m_a0 = 0, a.m_A0 = 0, a.m_0b = 0, a.m_0B = 0, a.m_ab = 0,
   a.m_AB = 0.9, a.m_Ab = 0, a.m_aB = 0, a.f_00 = 0.1, a.f_a0 = 0,
   a.f_A0 = 0, a.f_0b = 0, a.f_0B = 0, a.f_ab = 0, a.f_AB = 0.9,
