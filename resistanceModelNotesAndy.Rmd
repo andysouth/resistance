@@ -6,7 +6,17 @@ output: html_document
 Notes on insecticide resistance model for liverpool.
 andy south 27/1/15
 
-My first go at keeping notes like this as an rmarkdown file.
+Timelines and deliverables
+**Days 1 to 12:** 
+Read and assimilate the Curtis paper cited above. Run the LSTM code written by Levick, replicate the results from the Curtis paper, and prepare the code for sensitivity analysis by firstly refactoring into an R package and creating a Github repository. Identify appropriate parameter ranges and any rules that should be applied while sampling (e.g. male exposure to insecticide within homes should not be higher than for the more endophilic females).  Run sensitivity analysis and present the results as classification trees showing what parameter combinations favour which deployment strategy.  
+
+**Deliverables:**  the provision of sensitivity analyses and classification trees that will allow us to publish the model in a peer-reviewed journal.  
+
+**Days 13 to 25.**  This component is to use the full model rather than the sub-model used to replicate the Curtis results. Liaise with IVCC to identify the policy question they consider the most pressing and the likely end users of the simulation package. Perform sensitivity analysis on the full model as above. Attempt to put a user-friendly interface onto the simulation package using the “Shiny R” package.  
+
+**Deliverables:** sensitivity analysis of the complete model and a reasoned consideration (or delivery) of the feasibility of distributing the package with a graphical interface for use by users with no computing experience.  
+
+
 
 **27/1/15**  7.5hrs
 
@@ -356,7 +366,7 @@ Ian has created list of defaults in most recent manuscript.
  
 The Curtis version is going to be simpler. Because not all param variations are included.
 
-**17/3/15** weds in liverpool 8.30-6 9.5hrs
+**18/3/15** weds in liverpool 8.30-6 9.5hrs
 
 Ian created `suggested_sensitivity_analysis.doc`
  
@@ -514,7 +524,7 @@ RR1RR2	1	0	0	0	0	0	0.215	0	0
 Starting resistSimple() to be able to run single simple Scenarios.
 
 
-**19/3/15** sat 10.15-2.15 4hrs
+**20/3/15** sat 10.15-2.15 4hrs
 
 [recent popgen hack](https://github.com/NESCent/r-popgen-hackathon/wiki)
 Doesn't seem that useful for this project.
@@ -529,7 +539,7 @@ check out e.g.
 `resistSimple(P_1=0.01,P_2=0.3)`
 
 
-**22/3/15** mon 9.45-11.45 2hrs 5-8 5hrs 
+**23/3/15** mon 9.45-11.45 2hrs 5-8 5hrs 
 
 created a modified plot allele freq function to be able to see overlapping lines
 
@@ -588,8 +598,7 @@ It could perhaps be 2 columns, Locus1 & Locus2
 
 Or to fit better with widget titles, 2 rows (l1&2) with 5 columns.
 
-
-**23/3/15** tue 9.45-2.15 4.5hrs
+**24/3/15** tue 9.45-2.15 4.5hrs
 
 created function to run shiny UI from package, and add it to readme
 
@@ -599,13 +608,149 @@ Cool! Seems to be working well now.
 
 Sent message to Ian & Beth to test installing from Github and the shinyUI.
 
+**25/3/15** weds 12.30-13.45 1.25 2.30-4 1.5 2.75
+
+created a time record  
+
+Barbosa paper methods: 
+The analysis was performed using R & package lhs. It does not
+allow for the specification of each variable distribution
+beforehand, so sampling was performed assuming a uniform
+distribution. Once the sample was generated, the
+uniform sample from a column (variable) could be transformed
+to the required distribution (Table 3) by using
+quantile functions (using the qtriangle comand in R).
+
+A data set of 3,000 replications was generated, with random
+parameter sets. Ten replicates of this procedure were performed as suggested
+in [24] to investigate the predictive precision of model
+using LHS as the sampling method. This was achieved
+by analysing each replicate separately and verifying that
+results were consistent across ten replicates.
+
+...
+
+Results included a counter-intuitive outcome that the
+inclusion of a synergist could lead to an increase in the
+rate of the spread of resistance (i.e. y > 1). Further investigation of this result was pursed by performing a logistic regression with a binary dependent variable (1 if y > 1 and 0 if y < 1), therefore quantifying how changes in the
+parameters values affect the odds of getting the unexpected
+outcome y > 1.
+
+...
+
+Classification trees are used to predict membership of
+cases in the classes of a categorical dependent variable
+(1 if y > 1 or 0 if y < 1) from their input parameters
+and were implemented using an algorithm that grows a
+binary tree [27]. At each internal node in the tree, a test
+is applied to the input parameters to identify the binary
+distinction which gives the most information about the
+class membership.
+
+These are the references that refer to the classification trees :
+27. Breiman L: Classification and Regression Trees. Belmont (Calif.): Wadsworth International Group; 1984: 358.
+28. Therneau T, Atkinson EJ: An introduction to recursive partitioning using the RPART routines 2011:1–67. [r.789695.n4.nabble.com/attachment/3209029/0/zed.pdf].
+
+seems that [recursive partitioning using rpart](http://r.789695.n4.nabble.com/attachment/3209029/0/zed.pdf) is the R software used.
+
+[rpart package](http://cran.r-project.org/web/packages/rpart/index.html)
+Recursive partitioning for classification, regression and survival trees. An implementation of most of the functionality of the 1984 book by Breiman et al.
+
+[rpart intro vignette](http://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf) updated version of the reference.
+
+
+First example from the vignette (p10). This works on a binary response yes/no. method = 'class' is for categorical.
+```{r}
+library(rpart)
+#uses stagec, a dataframe
+str(stagec)
+#creates a factor for response var to improve labelling
+progstat <- factor(stagec$pgstat, levels = 0:1, labels = c("No", "Prog"))
+#fit the model by adding the columns
+cfit <- rpart(progstat ~ age + eet + g2 + grade + gleason + ploidy, data = stagec, method = 'class')
+plot(cfit) #plots tree
+text(cfit) #labels tree
+```
+
+So that seems to suggest that I'll need to output a dataframe with one row per simulation, columns for outputs (generations until resistance reached) and inputs. Will need to run it by Ian exactly what the outputs are.
+
+p25 in vignette has an example with multiple categories.
+Seems there are methods that work on continuous data too, which might be our case ...
+
+**30/3/15** mon 10.30 - 11.30 1hr
+
+RSTMH digital methods conference.
+KDR insecticide resistance gene.
+Turning 'big' data about how resistance spreads into epidemiological models and then into DSS about control and eradication is very complex. 
+Malaria genomics: tracking a diverse and evolving parasite population
+Professor Dominic Kwiatkowski, University of Oxford and Wellcome Trust Sanger Institute
+Paul Ben Allistere, Panoptes web app
+https://www.malariagen.net/apps/ag1000g/phase1-AR2/index.html#genomebrowser
+
+**2/4/15** 1hr
+
+emails from Ian & Marlize Coleman about insecticide resistance gaming.
+
+Ian : Marlize Coleman has funding from B&MGF to build computer games of insecticide deployment policies and wants to tie them to the outputs of various IR models.
+
+Marlize : At the moment **we need someone to look at current mathematical models that have any relevance to insecticide resistance management and determine if there is any potential to use them, or just components of the model/s, to create scenarios for a IR game**. We planning to start development of the game in July so we need to get a game scope sorted pretty soon. It will also be important for this person to communicate and discuss these scenarios/simulations with the game development team to ensure that they have a good grasp of the backend mathematical detail.
+
+We want to expand on this version by adding a bit more complexity in the backend and we’d like to create a bit more flexibility e.g. choice of vectors, disease prevalence/incidence, interventions, specific learning outcomes of interest etc.
+
+If you are interested, we can discuss more detail. Probably 3 months full time or **6 months 2-3 days a week**. You might be better placed to tell me how much effort will be required. Perhaps more time in the first few months and less during game development for assistance to developers.
+
+Me to Ian : Will be good to talk to you about potential IR models after I've spoken to Marlize. Do you imagine that a simplified version of Curtis might be useful for her ?
+
+Ian : I definitely think the 2locus Curtis model should be included. I don't think it necessarily needs to be simple. We may restrict the user to certain parameter values then preload the results from all possible permutations. We can discuss later. BW Ian
+
+
+**13/4/15** mon 9.30 - 13.30 4hrs 2.30-6 3.5hrs 7.5hrs
+
+looking at new serious gaming project ... & can offset these hours on that
+
+publish shinyCurtis1 to shinyapps.io to enable sharing with Marlize
+using publish button from RStudio worked well
+It gives this warning on installation, but then does work from web.
+Warning message:
+In FUN(c("shiny", "resistance")[[2L]], ...) :
+  Package 'resistance' not available in repository or locally
+
+https://andysouth.shinyapps.io/shinyCurtis1/
+
+Options :
+1. run R code from within the game
+1. translate model modules into the game language
+1. save model outputs as input files that can modify game behaviour
+
+Points to discuss with Marlize :
+
+* I am mostly committed until end of June, but might be able to shuffle. If we know what they want from the design, we could work on the model behind to produce this after the game design has been started.
+* might they want to run actual model code or translate it ?
+* I don't know how much info there is out there on the effect on resistance of different insecticide applications, but am happy to research in discussion with Ian, and produce working versions.
+* I would be a good intermediary between the biologists and the coders, as I'm somewhere in between myself !
+
+Imperial malaria models :
+http://www1.imperial.ac.uk/resources/27F31FE6-4CA6-4C97-85BD-58B342BC2CDA/usingthemalariatoolssoftwareforesp.pdf
+http://www1.imperial.ac.uk/malariamodelling/toolsdata/tools/
+On download I got an error msg saying : "The program can't start because VCOMP120.DLL is missing from your computer. Try reinstalling the program to fix" 
+
+http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324
+Reducing Plasmodium falciparum Malaria Transmission in Africa: A Model-Based Evaluation of Intervention Strategies
+
 
  
 ### TO DO  
 
+1. can I create a plotting method that can accept multiple scenarios
+
+1. look at the method used in the Barbosa paper
+1. ask Ian if he has the code for the Barbosa classification trees analysis.
+
 1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
 
-1. submit travel claim & maybe first invoice after creating hours spreadsheet
+1. from the first stage of the sensitivity analysis I'll want to output a dataframe with 1 row per replicate containing both the inputs and the outputs. Getting it to put the inputs into a dataframe like this would be a good start.
+
+1. submit travel claim 
 
 1. create a vignette from first shiny app documenting how the model works
 
