@@ -16,7 +16,7 @@ runModel(input, calibration, produce.plots = TRUE, savePlots = FALSE)
 \item{savePlots}{whether to save plots to hardcoded filenames}
 }
 \value{
-a list of 3 lists: results, genotype and fitness
+a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 }
 \description{
 run model scenarios and put the results for each in a results object

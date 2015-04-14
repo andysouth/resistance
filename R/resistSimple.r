@@ -10,7 +10,7 @@
 
 #' @param ... extra arguments passed to setInputOneScenario()
 #' 
-#' @return a list of 3 lists: results, genotype and fitness
+#' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 #' 
 resistSimple <- function(...)

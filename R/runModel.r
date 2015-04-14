@@ -7,7 +7,7 @@
 #' @param produce.plots whether to produce plots
 #' @param savePlots whether to save plots to hardcoded filenames
 
-#' @return a list of 3 lists: results, genotype and fitness
+#' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
 runModel <- function(input,
