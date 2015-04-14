@@ -22,7 +22,7 @@ resistanceMaster(params.csv = FALSE, inFile = system.file("extdata",
 \item{save.fitvals}{whether to save fitness scores to csv 0=no, 1=yes}
 }
 \value{
-nothing yet
+a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 }
 \description{
 May restructure later.

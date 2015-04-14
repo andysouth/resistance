@@ -10,7 +10,7 @@
 #' @param savePlots whether to save plots to hardcoded filenames
 #' @param save.fitvals whether to save fitness scores to csv 0=no, 1=yes 
 #' 
-#' @return nothing yet
+#' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 #' 
 resistanceMaster <- function(params.csv = FALSE,
@@ -108,10 +108,12 @@ resistanceMaster <- function(params.csv = FALSE,
   	}
   }
   	
-  
   ### Finding generations taken to reach a frequency of R of 0.5 at each locus ####
   #andy, thes now can't be done from here because max_gen doesn't make it out of runModel()
   #loc1_0.5 <- timetoFifty( 1, max_gen, listOut$results, input )
   #loc2_0.5 <- timetoFifty( 2, max_gen, listOut$results, input )
+  
+  #return list of outputs
+  invisible(listOut)
   
 }
