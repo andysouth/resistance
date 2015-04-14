@@ -13,7 +13,7 @@
 #' @return nothing yet
 #' @export
 #' 
-resistanceMaster <- function(params.csv = TRUE,
+resistanceMaster <- function(params.csv = FALSE,
                              inFile = system.file("extdata","input.parameters.csv", package="resistance"),
                              calibration = 1012,
                              produce.plots = TRUE,
@@ -21,13 +21,10 @@ resistanceMaster <- function(params.csv = TRUE,
                              save.fitvals = 0)
 {
   
-  #inFile <- "full-dom_SD.csv"
-  #inFile <- "input.parameters.col1.csv" 
-  
   ## manually editing the calibration number in a file
   ## allows for multiple runs with different calibrations
 
-  ## Beth to run scenario to recreate curtis' plots
+  ## to run scenario to recreate curtis' plots
   #params.csv <- FALSE
   #calibration <- 1012
   

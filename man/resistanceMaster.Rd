@@ -4,7 +4,7 @@
 \alias{resistanceMaster}
 \title{master function to setup and run resistance model scenarios}
 \usage{
-resistanceMaster(params.csv = TRUE, inFile = system.file("extdata",
+resistanceMaster(params.csv = FALSE, inFile = system.file("extdata",
   "input.parameters.csv", package = "resistance"), calibration = 1012,
   produce.plots = TRUE, savePlots = FALSE, save.fitvals = 0)
 }
