@@ -10,7 +10,7 @@
 
 #' @param ... extra arguments passed to setInputOneScenario()
 #' 
-#' @return nothing yet
+#' @return a list of 3 lists: results, genotype and fitness
 #' @export
 #' 
 resistSimple <- function(...)
@@ -46,5 +46,7 @@ resistSimple <- function(...)
   # Plot R and S allele frequencies over generations by M&F
   genplot <- plotallele.freq.andy( listOut$results[[1]] ) 
 
+  #returning outputs just in case needed
+  invisible(listOut)
   
 }

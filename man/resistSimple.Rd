@@ -10,7 +10,7 @@ resistSimple(...)
 \item{...}{extra arguments passed to setInputOneScenario()}
 }
 \value{
-nothing yet
+a list of 3 lists: results, genotype and fitness
 }
 \description{
 May restructure later.
