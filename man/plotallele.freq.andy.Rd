@@ -2,19 +2,29 @@
 % Please edit documentation in R/plotallele.freq.andy.r
 \name{plotallele.freq.andy}
 \alias{plotallele.freq.andy}
-\title{plot allele frequencies over time, version modified by andy}
+\title{plot allele frequencies over time for single or multiple scenarios}
 \usage{
 plotallele.freq.andy(mat)
 }
 \arguments{
-\item{mat}{results matrix}
+\item{mat}{results matrix or list of multiple matrices}
 }
 \value{
 list of plot components
 }
 \description{
-plot of R and S allele frequencies over time
+plot of resistance allele frequencies over time
 Prints male frequency of R allele at locus 1 (blue) and locus 2 (green)
 and same in female at locus 1 (red) and locus 2 (orange)
+For multiple scenarios multipl;e lines are plotted.
+todo : for multiple scenarios currently it accepts listOut, and gets results from listOut$results, I might instead want it to accept listOut$results.
+}
+\examples{
+#single scenario
+listOut <- resistSimple()
+plotallele.freq.andy(listOut$results[[1]])
+#mutliple scenarios
+listOut <- resistanceMaster()
+plotallele.freq.andy(listOut)
 }
 
