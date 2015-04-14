@@ -7,11 +7,11 @@
 plotcurtis_f2(combmat, bmat, amat, gencol, r1col, r2col)
 }
 \arguments{
-\item{combmat}{todo}
+\item{combmat}{combined insecticide results matrix}
 
-\item{bmat}{todo}
+\item{bmat}{single insecticide (hch) results matrix}
 
-\item{amat}{todo}
+\item{amat}{single insecticide (ddt) results matrix}
 
 \item{gencol}{column number containing generation}
 

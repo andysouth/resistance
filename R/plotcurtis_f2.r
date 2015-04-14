@@ -4,9 +4,9 @@
 #' Plot of R at each locus 
 #' Prints total frequency of R allele at locus 1 (red) and locus 2 (blue)
 #' 
-#' @param combmat todo
-#' @param bmat todo 
-#' @param amat todo
+#' @param combmat combined insecticide results matrix 
+#' @param bmat single insecticide (hch) results matrix 
+#' @param amat single insecticide (ddt) results matrix
 #' @param gencol column number containing generation
 #' @param r1col column number containing frequency of allele at R1
 #' @param r2col column number containing frequency of allele at R2
