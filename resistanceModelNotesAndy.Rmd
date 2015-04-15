@@ -385,8 +385,6 @@ input <- make.matrix(input, input$Input)
  
 this might be something to do with the location of "input.parameters.csv" which I need to sort ...
  
- 
- 
 devtools commands for setting up a package :
 create requires that the directory doesn't exist yet; it will be created. 
 setup assumes an existing directory from which it will infer the package name.
@@ -396,7 +394,7 @@ probably need to set rstudio rg to false because mine is already a rs project.
 setup(rstudio=FALSE)
  
 Then in RStudio I had to set project options, build tools to package
-(so maybe I should have done just done detools::setup())
+(so maybe I should have done just done devtools::setup())
 
 but on build :
 ERROR: The build directory does not contain a DESCRIPTION
@@ -737,18 +735,106 @@ On download I got an error msg saying : "The program can't start because VCOMP12
 http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324
 Reducing Plasmodium falciparum Malaria Transmission in Africa: A Model-Based Evaluation of Intervention Strategies
 
+emailed them to see about the error
+
+
+**14/4/15** tue 11.45 - 14.15 2.5hrs 3-5.30 2.5 5hrs  
+
+can I create a plotting method that can accept multiple scenarios ?
+initially it could just plot all scenarios as additional lines in the existing colours for locus & sex
+use `plotallele.freq.andy`
+might need to modify to accept more than one matrix of results outputs  
+I thought tricky bit might be to set plot bounds based on multiple lines (but actually the y is already hardcoded from 0-1 for allele frequency). Might need to be a bit careful with x because different scenarios can have different numbers of generations.
+
+done : fixed why `resistanceMaster()` currently fails. I suspect due to input scenario calibration combination, it used to work ??
+
+Error in 1:ddt_cutoff : result would be too long a vector
+In addition: Warning messages:
+1: In data.matrix(mat) : NAs introduced by coercion
+2: In min(which((amat[, r1col]) > 0.5)) :
+  no non-missing arguments to min; returning Inf
+
+the error comes from `plotcurtis_f2()`
+I suspect it's because the input.parameters.csv isn't the one compatible with producing the curtis plot.
+`plotcurtis_f2()` needs results matrices from 3 scenarios: 1 hch, 2 ddt, 3 combined. Yet the current csv I have in the package seems to have 7 scenarios
+Input,Curtis Fig 2 Comb - calibration,DDT high,DDT high,DDT high,HCH high,HCH high,HCH high  
+Why did it work before then ??
+Aha! it's because in `createInputMatrix()` this sets up the 3 Curtis scenarios if an input file is not specified :
+  `if( !params.csv && calibration == 1012 ){
+    input <- matrix( ncol=3, nrow=52 )
+    colnames(input) <- c("B (HCH)", "A (DDT)","Combination")`
+So maybe I should have no input csv as the default.
+
+setting params.csv=FALSE as the default for resistanceMaster() sorted it.
+
+Back to `plotallele.freq.andy`, I might be able easily to modify it to accept a list of matrices for multiple scenarios, as well as it's current single scenario mode.
+
+this gives me the number of generations per scenario
+`sapply(listOut$results,nrow)`
+70  70 160
+`max_gen <- max( sapply(listOut$results,nrow) )`
+ 
+done : create a plotting method that can accept multiple scenarios 
+ 
+now try to use it to plot a parameter range.
+To run multiple scenarios one way would be to call `setInputOneScenario()` repeatedly to create single scenarios & then rbind these together into an input object that I can pass to `runModel()`
+
+```{r}
+
+input <- NULL
+vals <- seq(0,1,0.2) #create a range of input values
+for(i in vals)
+{
+ inputOneScenario <- setInputOneScenario( h.RS1_A0=i )  
+ input <- cbind(input, inputOneScenario)
+}
+
+listOut <- runModel(input)
+plotallele.freq.andy(listOut)
+
+```
+This is getting close to allowing the user to specify an input parameter and what range of that parameter you want to plot. I could then potentially create a UI allowing the user to do that.
+Would it be useful to put the above code into a function ? 
+Actually the above code is very close to what I would need for the sensitivity analysis.
+
+I could create a `setInputMultiScenario()` function that accepts a vector of values for a param, and creates an input object with all other params set to their default. It could maybe even accept multiple args, but then would need to return the n*n scenarios. Also this is going away from the way that Ian suggested doing it by smapling from a distribution, maybe I should try that route first ?
+
+In that case do I want to randomly change all params at once ?
+Also might be good to get it to output a file at the end of each 100 runs, so that if it does crash during a long run, everything is not lost. These could just be RDA files saved from the listOut object.
+Do I want it to output listOut() each time or will I process so that the outputs are smaller ?
+(Might be better to keep the raw outputs to save any confusion later.)
+ 
+The sensitivity analysis function may be called a bit like this : 
+ 
+```
+#specify ranges for parameters, if a range is not specified the default will be used
+#could offer option to setother params at diff fixed values
+#this would only accomodate uniform distributions, OK for now
+#think about random seeds later
+#be careful about some params which must total one
+input <- setInputSensiScenarios( n=100, h.RS1_A0=c(0,1) )
+```
+ 
+Am I reinventing the wheel here, can anything else help me with this ?
+ 
+**15/4/15** wed 1.30-2.30 1hrs 3.45-
+
+
+
 
  
 ### TO DO  
 
-1. can I create a plotting method that can accept multiple scenarios
+1. see setInputSensiScenarios
+1. start to write script to run sensitivity analysis, probably by creating a large input object rather than a large input.params.csv.
 
-1. look at the method used in the Barbosa paper
+1. write a function to calculate timeToThreshold for all scenarios based on listOut, allow user to specify which locus.
+
 1. ask Ian if he has the code for the Barbosa classification trees analysis.
 
-1. start to write script to run sensitivity analysis, does it want to work by creating a large input.csv file, or by setting input object directly.
-
 1. from the first stage of the sensitivity analysis I'll want to output a dataframe with 1 row per replicate containing both the inputs and the outputs. Getting it to put the inputs into a dataframe like this would be a good start.
+
+1. add some defensive checks, e.g. for sensible input variables
 
 1. submit travel claim 
 
@@ -768,7 +854,6 @@ Reducing Plasmodium falciparum Malaria Transmission in Africa: A Model-Based Eva
 ### suggestion from Beth
 a solution may be to provide a .csv file with the Curtis scenarios set up
 and then the need to set the calibration number and params.csv in the R script can be removed altogether
-the only bit of R code the user will need to change is the setwd() and the read.csv()
 
 ### variable naming conventions
 **SS1, RS1, RR1** homozygous susceptible, heterozygous or homozygous resistant genotypes at each locus.   
