@@ -817,22 +817,58 @@ input <- setInputSensiScenarios( n=100, h.RS1_A0=c(0,1) )
  
 Am I reinventing the wheel here, can anything else help me with this ?
  
-**15/4/15** wed 1.30-2.30 1hrs 3.45-
+**15/4/15** wed 1.30-2.30 1hrs 3.45-6.15 2.5 3.5hrs
 
+setInputSensiScenarios
+function to create sensitivity analysis scenarios, probably by creating a large input object.
 
+**16/4/15** thurs 10-14 4hrs 2.30-5 2.5 6.5hrs
 
+To get input params into 1 row per scenario I can transpose, but the result is a matrix and has no names.
+But I need to find a way of getting column names set.
+
+```{r}
+input <- setInputSensiScenarios( nScenarios=3, P_1=c(0,0.5), P_2=c(0,0.5) )
+tinput <- t(input)
+str(tinput)
+#num [1:3, 1:52] 100 100 100 100 100 100 1 1 1 0 ...
+```
+
+putting names into `setInputOneScenario()` fixed this.
+
+Having a problem with sensiAnalysis1()
+Error in eval(..1) : ..1 used in an incorrect context, no ... to look in
+
+This may be because setInputSensiScenarios() expects a range for each argument, whereas setInputOneScenario expects a single value for the same named args. (but I don't really think it is this)
+
+Also stackoverflow pointed that using c for a varname (and there is one in resistance) is dangerous because R can expect the function.
+
+replaced c with recomb_rate for "Recombination Rate" to avoid R conflicts with c() 
+previous ... error still remained
+
+Aha! i think problem is that I specify defaults in setInputSensiScenarios when I don't need to (and that stops them making it into the ...)
+
+cool yes, getting there.
 
  
 ### TO DO  
 
-1. see setInputSensiScenarios
-1. start to write script to run sensitivity analysis, probably by creating a large input object rather than a large input.params.csv.
+1. continue with getting classificatrion trees working in sensiAn1
+
+1. update R, new lengths() function may be useful for me
+but doesn't find latest version yet
+library(installr)
+updateR()
+
+1. in susana's script the 'outcome' is 0/1 if used in our case that would seem to lose a lot of information about the outcomes ? Even timeToFifty would be better for us.
 
 1. write a function to calculate timeToThreshold for all scenarios based on listOut, allow user to specify which locus.
 
-1. ask Ian if he has the code for the Barbosa classification trees analysis.
+1. from the first stage of the sensitivity analysis I'll want to output a dataframe with 1 row per replicate containing both the inputs and the outputs. Getting it to put the inputs into a dataframe like this would be a good start. I think this may just be a case of transposing the input object ?
 
-1. from the first stage of the sensitivity analysis I'll want to output a dataframe with 1 row per replicate containing both the inputs and the outputs. Getting it to put the inputs into a dataframe like this would be a good start.
+1. try out classification trees code from Susana
+
+1. maybe add option in setInputSensiScenarios to save input object as a csv or rda.
 
 1. add some defensive checks, e.g. for sensible input variables
 
