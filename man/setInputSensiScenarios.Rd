@@ -6,7 +6,7 @@
 \usage{
 setInputSensiScenarios(nScenarios = 10, calibration = 100, max_gen = 100,
   coll.fitvals = 1, save.fitvals = 0, P_1 = 0.001, P_2 = 0.001,
-  c = 0.5, a.m_00 = 0.1, a.m_a0 = 0, a.m_A0 = 0, a.m_0b = 0,
+  recomb_rate = 0.5, a.m_00 = 0.1, a.m_a0 = 0, a.m_A0 = 0, a.m_0b = 0,
   a.m_0B = 0, a.m_ab = 0, a.m_AB = 0.9, a.m_Ab = 0, a.m_aB = 0,
   a.f_00 = 0.1, a.f_a0 = 0, a.f_A0 = 0, a.f_0b = 0, a.f_0B = 0,
   a.f_ab = 0, a.f_AB = 0.9, a.f_Ab = 0, a.f_aB = 0, phi.SS1_a0 = 0,
@@ -33,7 +33,7 @@ setInputSensiScenarios(nScenarios = 10, calibration = 100, max_gen = 100,
 
 \item{P_2}{locus 2 frequency of resistance allele}
 
-\item{c}{recombination rate}
+\item{recomb_rate}{recombination rate}
 
 \item{a.m_00}{insecticide exposure male no1 no2}
 

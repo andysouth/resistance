@@ -5,18 +5,18 @@
 \title{set inputs for one scenario}
 \usage{
 setInputOneScenario(calibration = 100, max_gen = 100, coll.fitvals = 1,
-  save.fitvals = 0, P_1 = 0.001, P_2 = 0.001, c = 0.5, a.m_00 = 0.1,
-  a.m_a0 = 0, a.m_A0 = 0, a.m_0b = 0, a.m_0B = 0, a.m_ab = 0,
-  a.m_AB = 0.9, a.m_Ab = 0, a.m_aB = 0, a.f_00 = 0.1, a.f_a0 = 0,
-  a.f_A0 = 0, a.f_0b = 0, a.f_0B = 0, a.f_ab = 0, a.f_AB = 0.9,
-  a.f_Ab = 0, a.f_aB = 0, phi.SS1_a0 = 0, phi.SS1_A0 = 1,
-  phi.SS2_0b = 0, phi.SS2_0B = 1, W.SS1_00 = 1, W.SS2_00 = 1,
-  h.RS1_00 = 0, h.RS1_a0 = 0, h.RS1_A0 = 1, h.RS2_00 = 0,
-  h.RS2_0b = 0, h.RS2_0B = 1, s.RR1_a0 = 0, s.RR1_A0 = 1,
-  s.RR2_0b = 0, s.RR2_0B = 1, z.RR1_00 = 0, z.RR2_00 = 0,
-  niche_00 = 1, niche_a0 = 0, niche_A0 = 0, niche_0b = 0,
-  niche_0B = 0, niche_ab = 0, niche_AB = 1, niche_Ab = 0,
-  niche_aB = 0)
+  save.fitvals = 0, P_1 = 0.001, P_2 = 0.001, recomb_rate = 0.5,
+  a.m_00 = 0.1, a.m_a0 = 0, a.m_A0 = 0, a.m_0b = 0, a.m_0B = 0,
+  a.m_ab = 0, a.m_AB = 0.9, a.m_Ab = 0, a.m_aB = 0, a.f_00 = 0.1,
+  a.f_a0 = 0, a.f_A0 = 0, a.f_0b = 0, a.f_0B = 0, a.f_ab = 0,
+  a.f_AB = 0.9, a.f_Ab = 0, a.f_aB = 0, phi.SS1_a0 = 0,
+  phi.SS1_A0 = 1, phi.SS2_0b = 0, phi.SS2_0B = 1, W.SS1_00 = 1,
+  W.SS2_00 = 1, h.RS1_00 = 0, h.RS1_a0 = 0, h.RS1_A0 = 1,
+  h.RS2_00 = 0, h.RS2_0b = 0, h.RS2_0B = 1, s.RR1_a0 = 0,
+  s.RR1_A0 = 1, s.RR2_0b = 0, s.RR2_0B = 1, z.RR1_00 = 0,
+  z.RR2_00 = 0, niche_00 = 1, niche_a0 = 0, niche_A0 = 0,
+  niche_0b = 0, niche_0B = 0, niche_ab = 0, niche_AB = 1,
+  niche_Ab = 0, niche_aB = 0)
 }
 \arguments{
 \item{calibration}{one of a limited set of integers effecting how scenarios are run}
@@ -31,7 +31,7 @@ setInputOneScenario(calibration = 100, max_gen = 100, coll.fitvals = 1,
 
 \item{P_2}{locus 2 frequency of resistance allele}
 
-\item{c}{recombination rate}
+\item{recomb_rate}{recombination rate}
 
 \item{a.m_00}{insecticide exposure male no1 no2}
 

@@ -11,7 +11,7 @@
 #' @param save.fitvals save fitness values to an external .csv 0/1
 #' @param P_1 locus 1 frequency of resistance allele
 #' @param P_2 locus 2 frequency of resistance allele
-#' @param c recombination rate
+#' @param recomb_rate recombination rate
 #' @param a.m_00 insecticide exposure male no1 no2
 #' @param a.m_a0 insecticide exposure male lo1 no2
 #' @param a.m_A0 insecticide exposure male hi1 no2
@@ -67,7 +67,7 @@ setInputOneScenario <- function( calibration = 100,
                                  save.fitvals = 0,
                                  P_1 = 0.001,
                                  P_2 = 0.001,
-                                 c = 0.5,
+                                 recomb_rate = 0.5,
                                  a.m_00 = 0.1,
                                  a.m_a0 = 0,
                                  a.m_A0 = 0,
@@ -124,7 +124,7 @@ setInputOneScenario <- function( calibration = 100,
   input[4] <- save.fitvals
   input[5] <- P_1
   input[6] <- P_2
-  input[7] <- c
+  input[7] <- recomb_rate
   input[8] <- a.m_00
   input[9] <- a.m_a0
   input[10] <- a.m_A0

@@ -44,7 +44,7 @@ createInputMatrix <- function(params.csv,
     input[4,1] <- save.fitvals	# save.fitvals save fitness values to an external .csv 0/1
     input[5,1] <- 0.001	        # P_1 locus 1 frequency of resistance allele
     input[6,1] <- 0.001	        # P_2 locus 2 frequency of resistance allele
-    input[7,1] <- 0.5		        # c recombination rate
+    input[7,1] <- 0.5		        # recomb_rate recombination rate
     
     input[8,1] <- 0.1  	# a.m_00 insecticide exposure male no1 no2
     input[9,1] <- 0     # a.m_a0 insecticide exposure male lo1 no2

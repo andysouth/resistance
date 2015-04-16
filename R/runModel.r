@@ -48,7 +48,7 @@ runModel <- function(input,
     ## P = p = R
     
     ## Recombination ##
-    c <- input[7,i]		# recombination rate
+    recomb_rate <- input[7,i]		# recombination rate
     
     
     ### small case = low concentration, upper case = high concentration, 0 = absence (zero not UC o). ###
@@ -839,20 +839,20 @@ runModel <- function(input,
       
       # f.m.RS1RS2_cis
       # no recombination
-      G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_cis * 0.5 * ( 1-c )
-      G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_cis * 0.5 * ( 1-c )
+      G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
+      G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_cis * 0.5 * c			
-      G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_cis * 0.5 * c
+      G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_cis * 0.5 * recomb_rate			
+      G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_cis * 0.5 * recomb_rate
       
       
       # f.m.RS1RS2_trans
       # no recombination
-      G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_trans * 0.5 * ( 1-c )		
-      G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_trans * 0.5 * ( 1-c )
+      G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
+      G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_trans * 0.5 * c
-      G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_trans * 0.5 * c
+      G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
+      G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
       
       
       # SS Gametes
@@ -913,20 +913,20 @@ runModel <- function(input,
       
       # f.f.RS1RS2_cis
       #no recombination
-      G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_cis * 0.5 * ( 1-c ) 
-      G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_cis * 0.5 * ( 1-c )
+      G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate ) 
+      G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_cis * 0.5 * c			
-      G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_cis * 0.5 * c
+      G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_cis * 0.5 * recomb_rate			
+      G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_cis * 0.5 * recomb_rate
       
       
       # f.f.RS1RS2_trans			
       # no recombination
-      G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_trans * 0.5 * ( 1-c )		
-      G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_trans * 0.5 * ( 1-c )
+      G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
+      G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_trans * 0.5 * c
-      G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_trans * 0.5 * c
+      G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
+      G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
       
       
       # SS Gametes
@@ -1198,20 +1198,20 @@ runModel <- function(input,
       
       # fs.m.RS1RS2_cis
       # no recombination
-      G.m.R1.R2 <- G.m.R1.R2 + fs.m.RS1RS2_cis * 0.5 * ( 1-c )
-      G.m.S1.S2 <- G.m.S1.S2 + fs.m.RS1RS2_cis * 0.5 * ( 1-c )
+      G.m.R1.R2 <- G.m.R1.R2 + fs.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
+      G.m.S1.S2 <- G.m.S1.S2 + fs.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.m.S1.R2 <- G.m.S1.R2 + fs.m.RS1RS2_cis * 0.5 * c			
-      G.m.R1.S2 <- G.m.R1.S2 + fs.m.RS1RS2_cis * 0.5 * c
+      G.m.S1.R2 <- G.m.S1.R2 + fs.m.RS1RS2_cis * 0.5 * recomb_rate			
+      G.m.R1.S2 <- G.m.R1.S2 + fs.m.RS1RS2_cis * 0.5 * recomb_rate
       
       
       # fs.m.RS1RS2_trans
       # no recombination
-      G.m.R1.S2 <- G.m.R1.S2 + fs.m.RS1RS2_trans * 0.5 * ( 1-c )		
-      G.m.S1.R2 <- G.m.S1.R2 + fs.m.RS1RS2_trans * 0.5 * ( 1-c )
+      G.m.R1.S2 <- G.m.R1.S2 + fs.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
+      G.m.S1.R2 <- G.m.S1.R2 + fs.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.m.R1.R2 <- G.m.R1.R2 + fs.m.RS1RS2_trans * 0.5 * c
-      G.m.S1.S2 <- G.m.S1.S2 + fs.m.RS1RS2_trans * 0.5 * c
+      G.m.R1.R2 <- G.m.R1.R2 + fs.m.RS1RS2_trans * 0.5 * recomb_rate
+      G.m.S1.S2 <- G.m.S1.S2 + fs.m.RS1RS2_trans * 0.5 * recomb_rate
       
       
       # SS Gametes
@@ -1271,20 +1271,20 @@ runModel <- function(input,
       
       # fs.f.RS1RS2_cis
       #no recombination
-      G.f.R1.R2 <- G.f.R1.R2 + fs.f.RS1RS2_cis * 0.5 * ( 1-c ) 
-      G.f.S1.S2 <- G.f.S1.S2 + fs.f.RS1RS2_cis * 0.5 * ( 1-c )
+      G.f.R1.R2 <- G.f.R1.R2 + fs.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate ) 
+      G.f.S1.S2 <- G.f.S1.S2 + fs.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.f.S1.R2 <- G.f.S1.R2 + fs.f.RS1RS2_cis * 0.5 * c			
-      G.f.R1.S2 <- G.f.R1.S2 + fs.f.RS1RS2_cis * 0.5 * c
+      G.f.S1.R2 <- G.f.S1.R2 + fs.f.RS1RS2_cis * 0.5 * recomb_rate			
+      G.f.R1.S2 <- G.f.R1.S2 + fs.f.RS1RS2_cis * 0.5 * recomb_rate
       
       
       # fs.f.RS1RS2_trans			
       # no recombination
-      G.f.R1.S2 <- G.f.R1.S2 + fs.f.RS1RS2_trans * 0.5 * ( 1-c )		
-      G.f.S1.R2 <- G.f.S1.R2 + fs.f.RS1RS2_trans * 0.5 * ( 1-c )
+      G.f.R1.S2 <- G.f.R1.S2 + fs.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
+      G.f.S1.R2 <- G.f.S1.R2 + fs.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
       # recombination takes place
-      G.f.R1.R2 <- G.f.R1.R2 + fs.f.RS1RS2_trans * 0.5 * c
-      G.f.S1.S2 <- G.f.S1.S2 + fs.f.RS1RS2_trans * 0.5 * c
+      G.f.R1.R2 <- G.f.R1.R2 + fs.f.RS1RS2_trans * 0.5 * recomb_rate
+      G.f.S1.S2 <- G.f.S1.S2 + fs.f.RS1RS2_trans * 0.5 * recomb_rate
       
       
       # SS Gametes
