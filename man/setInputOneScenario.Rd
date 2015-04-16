@@ -128,5 +128,9 @@ named vector
 }
 \description{
 fills one column of input matrix
+user can specify as many or few parameters as they wish, any not specified will be set to default value.
+}
+\details{
+BEWARE function programmer not to change order of the function arguments as this determines the names of the output
 }
 

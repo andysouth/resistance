@@ -1,6 +1,9 @@
 #' set inputs for one scenario
 #' 
-#' fills one column of input matrix 
+#' fills one column of input matrix  
+#' user can specify as many or few parameters as they wish, any not specified will be set to default value.
+#' 
+#' BEWARE function programmer not to change order of the function arguments as this determines the names of the output
 #' 
 #' @param calibration one of a limited set of integers effecting how scenarios are run 
 #' @param max_gen number of generations
@@ -178,6 +181,11 @@ setInputOneScenario <- function( calibration = 100,
   if ( a.f != 1 ){		 
     stop( "female exposures must total one, currently: ", a.f )
   	}
+ 
+ #set rownames of input to the use variable names
+ #trying to avoid code repetition and potential for confusion
+ #BEWARE this relies on the arguments being specified in the function in the correct order
+ rownames(input) <- names(formals()) 
   
  return(input)
   
