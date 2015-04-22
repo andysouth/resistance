@@ -9,7 +9,7 @@ sensiAn1(nScenarios = 10, ...)
 \arguments{
 \item{nScenarios}{number of scenarios}
 
-\item{...}{parameter ranges to pass to \code{\link{setInputSensiScenarios}}}
+\item{...}{parameter ranges to pass to \code{\link{setInputSensiScenarios}} in form c(min,max)}
 }
 \value{
 todo
@@ -19,5 +19,6 @@ sensitivity analysis first attempt
 }
 \examples{
 sensiAn1( P_1=c(0,0.5) )
+sensiAn1( h.RS1_A0=c(0.1,1))
 }
 

@@ -2,7 +2,7 @@
 #' 
 #' 
 #' @param nScenarios number of scenarios 
-#' @param ... parameter ranges to pass to \code{\link{setInputSensiScenarios}}
+#' @param ... parameter ranges to pass to \code{\link{setInputSensiScenarios}} in form c(min,max)
 #' 
 #' @examples
 #' sensiAn1( P_1=c(0,0.5) )
