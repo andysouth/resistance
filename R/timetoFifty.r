@@ -2,6 +2,7 @@
 #' 
 #' Takes the matrix produced by single allele frequency function 
 #' and finds the number of generations it takes for the R allele frequency to reach 0.5
+#' Returns NA if freq does not reach 0.5
 
 #' @param locus locus of interest (i.e. 1 or 2)
 #' @param max_gen number of generations 
