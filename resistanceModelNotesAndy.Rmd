@@ -850,10 +850,55 @@ Aha! i think problem is that I specify defaults in setInputSensiScenarios when I
 
 cool yes, getting there.
 
+**22/4/15** jury service 11.30 - 12.30 1 hr
+
+```{r}
+out <- sensiAn1( nScenarios = 10, h.RS1_A0=c(0.1,1))
+```
+
+
+**24/4/15** 4-5 1hr
+
+**27/4/15** 9.15-13.15 4hrs
+
+trying to test rpart in sensiAn1
+getting :
+cfit <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = forCT, method = 'class')
+Error in cbind(yval2, yprob, nodeprob) : 
+  number of rows of matrices must match (see arg 2)
+
+This was because there were some NAs in the results that can from where a resistance frequency of 0.5 was not reached.
+so I temp converted them to 999
+
+Now get :
+Error in plot.rpart(cfit) : fit is not a tree, just a root
+
+Is this because I haven't used enough samples or because it doesn't work with just 2 predictors ?
+
+Trying with more samples, still get same error :
+
+`inputAndResults <- sensiAn1( 100, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1) )`
+
+more samples and more inputs I do get a tree
+`inputAndResults <- sensiAn1(500, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))`
+
+
+Some of susanas code for finessing the tree :
+tree->rpart(outcome ~ h_n+ h_o+h_I+s_o+s_I+φ_o+φ_I+α_o+α_I+α_fn+α_mo+α_mI+α_mn+z+beta_f+β_m ,method='class',data=working_example,control=rpart.control(minsplit=50))
+
+# control=rpart.control(minsplit=50)
+# minsplit	the minimum number of observations that must exist in a node in order for a split to be attempted.
+# then prune the tree to avoid overfitting the data
+pruned_tree<- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+
+
+
+
+
  
 ### TO DO  
 
-1. continue with getting classificatrion trees working in sensiAn1
+1. continue with getting classification trees working in sensiAn1
 
 1. update R, new lengths() function may be useful for me
 but doesn't find latest version yet
