@@ -1433,7 +1433,7 @@ runModel <- function(input,
         genotype.freq[10,] <- f.m.RR1RR2
       }
       
-    }	# loop running model
+    }	# end of generation loop 
     
     
     ## Assign results matrices to lists for multiple runs
