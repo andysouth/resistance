@@ -49,33 +49,42 @@ sensiAn1 <- function( nScenarios = 10,
   #NAs are where 0.5 resistance not reached, convert them to 99 for now
   inputAndResults$Gens.to.0.5[is.na(inputAndResults$Gens.to.0.5)] <- 999
   inputAndResults$res <- cut(inputAndResults$Gens.to.0.5, breaks=c(0,50,9999),labels=c("<=50",">50"))
-  #fit the model by adding the columns
-  #**me can I specify the predictors by names(match.call())[-1]**
-  #cfit <- rpart(res ~ age + eet + g2 + grade + gleason + ploidy, data = inputAndResults, method = 'class')
+
+
+  #using match.call to set the predictors to those passed by the user
+  #collapse="+" adds a + between each arg
+  argString <- paste(names(match.call())[-1],collapse="+")
+  #"h.RS1_A0+h.RS2_0B+s.RR1_A0+s.RR2_0B"
+
+  #uh-oh!! seems that my eval bit adds all the args together before putting them in the model.
   
-  #cfit <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = inputAndResults, method = 'class')
+  #uh-oh2! need to exclude nScenarios from argString if it has been passed
   
-  tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class')
+  tree <- rpart(res ~ eval(parse(text=argString)), data = inputAndResults, method = 'class')  
   
+  #2 hardcoded args
+  #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = inputAndResults, method = 'class')
+  #4 hardcoded args
+  #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class')
+  
+  #todo look at minsplit more
   #including susanahs code to reduce branches using minsplit
-  tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class', control=rpart.control(minsplit=50))
+  #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class', control=rpart.control(minsplit=50))
+
+  #? do these work within function ?
+  plot(tree) #plots tree
+  text(tree) #labels tree
   
-  #pruning tree
-  treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
-  plot(treePruned) #plots tree
-  text(treePruned) #labels tree
     
-  
-  #can I use match.call to simplify setting the predictors to those passed by the user
-  #cfit <- rpart(res ~ names(match.call())[-1], data = inputAndResults, method = 'class')
+  #pruning tree
+#   treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+#   plot(treePruned) #plots tree
+#   text(treePruned) #labels tree
+    
   
   #can just separate out the data that is used in the model
   #forCT <- inputAndResults[c('h.RS1_A0','h.RS2_0B','res')]
   #cfit <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = forCT, method = 'class')
-
-  
-  plot(tree) #plots tree
-  text(tree) #labels tree
 
   
   #may want to return inputAndResults from this func
@@ -83,5 +92,6 @@ sensiAn1 <- function( nScenarios = 10,
   #and then return tree or treePruned from another func
   #invisible(tree)
   #invisible(treePruned)
+  #BUT then also would need to return arglist somehow
   
 }
