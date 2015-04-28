@@ -50,17 +50,25 @@ sensiAn1 <- function( nScenarios = 10,
   inputAndResults$Gens.to.0.5[is.na(inputAndResults$Gens.to.0.5)] <- 999
   inputAndResults$res <- cut(inputAndResults$Gens.to.0.5, breaks=c(0,50,9999),labels=c("<=50",">50"))
 
-
-  #using match.call to set the predictors to those passed by the user
-  #collapse="+" adds a + between each arg
-  argString <- paste(names(match.call())[-1],collapse="+")
-  #"h.RS1_A0+h.RS2_0B+s.RR1_A0+s.RR2_0B"
-
-  #uh-oh!! seems that my eval bit adds all the args together before putting them in the model.
-  
+ 
   #uh-oh2! need to exclude nScenarios from argString if it has been passed
   
-  tree <- rpart(res ~ eval(parse(text=argString)), data = inputAndResults, method = 'class')  
+  #using match.call to set the predictors to those passed by the user
+  #1 get the arg names (exclude function name at item1)
+  argString <- names(match.call())[-1]
+  #2 exclude nScenarios if present
+  argString <- argString[argString!="nScenarios"]
+  #3 collapse="+" adds a + between each arg
+  argString <- paste(argString, collapse="+")
+  
+    
+  #"h.RS1_A0+h.RS2_0B+s.RR1_A0+s.RR2_0B"
+
+  #uh-oh1!! seems that my eval bit adds all the args together before putting them in the model.
+
+  
+  #using as.formula like this sorts uh-oh1
+  tree <- rpart(as.formula(paste("res ~",argString)), data = inputAndResults, method = 'class')  
   
   #2 hardcoded args
   #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = inputAndResults, method = 'class')
