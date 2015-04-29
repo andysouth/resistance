@@ -859,7 +859,7 @@ out <- sensiAn1( nScenarios = 10, h.RS1_A0=c(0.1,1))
 
 **24/4/15** 4-5 1hr
 
-**27/4/15** 9.15-13.15 4hrs
+**27/4/15** 9.15-13.15 4hrs 1.45-2.45 5hrs
 
 trying to test rpart in sensiAn1
 getting :
@@ -892,26 +892,72 @@ tree->rpart(outcome ~ h_n+ h_o+h_I+s_o+s_I+φ_o+φ_I+α_o+α_I+α_fn+α_mo+α_mI
 pruned_tree<- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
 
 
+**28/4/15** 10-14.30 4.5hrs 3-6 7.5hrs
+
+reading Ians recent manuscript update.
+I think this from p13 is key on what I need to do with the analysis : 
+
+** The simulation output was the ratio of  the time (in generation) for resistance  to the ‘new’ insecticide  to reach a given allele threshold frequency when the ‘new’ insecticide was deployed as combination, compared to the time taken to reach the same threshold if deployed on its own; a ratio >1 indicates that combination is better. Five threshold frequencies were investigated: 0.05, 0.1, 0.2, 0.5, 0.8. **
+
+In order to do that I'd need to repeat each scenario for a single & combined insecticide treatment. Single is just the new rarer insecticide, Combined also has an older insecticide to which initial resistance is more common.
+
+Searching for the Curtis paper. Cited by 181 papers according to Google.
+https://www.google.co.uk/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=%22theoretical%20models%20of%20the%20use%20of%20insecticide%20mixtures%22
+
+https://books.google.co.uk/books?id=ooHjBwAAQBAJ&pg=PA177&lpg=PA177&dq=%22theoretical+models+of+the+use+of+insecticide+mixtures%22&source=bl&ots=b3CPTQc5LL&sig=FCB5MCvX1xUjtfgog1z_dq1pH1Y&hl=en&sa=X&ei=bXw_VbriFoWpsAGnvYG4Ag&ved=0CEEQ6AEwBA#v=onepage&q=Curtis&f=false
+
+Pesticide Resistance in Arthropods (1990) edited by Richard Roush, Bruce E. Tabashnik
+
+these 2 chapters look useful :
+Roush, R. T., and J. C. Daly. 1990. The role of population genetics in resistance research
+and management, pp. 97-152.In: Pesticide resistance in arthropods. R. T. Roush and
+B. E. tabashnik (Eds.) Chapman and Hall, New York.
+
+Tabashnik, B. E. 1990. Modeling and evaluation of resistance management tactics, pp.
+153-182. In: Pesticide resistance in arthropods. R. T. Roush and B. E. Tabashnik
+(Eds.) Chapman and Hall, New York.
+
+page 131 talks about insecticide mixtures. Refers to some modelling by Roush (1989a)
+
+Roush, R. T. 1989. Designing resistance management programs: How can you choose?
+Pestic. Sci. 26:423-441.
+
+p467 in Insect Resistance Management: Biology, Economics, and Prediction edited by David W. Onstad (2013)
+seems to have some simulations addressing similar issues to us.
+
+https://books.google.co.uk/books?id=6hp384ZH0_kC&pg=PA453&dq=%22Modeling+and+evaluation+of+resistance+management+tactics%22&source=gbs_toc_r&cad=4#v=onepage&q=%22Modeling%20and%20evaluation%20of%20resistance%20management%20tactics%22&f=false
 
 
+Now have sorted passing user args to rpart in sensiAn1(). It does produce reasonable looking trees just by e.g.
+
+`inputAndResults <- sensiAn1(100, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))`
+
+**29/4/15** 10.30-12.30 2hrs 3.15-
+
+working on refactoring variables to arrays
 
  
 ### TO DO  
 
-1. continue with getting classification trees working in sensiAn1
+1. is there a way I can easily run single & combined deployments for the same scenario ?
+* is it `niche_00` and `niche_AB`
+* or in `a.m_AB` insecticide exposure male hi1 hi2
+* do I also need to change "Starting frequency of resistance" ?
+* perhaps I can set up a simple example input to send to Beth ?
+* or ask Beth to send me the input.csv used to produce tables 8 & 9 in 'Brief_full-genotype-tables.pdf'
+* maybe comparing the files in full-dom_CD.csv & SD in C:\Dropbox\Levick et al IR manuscript will help me.
 
-1. update R, new lengths() function may be useful for me
-but doesn't find latest version yet
-library(installr)
-updateR()
+1. before May 15th move Spark and Glimmer shiny apps
+
+1. go through the paper and check which bits relate to which in the code. Maybe create a table ? Could I create the table from R ? but actually much of the functionality is still in runModel() and needs to be put into functions.
+
+1. Maybe create a model diagram perhaps from diagrammer ?
+
+1. maybe separate out classification trees from sensiAn1
 
 1. in susana's script the 'outcome' is 0/1 if used in our case that would seem to lose a lot of information about the outcomes ? Even timeToFifty would be better for us.
 
 1. write a function to calculate timeToThreshold for all scenarios based on listOut, allow user to specify which locus.
-
-1. from the first stage of the sensitivity analysis I'll want to output a dataframe with 1 row per replicate containing both the inputs and the outputs. Getting it to put the inputs into a dataframe like this would be a good start. I think this may just be a case of transposing the input object ?
-
-1. try out classification trees code from Susana
 
 1. maybe add option in setInputSensiScenarios to save input object as a csv or rda.
 
@@ -924,17 +970,80 @@ updateR()
 1. finish tidying documentation of reading in input vars in createInputMatrix()
 
 1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
-1. edit runModel carefully
+1. edit/refactor runModel carefully
 1. check out the part about running sequential insecticide scenarios
 
 1. spend some time developing my understanding of how the model works
 1. submit tilde bug report
-1. re-look at R popgen packages when I've got more of a handle on what we are doing.
 
 
 ### suggestion from Beth
-a solution may be to provide a .csv file with the Curtis scenarios set up
+could provide a .csv file with the Curtis scenarios set up
 and then the need to set the calibration number and params.csv in the R script can be removed altogether
+
+### How best to refactor variables to arrays ?
+Refactoring to arrays will reduce code volume, reduce risk of mistyped variable names and allow objects to be passed between functions.
+cis/trans makes it slightly tricky, but not all variables have cis/trans
+only used for genotype frequencies (f) and in output matrices fitness & genotype 
+in the wild in Beths code :
+```
+fs.m.RS1RS2_cis <- f.m.RS1RS2_cis
+fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
+```
+
+e.g. W doesn't have cis/trans
+I could refactor
+```{r}
+        # relaxed selection fitnesses
+        ## Males
+        W.m.SS1SS2 <- 0.1 
+        W.m.SS1RS2 <- 0.1
+        W.m.SS1RR2 <- 0.1
+        
+        W.m.RS1SS2 <- 0.1
+        W.m.RS1RS2 <- 0.1  
+        W.m.RS1RR2 <- 0.1  
+        
+        W.m.RR1SS2 <- 0.1 
+        W.m.RR1RS2 <- 0.1 
+        W.m.RR1RR2 <- 0.1  
+        
+        ## Female
+        W.f.SS1SS2 <- 0.1
+        W.f.SS1RS2 <- 0.1
+        W.f.SS1RR2 <- 0.1
+        
+        W.f.RS1SS2 <- 0.1
+        W.f.RS1RS2 <- 0.1 
+        W.f.RS1RR2 <- 0.1 
+        
+        W.f.RR1SS2 <- 0.1
+        W.f.RR1RS2 <- 0.1 
+        W.f.RR1RR2 <- 0.1
+# to :
+#to create an array a[sex][locus1][locus2]
+namesLoci <- c('SS','RS','RR')
+locus1 <- paste0(namesLoci,'1')
+locus2 <- paste0(namesLoci,'2')
+sex <- c("f","m")
+
+dimnames1 <- list( sex=sex, locus1=locus1, locus2=locus2 )
+dim1 <- sapply(dimnames1, function(x) length(x))
+W <- array(0,dim=dim1, dimnames=dimnames1)
+
+#to fill al elements as above
+W <- 0.1
+#check length
+length(W)
+#to access one element
+W['m','SS1','RR2']
+#to check that males total 1
+sum(a['m',,])
+```        
+
+
+
+
 
 ### variable naming conventions
 **SS1, RS1, RR1** homozygous susceptible, heterozygous or homozygous resistant genotypes at each locus.   
@@ -950,3 +1059,35 @@ rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2",
                         "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                         "RR1SS2", "RR1RS2", "RR1RR2")
 ```
+#### inputs
+** a ** exposure to insecticide
+** phi ** fitness of one locus (baseline)
+** W.SS1_00 & W.SS2_00** fitness of SS in no insecticide
+** h ** dominance coefficient
+** s ** selection coefficient
+** z ** fitness cost of resistance allele in no insecticide
+** niche_ ** insecticide niche toggle
+
+#### calculated
+** W ** fitnesses by niche and sex
+** f ** genotype frequency
+** fs ** genotype frequency following selection
+** G ** gametes
+
+Different W fitness variables
+`W.RR1_00 : [locus][niche]` single locus
+`W.RR1SS2_0b :   [locus1][locus2][niche]` niche
+`W.m.SS1SS2 : [sex][locus1][locus2]` sex
+
+
+
+Question.
+What if `a.m_A0 > 0` but `niche_A0 == 0` ?
+The ifelse clauses allow niches to be toggled on/off, i.e. a fitness can be given for A0
+but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
+
+
+
+
+
+
