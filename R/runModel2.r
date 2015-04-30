@@ -530,6 +530,22 @@ runModel2 <- function(input,
     #todo, I should be able to refactor these ~120 lines
     #by using arrays with named fields
     
+    #!r first stage of refactoring to arrays, can reduce further later
+    #Windiv['m','SS1','SS2'] <- sum( a['m',,] * Wniche['SS1','SS2',,])
+    #Windiv['m','SS1','RS2'] <- sum( a['m',,] * Wniche['SS1','RS2',,])
+    
+    #!r 2nd stage of refactoring to arrays, this replaces the ~120 lines below
+    for( sex in dimnames(Windiv)$sex)
+    {
+      for( locus1 in dimnames(Windiv)$locus1)
+      {
+        for( locus2 in dimnames(Windiv)$locus2)
+        {
+          Windiv[sex,locus1,locus2] <- sum( a[sex,,] * Wniche[locus1,locus2,,])
+        }
+      }
+    }
+        
     # Males, SS1, SS2
     W.m.SS1SS2 <- (a.m_00 * W.SS1SS2_00) + 
       (a.m_a0 * W.SS1SS2_a0) + (a.m_A0 * W.SS1SS2_A0) + 
