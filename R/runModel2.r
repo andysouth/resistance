@@ -57,6 +57,7 @@ runModel2 <- function(input,
     ## Exposure levels of males and females to each insecticide niche ##
     #!r
     a <- createArray( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+    Wloci <- createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
     Wniche <- createArray( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
     Windiv <- createArray( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
     # males
@@ -254,6 +255,12 @@ runModel2 <- function(input,
     
     # -,- niche
     if( niche_00 == 0 ){
+      
+      #!r
+      #Wniche[locus1, locus2, niche1, niche2]
+      #?or should niche1 & 2 be combined
+      Wniche[,,'0','0'] <- 0
+      
       # SS1
       W.SS1SS2_00 <- 0
       W.SS1RS2_00 <- 0
@@ -267,6 +274,16 @@ runModel2 <- function(input,
       W.RR1RS2_00 <- 0
       W.RR1RR2_00 <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'0','0'] <- Wloci[locus1,'0','0'] * Wloci[locus2,'0','0']
+        }
+      }
+      
       # SS1
       W.SS1SS2_00 <- W.SS1_00 * W.SS2_00
       W.SS1RS2_00 <- W.SS1_00 * W.RS2_00
@@ -284,7 +301,10 @@ runModel2 <- function(input,
     
     # a,- niche ####
     if( niche_a0 == 0 ){
-      # SS1
+
+      #!r to replace 9 lines below
+      Wniche[,,'a','0'] <- 0      
+      
       # SS1
       W.SS1SS2_a0 <- 0
       W.SS1RS2_a0 <- 0
@@ -298,6 +318,16 @@ runModel2 <- function(input,
       W.RR1RS2_a0 <- 0
       W.RR1RR2_a0 <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'a','0'] <- Wloci[locus1,'a','0'] * Wloci[locus2,'0','0']
+        }
+      }      
+      
       # SS1
       W.SS1SS2_a0 <- W.SS1_a0 * W.SS2_00
       W.SS1RS2_a0 <- W.SS1_a0 * W.RS2_00
@@ -314,6 +344,10 @@ runModel2 <- function(input,
     
     # A,- niche ####
     if( niche_A0 == 0 ){
+      
+      #!r to replace 9 lines below
+      Wniche[,,'A','0'] <- 0       
+      
       # SS1
       W.SS1SS2_A0 <- 0
       W.SS1RS2_A0 <- 0
@@ -327,6 +361,16 @@ runModel2 <- function(input,
       W.RR1RS2_A0 <- 0
       W.RR1RR2_A0 <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'A','0'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','0']
+        }
+      }
+      
       # SS1
       W.SS1SS2_A0 <- W.SS1_A0 * W.SS2_00
       W.SS1RS2_A0 <- W.SS1_A0 * W.RS2_00
@@ -343,7 +387,12 @@ runModel2 <- function(input,
     
     
     # -,b niche ####
-    if( niche_0B == 0 ){
+    #andy : i think this was a bug here B should have been b - corrected
+    if( niche_0b == 0 ){ #if( niche_0B == 0 ){
+      
+      #!r to replace 9 lines below
+      Wniche[,,'0','b'] <- 0  
+      
       # SS1
       W.SS1SS2_0b <- 0
       W.SS1RS2_0b <- 0
@@ -357,6 +406,16 @@ runModel2 <- function(input,
       W.RR1RS2_0b <- 0
       W.RR1RR2_0b <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'0','b'] <- Wloci[locus1,'0','0'] * Wloci[locus2,'0','b']
+        }
+      }
+      
       # SS1
       W.SS1SS2_0b <- W.SS1_00 * W.SS2_0b
       W.SS1RS2_0b <- W.SS1_00 * W.RS2_0b
@@ -373,6 +432,10 @@ runModel2 <- function(input,
     
     # -,B niche ####
     if( niche_0B == 0 ){
+      
+      #!r to replace 9 lines below
+      Wniche[,,'0','B'] <- 0  
+      
       # SS1
       W.SS1SS2_0B <- 0
       W.SS1RS2_0B <- 0
@@ -386,6 +449,16 @@ runModel2 <- function(input,
       W.RR1RS2_0B <- 0
       W.RR1RR2_0B <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'0','B'] <- Wloci[locus1,'0','0'] * Wloci[locus2,'0','B']
+        }
+      }      
+      
       # SS1
       W.SS1SS2_0B <- W.SS1_00 * W.SS2_0B
       W.SS1RS2_0B <- W.SS1_00 * W.RS2_0B
@@ -402,6 +475,10 @@ runModel2 <- function(input,
     
     # a,b niche ####
     if( niche_ab == 0 ){
+      
+      #!r to replace 9 lines below
+      Wniche[,,'a','b'] <- 0  
+      
       # SS1
       W.SS1SS2_ab <- 0
       W.SS1RS2_ab <- 0
@@ -416,6 +493,16 @@ runModel2 <- function(input,
       W.RR1RR2_ab <- 0
       
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'a','b'] <- Wloci[locus1,'a','0'] * Wloci[locus2,'0','b']
+        }
+      }
+      
       # SS1
       W.SS1SS2_ab <- W.SS1_a0 * W.SS2_0b
       W.SS1RS2_ab <- W.SS1_a0 * W.RS2_0b
@@ -433,6 +520,10 @@ runModel2 <- function(input,
     
     # A,B niche ####
     if( niche_AB == 0 ){
+      
+      #!r to replace 9 lines below
+      Wniche[,,'A','B'] <- 0  
+      
       # SS1
       W.SS1SS2_AB <- 0
       W.SS1RS2_AB <- 0
@@ -446,6 +537,16 @@ runModel2 <- function(input,
       W.RR1RS2_AB <- 0
       W.RR1RR2_AB <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'A','B'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','B']
+        }
+      }
+      
       # SS1
       W.SS1SS2_AB <- W.SS1_A0 * W.SS2_0B
       W.SS1RS2_AB <- W.SS1_A0 * W.RS2_0B
@@ -464,6 +565,10 @@ runModel2 <- function(input,
     
     # A,b niche ####
     if( niche_Ab == 0 ){
+      
+      #!r to replace 9 lines below
+      Wniche[,,'A','b'] <- 0  
+      
       # SS1
       W.SS1SS2_Ab <- 0
       W.SS1RS2_Ab <- 0
@@ -477,6 +582,16 @@ runModel2 <- function(input,
       W.RR1RS2_Ab <- 0
       W.RR1RR2_Ab <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'A','B'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','b']
+        }
+      }      
+      
       # SS1
       W.SS1SS2_Ab <- W.SS1_A0 * W.SS2_0b
       W.SS1RS2_Ab <- W.SS1_A0 * W.RS2_0b
@@ -494,6 +609,10 @@ runModel2 <- function(input,
     
     # a,B niche
     if( niche_aB == 0 ){
+      
+      #!r to replace 9 lines below
+      Wniche[,,'a','B'] <- 0  
+      
       # SS1
       W.SS1SS2_aB <- 0
       W.SS1RS2_aB <- 0
@@ -507,6 +626,16 @@ runModel2 <- function(input,
       W.RR1RS2_aB <- 0
       W.RR1RR2_aB <- 0
     }else{
+      
+      #!r to replace 9 lines below
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          Wniche[locus1,locus2,'a','0'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','B']
+        }
+      }
+      
       # SS1
       W.SS1SS2_aB <- W.SS1_a0 * W.SS2_0B
       W.SS1RS2_aB <- W.SS1_a0 * W.RS2_0B
