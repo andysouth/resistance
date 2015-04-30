@@ -313,7 +313,8 @@ runModel <- function(input,
     
     
     # -,b niche ####
-    if( niche_0B == 0 ){
+    #andy : i think this was a bug here B should have been b - corrected
+    if( niche_0b == 0 ){ #if( niche_0B == 0 ){
       # SS1
       W.SS1SS2_0b <- 0
       W.SS1RS2_0b <- 0
