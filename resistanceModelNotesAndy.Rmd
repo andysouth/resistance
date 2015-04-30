@@ -499,8 +499,8 @@ str(a)
 checking whether I can run without the input file. Fixed now.
 
 ```{r}
-require(devtools)    
-install_github('AndySouth/resistance') 
+#require(devtools)    
+#install_github('AndySouth/resistance') 
 library(resistance)
 resistanceMaster(params.csv = FALSE)
 ``` 
@@ -852,7 +852,7 @@ cool yes, getting there.
 
 **22/4/15** jury service 11.30 - 12.30 1 hr
 
-```{r}
+```
 out <- sensiAn1( nScenarios = 10, h.RS1_A0=c(0.1,1))
 ```
 
@@ -932,9 +932,161 @@ Now have sorted passing user args to rpart in sensiAn1(). It does produce reason
 
 `inputAndResults <- sensiAn1(100, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))`
 
-**29/4/15** 10.30-12.30 2hrs 3.15-
+**29/4/15** 10.30-12.30 2hrs 3.15-5.15 4hrs
 
-working on refactoring variables to arrays
+e.g. W doesn't have cis/trans
+I could refactor
+```{r}
+        # relaxed selection fitnesses
+        ## Males
+        W.m.SS1SS2 <- 0.1 
+        W.m.SS1RS2 <- 0.1
+        W.m.SS1RR2 <- 0.1
+        
+        W.m.RS1SS2 <- 0.1
+        W.m.RS1RS2 <- 0.1  
+        W.m.RS1RR2 <- 0.1  
+        
+        W.m.RR1SS2 <- 0.1 
+        W.m.RR1RS2 <- 0.1 
+        W.m.RR1RR2 <- 0.1  
+        
+        ## Female
+        W.f.SS1SS2 <- 0.1
+        W.f.SS1RS2 <- 0.1
+        W.f.SS1RR2 <- 0.1
+        
+        W.f.RS1SS2 <- 0.1
+        W.f.RS1RS2 <- 0.1 
+        W.f.RS1RR2 <- 0.1 
+        
+        W.f.RR1SS2 <- 0.1
+        W.f.RR1RS2 <- 0.1 
+        W.f.RR1RR2 <- 0.1
+# to :
+#to create an array a[sex][locus1][locus2]
+namesLoci <- c('SS','RS','RR')
+locus1 <- paste0(namesLoci,'1')
+locus2 <- paste0(namesLoci,'2')
+sex <- c("f","m")
+
+dimnames1 <- list( sex=sex, locus1=locus1, locus2=locus2 )
+dim1 <- sapply(dimnames1, function(x) length(x))
+W <- array(0,dim=dim1, dimnames=dimnames1)
+
+#to fill al elements as above
+W[] <- 0.1
+#check length
+length(W)
+#to access one element
+W['m','SS1','RR2']
+#to check that males total 1
+sum(W['m',,])
+```        
+
+working on refactoring variables to arrays, made flexible createArray() function.
+good progress
+started runModel2() to contain the refactoring
+
+**30/4/15** 9.45-
+
+Need to be careful about different W fitness variables
+`W.RR1_00 : [locus][niche]` single locus (Wlocus)
+`W.RR1SS2_0b :   [locus1][locus2][niche]` niche (Wniche)
+`W.m.SS1SS2 : [sex][locus1][locus2]` sex (Windiv)
+
+Once I have array refactoring working by .
+```{r}
+
+    a <- createArray( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+    Wniche <- createArray( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    Windiv <- createArray( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+```
+I should be able to replace 
+```
+    W.m.SS1SS2 <- (a.m_00 * W.SS1SS2_00) + 
+      (a.m_a0 * W.SS1SS2_a0) + (a.m_A0 * W.SS1SS2_A0) + 
+      (a.m_0b * W.SS1SS2_0b) + (a.m_0B * W.SS1SS2_0B) + 
+      (a.m_ab * W.SS1SS2_ab) + (a.m_AB * W.SS1SS2_AB) + 
+      (a.m_Ab * W.SS1SS2_Ab) + (a.m_aB * W.SS1SS2_aB) 
+```
+with
+```{r}
+    Windiv['m','SS1','SS2'] <- sum( a['m',,] * Wniche['SS1','SS2',,])
+```
+To prove that the above works
+```{r}
+    #set constant
+    a['m',,] <- 2 
+    #set variable
+    Wniche['SS1','SS2',,] <- 1:9
+    Wniche['SS1','SS2',,]
+    
+    #showing that each element gets multiplied by 2
+    a['m',,] * Wniche['SS1','SS2',,]
+    
+    #show result of sum
+    sum( a['m',,] * Wniche['SS1','SS2',,])
+    
+    Windiv['m','SS1','SS2'] <- sum( a['m',,] * Wniche['SS1','SS2',,])
+    
+```
+Gives a result of 90 for just mSS1SS2 which is correct
+``` Windiv
+, , locus2 = SS2
+
+   locus1
+sex SS1 RS1 RR1
+  m  90   0   0
+  f   0   0   0
+
+, , locus2 = RS2
+
+   locus1
+sex SS1 RS1 RR1
+  m   0   0   0
+  f   0   0   0
+
+, , locus2 = RR2
+
+   locus1
+sex SS1 RS1 RR1
+  m   0   0   0
+  f   0   0   0
+```
+
+Or indeed might be able to replace the whole 120 lines of code from 510-630 with :
+No these give: 
+```
+#Error in a[, , ] * Wniche[, , , ] : non-conformable arrays
+    Windiv['m',,] <- sum( a['m',,] * Wniche[,,,])
+    Windiv['f',,] <- sum( a['f',,] * Wniche[,,,])
+    #or even just
+    Windiv[,,] <- sum( a[,,] * Wniche[,,,]) 
+```
+Just needs a little more thought ...
+It's because a needs to be applied repeatedly to each genotype.
+Maybe worry about that later ..
+
+Want to develop a sequential testing process, so that I can compare runModel() and runModel2().
+Maybe I could use testthat for it ?
+
+Just need to do this to start :
+`devtools::use_testthat()`
+
+see testRefactoring() which does things like this :
+
+```
+input <- setInputOneScenario()
+tst <- runModel(input)
+tst2 <- runModel2(input)
+input <- setInputSensiScenarios(20, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))
+tst <- runModel2(input, produce.plots=FALSE)
+tst2 <- runModel(input, produce.plots=FALSE)
+identical(tst,tst2)
+```
+
+
 
  
 ### TO DO  
@@ -948,6 +1100,7 @@ working on refactoring variables to arrays
 * maybe comparing the files in full-dom_CD.csv & SD in C:\Dropbox\Levick et al IR manuscript will help me.
 
 1. before May 15th move Spark and Glimmer shiny apps
+1. I should have included unit testing on my CV
 
 1. go through the paper and check which bits relate to which in the code. Maybe create a table ? Could I create the table from R ? but actually much of the functionality is still in runModel() and needs to be put into functions.
 
@@ -991,55 +1144,7 @@ fs.m.RS1RS2_cis <- f.m.RS1RS2_cis
 fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
 ```
 
-e.g. W doesn't have cis/trans
-I could refactor
-```{r}
-        # relaxed selection fitnesses
-        ## Males
-        W.m.SS1SS2 <- 0.1 
-        W.m.SS1RS2 <- 0.1
-        W.m.SS1RR2 <- 0.1
-        
-        W.m.RS1SS2 <- 0.1
-        W.m.RS1RS2 <- 0.1  
-        W.m.RS1RR2 <- 0.1  
-        
-        W.m.RR1SS2 <- 0.1 
-        W.m.RR1RS2 <- 0.1 
-        W.m.RR1RR2 <- 0.1  
-        
-        ## Female
-        W.f.SS1SS2 <- 0.1
-        W.f.SS1RS2 <- 0.1
-        W.f.SS1RR2 <- 0.1
-        
-        W.f.RS1SS2 <- 0.1
-        W.f.RS1RS2 <- 0.1 
-        W.f.RS1RR2 <- 0.1 
-        
-        W.f.RR1SS2 <- 0.1
-        W.f.RR1RS2 <- 0.1 
-        W.f.RR1RR2 <- 0.1
-# to :
-#to create an array a[sex][locus1][locus2]
-namesLoci <- c('SS','RS','RR')
-locus1 <- paste0(namesLoci,'1')
-locus2 <- paste0(namesLoci,'2')
-sex <- c("f","m")
 
-dimnames1 <- list( sex=sex, locus1=locus1, locus2=locus2 )
-dim1 <- sapply(dimnames1, function(x) length(x))
-W <- array(0,dim=dim1, dimnames=dimnames1)
-
-#to fill al elements as above
-W <- 0.1
-#check length
-length(W)
-#to access one element
-W['m','SS1','RR2']
-#to check that males total 1
-sum(a['m',,])
-```        
 
 
 
