@@ -55,7 +55,13 @@ runModel2 <- function(input,
     ### small case = low concentration, upper case = high concentration, 0 = absence (zero not UC o). ###
 
     ## Exposure levels of males and females to each insecticide niche ##
+    #!r
+    a <- createArray( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+    Wniche <- createArray( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    Windiv <- createArray( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
     # males
+    #todo finish find & replace for a
+    a['m','0','0'] <- input[8,i]
     a.m_00 <- input[8,i]
     
     a.m_a0 <- input[9,i]
