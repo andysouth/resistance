@@ -61,46 +61,69 @@ runModel2 <- function(input,
     Windiv <- createArray( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
     # males
     #todo finish find & replace for a
-    a['m','0','0'] <- input[8,i]
     a.m_00 <- input[8,i]
+    a['m','0','0'] <- input[8,i]
     
     a.m_a0 <- input[9,i]
     a.m_A0 <- input[10,i]
+    a['m','a','0'] <- input[9,i]
+    a['m','A','0'] <- input[10,i]
     
     a.m_0b <- input[11,i]
     a.m_0B <- input[12,i]
+    a['m','0','b'] <- input[11,i]
+    a['m','0','B'] <- input[12,i]
     
     a.m_ab <- input[13,i]
     a.m_AB <- input[14,i]
+    a['m','a','b'] <- input[13,i]
+    a['m','A','B'] <- input[14,i]    
     
     a.m_Ab <- input[15,i]
     a.m_aB <- input[16,i]
+    a['m','A','b'] <- input[15,i]
+    a['m','a','B'] <- input[16,i]      
     
     #a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
     #if ( a.m != 1 ){		 
     #	print( paste("Error in male exposures: must total one: ", a.m) )
     #	}
+    if ( sum(a['m',,]) != 1 ){		 
+    	stop( paste("Error in male exposures: must total one: ", sum(a['m',,])) )
+    	}
     
     # females
     a.f_00 <- input[17,i]
+    a['f','0','0'] <- input[17,i]
     
     a.f_a0 <- input[18,i]
     a.f_A0 <- input[19,i]
+    a['f','a','0'] <- input[18,i]
+    a['f','A','0'] <- input[19,i]
     
     a.f_0b <- input[20,i]
     a.f_0B <- input[21,i]
+    a['f','0','b'] <- input[20,i]
+    a['f','0','B'] <- input[21,i]
     
     a.f_ab <- input[22,i]
     a.f_AB <- input[23,i]
+    a['f','a','b'] <- input[22,i]
+    a['f','A','B'] <- input[23,i] 
     
     a.f_Ab <- input[24,i]
     a.f_aB <- input[25,i]
+    a['f','A','b'] <- input[24,i]
+    a['f','a','B'] <- input[25,i] 
+    
     
     #a.f <- sum(a.f_00, a.f_a0, a.f_A0, a.f_0b, a.f_0B, a.f_ab, a.f_AB, a.f_Ab, a.f_aB)
     #if ( a.f != 1 ){		 
     #	print( paste("Error in female exposures: must total one: ", a.f) )
     #	}
-    
+    if ( sum(a['f',,]) != 1 ){		 
+      stop( paste("Error in female exposures: must total one: ", sum(a['f',,])) )
+    }
     
     ### Selection from distributions ###
     ### Fitness Values ###
