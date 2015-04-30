@@ -4,11 +4,13 @@
 \alias{createArray}
 \title{create array for representing genotypes and niches}
 \usage{
-createArray(sex = NULL, locus1 = NULL, locus2 = NULL, niche1 = NULL,
-  niche2 = NULL, fillValue = 0)
+createArray(sex = NULL, loci = NULL, locus1 = NULL, locus2 = NULL,
+  niche1 = NULL, niche2 = NULL, fillValue = 0)
 }
 \arguments{
 \item{sex}{vector of dimension names e.g. c('f','m')}
+
+\item{loci}{vector of dimension names e.g. c('SS1','RS1','RR1','SS2','RS2','RR2')}
 
 \item{locus1}{vector of dimension names e.g. c('SS1','RS1','RR1')}
 
@@ -26,7 +28,8 @@ creates array with the passed dimensions
 }
 \examples{
 createArray( sex = c('f','m') )
-createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1') )
+#Wloci
+createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
 createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
 createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A') )
 createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A'), niche2 = c('0','a','A') )

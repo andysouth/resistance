@@ -3,6 +3,7 @@
 #' creates array with the passed dimensions
 #' 
 #' @param sex vector of dimension names e.g. c('f','m')
+#' @param loci vector of dimension names e.g. c('SS1','RS1','RR1','SS2','RS2','RR2')
 #' @param locus1 vector of dimension names e.g. c('SS1','RS1','RR1')
 #' @param locus2 vector of dimension names e.g. c('SS2','RS2','RR2')
 #' @param niche1 vector of dimension names e.g. c('0','a','A')
@@ -10,7 +11,8 @@
 #' 
 #' @examples 
 #' createArray( sex = c('f','m') ) 
-#' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1') )
+#' #Wloci
+#' createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
 #' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
 #' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A') )
 #' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A'), niche2 = c('0','a','A') )
@@ -19,6 +21,7 @@
 #' @export
 
 # createArray <- function(sex = c('f','m'),
+#                         loci = c('SS1','RS1','RR1','SS2','RS2','RR2'),
 #                         locus1 = c('SS1','RS1','RR1'),
 #                         locus2 = c('SS2','RS2','RR2'),
 #                         niche1 = c('0','a','A'),
@@ -27,6 +30,7 @@
 # ){
 
 createArray <- function(sex = NULL,
+                        loci = NULL,
                         locus1 = NULL,
                         locus2 = NULL,
                         niche1 = NULL,
@@ -44,6 +48,14 @@ createArray <- function(sex = NULL,
   
   if(!is.null(sex)) dimnames1 <- list( sex=sex )
 
+  if(!is.null(loci)) {
+    if(exists("dimnames1", environment(), inherits=FALSE)) {
+      dimnames1 <- list( dimnames1, list(loci=loci) )
+      dimnames1 <- unlist(dimnames1, recursive=FALSE)
+    }
+    else dimnames1 <- list( loci=loci )
+  }
+  
   if(!is.null(locus1)) {
     if(exists("dimnames1", environment(), inherits=FALSE)) {
       dimnames1 <- list( dimnames1, list(locus1=locus1) )
