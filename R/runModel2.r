@@ -691,6 +691,9 @@ runModel2 <- function(input,
       
       if( relax == TRUE & (2<k) & (k<12)){
         # relaxed selection fitnesses
+        #!r 18 lines below can be replaced with
+        Windiv[] <- 0.1
+        
         ## Males
         W.m.SS1SS2 <- 0.1 
         W.m.SS1RS2 <- 0.1
@@ -720,6 +723,14 @@ runModel2 <- function(input,
       } else if( relax == TRUE & (k>11) & (k<15)){
         
         # non relaxed fitnesses
+        #!r 18 lines below can be replaced with
+        Windiv[] <- 0.1
+        #these do m,f at same time
+        Windiv[,'RS1','RS2'] <- 1
+        Windiv[,'RS1','RR2'] <- 1
+        Windiv[,'RR1','RS2'] <- 1
+        Windiv[,'RR1','RR2'] <- 1
+                
         ## Males
         W.m.SS1SS2 <- 0.1
         W.m.SS1RS2 <- 0.1
@@ -749,6 +760,9 @@ runModel2 <- function(input,
       } else if( relax == TRUE & (k>14) ){
         
         # relaxed selection fitnesses
+        #!r 18 lines below can be replaced with
+        Windiv[] <- 0.1
+        
         ## Males
         W.m.SS1SS2 <- 0.1 
         W.m.SS1RS2 <- 0.1
