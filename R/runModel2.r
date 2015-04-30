@@ -60,8 +60,10 @@ runModel2 <- function(input,
     Wloci <- createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
     Wniche <- createArray( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
     Windiv <- createArray( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+    niche <- createArray( niche1=c('0','a','A'), niche2=c('0','b','B') )
+    
+    
     # males
-    #todo finish find & replace for a
     a.m_00 <- input[8,i]
     a['m','0','0'] <- input[8,i]
     
@@ -169,18 +171,25 @@ runModel2 <- function(input,
     ## if toggled FALSE the calculation of fitness in that niche is cancelled and results printed as 0
     ## even if all set to TRUE, calibration == 1011||1012 will change the correct ones to OFF to run Curtis/Comparator
     niche_00 <- input[44,i]
-    
     niche_a0 <- input[45,i]
     niche_A0 <- input[46,i]
-    
     niche_0b <- input[47,i]
     niche_0B <- input[48,i]
-    
     niche_ab <- input[49,i]
     niche_AB <- input[50,i]
-    
     niche_Ab <- input[51,i]
     niche_aB <- input[52,i]
+    
+    niche['0','0'] <- input[44,i]
+    niche['a','0'] <- input[45,i]
+    niche['A','0'] <- input[46,i]
+    niche['0','b'] <- input[47,i]
+    niche['0','B'] <- input[48,i]
+    niche['a','b'] <- input[49,i]
+    niche['A','B'] <- input[50,i]
+    niche['A','b'] <- input[51,i]
+    niche['a','B'] <- input[52,i]
+    
     
     
     #### end of reading inputs into parameters ####
@@ -252,6 +261,33 @@ runModel2 <- function(input,
     ## but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
     ## Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
     ## See table 4 of briefing document
+    
+    
+    #todo if I convert niche_00 etc to an array
+    #I can simplify the code below still further
+
+    #!r to replace 250+ lines below
+    for( niche1 in dimnames(Wniche)$niche1)
+    {
+      for( niche2 in dimnames(Wniche)$niche2)
+      {
+        #if this niche toggled off set fitness to 0
+        if (niche[niche1,niche2] == 0)
+        {
+          Wniche[,,niche1,niche2] <- 0
+        } else{
+          #otherwise set fitness to product of the 2 loci
+          for( locus1 in dimnames(Wniche)$locus1)
+          {
+            for( locus2 in dimnames(Wniche)$locus2)
+            {    
+              Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,niche1,niche2] * Wloci[locus2,niche1,niche2]
+            }
+          }          
+        }
+      }
+    }
+    
     
     # -,- niche
     if( niche_00 == 0 ){
