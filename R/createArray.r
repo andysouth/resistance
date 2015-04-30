@@ -39,10 +39,13 @@ createArray <- function(sex = NULL,
   
   # building up dimension names according to passed args
   
+  #BEWARE exists() also searches in GlobalEnv which can mess up this function
+  #exists("dimnames1", environment(), inherits=FALSE) #fixes it
+  
   if(!is.null(sex)) dimnames1 <- list( sex=sex )
 
   if(!is.null(locus1)) {
-    if(exists("dimnames1")) {
+    if(exists("dimnames1", environment(), inherits=FALSE)) {
       dimnames1 <- list( dimnames1, list(locus1=locus1) )
       dimnames1 <- unlist(dimnames1, recursive=FALSE)
     }
@@ -50,7 +53,7 @@ createArray <- function(sex = NULL,
   }
   
   if(!is.null(locus2)) {
-    if(exists("dimnames1")) {
+    if(exists("dimnames1", environment(), inherits=FALSE)) {
       dimnames1 <- list( dimnames1, list(locus2=locus2) )
       dimnames1 <- unlist(dimnames1, recursive=FALSE)
     }
@@ -58,7 +61,7 @@ createArray <- function(sex = NULL,
   }  
 
   if(!is.null(niche1)) {
-    if(exists("dimnames1")) {
+    if(exists("dimnames1", environment(), inherits=FALSE)) {
       dimnames1 <- list( dimnames1, list(niche1=niche1) )
       dimnames1 <- unlist(dimnames1, recursive=FALSE)
     }
@@ -66,7 +69,7 @@ createArray <- function(sex = NULL,
   }  
     
   if(!is.null(niche2)) {
-    if(exists("dimnames1")) {
+    if(exists("dimnames1", environment(), inherits=FALSE)) {
       dimnames1 <- list( dimnames1, list(niche2=niche2) )
       dimnames1 <- unlist(dimnames1, recursive=FALSE)
     }
