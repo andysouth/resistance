@@ -2,6 +2,7 @@
 
 export(HW)
 export(createArray)
+export(createArray2)
 export(createInputMatrix)
 export(make.genotypemat)
 export(make.matrix)
