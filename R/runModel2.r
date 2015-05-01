@@ -8,6 +8,9 @@
 #' @param produce.plots whether to produce plots
 #' @param savePlots whether to save plots to hardcoded filenames
 
+#' @examples 
+#' input <- setInputOneScenario()
+#' tst <- runModel2(input)
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
@@ -56,12 +59,16 @@ runModel2 <- function(input,
 
     ## Exposure levels of males and females to each insecticide niche ##
     #!r
-    a <- createArray( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
-    Wloci <- createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
-    Wniche <- createArray( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
-    Windiv <- createArray( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
-    niche <- createArray( niche1=c('0','a','A'), niche2=c('0','b','B') )
+    a <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+    Wloci <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+    Wniche <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    Windiv <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+    niche <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
     
+    s <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
+    phi <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    h <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    z <- createArray2(locusNum=c(1,2))
     
     # males
     a.m_00 <- input[8,i]
@@ -136,16 +143,21 @@ runModel2 <- function(input,
     # phi = baseline fitness value
     phi.SS1_a0 <- input[26,i]
     phi.SS1_A0 <- input[27,i]
-    
     phi.SS2_0b <- input[28,i]
     phi.SS2_0B <- input[29,i]
+    #!r
+    phi[1,'lo'] <- input[26,i]
+    phi[1,'hi'] <- input[27,i]
+    phi[2,'lo'] <- input[28,i]
+    phi[2,'hi'] <- input[29,i]
+    
     
     # fitness of SS in environment with no insecticide are set to 1
     W.SS1_00 <- input[30,i]
     W.SS2_00 <- input[31,i]
     #!r
-    W['SS1','0','0'] <- input[30,i]
-    W['SS1','0','0'] <- input[31,i]    
+    Wloci['SS1','no'] <- input[30,i]
+    Wloci['SS2','no'] <- input[31,i]    
     
     ## Dominance and selection coefficients
     ## needed to find fitness values of genotype in exposure to relating insecticide 
@@ -153,21 +165,39 @@ runModel2 <- function(input,
     h.RS1_00 <- input[32,i]
     h.RS1_a0 <- input[33,i]
     h.RS1_A0 <- input[34,i]
-    
     h.RS2_00 <- input[35,i]
     h.RS2_0b <- input[36,i]
     h.RS2_0B <- input[37,i]
+    #!r
+    h[1,'no'] <- input[32,i]
+    h[1,'lo'] <- input[33,i]
+    h[1,'hi'] <- input[34,i]
+    h[2,'no'] <- input[35,i]
+    h[2,'lo'] <- input[36,i]
+    h[2,'hi'] <- input[37,i]    
+    
     
     # s = selection coefficient
     s.RR1_a0 <- input[38,i]
     s.RR1_A0 <- input[39,i]
-    
     s.RR2_0b <- input[40,i]
     s.RR2_0B <- input[41,i]
+    #!r
+    s[1,'lo'] <- input[38,i]
+    s[1,'hi'] <- input[39,i]
+    s[2,'lo'] <- input[40,i]
+    s[2,'hi'] <- input[41,i]
     
     # z = fitness cost of resistance allele in insecticide free environment
     z.RR1_00 <- input[42,i]
     z.RR2_00 <- input[43,i]
+    #!r
+    z[1] <- input[42,i]
+    z[2] <- input[43,i]
+    #todo but this could perhaps be
+    #s[1,'no'] <- input[42,i]
+    #s[2,'no'] <- input[43,i]    
+    
     
     ### Toggle Insecticide Niches on and off ###
     ## Allows for setting of specific combinations of insecticide niches to be used
@@ -228,11 +258,41 @@ runModel2 <- function(input,
     #		}
     
     
-    ## Calculated fitnesses ####
-    # fitnesses calculated from baselines/coefficients as according to calibration table (Table 1)
+    ## Calculated single locus fitnesses ####
+    #h[locusNum, exposure]
+    #phi[locusNum, exposure] where exposure is lo, hi
     
+    #!r trying to refactor below 32 lines
+    #bit trickier than previous refactoring, I need to change the structure slightly
+    for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
+    {
+      #actually this is just for no
+      Wloci[ paste0('RS',locusNum), 'no'] <- 1 - (h[locusNum, 'no'] * z[locusNum])
+      Wloci[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
+      
+      for( exposure in c('lo','hi') )
+      {
+#         # low levels of insecticide a
+#         W.SS1_a0 <- 1 - phi.SS1_a0
+#         W.RS1_a0 <- W.SS1_a0 + (h.RS1_a0 * s.RR1_a0)
+#         W.RR1_a0 <- W.SS1_a0 + s.RR1_a0
+#         
+#         # high levels of insecticide A
+#         W.SS1_A0 <- 1 - phi.SS1_A0
+#         W.RS1_A0 <- W.SS1_A0 + (h.RS1_A0 * s.RR1_A0)
+#         W.RR1_A0 <- W.SS1_A0 + s.RR1_A0
+
+        Wloci[ paste0('SS',locusNum), exposure] <-  1 - phi[locusNum, exposure] 
+        Wloci[ paste0('RS',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
+                                                   (h[locusNum, exposure] * s[locusNum, exposure])
+        Wloci[ paste0('RR',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
+                                                   (s[locusNum, exposure])
+      }
+    }
+    
+
     # absence of insecticide
-    ## fitness of SS in absence of insecticide is entered above as a parameter
+    # fitness of SS in absence of insecticide is entered above as a parameter
     W.RS1_00 <- 1 - (h.RS1_00 * z.RR1_00)
     W.RR1_00 <- 1 - z.RR1_00
     
@@ -266,10 +326,22 @@ runModel2 <- function(input,
     ## Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
 
     #!r to replace 250+ lines below
-    for( niche1 in dimnames(Wniche)$niche1)
+#     for( niche1 in dimnames(Wniche)$niche1)
+#     {
+#       for( niche2 in dimnames(Wniche)$niche2)
+#       {
+    for( nicheNum1 in 1:3 ) #todo get this 1:3 from somewhere
     {
-      for( niche2 in dimnames(Wniche)$niche2)
-      {
+      for( nicheNum2 in 1:3 ) #todo get this 1:3 from somewhere
+      { 
+        #this is a temporary solution
+        #to get both niche (one of 0aAbB)
+        #and nicheLevel (one of no,lo,hi)
+        niche1 <- dimnames(Wniche)$niche1[ nicheNum1 ]
+        niche2 <- dimnames(Wniche)$niche2[ nicheNum2 ]
+        exposure1 <- dimnames(Wloci)$exposure[ nicheNum1 ]
+        exposure2 <- dimnames(Wloci)$exposure[ nicheNum2 ]        
+        
         #if this niche toggled off set fitness to 0
         if (niche[niche1,niche2] == 0)
         {
@@ -279,13 +351,21 @@ runModel2 <- function(input,
           for( locus1 in dimnames(Wniche)$locus1)
           {
             for( locus2 in dimnames(Wniche)$locus2)
-            {    
-              Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,niche1,niche2] * Wloci[locus2,niche1,niche2]
+            {   
+              #*problem with this line
+              #*needs to be something like
+              #Wloci[locus1,niche1] * Wloci[locus2,niche2]
+              #Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,niche1,niche2] * Wloci[locus2,niche1,niche2]
+              Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
+              
             }
           }          
         }
       }
     }
+    
+    
+    
     
     
     # -,- niche
@@ -310,14 +390,6 @@ runModel2 <- function(input,
       W.RR1RR2_00 <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'0','0'] <- Wloci[locus1,'0','0'] * Wloci[locus2,'0','0']
-        }
-      }
       
       # SS1
       W.SS1SS2_00 <- W.SS1_00 * W.SS2_00
@@ -354,14 +426,7 @@ runModel2 <- function(input,
       W.RR1RR2_a0 <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'a','0'] <- Wloci[locus1,'a','0'] * Wloci[locus2,'0','0']
-        }
-      }      
+   
       
       # SS1
       W.SS1SS2_a0 <- W.SS1_a0 * W.SS2_00
@@ -397,14 +462,7 @@ runModel2 <- function(input,
       W.RR1RR2_A0 <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'A','0'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','0']
-        }
-      }
+
       
       # SS1
       W.SS1SS2_A0 <- W.SS1_A0 * W.SS2_00
@@ -442,14 +500,7 @@ runModel2 <- function(input,
       W.RR1RR2_0b <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'0','b'] <- Wloci[locus1,'0','0'] * Wloci[locus2,'0','b']
-        }
-      }
+
       
       # SS1
       W.SS1SS2_0b <- W.SS1_00 * W.SS2_0b
@@ -485,14 +536,7 @@ runModel2 <- function(input,
       W.RR1RR2_0B <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'0','B'] <- Wloci[locus1,'0','0'] * Wloci[locus2,'0','B']
-        }
-      }      
+  
       
       # SS1
       W.SS1SS2_0B <- W.SS1_00 * W.SS2_0B
@@ -529,14 +573,7 @@ runModel2 <- function(input,
       
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'a','b'] <- Wloci[locus1,'a','0'] * Wloci[locus2,'0','b']
-        }
-      }
+
       
       # SS1
       W.SS1SS2_ab <- W.SS1_a0 * W.SS2_0b
@@ -573,14 +610,7 @@ runModel2 <- function(input,
       W.RR1RR2_AB <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'A','B'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','B']
-        }
-      }
+
       
       # SS1
       W.SS1SS2_AB <- W.SS1_A0 * W.SS2_0B
@@ -618,14 +648,7 @@ runModel2 <- function(input,
       W.RR1RR2_Ab <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'A','B'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','b']
-        }
-      }      
+   
       
       # SS1
       W.SS1SS2_Ab <- W.SS1_A0 * W.SS2_0b
@@ -662,14 +685,7 @@ runModel2 <- function(input,
       W.RR1RR2_aB <- 0
     }else{
       
-      #!r to replace 9 lines below
-      for( locus1 in dimnames(Wniche)$locus1)
-      {
-        for( locus2 in dimnames(Wniche)$locus2)
-        {
-          Wniche[locus1,locus2,'a','0'] <- Wloci[locus1,'A','0'] * Wloci[locus2,'0','B']
-        }
-      }
+
       
       # SS1
       W.SS1SS2_aB <- W.SS1_a0 * W.SS2_0B
@@ -1705,6 +1721,7 @@ runModel2 <- function(input,
     if( coll.fitvals == 1 ){
       fbn <- matrix( ncol=9, nrow=9 )
       colnames(fbn) <- c("-,-", "a,-", "A,-", "-,b", "-,B", "a,b", "A,B", "A,b", "a,B")
+      #my order is 00 a0 A0 0b ab Ab 0B aB AB
       rownames(fbn) <- c("SS1SS2", "SS1RS2", "SS1RR2",
                          "RS1SS2", "RS1RS2", "RS1RR2",
                          "RR1SS2", "RR1RS2", "RR1RR2" )
@@ -1812,23 +1829,29 @@ runModel2 <- function(input,
       {
         for( locus2 in dimnames(Wniche)$locus2)
         {
-          fbn2[paste0(locus1,locus2),] <- Wniche[locus1,locus2,,]
-#       #a dangerous quick way of doing
-#       #because the fbn out matrix needs to be indexed by number
-#       for( loc1Num in seq_along(dimnames(Wniche)$locus1))
-#       {
-#         for( loc2Num in seq_along(dimnames(Wniche)$locus2))
-#         {          
-#           #beware potential for confusing order of loci here
-#           fbn2[(loc1Num+loc2Num),] <- Wniche[loc1Num,loc2Num,,]
+          #this is a good way of doing but the columns end in a different order
+          #which wouldn't be a problem except that initially I'm trying
+          #to keep results identical to Beths
+          #fbn2[paste0(locus1,locus2),] <- Wniche[locus1,locus2,,]
+          #so instead go through each niche
+          for( niche1 in dimnames(Wniche)$niche1)
+          {
+            for( niche2 in dimnames(Wniche)$niche2)
+            {
+              #now need to convert 0 to - and insert commas
+              columnName <- paste0(niche1,",",niche2)
+              columnName <- gsub('0','-',columnName)
+              fbn2[paste0(locus1,locus2),columnName] <- Wniche[locus1,locus2,niche1,niche2]
+            }
+          }
         }
       }
       
       #now compare fbn and fbn2
+      identical(fbn,fbn2)
       
-    
       
-      listOut$fitness[[i]] <- fbn
+      listOut$fitness[[i]] <- fbn2
       
     }					  
     if( save.fitvals==1 ){

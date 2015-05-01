@@ -22,4 +22,8 @@ a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. 
 refactored version starting to use genotype and niche arrays to reduce code volume
 run model scenarios and put the results for each in a results object
 }
+\examples{
+input <- setInputOneScenario()
+tst <- runModel2(input)
+}
 
