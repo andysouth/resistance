@@ -988,12 +988,12 @@ working on refactoring variables to arrays, made flexible createArray() function
 good progress
 started runModel2() to contain the refactoring
 
-**30/4/15** 9.45-
+**30/4/15** 9.45-13.30 3.75hrs 2.15-5.30 3.25hrs 6-7 8hrs 
 
 Need to be careful about different W fitness variables
-`W.RR1_00 : [locus][niche]` single locus (Wlocus)
-`W.RR1SS2_0b :   [locus1][locus2][niche]` niche (Wniche)
-`W.m.SS1SS2 : [sex][locus1][locus2]` sex (Windiv)
+`W.RR1_00 : [locus,niche]` single locus (Wlocus)
+`W.RR1SS2_0b :   [locus1, locus2, niche]` niche (Wniche)
+`W.m.SS1SS2 : [sex, locus1, locus2]` sex (Windiv)
 
 Once I have array refactoring working by .
 ```{r}
@@ -1086,10 +1086,282 @@ tst2 <- runModel(input, produce.plots=FALSE)
 identical(tst,tst2)
 ```
 
+So now I can keep developing runModel2() and use Ctrl T to test I'm not breaking it. 
+
+Think, does my Wniche contain too many elements at 81 ?
+i.e. does it contain impossible combinations ? I think I'm OK Beths code fills 9*9 groups of individual variables.
+
+`W.RR1SS2_0b` ... `*81 3*3*3*3` to: Wniche[locus1, locus2, niche1, niche2] 
+
+I may need to add a genotype option to createArray() to cope with f that needs cis & trans
 
 
+If I convert niche_0B to niche[niche1,niche2] I can simplify further the calculation of 
+Two genotype fitnesses in two insecticide Niche
+by having a loop that goes through each niche.
+
+Coolio! reduced 250 lines of code to ~ 20 with this
+```
+    ## Two genotype fitnesses in two insecticide Niche ##
+
+    #!r to replace 250+ lines below
+    for( niche1 in dimnames(Wniche)$niche1)
+    {
+      for( niche2 in dimnames(Wniche)$niche2)
+      {
+        #if this niche toggled off set fitness to 0
+        if (niche[niche1,niche2] == 0)
+        {
+          Wniche[,,niche1,niche2] <- 0
+        } else{
+          #otherwise set fitness to product of the 2 loci
+          for( locus1 in dimnames(Wniche)$locus1)
+          {
+            for( locus2 in dimnames(Wniche)$locus2)
+            {    
+              Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,niche1,niche2] * Wloci[locus2,niche1,niche2]
+            }
+          }          
+        }
+      }
+    }
+```
+
+Trying to get fitnesses from my array into the existing output object fbn at the end of runModel2
+
+       -,- a,- A,- -,b -,B a,b A,B A,b a,B
+SS1SS2   0   0   0   0   0   0   0   0   0
+SS1RS2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+SS1RR2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+RS1SS2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+RS1RS2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+RS1RR2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+RR1SS2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+RR1RS2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+RR1RR2  NA  NA  NA  NA  NA  NA  NA  NA  NA
+
+STill not quite working ...
+
+**1/5/15** 9-14.30 5.5hrs 3.15-6 2.75 8.25hrs
+
+Fitness matrix different in my refactored version. But do I know which is correct ?
+
+Browse[2]> fbn
+       -,- a,- A,- -,b -,B a,b A,B A,b a,B
+SS1SS2   1   0   0   0   0   0   0   0   0
+SS1RS2   1   0   0   0   0   0   0   0   0
+SS1RR2   1   0   0   0   0   0   0   0   0
+RS1SS2   1   0   0   0   0   0   0   0   0
+RS1RS2   1   0   0   0   0   0   1   0   0
+RS1RR2   1   0   0   0   0   0   1   0   0
+RR1SS2   1   0   0   0   0   0   0   0   0
+RR1RS2   1   0   0   0   0   0   1   0   0
+RR1RR2   1   0   0   0   0   0   1   0   0
+Browse[2]> fbn2
+       -,- a,- A,- -,b -,B a,b A,B A,b a,B
+SS1SS2   0   0   0   0   0   0   0   0   0
+SS1RS2   0   0   0   0   0   0   0   0   0
+SS1RR2   0   0   0   0   0   0   0   0   0
+RS1SS2   0   0   0   0   0   0   0   0   0
+RS1RS2   0   0   0   0   0   0   0   0   0
+RS1RR2   0   0   0   0   0   0   0   0   0
+RR1SS2   0   0   0   0   0   0   0   0   0
+RR1RS2   0   0   0   0   0   0   0   0   0
+RR1RR2   0   0   0   0   0   0   0   0   0
+
+Aha difference is because Wniche just has 0s in, may be a problem earlier in the program.
+Aha issue is that Wloci is not read in yet.
+
+Reading in of Wloci can also be refactored, but I first need to read in h,z,phi & s as arrays.
+
+Then I can try to refactor this :
+```
+    ## Calculated fitnesses ####
+    
+    # absence of insecticide
+    ## fitness of SS in absence of insecticide is entered above as a parameter
+    W.RS1_00 <- 1 - (h.RS1_00 * z.RR1_00)
+    W.RR1_00 <- 1 - z.RR1_00
+    
+    W.RS2_00 <- 1 - (h.RS2_00 * z.RR2_00)
+    W.RR2_00 <- 1 - z.RR2_00
+    
+    # low levels of insecticide a
+    W.SS1_a0 <- 1 - phi.SS1_a0
+    W.RS1_a0 <- W.SS1_a0 + (h.RS1_a0 * s.RR1_a0)
+    W.RR1_a0 <- W.SS1_a0 + s.RR1_a0
+    
+    # high levels of insecticide A
+    W.SS1_A0 <- 1 - phi.SS1_A0
+    W.RS1_A0 <- W.SS1_A0 + (h.RS1_A0 * s.RR1_A0)
+    W.RR1_A0 <- W.SS1_A0 + s.RR1_A0
+    
+    # low levels of insecticide b
+    W.SS2_0b <- 1 - phi.SS2_0b
+    W.RS2_0b <- W.SS2_0b + (h.RS2_0b * s.RR2_0b)
+    W.RR2_0b <- W.SS2_0b + s.RR2_0b
+    
+    # high levels of insecticide B
+    W.SS2_0B <- 1 - phi.SS2_0B
+    W.RS2_0B <- W.SS2_0B + (h.RS2_0B * s.RR2_0B)
+    W.RR2_0B <- W.SS2_0B + s.RR2_0B
+```
+
+h only has 6 values 2*3. Because it's only for heterozygous loci & niches.
+
+```
+    # h = dominance coefficient
+    h.RS1_00 <- input[32,i]
+    h.RS1_a0 <- input[33,i]
+    h.RS1_A0 <- input[34,i]
+    
+    h.RS2_00 <- input[35,i]
+    h.RS2_0b <- input[36,i]
+    h.RS2_0B <- input[37,i]
+```
+
+Perhaps best to store as
+h[locusNum,niche1,niche2]
+
+This nearly works, but includes un-needed homozygous niches aa etc 
+createArray( loci=c('RS1','RS2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+
+I could add a niches arg to createArray()
+createArray( loci=c('RS1','RS2'), niches=c('00','a0','A0') )
+
+BUT no even that doesn't work. 
+Because it only needs to contain the insecticide niche associated with the locus.
+
+Actually it just needs :
+h[locusNum, nicheLevel] : where insecticide is no, lo, hi
+... seeing how that works.
+
+and what about z - fitness cost of resistance allele in no insecticide
+z only has 2 values
+    z.RR1_00 <- input[42,i]
+    z.RR2_00 <- input[43,i]
+z[locusNum]
+Because by definition it is the fitness cost of one allele in absence of the corresponding insecticide. (so `RR1_00` is a little misleading `z.R1_0` more like it)
+
+phi - fitness of SS in each insecticide/concentration 
+just 4 values
+    phi.SS1_a0 <- input[26,i]
+    phi.SS1_A0 <- input[27,i]
+    
+    phi.SS2_0b <- input[28,i]
+    phi.SS2_0B <- input[29,i]
+
+phi[locusNum, nicheLevel] where nicheLevel is lo, hi
+
+I have Wloci being 54
+> str(Wloci)
+ num [1:6, 1:3, 1:3] 0 0 0 0 0 0 0 0 0 0 ...
+ - attr(*, "dimnames")=List of 3
+  ..$ loci  : chr [1:6] "SS1" "RS1" "RR1" "SS2" ...
+  ..$ niche1: chr [1:3] "0" "a" "A"
+  ..$ niche2: chr [1:3] "0" "b" "B"
+> length(Wloci)
+[1] 54
+
+but actually I think it only needs 1 niche that corresponds to the chosen locus.
+for locus1 it only has as and locus2 it only has bs
+
+look at how Wloci is used to think about how best to structure
+
+This is where it is used 
+`Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,niche1,niche2] * Wloci[locus2,niche1,niche2]`
+I think I need to change from 
+`Wloci[locus1,niche1,niche2] * Wloci[locus2,niche1,niche2]`
+to
+`Wloci[locus1,niche1] * Wloci[locus2,niche2]`
+
+I might want to change niche names to no,lo,hi throughout. Having them different for each locus (0aA & 0bB) causes the code difficulty.
+
+But that is a bigger change making it more difficult to check that the code logic remains the same.
+
+A temporray solution could be to have a lookup from nicheLevel to niche.
+e.g. no,lo,hi to 0,a,A & 0,b,B for locus1 & 2 respectively
+
+Later maybe
+Wloci[(locusNum),allele=(SS,SR,RR),exposure=(no,lo,hi)]
+for now
+Wloci[loci=(SS1,SR1,RR1,SS2,SR2,RR2),exposure=(no,lo,hi)]
+
+s selection coeeficient : just 4 values
+    # s = selection coefficient
+    s.RR1_a0 <- input[38,i]
+    s.RR1_A0 <- input[39,i]
+    
+    s.RR2_0b <- input[40,i]
+    s.RR2_0B <- input[41,i]
+
+It's the selection coefficient of resistance in presence of the corresponding insecticide (at lo or hi)
+s[locusNum,exposure]
+but exposure is only lo or hi. Would a -ve value here for no be the same as z (the fitness cost of resistance in absence of insecticide ?)
+
+cool I think I have generic createArray2 function working
+
+I'm getting closer to fbn & fbn2 being the same
+
+Differences in fbn2:
+1) The 00 column has 0s, in fbn it is all 1s
+2) Column aB has the values that should be in AB
+
+e.g. SS1RR2
+W.SS1RR2_00
+Wniche['SS1','RR2','0','0']
+
+Wloci[locus2,exposure2] == 0
+but
+W.RR2_00 == 1
+
+aha think due to typo here :
+Wloci[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
+
+hurrah fixed first problem, now on to 2)
+
+Wniche looks correct
+So i think it may be due to ordering of columns in fbn
+Which goes AB, Ab, aB, where I think I assume aB, Ab, AB
+
+Wniche['RR1','RR2',,]
+      niche2
+niche1 0 b B
+     0 1 0 0
+     a 0 0 0
+     A 0 0 1
+
+as.vector( Wniche['RR1','RR2',,])
+[1] 1 0 0 0 0 0 0 0 1
+
+It may be tricky for me to get output in exactly the same order as Beths.
+How can I use the niche names to name the output matrix ?
+
+Difference in orders
+colnames(fbn) <- c("-,-", "a,-", "A,-", "-,b", "-,B", "a,b", "A,B", "A,b", "a,B")
+my order is         00     a0     A0     0b     ab     Ab     0B    aB     AB
+
+which is 1,2,3,4,6,8,5,9,7
+
+I might just need to allow that the fitness list is different in my refactor test ?
+
+Still how can I name the output columns from the data ?
+Fixed !!
+
+Then I started to delete some of the old code, and found that it broke some things I didn't want to break yet.
+
+Particularly this which suggests I need to get into the cis/trans issue soon:
+
+W.bar.m <- Windiv['m']
+W.bar.m <- (f.m.SS1SS2 * W.m.SS1SS2) ...
+
+revert changes for now and come back to 
+ 
+ 
  
 ### TO DO  
+
+1. what to call createArray2() ? maybe namedArray, or arrayNamed() ? could even put back in the option to pass the fill value ? submit to stackoverflow ?
 
 1. is there a way I can easily run single & combined deployments for the same scenario ?
 * is it `niche_00` and `niche_AB`
@@ -1180,10 +1452,31 @@ rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2",
 ** G ** gametes
 
 Different W fitness variables
-`W.RR1_00 : [locus][niche]` single locus
-`W.RR1SS2_0b :   [locus1][locus2][niche]` niche
-`W.m.SS1SS2 : [sex][locus1][locus2]` sex
+`W.RR1_00 : [locus, niche1, niche2]` single locus (Wloci)
+`W.RR1SS2_0b :   [locus1, locus2, niche1, niche2]` niche (Wniche)
+`W.m.SS1SS2 : [sex, locus1, locus2]` sex (Windiv)
 
+
+### refactoring, what I have done
+Replaced the following collections of individual variables with arrays :
+(To reduce code volume, reduce risk of mistyped variable names and allow objects to be passed between functions. Also potentially allows it to cope with more loci and/or niches later).
+
+```
+a.m_a0 ... *18 2*3*3  to: a[sex, niche1, niche2]
+W.m.SS1SS2 ... *18 2*3*3 to:  Windiv[sex, locus1, locus2]
+W.RR1SS2_0b ... *81 3*3*3*3 to: Wniche[locus1, locus2, niche1, niche2] 
+
+
+still todo
+W.RR1_00 etc. with Wloci[loci, niche1, niche2]
+
+because of cis/trans:
+f.m.SS1SS2 ... *19 2*3*3+1 to: f[sex, genotype]
+
+```
+Want to do:
+1. rename a to exposure
+1. rename W to ?fitness : fitnessLocus, fitnessNiche and fitnessIndiv
 
 
 Question.
