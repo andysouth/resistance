@@ -8,6 +8,8 @@ setInputSensiScenarios(nScenarios = 10, ...)
 }
 \arguments{
 \item{nScenarios}{number of scenarios to generate}
+
+\item{...}{parameter ranges to run, passed as name=c(min,max)}
 }
 \value{
 a matrix of input scenarios
