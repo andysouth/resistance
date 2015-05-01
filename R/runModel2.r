@@ -143,6 +143,9 @@ runModel2 <- function(input,
     # fitness of SS in environment with no insecticide are set to 1
     W.SS1_00 <- input[30,i]
     W.SS2_00 <- input[31,i]
+    #!r
+    W['SS1','0','0'] <- input[30,i]
+    W['SS1','0','0'] <- input[31,i]    
     
     ## Dominance and selection coefficients
     ## needed to find fitness values of genotype in exposure to relating insecticide 
@@ -256,15 +259,11 @@ runModel2 <- function(input,
     W.RS2_0B <- W.SS2_0B + (h.RS2_0B * s.RR2_0B)
     W.RR2_0B <- W.SS2_0B + s.RR2_0B
     
-    ### Two genotype fitnesses in two insecticide Niche ####
+    
+    ## Two genotype fitnesses in two insecticide Niche ##
     ## The ifelse clauses allow niches to be toggled on/off, i.e. a fitness can be given for A0
     ## but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
     ## Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
-    ## See table 4 of briefing document
-    
-    
-    #todo if I convert niche_00 etc to an array
-    #I can simplify the code below still further
 
     #!r to replace 250+ lines below
     for( niche1 in dimnames(Wniche)$niche1)
@@ -1709,6 +1708,10 @@ runModel2 <- function(input,
       rownames(fbn) <- c("SS1SS2", "SS1RS2", "SS1RR2",
                          "RS1SS2", "RS1RS2", "RS1RR2",
                          "RR1SS2", "RR1RS2", "RR1RR2" )
+      #!r for refactoring testing
+      fbn2 <- fbn
+      
+      
       # SS1			 
       fbn[1,1] <- W.SS1SS2_00
       fbn[1,2] <- W.SS1SS2_a0
@@ -1800,6 +1803,30 @@ runModel2 <- function(input,
       fbn[9,7] <- W.RR1RR2_AB
       fbn[9,8] <- W.RR1RR2_Ab
       fbn[9,9] <- W.RR1RR2_aB						  
+      
+      
+      #!r if I have niches & loci in correct order
+      #I should be able to refactor the 81 lines above with :
+      #initially fails test
+      for( locus1 in dimnames(Wniche)$locus1)
+      {
+        for( locus2 in dimnames(Wniche)$locus2)
+        {
+          fbn2[paste0(locus1,locus2),] <- Wniche[locus1,locus2,,]
+#       #a dangerous quick way of doing
+#       #because the fbn out matrix needs to be indexed by number
+#       for( loc1Num in seq_along(dimnames(Wniche)$locus1))
+#       {
+#         for( loc2Num in seq_along(dimnames(Wniche)$locus2))
+#         {          
+#           #beware potential for confusing order of loci here
+#           fbn2[(loc1Num+loc2Num),] <- Wniche[loc1Num,loc2Num,,]
+        }
+      }
+      
+      #now compare fbn and fbn2
+      
+    
       
       listOut$fitness[[i]] <- fbn
       
