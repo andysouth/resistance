@@ -18,10 +18,10 @@ todo
 sensitivity analysis first attempt
 }
 \examples{
-sensiAn1( P_1=c(0,0.5) )
-inputAndResults <- sensiAn1( h.RS1_A0=c(0.1,1))
-colnames(inputAndResults)
-inputAndResults <- sensiAn1( h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1) )
-inputAndResults <- sensiAn1(500, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))
+#sensiAn1( P_1=c(0,0.5) )
+#inputAndResults <- sensiAn1( h.RS1_A0=c(0.1,1))
+#colnames(inputAndResults)
+#inputAndResults <- sensiAn1( h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1) )
+#inputAndResults <- sensiAn1(500, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))
 }
 
