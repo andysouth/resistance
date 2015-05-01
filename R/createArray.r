@@ -1,4 +1,4 @@
-#' create array for representing genotypes and niches
+#' deprecated, replaced with createArray2() create array for representing genotypes and niches
 #' 
 #' creates array with the passed dimensions
 #' 
@@ -8,6 +8,8 @@
 #' @param locus2 vector of dimension names e.g. c('SS2','RS2','RR2')
 #' @param niche1 vector of dimension names e.g. c('0','a','A')
 #' @param niche2 vector of dimension names e.g. c('0','a','A')
+#' @param exposure vector of dimension names e.g. c('no','lo','hi')
+#' @param fillValue optional what to fill array with, defaults to 0  
 #' 
 #' @examples 
 #' createArray( sex = c('f','m') ) 
@@ -35,6 +37,7 @@ createArray <- function(sex = NULL,
                         locus2 = NULL,
                         niche1 = NULL,
                         niche2 = NULL,
+                        exposure = NULL,
                         fillValue = 0
                         ){
 
@@ -87,6 +90,22 @@ createArray <- function(sex = NULL,
     }
     else dimnames1 <- list( niche2=niche2 )
   }   
+  
+  if(!is.null(exposure)) {
+    if(exists("dimnames1", environment(), inherits=FALSE)) {
+      dimnames1 <- list( dimnames1, list(exposure=exposure) )
+      dimnames1 <- unlist(dimnames1, recursive=FALSE)
+    }
+    else dimnames1 <- list( exposure=exposure )
+  }  
+  
+#   if(!is.null(exposure2)) {
+#     if(exists("dimnames1", environment(), inherits=FALSE)) {
+#       dimnames1 <- list( dimnames1, list(exposure2=exposure2) )
+#       dimnames1 <- unlist(dimnames1, recursive=FALSE)
+#     }
+#     else dimnames1 <- list( exposure2=exposure2 )
+#   }   
   
   #setting dimensions of array from dimnames1
   dim1 <- sapply(dimnames1, function(x) length(x))

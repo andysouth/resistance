@@ -2,10 +2,10 @@
 % Please edit documentation in R/createArray.r
 \name{createArray}
 \alias{createArray}
-\title{create array for representing genotypes and niches}
+\title{deprecated, replaced with createArray2() create array for representing genotypes and niches}
 \usage{
 createArray(sex = NULL, loci = NULL, locus1 = NULL, locus2 = NULL,
-  niche1 = NULL, niche2 = NULL, fillValue = 0)
+  niche1 = NULL, niche2 = NULL, exposure = NULL, fillValue = 0)
 }
 \arguments{
 \item{sex}{vector of dimension names e.g. c('f','m')}
@@ -19,6 +19,10 @@ createArray(sex = NULL, loci = NULL, locus1 = NULL, locus2 = NULL,
 \item{niche1}{vector of dimension names e.g. c('0','a','A')}
 
 \item{niche2}{vector of dimension names e.g. c('0','a','A')}
+
+\item{exposure}{vector of dimension names e.g. c('no','lo','hi')}
+
+\item{fillValue}{optional what to fill array with, defaults to 0}
 }
 \value{
 matrix
