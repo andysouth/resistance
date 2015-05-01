@@ -7,6 +7,7 @@
 #' TODO: I might be able to allow parameters to be set to non default values from here too.
 #' 
 #' @param nScenarios number of scenarios to generate 
+#' @param ... parameter ranges to run, passed as name=c(min,max)
 #' 
 #' @examples
 #' setInputSensiScenarios( nScenarios=2, h.RS1_A0=c(0,1) )
