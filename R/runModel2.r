@@ -974,8 +974,20 @@ runModel2 <- function(input,
       # extracted from genotype frequency matrix generated above from initial value of P (frequency of R allele)
       # set for male and for female: before first round of selection these are the same values
       # f = frequency before selection
+      # andy frequencies at end of loop are put back into genotype.freq (unless callibration=102)
       
-      # male
+      #!r 20 lines reading genotype.freq into f below could be replaced with
+      namesLoci <- rownames( genotype.freq )
+      sex2 <- c("m","f")
+      f <- createArray2( sex=sex2, loci=namesLoci )
+      #f['m', ] <- genotype.freq[,]
+      #? todo can I assume that the loci will be in the same order because I've derived the names the same ? 
+      #if not may be able to use positions of rownames(genotype.freq) in colnames(f)
+      f['m', ] <- genotype.freq[]
+      f['f', ] <- genotype.freq[]
+      
+      
+      #todo cut begin
       f.m.SS1SS2 <- genotype.freq[1,]
       f.m.SS1RS2 <- genotype.freq[2,]
       f.m.SS1RR2 <- genotype.freq[3,]
@@ -997,65 +1009,75 @@ runModel2 <- function(input,
       f.f.RR1SS2 <- genotype.freq[8,]
       f.f.RR1RS2 <- genotype.freq[9,]
       f.f.RR1RR2 <- genotype.freq[10,]
+      #todo cut end
       
       
-      # Male
-      #male.freq <- (f.m.SS1SS2 + f.m.SS1RS2 + f.m.SS1RR2+
-      #	  f.m.RS1SS2 + f.m.RS1RS2_cis + f.m.RS1RS2_trans + f.m.RS1RR2+
-      #	  f.m.RR1SS2 + f.m.RR1RS2 + f.m.RR1RR2) 
-      #print( (paste("Male frequencies before selection total = ",male.freq) ) )
-      # Female
-      #female.freq <- (f.f.SS1SS2 + f.f.SS1RS2 + f.f.SS1RR2+
-      #	  f.f.RS1SS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RS1RR2+
-      #	  f.f.RR1SS2 + f.f.RR1RS2 + f.f.RR1RR2) 			
-      #print( (paste("Female frequencies before selection total = ",female.freq) ) )
+      #these warnings allow for rouding differences
+      if ( !isTRUE( all.equal(1, sum(f['m',])  )))
+        warning("Male frequencies before selection total != 1 ", sum(f['m',]) ) 
+      if ( !isTRUE( all.equal(1, sum(f['f',])  )))
+        warning("Female frequencies before selection total != 1 ", sum(f['f',]) )        
+
+      
       
       ### Prints record of genotype proportions each generation
-      genotype[k,1] <- k					
-      genotype[k,2] <- f.m.SS1SS2
-      genotype[k,3] <- f.m.SS1RS2
-      genotype[k,4] <- f.m.SS1RR2
+      genotype[k,1] <- k	
+      #r! replace 10 lines below
+      #question is it right that only male fitnesses seem to be saved ?
+      genotype[k,2:11] <- f['m',]
       
-      genotype[k,5] <- f.m.RS1SS2
-      genotype[k,6] <- f.m.RS1RS2_cis
-      genotype[k,7] <- f.m.RS1RS2_trans
-      genotype[k,8] <- f.m.RS1RR2
-      
-      genotype[k,9] <- f.m.RR1SS2
-      genotype[k,10] <- f.m.RR1RS2
-      genotype[k,11] <- f.m.RR1RR2
+      #todo cut begin
+#       genotype[k,2] <- f.m.SS1SS2
+#       genotype[k,3] <- f.m.SS1RS2
+#       genotype[k,4] <- f.m.SS1RR2
+#       
+#       genotype[k,5] <- f.m.RS1SS2
+#       genotype[k,6] <- f.m.RS1RS2_cis
+#       genotype[k,7] <- f.m.RS1RS2_trans
+#       genotype[k,8] <- f.m.RS1RR2
+#       
+#       genotype[k,9] <- f.m.RR1SS2
+#       genotype[k,10] <- f.m.RR1RS2
+#       genotype[k,11] <- f.m.RR1RR2
+      #todo cut end
       
       #### Printing Results to matrix ####
       # print generation
       results[k,1] <- k
       
       # frequency of resistance allele in males
-      # locus 1
-      m.R1 <- ( f.m.RR1SS2 + f.m.RR1RS2 + f.m.RR1RR2 ) + ( 0.5 * (f.m.RS1SS2 + f.m.RS1RS2_trans + f.m.RS1RS2_cis + f.m.RS1RR2 ) ) 
+      #!r refactor frequency of resistance allele calc by seraching for RR1 & RS1 in locus names
+      #todo this can be refactored further
+      m.R1 <- sum(f['m',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS1",colnames(f))]))
+      m.R2 <- sum(f['m',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS2",colnames(f))]))
+      f.R1 <- sum(f['f',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS1",colnames(f))]))
+      f.R2 <- sum(f['f',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS2",colnames(f))]))   
       results[k,2] <- m.R1
-      # locus 2
-      m.R2 <- ( f.m.SS1RR2 + f.m.RS1RR2 + f.m.RR1RR2 ) + ( 0.5 * (f.m.SS1RS2 + f.m.RS1RS2_cis + f.m.RS1RS2_trans + f.m.RR1RS2 ) )
       results[k,3] <- m.R2
-      
-      
-      # frequency of resistance allele in females
-      # locus 1
-      f.R1 <- ( f.f.RR1SS2 + f.f.RR1RS2 + f.f.RR1RR2 ) + ( 0.5 * (f.f.RS1SS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RS1RR2 ) ) 
       results[k,5] <- f.R1
-      # locus 2
-      f.R2 <- ( f.f.SS1RR2 + f.f.RS1RR2 + f.f.RR1RR2 ) + ( 0.5 * (f.f.SS1RS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RR1RS2 ) )
       results[k,6] <- f.R2
       
+      #todo cut begin
+      # locus 1
+#       m.R1 <- ( f.m.RR1SS2 + f.m.RR1RS2 + f.m.RR1RR2 ) + ( 0.5 * (f.m.RS1SS2 + f.m.RS1RS2_trans + f.m.RS1RS2_cis + f.m.RS1RR2 ) ) 
+#       results[k,2] <- m.R1
+#       # locus 2
+#       m.R2 <- ( f.m.SS1RR2 + f.m.RS1RR2 + f.m.RR1RR2 ) + ( 0.5 * (f.m.SS1RS2 + f.m.RS1RS2_cis + f.m.RS1RS2_trans + f.m.RR1RS2 ) )
+#       results[k,3] <- m.R2
+#       
+#       # frequency of resistance allele in females
+#       # locus 1
+#       f.R1 <- ( f.f.RR1SS2 + f.f.RR1RS2 + f.f.RR1RR2 ) + ( 0.5 * (f.f.RS1SS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RS1RR2 ) ) 
+#       results[k,5] <- f.R1
+#       # locus 2
+#       f.R2 <- ( f.f.SS1RR2 + f.f.RS1RR2 + f.f.RR1RR2 ) + ( 0.5 * (f.f.SS1RS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RR1RS2 ) )
+#       results[k,6] <- f.R2
+      #todo cut end
       
-      # total males
-      results[k,8] <- ( f.m.SS1SS2 + f.m.SS1RS2 + f.m.SS1RR2 +
-                          f.m.RS1SS2 + f.m.RS1RS2_cis  + f.m.RS1RS2_trans + f.m.RS1RR2 +
-                          f.m.RR1SS2 + f.m.RR1RS2 + f.m.RR1RR2 )
-      
-      # total females
-      results[k,9] <- ( f.f.SS1SS2 + f.f.SS1RS2 + f.f.SS1RR2 +
-                          f.f.RS1SS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RS1RR2 +
-                          f.f.RR1SS2 + f.f.RR1RS2 + f.f.RR1RR2 )
+      #!r recording total fitnesses for males and females
+      #question aren't these always 1
+      results[k,8] <- sum(f['m',])
+      results[k,9] <- sum(f['f',])
       
       # 1013 - Fig 1. in Curtis, sequential application of insecticide
       # stops loop running if this calibration is selected to change insecticide when condition met
