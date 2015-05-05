@@ -1716,115 +1716,23 @@ runModel2 <- function(input,
       }
     }
     
-    #### Prints fitnesses caluclated by niche by genotype to matrix ####
+    ## Prints fitnesses calculated by niche by genotype to matrix ##
     ## To save in .csv, enter save.param as TRUE above ##
     if( coll.fitvals == 1 ){
+      
       fbn <- matrix( ncol=9, nrow=9 )
+      
       colnames(fbn) <- c("-,-", "a,-", "A,-", "-,b", "-,B", "a,b", "A,B", "A,b", "a,B")
-      #my order is 00 a0 A0 0b ab Ab 0B aB AB
+      #default order is different : 00 a0 A0 0b ab Ab 0B aB AB
+      #potential problems in ordering of rows & cols avoided by filling by name below
+      
       rownames(fbn) <- c("SS1SS2", "SS1RS2", "SS1RR2",
                          "RS1SS2", "RS1RS2", "RS1RR2",
                          "RR1SS2", "RR1RS2", "RR1RR2" )
-      #!r for refactoring testing
-      fbn2 <- fbn
       
       
-      # SS1			 
-      fbn[1,1] <- W.SS1SS2_00
-      fbn[1,2] <- W.SS1SS2_a0
-      fbn[1,3] <- W.SS1SS2_A0
-      fbn[1,4] <- W.SS1SS2_0b
-      fbn[1,5] <- W.SS1SS2_0B
-      fbn[1,6] <- W.SS1SS2_ab
-      fbn[1,7] <- W.SS1SS2_AB
-      fbn[1,8] <- W.SS1SS2_Ab
-      fbn[1,9] <- W.SS1SS2_aB
-      
-      fbn[2,1] <- W.SS1RS2_00
-      fbn[2,2] <- W.SS1RS2_a0
-      fbn[2,3] <- W.SS1RS2_A0
-      fbn[2,4] <- W.SS1RS2_0b
-      fbn[2,5] <- W.SS1RS2_0B
-      fbn[2,6] <- W.SS1RS2_ab
-      fbn[2,7] <- W.SS1RS2_AB
-      fbn[2,8] <- W.SS1RS2_Ab
-      fbn[2,9] <- W.SS1RS2_aB
-      
-      fbn[3,1] <- W.SS1RR2_00
-      fbn[3,2] <- W.SS1RR2_a0
-      fbn[3,3] <- W.SS1RR2_A0
-      fbn[3,4] <- W.SS1RR2_0b
-      fbn[3,5] <- W.SS1RR2_0B
-      fbn[3,6] <- W.SS1RR2_ab
-      fbn[3,7] <- W.SS1RR2_AB
-      fbn[3,8] <- W.SS1RR2_Ab
-      fbn[3,9] <- W.SS1RR2_aB						  
-      
-      # RS1
-      fbn[4,1] <- W.RS1SS2_00
-      fbn[4,2] <- W.RS1SS2_a0
-      fbn[4,3] <- W.RS1SS2_A0
-      fbn[4,4] <- W.RS1SS2_0b
-      fbn[4,5] <- W.RS1SS2_0B
-      fbn[4,6] <- W.RS1SS2_ab
-      fbn[4,7] <- W.RS1SS2_AB
-      fbn[4,8] <- W.RS1SS2_Ab
-      fbn[4,9] <- W.RS1SS2_aB
-      
-      fbn[5,1] <- W.RS1RS2_00
-      fbn[5,2] <- W.RS1RS2_a0
-      fbn[5,3] <- W.RS1RS2_A0
-      fbn[5,4] <- W.RS1RS2_0b
-      fbn[5,5] <- W.RS1RS2_0B
-      fbn[5,6] <- W.RS1RS2_ab
-      fbn[5,7] <- W.RS1RS2_AB
-      fbn[5,8] <- W.RS1RS2_Ab
-      fbn[5,9] <- W.RS1RS2_aB
-      
-      fbn[6,1] <- W.RS1RR2_00
-      fbn[6,2] <- W.RS1RR2_a0
-      fbn[6,3] <- W.RS1RR2_A0
-      fbn[6,4] <- W.RS1RR2_0b
-      fbn[6,5] <- W.RS1RR2_0B
-      fbn[6,6] <- W.RS1RR2_ab
-      fbn[6,7] <- W.RS1RR2_AB
-      fbn[6,8] <- W.RS1RR2_Ab
-      fbn[6,9] <- W.RS1RR2_aB		
-      
-      fbn[7,1] <- W.RR1SS2_00
-      fbn[7,2] <- W.RR1SS2_a0
-      fbn[7,3] <- W.RR1SS2_A0
-      fbn[7,4] <- W.RR1SS2_0b
-      fbn[7,5] <- W.RR1SS2_0B
-      fbn[7,6] <- W.RR1SS2_ab
-      fbn[7,7] <- W.RR1SS2_AB
-      fbn[7,8] <- W.RR1SS2_Ab
-      fbn[7,9] <- W.RR1SS2_aB
-      
-      fbn[8,1] <- W.RR1RS2_00
-      fbn[8,2] <- W.RR1RS2_a0
-      fbn[8,3] <- W.RR1RS2_A0
-      fbn[8,4] <- W.RR1RS2_0b
-      fbn[8,5] <- W.RR1RS2_0B
-      fbn[8,6] <- W.RR1RS2_ab
-      fbn[8,7] <- W.RR1RS2_AB
-      fbn[8,8] <- W.RR1RS2_Ab
-      fbn[8,9] <- W.RR1RS2_aB
-      
-      fbn[9,1] <- W.RR1RR2_00
-      fbn[9,2] <- W.RR1RR2_a0
-      fbn[9,3] <- W.RR1RR2_A0
-      fbn[9,4] <- W.RR1RR2_0b
-      fbn[9,5] <- W.RR1RR2_0B
-      fbn[9,6] <- W.RR1RR2_ab
-      fbn[9,7] <- W.RR1RR2_AB
-      fbn[9,8] <- W.RR1RR2_Ab
-      fbn[9,9] <- W.RR1RR2_aB						  
-      
-      
-      #!r if I have niches & loci in correct order
-      #I should be able to refactor the 81 lines above with :
-      #initially fails test
+      #!r refactored 81 lines of previous code with
+
       for( locus1 in dimnames(Wniche)$locus1)
       {
         for( locus2 in dimnames(Wniche)$locus2)
@@ -1832,26 +1740,26 @@ runModel2 <- function(input,
           #this is a good way of doing but the columns end in a different order
           #which wouldn't be a problem except that initially I'm trying
           #to keep results identical to Beths
-          #fbn2[paste0(locus1,locus2),] <- Wniche[locus1,locus2,,]
+          #fbn[paste0(locus1,locus2),] <- Wniche[locus1,locus2,,]
           #so instead go through each niche
           for( niche1 in dimnames(Wniche)$niche1)
           {
             for( niche2 in dimnames(Wniche)$niche2)
             {
-              #now need to convert 0 to - and insert commas
+              #get columnName by converting 0 to - and inserting commas
               columnName <- paste0(niche1,",",niche2)
               columnName <- gsub('0','-',columnName)
-              fbn2[paste0(locus1,locus2),columnName] <- Wniche[locus1,locus2,niche1,niche2]
+              #get rowname by pasting
+              rowName <- paste0(locus1,locus2)
+              
+              fbn[rowName,columnName] <- Wniche[locus1,locus2,niche1,niche2]
             }
           }
         }
       }
       
-      #now compare fbn and fbn2
-      identical(fbn,fbn2)
       
-      
-      listOut$fitness[[i]] <- fbn2
+      listOut$fitness[[i]] <- fbn
       
     }					  
     if( save.fitvals==1 ){
