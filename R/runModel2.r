@@ -321,9 +321,11 @@ runModel2 <- function(input,
     
     
     ## Two genotype fitnesses in two insecticide Niche ##
-    ## The ifelse clauses allow niches to be toggled on/off, i.e. a fitness can be given for A0
-    ## but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
     ## Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
+        
+    ## niches can be toggled off, i.e. a fitness can be given for A0
+    ## but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
+
 
     #!r to replace 250+ lines below
 #     for( niche1 in dimnames(Wniche)$niche1)
@@ -334,9 +336,9 @@ runModel2 <- function(input,
     {
       for( nicheNum2 in 1:3 ) #todo get this 1:3 from somewhere
       { 
-        #this is a temporary solution
+        #temporary solution
         #to get both niche (one of 0aAbB)
-        #and nicheLevel (one of no,lo,hi)
+        #and exposure (one of no,lo,hi)
         niche1 <- dimnames(Wniche)$niche1[ nicheNum1 ]
         niche2 <- dimnames(Wniche)$niche2[ nicheNum2 ]
         exposure1 <- dimnames(Wloci)$exposure[ nicheNum1 ]
@@ -352,10 +354,7 @@ runModel2 <- function(input,
           {
             for( locus2 in dimnames(Wniche)$locus2)
             {   
-              #*problem with this line
-              #*needs to be something like
-              #Wloci[locus1,niche1] * Wloci[locus2,niche2]
-              #Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,niche1,niche2] * Wloci[locus2,niche1,niche2]
+              #previous problem with this line, now
               Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
               
             }
