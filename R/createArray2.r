@@ -21,27 +21,30 @@ createArray2 <- function( ...)
   {
   
   
+  #previously didn't work if a named variable rather than the actual range is passed
+  #now seems it does
+  #e.g.
+  #works
+  #createArray2( sex = c('f','m') )
+  #used to fail
+  #sex = c('f','m')
+  #createArray2( sex = sex )
+  
+  
   listArgs <- as.list(match.call()[-1])
   
-  dimnames1 <- lapply(listArgs,eval)
+  #works only if args are specified by actual ranges not by a varname
+  #dimnames1 <- lapply(listArgs,eval)
   
-  
-  
-  #1 get the arg names (exclude function name at item1)
-  #argString <- names(match.call())[-1]
-  
-  
-#   loci <- c('tits','wank')
-#   
-#   if(!is.null(sex)) dimnames1 <- list( sex=sex )
-#   
-#   if(!is.null(loci)) {
-#     if(exists("dimnames1", environment(), inherits=FALSE)) {
-#       dimnames1 <- list( dimnames1, list(loci=loci) )
-#       dimnames1 <- unlist(dimnames1, recursive=FALSE)
-#     }
-#     else dimnames1 <- list( loci=loci )
-#   }
+  #fails
+  #dimnames1 <- lapply(listArgs,function(x){eval.parent(x,n=1)})
+  #works
+  #eval.parent(listArgs$sex)
+  #[1] "f" "m"
+  #fails
+  #dimnames1 <- lapply(listArgs,eval.parent)  
+  #works!! n=3 but I'm not sure why !!!
+  dimnames1 <- lapply(listArgs,function(x){eval.parent(x,n=3)})
   
   
   #setting dimensions of array from dimnames1
