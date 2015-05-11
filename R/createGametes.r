@@ -91,6 +91,11 @@ createGametes <- function( f, recomb_rate)
     G[sex,'R1','R2'] <- G[sex,'R1','R2'] + (f[sex,'RR1RR2'] * 1 +
                                               f[sex,'RR1RS2'] * 0.5 +
                                               f[sex,'RS1RR2'] * 0.5 )
+    
+    #check allowing for rounding differences
+    if ( !isTRUE( all.equal(1, sum(G[sex,,])  )))
+      warning(sex," gamete frequencies total != 1 ", sum(G[sex,,]) ) 
+    
   }
   
   #return gametes array
