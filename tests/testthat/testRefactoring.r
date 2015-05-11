@@ -7,7 +7,9 @@ test_that("refactoring named variables with arrays doesn't change results", {
   input <- setInputOneScenario()
   
   #expect refactored runModel2() to generate same results as runModel() for single default run
-  expect_identical( runModel2(input, produce.plots=FALSE),
+  #expect_identical( runModel2(input, produce.plots=FALSE),
+  #                  runModel(input, produce.plots=FALSE) )  
+  expect_equal( runModel2(input, produce.plots=FALSE),
                     runModel(input, produce.plots=FALSE) )  
   
   
@@ -15,6 +17,6 @@ test_that("refactoring named variables with arrays doesn't change results", {
 
   
   #expect refactored runModel2() to generate same results as runModel() for a range of scenarios
-  expect_identical( runModel2(input, produce.plots=FALSE),
+  expect_equal( runModel2(input, produce.plots=FALSE),
                     runModel(input, produce.plots=FALSE) )  
 })
