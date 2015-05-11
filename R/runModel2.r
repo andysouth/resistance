@@ -987,7 +987,8 @@ runModel2 <- function(input,
       #if not may be able to use positions of rownames(genotype.freq) in colnames(f)
       f['m', ] <- genotype.freq[]
       f['f', ] <- genotype.freq[]
-      
+      #todo : cut line below just temp while I'm starting fs
+      fs <- f
       
       #todo cut begin
       f.m.SS1SS2 <- genotype.freq[1,]
@@ -1025,7 +1026,7 @@ runModel2 <- function(input,
       ### Prints record of genotype proportions each generation
       genotype[k,1] <- k	
       #r! replace 10 lines below
-      #question is it right that only male fitnesses seem to be saved ?
+      #question is it right that only male frequencies seem to be saved ?
       genotype[k,2:11] <- f['m',]
       
       #todo cut begin
@@ -1098,155 +1099,6 @@ runModel2 <- function(input,
       G <- createGametes( f = f, recomb_rate = recomb_rate ) 
       
 
-      
-      #todo cut
-#       # Male Gametes
-#       G.m.S1.S2 <- 0
-#       G.m.R1.S2 <- 0
-#       G.m.S1.R2 <- 0
-#       G.m.R1.R2 <- 0
-#       
-#       # f.m.RS1RS2_cis
-#       # no recombination
-#       G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
-#       G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
-#       # recombination takes place
-#       G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_cis * 0.5 * recomb_rate			
-#       G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_cis * 0.5 * recomb_rate
-#       
-#       
-#       # f.m.RS1RS2_trans
-#       # no recombination
-#       G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
-#       G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
-#       # recombination takes place
-#       G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
-#       G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
-#       
-#       
-#       # SS Gametes
-#       G.m.S1.S2 <- G.m.S1.S2 +
-#         (f.m.SS1SS2 * 1.0 +
-#            f.m.SS1RS2 * 0.5 +
-#            f.m.SS1RR2 * 0.0 +
-#            
-#            f.m.RS1SS2 * 0.5 +
-#            f.m.RS1RR2 * 0.0 +
-#            
-#            f.m.RR1SS2 * 0.0 +
-#            f.m.RR1RS2 * 0.0 +
-#            f.m.RR1RR2 * 0.0 )
-#       # RS Gametes
-#       G.m.R1.S2 <- G.m.R1.S2 +
-#         (f.m.SS1SS2 * 0.0 +
-#            f.m.SS1RS2 * 0.0 +
-#            f.m.SS1RR2 * 0.0 +
-#            
-#            f.m.RS1SS2 * 0.5 +
-#            f.m.RS1RR2 * 0.0 +
-#            
-#            f.m.RR1SS2 * 1.0 +
-#            f.m.RR1RS2 * 0.5 +
-#            f.m.RR1RR2 * 0.0 )
-#       # SR Gametes
-#       G.m.S1.R2 <- G.m.S1.R2 +
-#         (f.m.SS1SS2 * 0.0 +
-#            f.m.SS1RS2 * 0.5 +
-#            f.m.SS1RR2 * 1.0 +
-#            
-#            f.m.RS1SS2 * 0.0 +
-#            f.m.RS1RR2 * 0.5 +
-#            
-#            f.m.RR1SS2 * 0.0 +
-#            f.m.RR1RS2 * 0.0 +
-#            f.m.RR1RR2 * 0.0 )
-#       # RR Gametes
-#       G.m.R1.R2 <- G.m.R1.R2 +
-#         (f.m.SS1SS2 * 0.0 +
-#            f.m.SS1RS2 * 0.0 +
-#            f.m.SS1RR2 * 0.0 +
-#            
-#            f.m.RS1SS2 * 0.0 +
-#            f.m.RS1RR2 * 0.5 +
-#            
-#            f.m.RR1SS2 * 0.0 +
-#            f.m.RR1RS2 * 0.5 +
-#            f.m.RR1RR2 * 1.0 )
-#       
-#       
-#       # Female Gametes ###
-#       G.f.S1.S2 <- 0
-#       G.f.R1.S2 <- 0
-#       G.f.S1.R2 <- 0
-#       G.f.R1.R2 <- 0
-#       
-#       # f.f.RS1RS2_cis
-#       #no recombination
-#       G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate ) 
-#       G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
-#       # recombination takes place
-#       G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_cis * 0.5 * recomb_rate			
-#       G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_cis * 0.5 * recomb_rate
-#       
-#       
-#       # f.f.RS1RS2_trans			
-#       # no recombination
-#       G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
-#       G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
-#       # recombination takes place
-#       G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
-#       G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
-#       
-#       
-#       # SS Gametes
-#       G.f.S1.S2 <- G.f.S1.S2 +
-#         (f.f.SS1SS2 * 1.0 +
-#            f.f.SS1RS2 * 0.5 +
-#            f.f.SS1RR2 * 0.0 +
-#            
-#            f.f.RS1SS2 * 0.5 +
-#            f.f.RS1RR2 * 0.0 +
-#            
-#            f.f.RR1SS2 * 0.0 +
-#            f.f.RR1RS2 * 0.0 +
-#            f.f.RR1RR2 * 0.0 )
-#       # RS Gametes
-#       G.f.R1.S2 <- G.f.R1.S2 +
-#         (f.f.SS1SS2 * 0.0 +
-#            f.f.SS1RS2 * 0.0 +
-#            f.f.SS1RR2 * 0.0 +
-#            
-#            f.f.RS1SS2 * 0.5 +
-#            f.f.RS1RR2 * 0.0 +
-#            
-#            f.f.RR1SS2 * 1.0 +
-#            f.f.RR1RS2 * 0.5 +
-#            f.f.RR1RR2 * 0.0 )
-#       # SR Gametes
-#       G.f.S1.R2 <- G.f.S1.R2 +
-#         (f.f.SS1SS2 * 0.0 +
-#            f.f.SS1RS2 * 0.5 +
-#            f.f.SS1RR2 * 1.0 +
-#            
-#            f.f.RS1SS2 * 0.0 +
-#            f.f.RS1RR2 * 0.5 +
-#            
-#            f.f.RR1SS2 * 0.0 +
-#            f.f.RR1RS2 * 0.0 +
-#            f.f.RR1RR2 * 0.0 )
-#       # RR Gametes
-#       G.f.R1.R2 <- G.f.R1.R2 +
-#         (f.f.SS1SS2 * 0.0 +
-#            f.f.SS1RS2 * 0.0 +
-#            f.f.SS1RR2 * 0.0 +
-#            
-#            f.f.RS1SS2 * 0.0 +
-#            f.f.RS1RR2 * 0.5 +
-#            
-#            f.f.RR1SS2 * 0.0 +
-#            f.f.RR1RS2 * 0.5 +
-#            f.f.RR1RR2 * 1.0 )
-      #todo end cut
       
       ### Linkage Disequilibrium ####
       ## Disequibilibrium of resistant allele in gametes ##
@@ -1330,6 +1182,10 @@ runModel2 <- function(input,
       ### Frequency following selection ####
       
       if(calibration==103){		## no selection calibration
+        
+        #!r
+        fs <- f
+        
         ## male
         # SS1
         fs.m.SS1SS2 <- f.m.SS1SS2
@@ -1470,6 +1326,11 @@ runModel2 <- function(input,
       # Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
       # 1 - both parts of genotype contribute, 0.5 - half of genotype contributes, 0.0 - neither part of genotype can produce this gamete
       
+      #r! refactoring gametes
+      #note this uses fs, frequency of genotypes after selection
+      G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
+      
+      #todo cut begin
       # Male Gametes
       G.m.S1.S2 <- 0
       G.m.R1.S2 <- 0
@@ -1633,8 +1494,8 @@ runModel2 <- function(input,
       #		print( (paste("Female gametes correct, gametes = ",G.f.t) ) )
       #		}
       
+      #todo cut end
       
-      ### To run next loop ####
       ## Random Mating ##
       # set blank variables for frequencies of each genotype
       # Only calculated once and then treated as the same for males and females (when frequencies generated at start of loop)
