@@ -11,6 +11,8 @@
 #' @examples 
 #' input <- setInputOneScenario()
 #' tst <- runModel2(input)
+#' input <- setInputOneScenario(max_gen=5)
+#' tst <- runModel2(input)
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
@@ -69,6 +71,9 @@ runModel2 <- function(input,
     phi <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     h <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     z <- createArray2(locusNum=c(1,2))
+    
+    #f & fs need to be able to cope with cis & trans
+    
     
     # males
     a.m_00 <- input[8,i]
@@ -706,9 +711,6 @@ runModel2 <- function(input,
     ## These are calculated from the individual's fitness by two locus genotype, 
     ## and exposure to niche depending on gender
     
-    #todo, I should be able to refactor these ~120 lines
-    #by using arrays with named fields
-    
     #!r first stage of refactoring to arrays, can reduce further later
     #Windiv['m','SS1','SS2'] <- sum( a['m',,] * Wniche['SS1','SS2',,])
     #Windiv['m','SS1','RS2'] <- sum( a['m',,] * Wniche['SS1','RS2',,])
@@ -1012,7 +1014,7 @@ runModel2 <- function(input,
       #todo cut end
       
       
-      #these warnings allow for rouding differences
+      #these warnings allow for rounding differences
       if ( !isTRUE( all.equal(1, sum(f['m',])  )))
         warning("Male frequencies before selection total != 1 ", sum(f['m',]) ) 
       if ( !isTRUE( all.equal(1, sum(f['f',])  )))
@@ -1092,161 +1094,172 @@ runModel2 <- function(input,
       # Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
       # 1 - both parts of genotype contribute, 0.5 - half of genotype contributes, 0.0 - neither part of genotype can produce this gamete
       
-      # Male Gametes
-      G.m.S1.S2 <- 0
-      G.m.R1.S2 <- 0
-      G.m.S1.R2 <- 0
-      G.m.R1.R2 <- 0
+      #r! refactoring gametes
+      G <- createGametes( f = f, recomb_rate = recomb_rate ) 
       
-      # f.m.RS1RS2_cis
-      # no recombination
-      G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
-      G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
-      # recombination takes place
-      G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_cis * 0.5 * recomb_rate			
-      G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_cis * 0.5 * recomb_rate
+
       
-      
-      # f.m.RS1RS2_trans
-      # no recombination
-      G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
-      G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
-      # recombination takes place
-      G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
-      G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
-      
-      
-      # SS Gametes
-      G.m.S1.S2 <- G.m.S1.S2 +
-        (f.m.SS1SS2 * 1.0 +
-           f.m.SS1RS2 * 0.5 +
-           f.m.SS1RR2 * 0.0 +
-           
-           f.m.RS1SS2 * 0.5 +
-           f.m.RS1RR2 * 0.0 +
-           
-           f.m.RR1SS2 * 0.0 +
-           f.m.RR1RS2 * 0.0 +
-           f.m.RR1RR2 * 0.0 )
-      # RS Gametes
-      G.m.R1.S2 <- G.m.R1.S2 +
-        (f.m.SS1SS2 * 0.0 +
-           f.m.SS1RS2 * 0.0 +
-           f.m.SS1RR2 * 0.0 +
-           
-           f.m.RS1SS2 * 0.5 +
-           f.m.RS1RR2 * 0.0 +
-           
-           f.m.RR1SS2 * 1.0 +
-           f.m.RR1RS2 * 0.5 +
-           f.m.RR1RR2 * 0.0 )
-      # SR Gametes
-      G.m.S1.R2 <- G.m.S1.R2 +
-        (f.m.SS1SS2 * 0.0 +
-           f.m.SS1RS2 * 0.5 +
-           f.m.SS1RR2 * 1.0 +
-           
-           f.m.RS1SS2 * 0.0 +
-           f.m.RS1RR2 * 0.5 +
-           
-           f.m.RR1SS2 * 0.0 +
-           f.m.RR1RS2 * 0.0 +
-           f.m.RR1RR2 * 0.0 )
-      # RR Gametes
-      G.m.R1.R2 <- G.m.R1.R2 +
-        (f.m.SS1SS2 * 0.0 +
-           f.m.SS1RS2 * 0.0 +
-           f.m.SS1RR2 * 0.0 +
-           
-           f.m.RS1SS2 * 0.0 +
-           f.m.RS1RR2 * 0.5 +
-           
-           f.m.RR1SS2 * 0.0 +
-           f.m.RR1RS2 * 0.5 +
-           f.m.RR1RR2 * 1.0 )
-      
-      
-      # Female Gametes ###
-      G.f.S1.S2 <- 0
-      G.f.R1.S2 <- 0
-      G.f.S1.R2 <- 0
-      G.f.R1.R2 <- 0
-      
-      # f.f.RS1RS2_cis
-      #no recombination
-      G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate ) 
-      G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
-      # recombination takes place
-      G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_cis * 0.5 * recomb_rate			
-      G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_cis * 0.5 * recomb_rate
-      
-      
-      # f.f.RS1RS2_trans			
-      # no recombination
-      G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
-      G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
-      # recombination takes place
-      G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
-      G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
-      
-      
-      # SS Gametes
-      G.f.S1.S2 <- G.f.S1.S2 +
-        (f.f.SS1SS2 * 1.0 +
-           f.f.SS1RS2 * 0.5 +
-           f.f.SS1RR2 * 0.0 +
-           
-           f.f.RS1SS2 * 0.5 +
-           f.f.RS1RR2 * 0.0 +
-           
-           f.f.RR1SS2 * 0.0 +
-           f.f.RR1RS2 * 0.0 +
-           f.f.RR1RR2 * 0.0 )
-      # RS Gametes
-      G.f.R1.S2 <- G.f.R1.S2 +
-        (f.f.SS1SS2 * 0.0 +
-           f.f.SS1RS2 * 0.0 +
-           f.f.SS1RR2 * 0.0 +
-           
-           f.f.RS1SS2 * 0.5 +
-           f.f.RS1RR2 * 0.0 +
-           
-           f.f.RR1SS2 * 1.0 +
-           f.f.RR1RS2 * 0.5 +
-           f.f.RR1RR2 * 0.0 )
-      # SR Gametes
-      G.f.S1.R2 <- G.f.S1.R2 +
-        (f.f.SS1SS2 * 0.0 +
-           f.f.SS1RS2 * 0.5 +
-           f.f.SS1RR2 * 1.0 +
-           
-           f.f.RS1SS2 * 0.0 +
-           f.f.RS1RR2 * 0.5 +
-           
-           f.f.RR1SS2 * 0.0 +
-           f.f.RR1RS2 * 0.0 +
-           f.f.RR1RR2 * 0.0 )
-      # RR Gametes
-      G.f.R1.R2 <- G.f.R1.R2 +
-        (f.f.SS1SS2 * 0.0 +
-           f.f.SS1RS2 * 0.0 +
-           f.f.SS1RR2 * 0.0 +
-           
-           f.f.RS1SS2 * 0.0 +
-           f.f.RS1RR2 * 0.5 +
-           
-           f.f.RR1SS2 * 0.0 +
-           f.f.RR1RS2 * 0.5 +
-           f.f.RR1RR2 * 1.0 )
-      
+      #todo cut
+#       # Male Gametes
+#       G.m.S1.S2 <- 0
+#       G.m.R1.S2 <- 0
+#       G.m.S1.R2 <- 0
+#       G.m.R1.R2 <- 0
+#       
+#       # f.m.RS1RS2_cis
+#       # no recombination
+#       G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
+#       G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
+#       # recombination takes place
+#       G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_cis * 0.5 * recomb_rate			
+#       G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_cis * 0.5 * recomb_rate
+#       
+#       
+#       # f.m.RS1RS2_trans
+#       # no recombination
+#       G.m.R1.S2 <- G.m.R1.S2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
+#       G.m.S1.R2 <- G.m.S1.R2 + f.m.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
+#       # recombination takes place
+#       G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
+#       G.m.S1.S2 <- G.m.S1.S2 + f.m.RS1RS2_trans * 0.5 * recomb_rate
+#       
+#       
+#       # SS Gametes
+#       G.m.S1.S2 <- G.m.S1.S2 +
+#         (f.m.SS1SS2 * 1.0 +
+#            f.m.SS1RS2 * 0.5 +
+#            f.m.SS1RR2 * 0.0 +
+#            
+#            f.m.RS1SS2 * 0.5 +
+#            f.m.RS1RR2 * 0.0 +
+#            
+#            f.m.RR1SS2 * 0.0 +
+#            f.m.RR1RS2 * 0.0 +
+#            f.m.RR1RR2 * 0.0 )
+#       # RS Gametes
+#       G.m.R1.S2 <- G.m.R1.S2 +
+#         (f.m.SS1SS2 * 0.0 +
+#            f.m.SS1RS2 * 0.0 +
+#            f.m.SS1RR2 * 0.0 +
+#            
+#            f.m.RS1SS2 * 0.5 +
+#            f.m.RS1RR2 * 0.0 +
+#            
+#            f.m.RR1SS2 * 1.0 +
+#            f.m.RR1RS2 * 0.5 +
+#            f.m.RR1RR2 * 0.0 )
+#       # SR Gametes
+#       G.m.S1.R2 <- G.m.S1.R2 +
+#         (f.m.SS1SS2 * 0.0 +
+#            f.m.SS1RS2 * 0.5 +
+#            f.m.SS1RR2 * 1.0 +
+#            
+#            f.m.RS1SS2 * 0.0 +
+#            f.m.RS1RR2 * 0.5 +
+#            
+#            f.m.RR1SS2 * 0.0 +
+#            f.m.RR1RS2 * 0.0 +
+#            f.m.RR1RR2 * 0.0 )
+#       # RR Gametes
+#       G.m.R1.R2 <- G.m.R1.R2 +
+#         (f.m.SS1SS2 * 0.0 +
+#            f.m.SS1RS2 * 0.0 +
+#            f.m.SS1RR2 * 0.0 +
+#            
+#            f.m.RS1SS2 * 0.0 +
+#            f.m.RS1RR2 * 0.5 +
+#            
+#            f.m.RR1SS2 * 0.0 +
+#            f.m.RR1RS2 * 0.5 +
+#            f.m.RR1RR2 * 1.0 )
+#       
+#       
+#       # Female Gametes ###
+#       G.f.S1.S2 <- 0
+#       G.f.R1.S2 <- 0
+#       G.f.S1.R2 <- 0
+#       G.f.R1.R2 <- 0
+#       
+#       # f.f.RS1RS2_cis
+#       #no recombination
+#       G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate ) 
+#       G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_cis * 0.5 * ( 1-recomb_rate )
+#       # recombination takes place
+#       G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_cis * 0.5 * recomb_rate			
+#       G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_cis * 0.5 * recomb_rate
+#       
+#       
+#       # f.f.RS1RS2_trans			
+#       # no recombination
+#       G.f.R1.S2 <- G.f.R1.S2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )		
+#       G.f.S1.R2 <- G.f.S1.R2 + f.f.RS1RS2_trans * 0.5 * ( 1-recomb_rate )
+#       # recombination takes place
+#       G.f.R1.R2 <- G.f.R1.R2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
+#       G.f.S1.S2 <- G.f.S1.S2 + f.f.RS1RS2_trans * 0.5 * recomb_rate
+#       
+#       
+#       # SS Gametes
+#       G.f.S1.S2 <- G.f.S1.S2 +
+#         (f.f.SS1SS2 * 1.0 +
+#            f.f.SS1RS2 * 0.5 +
+#            f.f.SS1RR2 * 0.0 +
+#            
+#            f.f.RS1SS2 * 0.5 +
+#            f.f.RS1RR2 * 0.0 +
+#            
+#            f.f.RR1SS2 * 0.0 +
+#            f.f.RR1RS2 * 0.0 +
+#            f.f.RR1RR2 * 0.0 )
+#       # RS Gametes
+#       G.f.R1.S2 <- G.f.R1.S2 +
+#         (f.f.SS1SS2 * 0.0 +
+#            f.f.SS1RS2 * 0.0 +
+#            f.f.SS1RR2 * 0.0 +
+#            
+#            f.f.RS1SS2 * 0.5 +
+#            f.f.RS1RR2 * 0.0 +
+#            
+#            f.f.RR1SS2 * 1.0 +
+#            f.f.RR1RS2 * 0.5 +
+#            f.f.RR1RR2 * 0.0 )
+#       # SR Gametes
+#       G.f.S1.R2 <- G.f.S1.R2 +
+#         (f.f.SS1SS2 * 0.0 +
+#            f.f.SS1RS2 * 0.5 +
+#            f.f.SS1RR2 * 1.0 +
+#            
+#            f.f.RS1SS2 * 0.0 +
+#            f.f.RS1RR2 * 0.5 +
+#            
+#            f.f.RR1SS2 * 0.0 +
+#            f.f.RR1RS2 * 0.0 +
+#            f.f.RR1RR2 * 0.0 )
+#       # RR Gametes
+#       G.f.R1.R2 <- G.f.R1.R2 +
+#         (f.f.SS1SS2 * 0.0 +
+#            f.f.SS1RS2 * 0.0 +
+#            f.f.SS1RR2 * 0.0 +
+#            
+#            f.f.RS1SS2 * 0.0 +
+#            f.f.RS1RR2 * 0.5 +
+#            
+#            f.f.RR1SS2 * 0.0 +
+#            f.f.RR1RS2 * 0.5 +
+#            f.f.RR1RR2 * 1.0 )
+      #todo end cut
       
       ### Linkage Disequilibrium ####
       ## Disequibilibrium of resistant allele in gametes ##
       # Male
       ## Frequency of allele patterns
-      x.R1.S2 <- G.m.R1.S2/2
-      x.S1.R2 <- G.m.R1.S2/2
-      x.R1.R2 <- G.m.R1.R2
+      #!r
+      x.R1.S2 <- G['m','R1','S2']/2
+      x.S1.R2 <- G['m','R1','S2']/2
+      x.R1.R2 <- G['m','R1','R2']
+#       x.R1.S2 <- G.m.R1.S2/2
+#       x.S1.R2 <- G.m.R1.S2/2
+#       x.R1.R2 <- G.m.R1.R2
+      
       ## Frequency of alleles at each locus
       R1 <- x.R1.S2 + x.R1.R2		# frequency of R allele at locus 1
       R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2
@@ -1255,9 +1268,15 @@ runModel2 <- function(input,
       
       # Female
       ## Frequency of allele patterns
-      x.R1.S2 <- G.f.R1.S2/2
-      x.S1.R2 <- G.f.R1.S2/2
-      x.R1.R2<- G.f.R1.R2
+      #!r
+      x.R1.S2 <- G['f','R1','S2']/2
+      x.S1.R2 <- G['f','R1','S2']/2
+      x.R1.R2 <- G['f','R1','R2']
+#       x.R1.S2 <- G.f.R1.S2/2
+#       x.S1.R2 <- G.f.R1.S2/2
+#       x.R1.R2<- G.f.R1.R2
+      
+      
       ## Frequency of alleles at each locus
       R1 <- x.R1.S2 + x.R1.R2		# frequency of R allele at locus 1
       R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2

@@ -25,5 +25,7 @@ run model scenarios and put the results for each in a results object
 \examples{
 input <- setInputOneScenario()
 tst <- runModel2(input)
+input <- setInputOneScenario(max_gen=5)
+tst <- runModel2(input)
 }
 
