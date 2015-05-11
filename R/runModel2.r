@@ -1186,6 +1186,7 @@ runModel2 <- function(input,
         #!r
         fs <- f
         
+        #todo cut begin
         ## male
         # SS1
         fs.m.SS1SS2 <- f.m.SS1SS2
@@ -1215,6 +1216,7 @@ runModel2 <- function(input,
         fs.f.RR1SS2 <- f.f.RR1SS2
         fs.f.RR1RS2 <- f.f.RR1RS2
         fs.f.RR1RR2 <- f.f.RR1RR2
+        #todo cut end
         
         
         #### If calibration 103 not set, selection continues as normal
@@ -1273,6 +1275,10 @@ runModel2 <- function(input,
         x.f <- select.gen.f				## Not lost in reprinting in next step
         
         ## Frequencies --- Reprinting after selection fitness with before selection to eliminate selection step
+        #!r
+        fs <- f
+        
+        #todo cut begin
         ## Males
         ## SS1
         fs.m.SS1SS2 <- f.m.SS1SS2
@@ -1302,6 +1308,7 @@ runModel2 <- function(input,
         fs.f.RR1SS2 <- f.f.RR1SS2
         fs.f.RR1RS2 <- f.f.RR1RS2
         fs.f.RR1RR2 <- f.f.RR1RR2
+        #todo cut end
         
         select.gen.m <- x.m			## Reprinting fitness that is intended to be selected on
         select.gen.f <- x.f			## with after selection fitness saved as variable above
