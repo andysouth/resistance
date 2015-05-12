@@ -163,13 +163,13 @@ runModel <- function(input,
     # set up fitness by niche matrix - records fitness scores for each niche for each genotype
     fitness <- matrix ( nrow = 10, ncol = 9, c(rep(0,90)))
     colnames(fitness) <- c( "-,-", "a,-", "A,-", "b,-", "B,-", "a,b", "A,B", "A,b", "a,B" )
-    rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2", 
+    rownames(fitness) <- c( "SS1SS2", "SS1RS2", "SS1RR2", 
                             "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                             "RR1SS2", "RR1RS2", "RR1RR2")
     
     # set up genotype matrix - records frequencies of each of the 9 two locus genotypes each generation
     genotype <- matrix( nrow=max_gen, ncol=11 )
-    colnames(genotype) <- c("gen", "SS1SS2", "SS2RS2", "SS1RR2", 
+    colnames(genotype) <- c("gen", "SS1SS2", "SS1RS2", "SS1RR2", 
                             "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                             "RR1SS2", "RR1RS2", "RR1RR2")
     ## make.genotypemat function will use this data and make a matrix of the genotype frequencies
