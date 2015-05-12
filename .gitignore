@@ -9,3 +9,5 @@
 .Rproj.user
 # previews of my notes file
 resistanceModelNotesAndy.html
+#man pages
+man/*
