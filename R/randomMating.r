@@ -4,7 +4,6 @@
 #' returns array of genotype frequencies
 #' This is refactored from code in runModel()
 #' 
-#' @param f array with frequencies of genotypes in popn 
 #' @param G array with frequencies of gametes
 #' 
 #' @examples 
@@ -12,11 +11,54 @@
 #' @return array with frequencies of genotypes
 #' @export
 
-#todo f is only passed so I don't have to create the dimensions within the func, maybe change how this is done
-
-randomMating <- function( f, G)
+randomMating <- function( G)
 {
   
+  
+  #for testing
+#   genotypes <- c( "SS1SS2", "SS1RS2", "SS1RR2", 
+#                   "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+#                   "RR1SS2", "RR1RS2", "RR1RR2")
+  
+  fGenotypeExpanded <- createArray2(l1a1=c('S1','R1'),l1a2=c('S1','R1'),l2a1=c('S2','R2'),l2a2=c('S2','R2'))
+  
+  
+  counter <- 0
+  
+  for( m2 in c('S2','R2'))
+  {
+    for( m1 in c('S1','R1'))
+    {
+      for( f2 in c('S2','R2'))
+      {
+        for( f1 in c('S1','R1'))
+        {
+          counter <- counter+1
+          #cat(paste(counter, m1,f1,m2,f2,"\n"))
+          #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,"\n"))
+          
+          
+          fGenotypeExpanded[f1,m1,f2,m2] <- G['m',m1,m2] * G['f',f1,f2]
+          
+          
+          #trying to get from 16 expanded genotypes to 10 contracted
+#           if (m1==m2 && f1==f2) #homozygous at both loci
+#           {
+#             #1:1 between expanded and contracted genotypes
+#           }
+          
+          #to access gametes
+          #G['m',m1,m2] * G['f',f1,f2]
+          
+          #created genotype frequencies
+          #beth just does for males to start
+          #f['m',]
+        }
+      }
+    }
+  }
+  
+return( fGenotypeExpanded )
   
 }  
   

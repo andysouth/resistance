@@ -1565,7 +1565,7 @@ runModel2 <- function(input,
       #!r trying to replace the above random mating code
       # initially by calculating 'expanded' genotypes which I can convert back later
       fGenotypeExpanded <- randomMating(G)
-      
+      f <- genotypesLong2Short(fGenotypeExpanded)
       
       
       ## Puts frequencies back into genotype frequency matrix to restart the loop
