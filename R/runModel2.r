@@ -1222,6 +1222,7 @@ runModel2 <- function(input,
         #### If calibration 103 not set, selection continues as normal
       }else{
         ## W bar - Sum of numerators
+        #todo cut begin
         # W bar males
         W.bar.m <- (f.m.SS1SS2 * W.m.SS1SS2) + (f.m.SS1RS2 * W.m.SS1RS2) + (f.m.SS1RR2 * W.m.SS1RR2) +
           (f.m.RS1SS2 * W.m.RS1SS2) + 
@@ -1234,6 +1235,28 @@ runModel2 <- function(input,
           (f.f.RS1RS2_cis * W.f.RS1RS2) + (f.f.RS1RS2_trans * W.f.RS1RS2) + 
           (f.f.RS1RR2 * W.f.RS1RR2) +
           (f.f.RR1SS2 * W.f.RR1SS2) + (f.f.RR1RS2 * W.f.RR1RS2) + (f.f.RR1RR2 * W.f.RR1RR2)
+        #todo cut end
+        
+        #!r refactoring W.bar calcs above
+        W.bar <- createArray2(sex=c('m','f'))
+        for( sex in dimnames(Windiv)$sex)
+        {
+          for( locus1 in dimnames(Windiv)$locus1)
+          {
+            for( locus2 in dimnames(Windiv)$locus2)
+            {
+              #have to do cis/trans specially
+              if ( locus1=='RS1' & locus2=='RS2' )
+              {
+                W.bar[sex] = W.bar[sex] + (f[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2])
+                W.bar[sex] = W.bar[sex] + (f[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2])
+              }else
+              {
+                W.bar[sex] = W.bar[sex] + (f[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2])                
+              }
+            }
+          }
+        }
         
         
         ## Frequencies --- Calculated with selection
@@ -1266,6 +1289,28 @@ runModel2 <- function(input,
         fs.f.RR1SS2 <- (f.f.RR1SS2 * W.f.RR1SS2) / W.bar.f
         fs.f.RR1RS2 <- (f.f.RR1RS2 * W.f.RR1RS2) / W.bar.f
         fs.f.RR1RR2 <- (f.f.RR1RR2 * W.f.RR1RR2) / W.bar.f
+        
+        #!r refactoring above ~20 lines
+        for( sex in dimnames(Windiv)$sex)
+        {
+          for( locus1 in dimnames(Windiv)$locus1)
+          {
+            for( locus2 in dimnames(Windiv)$locus2)
+            {
+              #have to do cis/trans specially
+              if ( locus1=='RS1' & locus2=='RS2' )
+              {
+                #fs.f.RS1RS2_cis <- (f.f.RS1RS2_cis * W.f.RS1RS2) / W.bar.f
+                #fs.f.RS1RS2_trans <- (f.f.RS1RS2_trans * W.f.RS1RS2) / W.bar.f
+                fs[sex,'RS1RS2_cis'] <- (f[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
+                fs[sex,'RS1RS2_trans'] <- (f[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
+              }else
+              {
+                fs[sex,paste0(locus1,locus2)] <- (f[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2]) / W.bar[sex]                
+              }
+            }
+          }
+        }
       }
       
       ## Calibration 104, selection on one genotype
@@ -1565,7 +1610,8 @@ runModel2 <- function(input,
       #!r trying to replace the above random mating code
       # initially by calculating 'expanded' genotypes which I can convert back later
       fGenotypeExpanded <- randomMating(G)
-      f <- genotypesLong2Short(fGenotypeExpanded)
+      
+      f['m',] <- genotypesLong2Short(fGenotypeExpanded)
       
       
       ## Puts frequencies back into genotype frequency matrix to restart the loop
@@ -1573,18 +1619,18 @@ runModel2 <- function(input,
         genotype.freq <- genotype.freq 
       }else{
         ## reprints genotype.freq with new frequencies from gametes
-        genotype.freq[1,] <- f.m.SS1SS2
-        genotype.freq[2,] <- f.m.SS1RS2
-        genotype.freq[3,] <- f.m.SS1RR2
+        genotype.freq[1,] <- f['m','SS1SS2'] #f.m.SS1SS2
+        genotype.freq[2,] <- f['m','SS1RS2'] #f.m.SS1RS2
+        genotype.freq[3,] <- f['m','SS1RR2'] #f.m.SS1RR2
         
-        genotype.freq[4,] <- f.m.RS1SS2
-        genotype.freq[5,] <- f.m.RS1RS2_cis
-        genotype.freq[6,] <- f.m.RS1RS2_trans
-        genotype.freq[7,] <- f.m.RS1RR2
+        genotype.freq[4,] <- f['m','RS1SS2'] #f.m.RS1SS2
+        genotype.freq[5,] <- f['m','RS1RS2_cis'] #f.m.RS1RS2_cis
+        genotype.freq[6,] <- f['m','RS1RS2_trans'] #f.m.RS1RS2_trans
+        genotype.freq[7,] <- f['m','RS1RR2'] #f.m.RS1RR2
         
-        genotype.freq[8,] <- f.m.RR1SS2
-        genotype.freq[9,] <- f.m.RR1RS2
-        genotype.freq[10,] <- f.m.RR1RR2
+        genotype.freq[8,] <- f['m','RR1SS2'] #f.m.RR1SS2
+        genotype.freq[9,] <- f['m','RR1RS2'] #f.m.RR1RS2
+        genotype.freq[10,] <- f['m','RR1RR2'] #f.m.RR1RR2
       }
       
     }	# end of generation loop 
