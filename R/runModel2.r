@@ -369,343 +369,343 @@ runModel2 <- function(input,
     }
     
     
-    
-    
-    
-    # -,- niche
-    if( niche_00 == 0 ){
-      
-      #!r
-      #Wniche[locus1, locus2, niche1, niche2]
-      #?or should niche1 & 2 be combined
-      Wniche[,,'0','0'] <- 0
-      
-      # SS1
-      W.SS1SS2_00 <- 0
-      W.SS1RS2_00 <- 0
-      W.SS1RR2_00 <- 0
-      # RS1
-      W.RS1SS2_00 <- 0
-      W.RS1RS2_00 <- 0
-      W.RS1RR2_00 <- 0
-      # RR1
-      W.RR1SS2_00 <- 0
-      W.RR1RS2_00 <- 0
-      W.RR1RR2_00 <- 0
-    }else{
-      
-      
-      # SS1
-      W.SS1SS2_00 <- W.SS1_00 * W.SS2_00
-      W.SS1RS2_00 <- W.SS1_00 * W.RS2_00
-      W.SS1RR2_00 <- W.SS1_00 * W.RR2_00
-      # RS1
-      W.RS1SS2_00 <- W.RS1_00 * W.SS2_00
-      W.RS1RS2_00 <- W.RS1_00 * W.RS2_00
-      W.RS1RR2_00 <- W.RS1_00 * W.RR2_00
-      # RR1
-      W.RR1SS2_00 <- W.RR1_00 * W.SS2_00
-      W.RR1RS2_00 <- W.RR1_00 * W.RS2_00
-      W.RR1RR2_00 <- W.RR1_00 * W.RR2_00
-    }
-    
-    
-    # a,- niche ####
-    if( niche_a0 == 0 ){
-
-      #!r to replace 9 lines below
-      Wniche[,,'a','0'] <- 0      
-      
-      # SS1
-      W.SS1SS2_a0 <- 0
-      W.SS1RS2_a0 <- 0
-      W.SS1RR2_a0 <- 0
-      # RS1
-      W.RS1SS2_a0 <- 0
-      W.RS1RS2_a0 <- 0
-      W.RS1RR2_a0 <- 0
-      # RR1
-      W.RR1SS2_a0 <- 0
-      W.RR1RS2_a0 <- 0
-      W.RR1RR2_a0 <- 0
-    }else{
-      
-   
-      
-      # SS1
-      W.SS1SS2_a0 <- W.SS1_a0 * W.SS2_00
-      W.SS1RS2_a0 <- W.SS1_a0 * W.RS2_00
-      W.SS1RR2_a0 <- W.SS1_a0 * W.RR2_00
-      # RS1
-      W.RS1SS2_a0 <- W.RS1_a0 * W.SS2_00
-      W.RS1RS2_a0 <- W.RS1_a0 * W.RS2_00
-      W.RS1RR2_a0 <- W.RS1_a0 * W.RR2_00
-      # RR1
-      W.RR1SS2_a0 <- W.RR1_a0 * W.SS2_00
-      W.RR1RS2_a0 <- W.RR1_a0 * W.RS2_00
-      W.RR1RR2_a0 <- W.RR1_a0 * W.RR2_00
-    }
-    
-    # A,- niche ####
-    if( niche_A0 == 0 ){
-      
-      #!r to replace 9 lines below
-      Wniche[,,'A','0'] <- 0       
-      
-      # SS1
-      W.SS1SS2_A0 <- 0
-      W.SS1RS2_A0 <- 0
-      W.SS1RR2_A0 <- 0
-      # RS1
-      W.RS1SS2_A0 <- 0
-      W.RS1RS2_A0 <- 0
-      W.RS1RR2_A0 <- 0
-      # RR1
-      W.RR1SS2_A0 <- 0
-      W.RR1RS2_A0 <- 0
-      W.RR1RR2_A0 <- 0
-    }else{
-      
-
-      
-      # SS1
-      W.SS1SS2_A0 <- W.SS1_A0 * W.SS2_00
-      W.SS1RS2_A0 <- W.SS1_A0 * W.RS2_00
-      W.SS1RR2_A0 <- W.SS1_A0 * W.RR2_00
-      # RS1
-      W.RS1SS2_A0 <- W.RS1_A0 * W.SS2_00
-      W.RS1RS2_A0 <- W.RS1_A0 * W.RS2_00
-      W.RS1RR2_A0 <- W.RS1_A0 * W.RR2_00
-      # RR1
-      W.RR1SS2_A0 <- W.RR1_A0 * W.SS2_00
-      W.RR1RS2_A0 <- W.RR1_A0 * W.RS2_00
-      W.RR1RR2_A0 <- W.RR1_A0 * W.RR2_00
-    }
-    
-    
-    # -,b niche ####
-    #andy : i think this was a bug here B should have been b - corrected
-    if( niche_0b == 0 ){ #if( niche_0B == 0 ){
-      
-      #!r to replace 9 lines below
-      Wniche[,,'0','b'] <- 0  
-      
-      # SS1
-      W.SS1SS2_0b <- 0
-      W.SS1RS2_0b <- 0
-      W.SS1RR2_0b <- 0
-      # RS1
-      W.RS1SS2_0b <- 0
-      W.RS1RS2_0b <- 0
-      W.RS1RR2_0b <- 0
-      # RR1
-      W.RR1SS2_0b <- 0
-      W.RR1RS2_0b <- 0
-      W.RR1RR2_0b <- 0
-    }else{
-      
-
-      
-      # SS1
-      W.SS1SS2_0b <- W.SS1_00 * W.SS2_0b
-      W.SS1RS2_0b <- W.SS1_00 * W.RS2_0b
-      W.SS1RR2_0b <- W.SS1_00 * W.RR2_0b
-      # RS1
-      W.RS1SS2_0b <- W.RS1_00 * W.SS2_0b
-      W.RS1RS2_0b <- W.RS1_00 * W.RS2_0b
-      W.RS1RR2_0b <- W.RS1_00 * W.RR2_0b
-      # RR1
-      W.RR1SS2_0b <- W.RR1_00 * W.SS2_0b
-      W.RR1RS2_0b <- W.RR1_00 * W.RS2_0b
-      W.RR1RR2_0b <- W.RR1_00 * W.RR2_0b
-    }
-    
-    # -,B niche ####
-    if( niche_0B == 0 ){
-      
-      #!r to replace 9 lines below
-      Wniche[,,'0','B'] <- 0  
-      
-      # SS1
-      W.SS1SS2_0B <- 0
-      W.SS1RS2_0B <- 0
-      W.SS1RR2_0B <- 0
-      # RS1
-      W.RS1SS2_0B <- 0
-      W.RS1RS2_0B <- 0
-      W.RS1RR2_0B <- 0
-      # RR1
-      W.RR1SS2_0B <- 0
-      W.RR1RS2_0B <- 0
-      W.RR1RR2_0B <- 0
-    }else{
-      
-  
-      
-      # SS1
-      W.SS1SS2_0B <- W.SS1_00 * W.SS2_0B
-      W.SS1RS2_0B <- W.SS1_00 * W.RS2_0B
-      W.SS1RR2_0B <- W.SS1_00 * W.RR2_0B
-      # RS1
-      W.RS1SS2_0B <- W.RS1_00 * W.SS2_0B
-      W.RS1RS2_0B <- W.RS1_00 * W.RS2_0B
-      W.RS1RR2_0B <- W.RS1_00 * W.RR2_0B
-      # RR1
-      W.RR1SS2_0B <- W.RR1_00 * W.SS2_0B
-      W.RR1RS2_0B <- W.RR1_00 * W.RS2_0B
-      W.RR1RR2_0B <- W.RR1_00 * W.RR2_0B
-    }
-    
-    # a,b niche ####
-    if( niche_ab == 0 ){
-      
-      #!r to replace 9 lines below
-      Wniche[,,'a','b'] <- 0  
-      
-      # SS1
-      W.SS1SS2_ab <- 0
-      W.SS1RS2_ab <- 0
-      W.SS1RR2_ab <- 0
-      # RS1
-      W.RS1SS2_ab <- 0
-      W.RS1RS2_ab <- 0
-      W.RS1RR2_ab <- 0
-      # RR1
-      W.RR1SS2_ab <- 0
-      W.RR1RS2_ab <- 0
-      W.RR1RR2_ab <- 0
-      
-    }else{
-      
-
-      
-      # SS1
-      W.SS1SS2_ab <- W.SS1_a0 * W.SS2_0b
-      W.SS1RS2_ab <- W.SS1_a0 * W.RS2_0b
-      W.SS1RR2_ab <- W.SS1_a0 * W.RR2_0b
-      # RS1
-      W.RS1SS2_ab <- W.RS1_a0 * W.SS2_0b
-      W.RS1RS2_ab <- W.RS1_a0 * W.RS2_0b
-      W.RS1RR2_ab <- W.RS1_a0 * W.RR2_0b
-      # RR1
-      W.RR1SS2_ab <- W.RR1_a0 * W.SS2_0b
-      W.RR1RS2_ab <- W.RR1_a0 * W.RS2_0b
-      W.RR1RR2_ab <- W.RR1_a0 * W.RR2_0b
-      
-    }
-    
-    # A,B niche ####
-    if( niche_AB == 0 ){
-      
-      #!r to replace 9 lines below
-      Wniche[,,'A','B'] <- 0  
-      
-      # SS1
-      W.SS1SS2_AB <- 0
-      W.SS1RS2_AB <- 0
-      W.SS1RR2_AB <- 0
-      # RS1
-      W.RS1SS2_AB <- 0
-      W.RS1RS2_AB <- 0
-      W.RS1RR2_AB <- 0
-      # RR1
-      W.RR1SS2_AB <- 0
-      W.RR1RS2_AB <- 0
-      W.RR1RR2_AB <- 0
-    }else{
-      
-
-      
-      # SS1
-      W.SS1SS2_AB <- W.SS1_A0 * W.SS2_0B
-      W.SS1RS2_AB <- W.SS1_A0 * W.RS2_0B
-      W.SS1RR2_AB <- W.SS1_A0 * W.RR2_0B
-      # RS1
-      W.RS1SS2_AB <- W.RS1_A0 * W.SS2_0B
-      W.RS1RS2_AB <- W.RS1_A0 * W.RS2_0B
-      W.RS1RR2_AB <- W.RS1_A0 * W.RR2_0B
-      # RR1
-      W.RR1SS2_AB <- W.RR1_A0 * W.SS2_0B
-      W.RR1RS2_AB <- W.RR1_A0 * W.RS2_0B
-      W.RR1RR2_AB <- W.RR1_A0 * W.RR2_0B
-      
-    }
-    
-    
-    # A,b niche ####
-    if( niche_Ab == 0 ){
-      
-      #!r to replace 9 lines below
-      Wniche[,,'A','b'] <- 0  
-      
-      # SS1
-      W.SS1SS2_Ab <- 0
-      W.SS1RS2_Ab <- 0
-      W.SS1RR2_Ab <- 0
-      # RS1
-      W.RS1SS2_Ab <- 0
-      W.RS1RS2_Ab <- 0
-      W.RS1RR2_Ab <- 0
-      # RR1
-      W.RR1SS2_Ab <- 0
-      W.RR1RS2_Ab <- 0
-      W.RR1RR2_Ab <- 0
-    }else{
-      
-   
-      
-      # SS1
-      W.SS1SS2_Ab <- W.SS1_A0 * W.SS2_0b
-      W.SS1RS2_Ab <- W.SS1_A0 * W.RS2_0b
-      W.SS1RR2_Ab <- W.SS1_A0 * W.RR2_0b
-      # RS1
-      W.RS1SS2_Ab <- W.RS1_A0 * W.SS2_0b
-      W.RS1RS2_Ab <- W.RS1_A0 * W.RS2_0b
-      W.RS1RR2_Ab <- W.RS1_A0 * W.RR2_0b
-      # RR1
-      W.RR1SS2_Ab <- W.RR1_A0 * W.SS2_0b
-      W.RR1RS2_Ab <- W.RR1_A0 * W.RS2_0b
-      W.RR1RR2_Ab <- W.RR1_A0 * W.RR2_0b
-      
-    }
-    
-    # a,B niche
-    if( niche_aB == 0 ){
-      
-      #!r to replace 9 lines below
-      Wniche[,,'a','B'] <- 0  
-      
-      # SS1
-      W.SS1SS2_aB <- 0
-      W.SS1RS2_aB <- 0
-      W.SS1RR2_aB <- 0
-      # RS1
-      W.RS1SS2_aB <- 0
-      W.RS1RS2_aB <- 0
-      W.RS1RR2_aB <- 0
-      # RR1
-      W.RR1SS2_aB <- 0
-      W.RR1RS2_aB <- 0
-      W.RR1RR2_aB <- 0
-    }else{
-      
-
-      
-      # SS1
-      W.SS1SS2_aB <- W.SS1_a0 * W.SS2_0B
-      W.SS1RS2_aB <- W.SS1_a0 * W.RS2_0B
-      W.SS1RR2_aB <- W.SS1_a0 * W.RR2_0B
-      # RS1
-      W.RS1SS2_aB <- W.RS1_a0 * W.SS2_0B
-      W.RS1RS2_aB <- W.RS1_a0 * W.RS2_0B
-      W.RS1RR2_aB <- W.RS1_a0 * W.RR2_0B
-      # RR1
-      W.RR1SS2_aB <- W.RR1_a0 * W.SS2_0B
-      W.RR1RS2_aB <- W.RR1_a0 * W.RS2_0B
-      W.RR1RR2_aB <- W.RR1_a0 * W.RR2_0B
-      
-    }
-    
+#     
+#     
+#     
+#     # -,- niche
+#     if( niche_00 == 0 ){
+#       
+#       #!r
+#       #Wniche[locus1, locus2, niche1, niche2]
+#       #?or should niche1 & 2 be combined
+#       Wniche[,,'0','0'] <- 0
+#       
+#       # SS1
+#       W.SS1SS2_00 <- 0
+#       W.SS1RS2_00 <- 0
+#       W.SS1RR2_00 <- 0
+#       # RS1
+#       W.RS1SS2_00 <- 0
+#       W.RS1RS2_00 <- 0
+#       W.RS1RR2_00 <- 0
+#       # RR1
+#       W.RR1SS2_00 <- 0
+#       W.RR1RS2_00 <- 0
+#       W.RR1RR2_00 <- 0
+#     }else{
+#       
+#       
+#       # SS1
+#       W.SS1SS2_00 <- W.SS1_00 * W.SS2_00
+#       W.SS1RS2_00 <- W.SS1_00 * W.RS2_00
+#       W.SS1RR2_00 <- W.SS1_00 * W.RR2_00
+#       # RS1
+#       W.RS1SS2_00 <- W.RS1_00 * W.SS2_00
+#       W.RS1RS2_00 <- W.RS1_00 * W.RS2_00
+#       W.RS1RR2_00 <- W.RS1_00 * W.RR2_00
+#       # RR1
+#       W.RR1SS2_00 <- W.RR1_00 * W.SS2_00
+#       W.RR1RS2_00 <- W.RR1_00 * W.RS2_00
+#       W.RR1RR2_00 <- W.RR1_00 * W.RR2_00
+#     }
+#     
+#     
+#     # a,- niche ####
+#     if( niche_a0 == 0 ){
+# 
+#       #!r to replace 9 lines below
+#       Wniche[,,'a','0'] <- 0      
+#       
+#       # SS1
+#       W.SS1SS2_a0 <- 0
+#       W.SS1RS2_a0 <- 0
+#       W.SS1RR2_a0 <- 0
+#       # RS1
+#       W.RS1SS2_a0 <- 0
+#       W.RS1RS2_a0 <- 0
+#       W.RS1RR2_a0 <- 0
+#       # RR1
+#       W.RR1SS2_a0 <- 0
+#       W.RR1RS2_a0 <- 0
+#       W.RR1RR2_a0 <- 0
+#     }else{
+#       
+#    
+#       
+#       # SS1
+#       W.SS1SS2_a0 <- W.SS1_a0 * W.SS2_00
+#       W.SS1RS2_a0 <- W.SS1_a0 * W.RS2_00
+#       W.SS1RR2_a0 <- W.SS1_a0 * W.RR2_00
+#       # RS1
+#       W.RS1SS2_a0 <- W.RS1_a0 * W.SS2_00
+#       W.RS1RS2_a0 <- W.RS1_a0 * W.RS2_00
+#       W.RS1RR2_a0 <- W.RS1_a0 * W.RR2_00
+#       # RR1
+#       W.RR1SS2_a0 <- W.RR1_a0 * W.SS2_00
+#       W.RR1RS2_a0 <- W.RR1_a0 * W.RS2_00
+#       W.RR1RR2_a0 <- W.RR1_a0 * W.RR2_00
+#     }
+#     
+#     # A,- niche ####
+#     if( niche_A0 == 0 ){
+#       
+#       #!r to replace 9 lines below
+#       Wniche[,,'A','0'] <- 0       
+#       
+#       # SS1
+#       W.SS1SS2_A0 <- 0
+#       W.SS1RS2_A0 <- 0
+#       W.SS1RR2_A0 <- 0
+#       # RS1
+#       W.RS1SS2_A0 <- 0
+#       W.RS1RS2_A0 <- 0
+#       W.RS1RR2_A0 <- 0
+#       # RR1
+#       W.RR1SS2_A0 <- 0
+#       W.RR1RS2_A0 <- 0
+#       W.RR1RR2_A0 <- 0
+#     }else{
+#       
+# 
+#       
+#       # SS1
+#       W.SS1SS2_A0 <- W.SS1_A0 * W.SS2_00
+#       W.SS1RS2_A0 <- W.SS1_A0 * W.RS2_00
+#       W.SS1RR2_A0 <- W.SS1_A0 * W.RR2_00
+#       # RS1
+#       W.RS1SS2_A0 <- W.RS1_A0 * W.SS2_00
+#       W.RS1RS2_A0 <- W.RS1_A0 * W.RS2_00
+#       W.RS1RR2_A0 <- W.RS1_A0 * W.RR2_00
+#       # RR1
+#       W.RR1SS2_A0 <- W.RR1_A0 * W.SS2_00
+#       W.RR1RS2_A0 <- W.RR1_A0 * W.RS2_00
+#       W.RR1RR2_A0 <- W.RR1_A0 * W.RR2_00
+#     }
+#     
+#     
+#     # -,b niche ####
+#     #andy : i think this was a bug here B should have been b - corrected
+#     if( niche_0b == 0 ){ #if( niche_0B == 0 ){
+#       
+#       #!r to replace 9 lines below
+#       Wniche[,,'0','b'] <- 0  
+#       
+#       # SS1
+#       W.SS1SS2_0b <- 0
+#       W.SS1RS2_0b <- 0
+#       W.SS1RR2_0b <- 0
+#       # RS1
+#       W.RS1SS2_0b <- 0
+#       W.RS1RS2_0b <- 0
+#       W.RS1RR2_0b <- 0
+#       # RR1
+#       W.RR1SS2_0b <- 0
+#       W.RR1RS2_0b <- 0
+#       W.RR1RR2_0b <- 0
+#     }else{
+#       
+# 
+#       
+#       # SS1
+#       W.SS1SS2_0b <- W.SS1_00 * W.SS2_0b
+#       W.SS1RS2_0b <- W.SS1_00 * W.RS2_0b
+#       W.SS1RR2_0b <- W.SS1_00 * W.RR2_0b
+#       # RS1
+#       W.RS1SS2_0b <- W.RS1_00 * W.SS2_0b
+#       W.RS1RS2_0b <- W.RS1_00 * W.RS2_0b
+#       W.RS1RR2_0b <- W.RS1_00 * W.RR2_0b
+#       # RR1
+#       W.RR1SS2_0b <- W.RR1_00 * W.SS2_0b
+#       W.RR1RS2_0b <- W.RR1_00 * W.RS2_0b
+#       W.RR1RR2_0b <- W.RR1_00 * W.RR2_0b
+#     }
+#     
+#     # -,B niche ####
+#     if( niche_0B == 0 ){
+#       
+#       #!r to replace 9 lines below
+#       Wniche[,,'0','B'] <- 0  
+#       
+#       # SS1
+#       W.SS1SS2_0B <- 0
+#       W.SS1RS2_0B <- 0
+#       W.SS1RR2_0B <- 0
+#       # RS1
+#       W.RS1SS2_0B <- 0
+#       W.RS1RS2_0B <- 0
+#       W.RS1RR2_0B <- 0
+#       # RR1
+#       W.RR1SS2_0B <- 0
+#       W.RR1RS2_0B <- 0
+#       W.RR1RR2_0B <- 0
+#     }else{
+#       
+#   
+#       
+#       # SS1
+#       W.SS1SS2_0B <- W.SS1_00 * W.SS2_0B
+#       W.SS1RS2_0B <- W.SS1_00 * W.RS2_0B
+#       W.SS1RR2_0B <- W.SS1_00 * W.RR2_0B
+#       # RS1
+#       W.RS1SS2_0B <- W.RS1_00 * W.SS2_0B
+#       W.RS1RS2_0B <- W.RS1_00 * W.RS2_0B
+#       W.RS1RR2_0B <- W.RS1_00 * W.RR2_0B
+#       # RR1
+#       W.RR1SS2_0B <- W.RR1_00 * W.SS2_0B
+#       W.RR1RS2_0B <- W.RR1_00 * W.RS2_0B
+#       W.RR1RR2_0B <- W.RR1_00 * W.RR2_0B
+#     }
+#     
+#     # a,b niche ####
+#     if( niche_ab == 0 ){
+#       
+#       #!r to replace 9 lines below
+#       Wniche[,,'a','b'] <- 0  
+#       
+#       # SS1
+#       W.SS1SS2_ab <- 0
+#       W.SS1RS2_ab <- 0
+#       W.SS1RR2_ab <- 0
+#       # RS1
+#       W.RS1SS2_ab <- 0
+#       W.RS1RS2_ab <- 0
+#       W.RS1RR2_ab <- 0
+#       # RR1
+#       W.RR1SS2_ab <- 0
+#       W.RR1RS2_ab <- 0
+#       W.RR1RR2_ab <- 0
+#       
+#     }else{
+#       
+# 
+#       
+#       # SS1
+#       W.SS1SS2_ab <- W.SS1_a0 * W.SS2_0b
+#       W.SS1RS2_ab <- W.SS1_a0 * W.RS2_0b
+#       W.SS1RR2_ab <- W.SS1_a0 * W.RR2_0b
+#       # RS1
+#       W.RS1SS2_ab <- W.RS1_a0 * W.SS2_0b
+#       W.RS1RS2_ab <- W.RS1_a0 * W.RS2_0b
+#       W.RS1RR2_ab <- W.RS1_a0 * W.RR2_0b
+#       # RR1
+#       W.RR1SS2_ab <- W.RR1_a0 * W.SS2_0b
+#       W.RR1RS2_ab <- W.RR1_a0 * W.RS2_0b
+#       W.RR1RR2_ab <- W.RR1_a0 * W.RR2_0b
+#       
+#     }
+#     
+#     # A,B niche ####
+#     if( niche_AB == 0 ){
+#       
+#       #!r to replace 9 lines below
+#       Wniche[,,'A','B'] <- 0  
+#       
+#       # SS1
+#       W.SS1SS2_AB <- 0
+#       W.SS1RS2_AB <- 0
+#       W.SS1RR2_AB <- 0
+#       # RS1
+#       W.RS1SS2_AB <- 0
+#       W.RS1RS2_AB <- 0
+#       W.RS1RR2_AB <- 0
+#       # RR1
+#       W.RR1SS2_AB <- 0
+#       W.RR1RS2_AB <- 0
+#       W.RR1RR2_AB <- 0
+#     }else{
+#       
+# 
+#       
+#       # SS1
+#       W.SS1SS2_AB <- W.SS1_A0 * W.SS2_0B
+#       W.SS1RS2_AB <- W.SS1_A0 * W.RS2_0B
+#       W.SS1RR2_AB <- W.SS1_A0 * W.RR2_0B
+#       # RS1
+#       W.RS1SS2_AB <- W.RS1_A0 * W.SS2_0B
+#       W.RS1RS2_AB <- W.RS1_A0 * W.RS2_0B
+#       W.RS1RR2_AB <- W.RS1_A0 * W.RR2_0B
+#       # RR1
+#       W.RR1SS2_AB <- W.RR1_A0 * W.SS2_0B
+#       W.RR1RS2_AB <- W.RR1_A0 * W.RS2_0B
+#       W.RR1RR2_AB <- W.RR1_A0 * W.RR2_0B
+#       
+#     }
+#     
+#     
+#     # A,b niche ####
+#     if( niche_Ab == 0 ){
+#       
+#       #!r to replace 9 lines below
+#       Wniche[,,'A','b'] <- 0  
+#       
+#       # SS1
+#       W.SS1SS2_Ab <- 0
+#       W.SS1RS2_Ab <- 0
+#       W.SS1RR2_Ab <- 0
+#       # RS1
+#       W.RS1SS2_Ab <- 0
+#       W.RS1RS2_Ab <- 0
+#       W.RS1RR2_Ab <- 0
+#       # RR1
+#       W.RR1SS2_Ab <- 0
+#       W.RR1RS2_Ab <- 0
+#       W.RR1RR2_Ab <- 0
+#     }else{
+#       
+#    
+#       
+#       # SS1
+#       W.SS1SS2_Ab <- W.SS1_A0 * W.SS2_0b
+#       W.SS1RS2_Ab <- W.SS1_A0 * W.RS2_0b
+#       W.SS1RR2_Ab <- W.SS1_A0 * W.RR2_0b
+#       # RS1
+#       W.RS1SS2_Ab <- W.RS1_A0 * W.SS2_0b
+#       W.RS1RS2_Ab <- W.RS1_A0 * W.RS2_0b
+#       W.RS1RR2_Ab <- W.RS1_A0 * W.RR2_0b
+#       # RR1
+#       W.RR1SS2_Ab <- W.RR1_A0 * W.SS2_0b
+#       W.RR1RS2_Ab <- W.RR1_A0 * W.RS2_0b
+#       W.RR1RR2_Ab <- W.RR1_A0 * W.RR2_0b
+#       
+#     }
+#     
+#     # a,B niche
+#     if( niche_aB == 0 ){
+#       
+#       #!r to replace 9 lines below
+#       Wniche[,,'a','B'] <- 0  
+#       
+#       # SS1
+#       W.SS1SS2_aB <- 0
+#       W.SS1RS2_aB <- 0
+#       W.SS1RR2_aB <- 0
+#       # RS1
+#       W.RS1SS2_aB <- 0
+#       W.RS1RS2_aB <- 0
+#       W.RS1RR2_aB <- 0
+#       # RR1
+#       W.RR1SS2_aB <- 0
+#       W.RR1RS2_aB <- 0
+#       W.RR1RR2_aB <- 0
+#     }else{
+#       
+# 
+#       
+#       # SS1
+#       W.SS1SS2_aB <- W.SS1_a0 * W.SS2_0B
+#       W.SS1RS2_aB <- W.SS1_a0 * W.RS2_0B
+#       W.SS1RR2_aB <- W.SS1_a0 * W.RR2_0B
+#       # RS1
+#       W.RS1SS2_aB <- W.RS1_a0 * W.SS2_0B
+#       W.RS1RS2_aB <- W.RS1_a0 * W.RS2_0B
+#       W.RS1RR2_aB <- W.RS1_a0 * W.RR2_0B
+#       # RR1
+#       W.RR1SS2_aB <- W.RR1_a0 * W.SS2_0B
+#       W.RR1RS2_aB <- W.RR1_a0 * W.RS2_0B
+#       W.RR1RR2_aB <- W.RR1_a0 * W.RR2_0B
+#       
+#     }
+#     
     
     # Calculating fitness determining selection 
     # These are calculated from the individual's fitness by two locus genotype, 
