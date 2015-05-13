@@ -972,47 +972,22 @@ runModel2 <- function(input,
       }
       
       
-      # set genotype frequencies as variables
+      # genotype frequencies
       # extracted from genotype frequency matrix generated above from initial value of P (frequency of R allele)
       # set for male and for female: before first round of selection these are the same values
-      # f = frequency before selection
-      # andy frequencies at end of loop are put back into genotype.freq (unless callibration=102)
+      # frequencies at end of loop are put back into genotype.freq (unless callibration=102)
       
-      #!r 20 lines reading genotype.freq into f below could be replaced with
       namesLoci <- rownames( genotype.freq )
       sex2 <- c("m","f")
+      # f  = genotype frequencies before selection
+      # fs = genotype frequencies after selection
       f <- createArray2( sex=sex2, loci=namesLoci )
+      fs <- createArray2( sex=sex2, loci=namesLoci )      
       #f['m', ] <- genotype.freq[,]
       #? todo can I assume that the loci will be in the same order because I've derived the names the same ? 
       #if not may be able to use positions of rownames(genotype.freq) in colnames(f)
       f['m', ] <- genotype.freq[]
       f['f', ] <- genotype.freq[]
-      #todo : cut line below just temp while I'm starting fs
-      fs <- f
-      
-      #todo cut begin
-      f.m.SS1SS2 <- genotype.freq[1,]
-      f.m.SS1RS2 <- genotype.freq[2,]
-      f.m.SS1RR2 <- genotype.freq[3,]
-      f.m.RS1SS2 <- genotype.freq[4,]
-      f.m.RS1RS2_cis <- genotype.freq[5,]		### cis
-      f.m.RS1RS2_trans <- genotype.freq[6,]	### trans
-      f.m.RS1RR2 <- genotype.freq[7,]
-      f.m.RR1SS2 <- genotype.freq[8,]
-      f.m.RR1RS2 <- genotype.freq[9,]
-      f.m.RR1RR2 <- genotype.freq[10,]
-      # female
-      f.f.SS1SS2 <- genotype.freq[1,]
-      f.f.SS1RS2 <- genotype.freq[2,]
-      f.f.SS1RR2 <- genotype.freq[3,]
-      f.f.RS1SS2 <- genotype.freq[4,]
-      f.f.RS1RS2_cis <- genotype.freq[5,]		### cis
-      f.f.RS1RS2_trans <- genotype.freq[6,]	### trans
-      f.f.RS1RR2 <- genotype.freq[7,]
-      f.f.RR1SS2 <- genotype.freq[8,]
-      f.f.RR1RS2 <- genotype.freq[9,]
-      f.f.RR1RR2 <- genotype.freq[10,]
-      #todo cut end
       
       
       #these warnings allow for rounding differences
@@ -1028,24 +1003,9 @@ runModel2 <- function(input,
       #question is it right that only male frequencies seem to be saved ?
       genotype[k,2:11] <- f['m',]
       
-      #todo cut begin
-#       genotype[k,2] <- f.m.SS1SS2
-#       genotype[k,3] <- f.m.SS1RS2
-#       genotype[k,4] <- f.m.SS1RR2
-#       
-#       genotype[k,5] <- f.m.RS1SS2
-#       genotype[k,6] <- f.m.RS1RS2_cis
-#       genotype[k,7] <- f.m.RS1RS2_trans
-#       genotype[k,8] <- f.m.RS1RR2
-#       
-#       genotype[k,9] <- f.m.RR1SS2
-#       genotype[k,10] <- f.m.RR1RS2
-#       genotype[k,11] <- f.m.RR1RR2
-      #todo cut end
       
-      #### Printing Results to matrix ####
-      # print generation
-      results[k,1] <- k
+      # Printing Results to matrix 
+      results[k,1] <- k #generation number
       
       # frequency of resistance allele in males
       #!r refactor frequency of resistance allele calc by seraching for RR1 & RS1 in locus names
