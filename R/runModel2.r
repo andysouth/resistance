@@ -1183,62 +1183,14 @@ runModel2 <- function(input,
       
       if(calibration==103){		## no selection calibration
         
-        #!r
+        # copy after selection frequencies from those before selection to eliminate selection step
         fs <- f
         
-        #todo cut begin
-        ## male
-        # SS1
-        fs.m.SS1SS2 <- f.m.SS1SS2
-        fs.m.SS1RS2 <- f.m.SS1RS2
-        fs.m.SS1RR2 <- f.m.SS1RR2
-        # RS1
-        fs.m.RS1SS2 <- f.m.RS1SS2 
-        fs.m.RS1RS2_cis <- f.m.RS1RS2_cis
-        fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
-        fs.m.RS1RR2 <- f.m.RS1RR2
-        # RR2 
-        fs.m.RR1SS2 <- f.m.RR1SS2
-        fs.m.RR1RS2 <- f.m.RR1RS2
-        fs.m.RR1RR2 <- f.m.RR1RR2
-        
-        ## female
-        # SS1
-        fs.f.SS1SS2 <- f.f.SS1SS2
-        fs.f.SS1RS2 <- f.f.SS1RS2
-        fs.f.SS1RR2 <- f.f.SS1RR2
-        # RS1
-        fs.f.RS1SS2 <- f.f.RS1SS2 
-        fs.f.RS1RS2_cis <- f.f.RS1RS2_cis
-        fs.f.RS1RS2_trans <- f.f.RS1RS2_trans
-        fs.f.RS1RR2 <- f.f.RS1RR2
-        # RR2 
-        fs.f.RR1SS2 <- f.f.RR1SS2
-        fs.f.RR1RS2 <- f.f.RR1RS2
-        fs.f.RR1RR2 <- f.f.RR1RR2
-        #todo cut end
-        
-        
-        #### If calibration 103 not set, selection continues as normal
       }else{
-        ## W bar - Sum of numerators
-        #todo cut begin
-        # W bar males
-        W.bar.m <- (f.m.SS1SS2 * W.m.SS1SS2) + (f.m.SS1RS2 * W.m.SS1RS2) + (f.m.SS1RR2 * W.m.SS1RR2) +
-          (f.m.RS1SS2 * W.m.RS1SS2) + 
-          (f.m.RS1RS2_cis * W.m.RS1RS2) + (f.m.RS1RS2_trans * W.m.RS1RS2) + 
-          (f.m.RS1RR2 * W.m.RS1RR2) +
-          (f.m.RR1SS2 * W.m.RR1SS2) + (f.m.RR1RS2 * W.m.RR1RS2) + (f.m.RR1RR2 * W.m.RR1RR2)
-        # W bar females
-        W.bar.f <- (f.f.SS1SS2 * W.f.SS1SS2) + (f.f.SS1RS2 * W.f.SS1RS2) + (f.f.SS1RR2 * W.f.SS1RR2) +
-          (f.f.RS1SS2 * W.f.RS1SS2) + 
-          (f.f.RS1RS2_cis * W.f.RS1RS2) + (f.f.RS1RS2_trans * W.f.RS1RS2) + 
-          (f.f.RS1RR2 * W.f.RS1RR2) +
-          (f.f.RR1SS2 * W.f.RR1SS2) + (f.f.RR1RS2 * W.f.RR1RS2) + (f.f.RR1RR2 * W.f.RR1RR2)
-        #todo cut end
         
-        #!r refactoring W.bar calcs above
+        # W bar - Sum of numerators
         W.bar <- createArray2(sex=c('m','f'))
+        
         for( sex in dimnames(Windiv)$sex)
         {
           for( locus1 in dimnames(Windiv)$locus1)
@@ -1260,37 +1212,7 @@ runModel2 <- function(input,
         
         
         ## Frequencies --- Calculated with selection
-        ## Males
-        ## SS1
-        fs.m.SS1SS2 <- (f.m.SS1SS2 * W.m.SS1SS2) / W.bar.m
-        fs.m.SS1RS2 <- (f.m.SS1RS2 * W.m.SS1RS2) / W.bar.m
-        fs.m.SS1RR2 <- (f.m.SS1RR2 * W.m.SS1RR2) / W.bar.m
-        ## RS1
-        fs.m.RS1SS2 <- (f.m.RS1SS2 * W.m.RS1SS2) / W.bar.m
-        fs.m.RS1RS2_cis <- (f.m.RS1RS2_cis * W.m.RS1RS2) / W.bar.m
-        fs.m.RS1RS2_trans <- (f.m.RS1RS2_trans * W.m.RS1RS2) / W.bar.m
-        fs.m.RS1RR2 <- (f.m.RS1RR2 * W.m.RS1RR2) / W.bar.m
-        ## RR1
-        fs.m.RR1SS2 <- (f.m.RR1SS2 * W.m.RR1SS2) / W.bar.m
-        fs.m.RR1RS2 <- (f.m.RR1RS2 * W.m.RR1RS2) / W.bar.m
-        fs.m.RR1RR2 <- (f.m.RR1RR2 * W.m.RR1RR2) / W.bar.m
         
-        ## Females
-        ## SS1
-        fs.f.SS1SS2 <- (f.f.SS1SS2 * W.f.SS1SS2) / W.bar.f
-        fs.f.SS1RS2 <- (f.f.SS1RS2 * W.f.SS1RS2) / W.bar.f
-        fs.f.SS1RR2 <- (f.f.SS1RR2 * W.f.SS1RR2) / W.bar.f
-        ## RS1
-        fs.f.RS1SS2 <- (f.f.RS1SS2 * W.f.RS1SS2) / W.bar.f
-        fs.f.RS1RS2_cis <- (f.f.RS1RS2_cis * W.f.RS1RS2) / W.bar.f
-        fs.f.RS1RS2_trans <- (f.f.RS1RS2_trans * W.f.RS1RS2) / W.bar.f
-        fs.f.RS1RR2 <- (f.f.RS1RR2 * W.f.RS1RR2) / W.bar.f
-        ## RR1
-        fs.f.RR1SS2 <- (f.f.RR1SS2 * W.f.RR1SS2) / W.bar.f
-        fs.f.RR1RS2 <- (f.f.RR1RS2 * W.f.RR1RS2) / W.bar.f
-        fs.f.RR1RR2 <- (f.f.RR1RR2 * W.f.RR1RR2) / W.bar.f
-        
-        #!r refactoring above ~20 lines
         for( sex in dimnames(Windiv)$sex)
         {
           for( locus1 in dimnames(Windiv)$locus1)
@@ -1319,66 +1241,30 @@ runModel2 <- function(input,
         x.m <- select.gen.m				## Setting fitness of genotype to select on as separate variable
         x.f <- select.gen.f				## Not lost in reprinting in next step
         
-        ## Frequencies --- Reprinting after selection fitness with before selection to eliminate selection step
-        #!r
+        # copy after selection frequencies from those before selection to eliminate selection step
         fs <- f
-        
-        #todo cut begin
-        ## Males
-        ## SS1
-        fs.m.SS1SS2 <- f.m.SS1SS2
-        fs.m.SS1RS2 <- f.m.SS1RS2
-        fs.m.SS1RR2 <- f.m.SS1RR2
-        ## RS1
-        fs.m.RS1SS2 <- f.m.RS1SS2
-        fs.m.RS1RS2_cis <- f.m.RS1RS2_cis
-        fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
-        fs.m.RS1RR2 <- f.m.RS1RR2
-        ## RR1
-        fs.m.RR1SS2 <- f.m.RR1SS2
-        fs.m.RR1RS2 <- f.m.RR1RS2
-        fs.m.RR1RR2 <- f.m.RR1RR2
-        
-        ## Females
-        ## SS1
-        fs.f.SS1SS2 <- f.f.SS1SS2
-        fs.f.SS1RS2 <- f.f.SS1RS2
-        fs.f.SS1RR2 <- f.f.SS1RR2
-        ## RS1
-        fs.f.RS1SS2 <- f.f.RS1SS2
-        fs.f.RS1RS2_cis <- f.f.RS1RS2_cis
-        fs.f.RS1RS2_trans <- f.f.RS1RS2_trans
-        fs.f.RS1RR2 <- f.f.RS1RR2
-        ## RR1
-        fs.f.RR1SS2 <- f.f.RR1SS2
-        fs.f.RR1RS2 <- f.f.RR1RS2
-        fs.f.RR1RR2 <- f.f.RR1RR2
-        #todo cut end
         
         select.gen.m <- x.m			## Reprinting fitness that is intended to be selected on
         select.gen.f <- x.f			## with after selection fitness saved as variable above
         
       }
       
-      ## Check for errors ##
-      ## Will print an error message if the genotype frequencies do not total 1.
-      # Male
-      #male.freq <- (fs.m.SS1SS2 + fs.m.SS1RS2 + fs.m.SS1RR2+
-      #	  fs.m.RS1SS2 + fs.m.RS1RS2_cis + fs.m.RS1RS2_trans + fs.m.RS1RR2+
-      #	  fs.m.RR1SS2 + fs.m.RR1RS2 + fs.m.RR1RR2) 
-      #print( (paste("Male frequencies after selection total = ",male.freq) ) )
-      # Female
-      #female.freq <- (fs.f.SS1SS2 + fs.f.SS1RS2 + fs.f.SS1RR2+
-      #	  fs.f.RS1SS2 + fs.f.RS1RS2_cis + fs.f.RS1RS2_trans + fs.f.RS1RR2+
-      #	  fs.f.RR1SS2 + fs.f.RR1RS2 + fs.f.RR1RR2) 			
-      #print( (paste("Female frequencies after selection total = ",female.freq) ) )
+      # Check for errors if genotype frequencies do not total 1.
+      # allow for rounding differences
+      for(sex in c('m','f'))
+      {
+        if ( !isTRUE( all.equal(1, sum(fs[sex,])  )))
+          warning(sex," gamete frequencies total != 1 ", sum(fs[sex,]) )         
+      }
+
       
       ## Gametes ####
 
       # Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
-      # 1 - both parts of genotype contribute, 0.5 - half of genotype contributes, 0 - neither part of genotype can produce this gamete
+      # 1 - both parts of genotype contribute, 
+      # 0.5 - half of genotype contributes, 
+      # 0 - neither part of genotype can produce this gamete
       
-      #r! refactoring gametes
       #note this uses fs, frequency of genotypes after selection
       G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
       
@@ -1388,7 +1274,6 @@ runModel2 <- function(input,
       # calculated just for males here
       # copied to females when frequencies generated at start of loop
 
-      #!r refactored
       # initially by calculating 'expanded' genotypes which I can convert back later
       fGenotypeExpanded <- randomMating(G)
       
