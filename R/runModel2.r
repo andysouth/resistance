@@ -199,9 +199,7 @@ runModel2 <- function(input,
     niche['A','b'] <- input[51,i]
     niche['a','B'] <- input[52,i]
     
-    
-    
-    #### end of reading inputs into parameters ####
+    #### end of reading inputs into parameters
     
     ## Set up matrices to print results to ####
     # Set up results matrix - prints overall freq of R and S allele per locus per sex, LD and overall allele freq (i.e. 1)
@@ -225,85 +223,44 @@ runModel2 <- function(input,
     ## frequencies of genotypes before selection - in HW equilibrium and same in male and female
     ## needs name of matrix and takes corresponding frequency of resistant allele in function call
     genotype.freq <- make.genotypemat ( P_1, P_2 )
-    ## Check for errors
-    #if ( sum(genotype.freq)!=1 ){			## Will print an error message if the genotype frequencies do not total 1. 
-    #	print( "Error in frequencies" )		## Unhash to use for bugfixing
-    #	
-    #	}else{
-    #		print( "Frequencies total 1")
-    #		}
     
+    # Check for errors
+    if ( sum(genotype.freq)!=1 ) stop("genotype frequencies don't sum to 1 :",sum(genotype.freq) )		
+
     
-    ## Calculated single locus fitnesses ####
+    ## Single locus fitnesses
+    
     #h[locusNum, exposure]
     #phi[locusNum, exposure] where exposure is lo, hi
     
-    #!r trying to refactor below 32 lines
-    #bit trickier than previous refactoring, I need to change the structure slightly
+    #refactored and structure had to be changed slightly
     for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
     {
-      #actually this is just for no
+      #exposure 0 'no'
       Wloci[ paste0('RS',locusNum), 'no'] <- 1 - (h[locusNum, 'no'] * z[locusNum])
       Wloci[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
       
       for( exposure in c('lo','hi') )
       {
-#         # low levels of insecticide a
-#         W.SS1_a0 <- 1 - phi.SS1_a0
-#         W.RS1_a0 <- W.SS1_a0 + (h.RS1_a0 * s.RR1_a0)
-#         W.RR1_a0 <- W.SS1_a0 + s.RR1_a0
-#         
-#         # high levels of insecticide A
-#         W.SS1_A0 <- 1 - phi.SS1_A0
-#         W.RS1_A0 <- W.SS1_A0 + (h.RS1_A0 * s.RR1_A0)
-#         W.RR1_A0 <- W.SS1_A0 + s.RR1_A0
-
         Wloci[ paste0('SS',locusNum), exposure] <-  1 - phi[locusNum, exposure] 
+        
         Wloci[ paste0('RS',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
                                                    (h[locusNum, exposure] * s[locusNum, exposure])
+        
         Wloci[ paste0('RR',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
                                                    (s[locusNum, exposure])
       }
     }
     
-
-    # absence of insecticide
-    # fitness of SS in absence of insecticide is entered above as a parameter
-    W.RS1_00 <- 1 - (h.RS1_00 * z.RR1_00)
-    W.RR1_00 <- 1 - z.RR1_00
     
-    W.RS2_00 <- 1 - (h.RS2_00 * z.RR2_00)
-    W.RR2_00 <- 1 - z.RR2_00
+    ## Two genotype fitnesses in two insecticide Niche
     
-    # low levels of insecticide a
-    W.SS1_a0 <- 1 - phi.SS1_a0
-    W.RS1_a0 <- W.SS1_a0 + (h.RS1_a0 * s.RR1_a0)
-    W.RR1_a0 <- W.SS1_a0 + s.RR1_a0
-    
-    # high levels of insecticide A
-    W.SS1_A0 <- 1 - phi.SS1_A0
-    W.RS1_A0 <- W.SS1_A0 + (h.RS1_A0 * s.RR1_A0)
-    W.RR1_A0 <- W.SS1_A0 + s.RR1_A0
-    
-    # low levels of insecticide b
-    W.SS2_0b <- 1 - phi.SS2_0b
-    W.RS2_0b <- W.SS2_0b + (h.RS2_0b * s.RR2_0b)
-    W.RR2_0b <- W.SS2_0b + s.RR2_0b
-    
-    # high levels of insecticide B
-    W.SS2_0B <- 1 - phi.SS2_0B
-    W.RS2_0B <- W.SS2_0B + (h.RS2_0B * s.RR2_0B)
-    W.RR2_0B <- W.SS2_0B + s.RR2_0B
-    
-    
-    ## Two genotype fitnesses in two insecticide Niche ##
-    ## Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
-        
-    ## niches can be toggled off, i.e. a fitness can be given for A0
-    ## but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
+    # Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
+    # niches can be toggled off, i.e. a fitness can be given for A0
+    # but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
 
 
-    #!r to replace 250+ lines below
+    #refactored to replace 250+ lines in earlier version
 #     for( niche1 in dimnames(Wniche)$niche1)
 #     {
 #       for( niche2 in dimnames(Wniche)$niche2)
@@ -330,9 +287,8 @@ runModel2 <- function(input,
           {
             for( locus2 in dimnames(Wniche)$locus2)
             {   
-              #previous problem with this line, now
+              #
               Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
-              
             }
           }          
         }
