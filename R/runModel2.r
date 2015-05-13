@@ -1022,7 +1022,6 @@ runModel2 <- function(input,
         warning("Female frequencies before selection total != 1 ", sum(f['f',]) )        
 
       
-      
       ### Prints record of genotype proportions each generation
       genotype[k,1] <- k	
       #r! replace 10 lines below
@@ -1060,22 +1059,6 @@ runModel2 <- function(input,
       results[k,5] <- f.R1
       results[k,6] <- f.R2
       
-      #todo cut begin
-      # locus 1
-#       m.R1 <- ( f.m.RR1SS2 + f.m.RR1RS2 + f.m.RR1RR2 ) + ( 0.5 * (f.m.RS1SS2 + f.m.RS1RS2_trans + f.m.RS1RS2_cis + f.m.RS1RR2 ) ) 
-#       results[k,2] <- m.R1
-#       # locus 2
-#       m.R2 <- ( f.m.SS1RR2 + f.m.RS1RR2 + f.m.RR1RR2 ) + ( 0.5 * (f.m.SS1RS2 + f.m.RS1RS2_cis + f.m.RS1RS2_trans + f.m.RR1RS2 ) )
-#       results[k,3] <- m.R2
-#       
-#       # frequency of resistance allele in females
-#       # locus 1
-#       f.R1 <- ( f.f.RR1SS2 + f.f.RR1RS2 + f.f.RR1RR2 ) + ( 0.5 * (f.f.RS1SS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RS1RR2 ) ) 
-#       results[k,5] <- f.R1
-#       # locus 2
-#       f.R2 <- ( f.f.SS1RR2 + f.f.RS1RR2 + f.f.RR1RR2 ) + ( 0.5 * (f.f.SS1RS2 + f.f.RS1RS2_cis + f.f.RS1RS2_trans + f.f.RR1RS2 ) )
-#       results[k,6] <- f.R2
-      #todo cut end
       
       #!r recording total fitnesses for males and females
       #question aren't these always 1
@@ -1090,12 +1073,9 @@ runModel2 <- function(input,
       #}				  
       
       
-      ## Gametes ####
-      ### Estimated here from before selection frequencies to estimate linkage disequilibrium ###
-      # Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
-      # 1 - both parts of genotype contribute, 0.5 - half of genotype contributes, 0.0 - neither part of genotype can produce this gamete
-      
-      #r! refactoring gametes
+      ## Gametes
+      # Estimated here from before selection frequencies to estimate linkage disequilibrium 
+
       G <- createGametes( f = f, recomb_rate = recomb_rate ) 
       
 
