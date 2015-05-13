@@ -871,104 +871,24 @@ runModel2 <- function(input,
       }
       
       if( relax == TRUE & (2<k) & (k<12)){
+        
         # relaxed selection fitnesses
-        #!r 18 lines below can be replaced with
         Windiv[] <- 0.1
-        
-        ## Males
-        W.m.SS1SS2 <- 0.1 
-        W.m.SS1RS2 <- 0.1
-        W.m.SS1RR2 <- 0.1
-        
-        W.m.RS1SS2 <- 0.1
-        W.m.RS1RS2 <- 0.1  
-        W.m.RS1RR2 <- 0.1  
-        
-        W.m.RR1SS2 <- 0.1 
-        W.m.RR1RS2 <- 0.1 
-        W.m.RR1RR2 <- 0.1  
-        
-        ## Female
-        W.f.SS1SS2 <- 0.1
-        W.f.SS1RS2 <- 0.1
-        W.f.SS1RR2 <- 0.1
-        
-        W.f.RS1SS2 <- 0.1
-        W.f.RS1RS2 <- 0.1 
-        W.f.RS1RR2 <- 0.1 
-        
-        W.f.RR1SS2 <- 0.1
-        W.f.RR1RS2 <- 0.1 
-        W.f.RR1RR2 <- 0.1
         
       } else if( relax == TRUE & (k>11) & (k<15)){
         
         # non relaxed fitnesses
-        #!r 18 lines below can be replaced with
         Windiv[] <- 0.1
-        #these do m,f at same time
+        #setting m,f at same time
         Windiv[,'RS1','RS2'] <- 1
         Windiv[,'RS1','RR2'] <- 1
         Windiv[,'RR1','RS2'] <- 1
         Windiv[,'RR1','RR2'] <- 1
-                
-        ## Males
-        W.m.SS1SS2 <- 0.1
-        W.m.SS1RS2 <- 0.1
-        W.m.SS1RR2 <- 0.1
-        
-        W.m.RS1SS2 <- 0.1
-        W.m.RS1RS2 <- 1  
-        W.m.RS1RR2 <- 1  
-        
-        W.m.RR1SS2 <- 0.1
-        W.m.RR1RS2 <- 1 
-        W.m.RR1RR2 <- 1 
-        
-        ## Female
-        W.f.SS1SS2 <- 0.1
-        W.f.SS1RS2 <- 0.1
-        W.f.SS1RR2 <- 0.1
-        
-        W.f.RS1SS2 <- 0.1
-        W.f.RS1RS2 <- 1 
-        W.f.RS1RR2 <- 1 
-        
-        W.f.RR1SS2 <- 0.1
-        W.f.RR1RS2 <- 1 
-        W.f.RR1RR2 <- 1
         
       } else if( relax == TRUE & (k>14) ){
         
         # relaxed selection fitnesses
-        #!r 18 lines below can be replaced with
         Windiv[] <- 0.1
-        
-        ## Males
-        W.m.SS1SS2 <- 0.1 
-        W.m.SS1RS2 <- 0.1
-        W.m.SS1RR2 <- 0.1
-        
-        W.m.RS1SS2 <- 0.1
-        W.m.RS1RS2 <- 0.1  
-        W.m.RS1RR2 <- 0.1  
-        
-        W.m.RR1SS2 <- 0.1 
-        W.m.RR1RS2 <- 0.1 
-        W.m.RR1RR2 <- 0.1  
-        
-        ## Female
-        W.f.SS1SS2 <- 0.1
-        W.f.SS1RS2 <- 0.1
-        W.f.SS1RR2 <- 0.1
-        
-        W.f.RS1SS2 <- 0.1
-        W.f.RS1RS2 <- 0.1 
-        W.f.RS1RR2 <- 0.1 
-        
-        W.f.RR1SS2 <- 0.1
-        W.f.RR1RS2 <- 0.1 
-        W.f.RR1RR2 <- 0.1
       }
       
       
@@ -1038,7 +958,6 @@ runModel2 <- function(input,
 
       G <- createGametes( f = f, recomb_rate = recomb_rate ) 
       
-
       
       ### Linkage Disequilibrium ####
       ## Disequibilibrium of resistant allele in gametes ##
