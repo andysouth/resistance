@@ -707,15 +707,10 @@ runModel2 <- function(input,
     }
     
     
-    ### Calculating fitness determining selection ####  
-    ## These are calculated from the individual's fitness by two locus genotype, 
-    ## and exposure to niche depending on gender
+    # Calculating fitness determining selection 
+    # These are calculated from the individual's fitness by two locus genotype, 
+    # and exposure to niche depending on gender
     
-    #!r first stage of refactoring to arrays, can reduce further later
-    #Windiv['m','SS1','SS2'] <- sum( a['m',,] * Wniche['SS1','SS2',,])
-    #Windiv['m','SS1','RS2'] <- sum( a['m',,] * Wniche['SS1','RS2',,])
-    
-    #!r 2nd stage of refactoring to arrays, this replaces the ~120 lines below
     for( sex in dimnames(Windiv)$sex)
     {
       for( locus1 in dimnames(Windiv)$locus1)
@@ -726,133 +721,7 @@ runModel2 <- function(input,
         }
       }
     }
-        
-    # Males, SS1, SS2
-    W.m.SS1SS2 <- (a.m_00 * W.SS1SS2_00) + 
-      (a.m_a0 * W.SS1SS2_a0) + (a.m_A0 * W.SS1SS2_A0) + 
-      (a.m_0b * W.SS1SS2_0b) + (a.m_0B * W.SS1SS2_0B) + 
-      (a.m_ab * W.SS1SS2_ab) + (a.m_AB * W.SS1SS2_AB) + 
-      (a.m_Ab * W.SS1SS2_Ab) + (a.m_aB * W.SS1SS2_aB) 
-    
-    # Males, SS1, RS2
-    W.m.SS1RS2 <- (a.m_00 * W.SS1RS2_00) + 
-      (a.m_a0 * W.SS1RS2_a0) + (a.m_A0 * W.SS1RS2_A0) + 
-      (a.m_0b * W.SS1RS2_0b) + (a.m_0B * W.SS1RS2_0B) + 
-      (a.m_ab * W.SS1RS2_ab) + (a.m_AB * W.SS1RS2_AB) + 
-      (a.m_Ab * W.SS1RS2_Ab) + (a.m_aB * W.SS1RS2_aB)
-    
-    # Males, SS1, RR2
-    W.m.SS1RR2 <- (a.m_00 * W.SS1RR2_00) + 
-      (a.m_a0 * W.SS1RR2_a0) + (a.m_A0 * W.SS1RR2_A0) + 
-      (a.m_0b * W.SS1RR2_0b) + (a.m_0B * W.SS1RR2_0B) + 
-      (a.m_ab * W.SS1RR2_ab) + (a.m_AB * W.SS1RR2_AB) + 
-      (a.m_Ab * W.SS1RR2_Ab) + (a.m_aB * W.SS1RR2_aB)
-    
-    # Males, RS1, SS2
-    W.m.RS1SS2 <- (a.m_00 * W.RS1SS2_00) + 
-      (a.m_a0 * W.RS1SS2_a0) + (a.m_A0 * W.RS1SS2_A0) + 
-      (a.m_0b * W.RS1SS2_0b) + (a.m_0B * W.RS1SS2_0B) + 
-      (a.m_ab * W.RS1SS2_ab) + (a.m_AB * W.RS1SS2_AB) + 
-      (a.m_Ab * W.RS1SS2_Ab) + (a.m_aB * W.RS1SS2_aB)
-    
-    # Males, RS1, RS2
-    W.m.RS1RS2 <- (a.m_00 * W.RS1RS2_00) + 
-      (a.m_a0 * W.RS1RS2_a0) + (a.m_A0 * W.RS1RS2_A0) + 
-      (a.m_0b * W.RS1RS2_0b) + (a.m_0B * W.RS1RS2_0B) + 
-      (a.m_ab * W.RS1RS2_ab) + (a.m_AB * W.RS1RS2_AB) + 
-      (a.m_Ab * W.RS1RS2_Ab) + (a.m_aB * W.RS1RS2_aB)
-    
-    # Males, RS1, RR2
-    W.m.RS1RR2 <- (a.m_00 * W.RS1RR2_00) + 
-      (a.m_a0 * W.RS1RR2_a0) + (a.m_A0 * W.RS1RR2_A0) + 
-      (a.m_0b * W.RS1RR2_0b) + (a.m_0B * W.RS1RR2_0B) + 
-      (a.m_ab * W.RS1RR2_ab) + (a.m_AB * W.RS1RR2_AB) + 
-      (a.m_Ab * W.RS1RR2_Ab) + (a.m_aB * W.RS1RR2_aB) 
-    
-    # Males, RR1, SS2
-    W.m.RR1SS2 <- (a.m_00 * W.RR1SS2_00) + 
-      (a.m_a0 * W.RR1SS2_a0) + (a.m_A0 * W.RR1SS2_A0) + 
-      (a.m_0b * W.RR1SS2_0b) + (a.m_0B * W.RR1SS2_0B) + 
-      (a.m_ab * W.RR1SS2_ab) + (a.m_AB * W.RR1SS2_AB) + 
-      (a.m_Ab * W.RR1SS2_Ab) + (a.m_aB * W.RR1SS2_aB) 
-    
-    # Males, RR1, RS2
-    W.m.RR1RS2 <- (a.m_00 * W.RR1RS2_00) + 
-      (a.m_a0 * W.RR1RS2_a0) + (a.m_A0 * W.RR1RS2_A0) +
-      (a.m_0b * W.RR1RS2_0b) + (a.m_0B * W.RR1RS2_0B) + 
-      (a.m_ab * W.RR1RS2_ab) + (a.m_AB * W.RR1RS2_AB) + 
-      (a.m_Ab * W.RR1RS2_Ab) + (a.m_aB * W.RR1RS2_aB) 
-    
-    # Males, RR1, RR2
-    W.m.RR1RR2 <- (a.m_00 * W.RR1RR2_00) + 
-      (a.m_a0 * W.RR1RR2_a0) + (a.m_A0 * W.RR1RR2_A0) + 
-      (a.m_0b * W.RR1RR2_0b) + (a.m_0B * W.RR1RR2_0B) + 
-      (a.m_ab * W.RR1RR2_ab) + (a.m_AB * W.RR1RR2_AB) + 
-      (a.m_Ab * W.RR1RR2_Ab) + (a.m_aB * W.RR1RR2_aB)
-    
-    # female, SS1, SS2
-    W.f.SS1SS2 <- (a.f_00 * W.SS1SS2_00) + 
-      (a.f_a0 * W.SS1SS2_a0) + (a.f_A0 * W.SS1SS2_A0) +
-      (a.f_0b * W.SS1SS2_0b) + (a.f_0B * W.SS1SS2_0B) + 
-      (a.f_ab * W.SS1SS2_ab) + (a.f_AB * W.SS1SS2_AB) + 
-      (a.f_Ab * W.SS1SS2_Ab) + (a.f_aB * W.SS1SS2_aB) 
-    
-    # female, SS1, RS2
-    W.f.SS1RS2 <- (a.f_00 * W.SS1RS2_00) + 
-      (a.f_a0 * W.SS1RS2_a0) + (a.f_A0 * W.SS1RS2_A0) +
-      (a.f_0b * W.SS1RS2_0b) + (a.f_0B * W.SS1RS2_0B) + 
-      (a.f_ab * W.SS1RS2_ab) + (a.f_AB * W.SS1RS2_AB) + 
-      (a.f_Ab * W.SS1RS2_Ab) + (a.f_aB * W.SS1RS2_aB)
-    
-    # female, SS1, RR2
-    W.f.SS1RR2 <- (a.f_00 * W.SS1RR2_00) + 
-      (a.f_a0 * W.SS1RR2_a0) + (a.f_A0 * W.SS1RR2_A0) +
-      (a.f_0b * W.SS1RR2_0b) + (a.f_0B * W.SS1RR2_0B) + 
-      (a.f_ab * W.SS1RR2_ab) + (a.f_AB * W.SS1RR2_AB) + 
-      (a.f_Ab * W.SS1RR2_Ab) + (a.f_aB * W.SS1RR2_aB)
-    
-    # female, RS1, SS2
-    W.f.RS1SS2 <- (a.f_00 * W.RS1SS2_00) + 
-      (a.f_a0 * W.RS1SS2_a0) + (a.f_A0 * W.RS1SS2_A0) + 
-      (a.f_0b * W.RS1SS2_0b) + (a.f_0B * W.RS1SS2_0B) + 
-      (a.f_ab * W.RS1SS2_ab) + (a.f_AB * W.RS1SS2_AB) + 
-      (a.f_Ab * W.RS1SS2_Ab) + (a.f_aB * W.RS1SS2_aB) 
-    
-    # female, RS1, RS2
-    W.f.RS1RS2 <- (a.f_00 * W.RS1RS2_00) + 
-      (a.f_a0 * W.RS1RS2_a0) + (a.f_A0 * W.RS1RS2_A0) + 
-      (a.f_0b * W.RS1RS2_0b) + (a.f_0B * W.RS1RS2_0B) +
-      (a.f_ab * W.RS1RS2_ab) + (a.f_AB * W.RS1RS2_AB) + 
-      (a.f_Ab * W.RS1RS2_Ab) + (a.f_aB * W.RS1RS2_aB)  
-    
-    # female, RS1, RR2
-    W.f.RS1RR2 <- (a.f_00 * W.RS1RR2_00) + 
-      (a.f_a0 * W.RS1RR2_a0) + (a.f_A0 * W.RS1RR2_A0) + 
-      (a.f_0b * W.RS1RR2_0b) + (a.f_0B * W.RS1RR2_0B) +
-      (a.f_ab * W.RS1RR2_ab) + (a.f_AB * W.RS1RR2_AB) + 
-      (a.f_Ab * W.RS1RR2_Ab) + (a.f_aB * W.RS1RR2_aB)  
-    
-    # female, RR1, SS2
-    W.f.RR1SS2 <- (a.f_00 * W.RR1SS2_00) +
-      (a.f_a0 * W.RR1SS2_a0) + (a.f_A0 * W.RR1SS2_A0) +
-      (a.f_0b * W.RR1SS2_0b) + (a.f_0B * W.RR1SS2_0B) +
-      (a.f_ab * W.RR1SS2_ab) + (a.f_AB * W.RR1SS2_AB) + 
-      (a.f_Ab * W.RR1SS2_Ab) + (a.f_aB * W.RR1SS2_aB) 
-    
-    # female, RR1, RS2
-    W.f.RR1RS2 <- (a.f_00 * W.RR1RS2_00) + 
-      (a.f_a0 * W.RR1RS2_a0) + (a.f_A0 * W.RR1RS2_A0) + 
-      (a.f_0b * W.RR1RS2_0b) + (a.f_0B * W.RR1RS2_0B) + 
-      (a.f_ab * W.RR1RS2_ab) + (a.f_AB * W.RR1RS2_AB) + 
-      (a.f_Ab * W.RR1RS2_Ab) + (a.f_aB * W.RR1RS2_aB) 
-    
-    # female, RR1, RR2
-    W.f.RR1RR2 <- (a.f_00 * W.RR1RR2_00) + 
-      (a.f_a0 * W.RR1RR2_a0) + (a.f_A0 * W.RR1RR2_A0) +
-      (a.f_0b * W.RR1RR2_0b) + (a.f_0B * W.RR1RR2_0B) + 
-      (a.f_ab * W.RR1RR2_ab) + (a.f_AB * W.RR1RR2_AB) + 
-      (a.f_Ab * W.RR1RR2_Ab) + (a.f_aB * W.RR1RR2_aB)
-    
+
     
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 		
     ### Loop to run the model from the initial conditions generated above ####
