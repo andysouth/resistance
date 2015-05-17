@@ -191,7 +191,7 @@ runModel2 <- function(input,
     # Check for errors
     if ( sum(genotype.freq)!=1 ) stop("genotype frequencies don't sum to 1 :",sum(genotype.freq) )		
 
-    
+    #########################
     ## Single locus fitnesses
     
     #h[locusNum, exposure]
@@ -216,8 +216,8 @@ runModel2 <- function(input,
       }
     }
     
-    
-    ## Two genotype fitnesses in two insecticide Niche
+    ##################################################
+    ## Two locus fitnesses in two insecticide Niche
     
     # Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
     # niches can be toggled off, i.e. a fitness can be given for A0
@@ -259,10 +259,8 @@ runModel2 <- function(input,
       }
     }
     
-    
-    # Calculating fitness determining selection 
-    # These are calculated from the individual's fitness by two locus genotype, 
-    # and exposure to niche depending on gender
+    #####################################################################
+    ## Calculating fitness based on 2 locus fitness and exposure to niche
     
     for( sex in dimnames(Windiv)$sex)
     {
@@ -275,10 +273,8 @@ runModel2 <- function(input,
       }
     }
 
-    
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 		
-    ### Loop to run the model from the initial conditions generated above ####
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+    #######################################################
+    ## generation loop to run model from initial conditions 
     
     #browser()
     
@@ -313,8 +309,9 @@ runModel2 <- function(input,
         Windiv[] <- 0.1
       }
       
+      #######################
+      ## genotype frequencies
       
-      # genotype frequencies
       # extracted from genotype frequency matrix generated above from initial value of P (frequency of R allele)
       # set for male and for female: before first round of selection these are the same values
       # frequencies at end of loop are put back into genotype.freq (unless callibration=102)
@@ -331,7 +328,6 @@ runModel2 <- function(input,
       f['m', ] <- genotype.freq[]
       f['f', ] <- genotype.freq[]
       
-      
       #these warnings allow for rounding differences
       if ( !isTRUE( all.equal(1, sum(f['m',])  )))
         warning("Male frequencies before selection total != 1 ", sum(f['m',]) ) 
@@ -345,12 +341,11 @@ runModel2 <- function(input,
       #question is it right that only male frequencies seem to be saved ?
       genotype[k,2:11] <- f['m',]
       
-      
       # Printing Results to matrix 
       results[k,1] <- k #generation number
       
-      # frequency of resistance allele in males
-      #!r refactor frequency of resistance allele calc by seraching for RR1 & RS1 in locus names
+      ##################################
+      ## frequency of resistance alleles
       #todo this can be refactored further
       m.R1 <- sum(f['m',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS1",colnames(f))]))
       m.R2 <- sum(f['m',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS2",colnames(f))]))
@@ -374,8 +369,9 @@ runModel2 <- function(input,
       #stop( (paste("Frequency of R allele at or over 0.5, generation = ", k)) )
       #}				  
       
-      
+      ##########
       ## Gametes
+      
       # Estimated here from before selection frequencies to estimate linkage disequilibrium 
 
       G <- createGametes( f = f, recomb_rate = recomb_rate ) 
@@ -460,7 +456,8 @@ runModel2 <- function(input,
       
       results[k,11] <- r2					# prints to column eleven of results matrix
       
-      ### Frequency following selection ####
+      ############################################
+      ### Frequency of alleles following selection
       
       if(calibration==103){		## no selection calibration
         
@@ -538,8 +535,8 @@ runModel2 <- function(input,
           warning(sex," gamete frequencies total != 1 ", sum(fs[sex,]) )         
       }
 
-      
-      ## Gametes ####
+      ###########
+      ## Gametes2
 
       # Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
       # 1 - both parts of genotype contribute, 
@@ -549,7 +546,7 @@ runModel2 <- function(input,
       #note this uses fs, frequency of genotypes after selection
       G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
       
-      
+      ###################
       ## Random Mating ##
 
       # calculated just for males here
