@@ -66,28 +66,32 @@ sensiAn1 <- function( nScenarios = 10,
 
   #uh-oh1!! seems that my eval bit adds all the args together before putting them in the model.
 
-  
-  #using as.formula like this sorts uh-oh1
-  tree <- rpart::rpart(as.formula(paste("res ~",argString)), data = inputAndResults, method = 'class')  
-  
-  #2 hardcoded args
-  #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = inputAndResults, method = 'class')
-  #4 hardcoded args
-  #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class')
-  
-  #todo look at minsplit more
-  #including susanahs code to reduce branches using minsplit
-  #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class', control=rpart.control(minsplit=50))
-
-  #? do these work within function ?
-  plot(tree) #plots tree
-  text(tree) #labels tree
-  
+  #temporary flag to allow tree to be set on & off
+  doTree <- FALSE
+  if (doTree)
+  {
+    #using as.formula like this sorts uh-oh1
+    tree <- rpart::rpart(as.formula(paste("res ~",argString)), data = inputAndResults, method = 'class')  
     
-  #pruning tree
-#   treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
-#   plot(treePruned) #plots tree
-#   text(treePruned) #labels tree
+    #2 hardcoded args
+    #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = inputAndResults, method = 'class')
+    #4 hardcoded args
+    #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class')
+    
+    #todo look at minsplit more
+    #including susanahs code to reduce branches using minsplit
+    #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B + s.RR1_A0 + s.RR2_0B, data = inputAndResults, method = 'class', control=rpart.control(minsplit=50))
+    
+    #? do these work within function ?
+    plot(tree) #plots tree
+    text(tree) #labels tree
+    
+    #pruning tree
+    #   treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+    #   plot(treePruned) #plots tree
+    #   text(treePruned) #labels tree    
+    
+  }
     
   
   #can just separate out the data that is used in the model
