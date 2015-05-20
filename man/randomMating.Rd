@@ -2,21 +2,22 @@
 % Please edit documentation in R/randomMating.r
 \name{randomMating}
 \alias{randomMating}
-\title{random mating}
+\title{random mating at 2 loci that have either susceptible or resistant alleles}
 \usage{
-randomMating(f, G)
+randomMating(G)
 }
 \arguments{
-\item{f}{array with frequencies of genotypes in popn}
-
 \item{G}{array with frequencies of gametes}
 }
 \value{
-array with frequencies of genotypes
+array with frequencies of genotypes in expanded format
 }
 \description{
 constructs genotypes given gametes
-returns array of genotype frequencies
+returns array of genotype frequencies in expanded format
+i.e. the 16 exhaustive combinations of 2 alleles at 2 loci (2x2x2x2).
+These can be converted to the collapsed 10 genotype format (8+cis&trans for the double heterozygotes),
+by \code{\link{genotypesLong2Short}}
 This is refactored from code in runModel()
 }
 \examples{

@@ -1,30 +1,33 @@
-#' random mating
+#' random mating at 2 loci that have either susceptible or resistant alleles
 #' 
 #' constructs genotypes given gametes
-#' returns array of genotype frequencies
+#' returns array of genotype frequencies in expanded format 
+#' i.e. the 16 exhaustive combinations of 2 alleles at 2 loci (2x2x2x2).
+#' These can be converted to the collapsed 10 genotype format (8+cis&trans for the double heterozygotes), 
+#' by \code{\link{genotypesLong2Short}}
 #' This is refactored from code in runModel()
 #' 
 #' @param G array with frequencies of gametes
 #' 
 #' @examples 
 #' #randomMating() 
-#' @return array with frequencies of genotypes
+#' @return array with frequencies of genotypes in expanded format
 #' @export
 
 randomMating <- function( G)
 {
   
-  
-  #for testing
-#   genotypes <- c( "SS1SS2", "SS1RS2", "SS1RR2", 
-#                   "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
-#                   "RR1SS2", "RR1RS2", "RR1RR2")
-  
+  #create array with named dimensions to hold results
+  #l1a1 : locus1 allele1
+  #l1a2 : locus1 allele2
+  #l2a1 : locus2 allele1
+  #l2a2 : locus2 allele2
   fGenotypeExpanded <- createArray2(l1a1=c('S1','R1'),l1a2=c('S1','R1'),l2a1=c('S2','R2'),l2a2=c('S2','R2'))
-  
   
   counter <- 0
   
+  # m1,2 the male parent derived gamete at locus1 & 2
+  # f1,2 the female parent equivalent  
   for( m2 in c('S2','R2'))
   {
     for( m1 in c('S1','R1'))
@@ -37,18 +40,7 @@ randomMating <- function( G)
           #cat(paste(counter, m1,f1,m2,f2,"\n"))
           #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,"\n"))
           
-          
           fGenotypeExpanded[f1,m1,f2,m2] <- G['m',m1,m2] * G['f',f1,f2]
-          
-          
-          #trying to get from 16 expanded genotypes to 10 contracted
-#           if (m1==m2 && f1==f2) #homozygous at both loci
-#           {
-#             #1:1 between expanded and contracted genotypes
-#           }
-          
-          #to access gametes
-          #G['m',m1,m2] * G['f',f1,f2]
           
           #created genotype frequencies
           #beth just does for males to start
