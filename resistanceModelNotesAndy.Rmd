@@ -1353,14 +1353,416 @@ Then I started to delete some of the old code, and found that it broke some thin
 Particularly this which suggests I need to get into the cis/trans issue soon:
 
 W.bar.m <- Windiv['m']
-W.bar.m <- (f.m.SS1SS2 * W.m.SS1SS2) ...
+W.bar.m <- (f.m.SS1SS2 * W.m.SS1SS2)
 
 revert changes for now and come back to 
  
+**5/5/15** 10.30 - 14 3.5hrs 2.45-6.15 7hrs
+ 
+removed refactored fbn code 
+ 
+sent update email to Ian & Beth 
+
+starting to look at cis/trans
+this is the first place they appear in the generation loop
+```
+# set genotype frequencies as variables
+# from genotype frequency matrix generated above from initial value of P (freq. of R allele)
+# f = frequency before selection
+
+# male
+f.m.SS1SS2 <- genotype.freq[1,]
+f.m.SS1RS2 <- genotype.freq[2,]
+f.m.SS1RR2 <- genotype.freq[3,]
+f.m.RS1SS2 <- genotype.freq[4,]
+f.m.RS1RS2_cis <- genotype.freq[5,]		### cis
+f.m.RS1RS2_trans <- genotype.freq[6,]	### trans
+``` 
+
+How is genotype.freq created ?
+```
+# set up genotype matrix - records frequencies of each of the 9 two locus genotypes each generation
+genotype <- matrix( nrow=max_gen, ncol=11 )
+colnames(genotype) <- c("gen", "SS1SS2", "SS2RS2", "SS1RR2", 
+                        "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+                        "RR1SS2", "RR1RS2", "RR1RR2")
+## make.genotypemat function will use this data and make a matrix of the genotype frequencies
+## frequencies of genotypes before selection - in HW equilibrium and same in male and female
+## needs name of matrix and takes corresponding frequency of resistant allele in function call
+genotype.freq <- make.genotypemat ( P_1, P_2 )
+```
+
+Within make.genotypemat, currently seems that cis & trans are always set to the same ??
+```
+## two forms of RS1RS2
+mat[5,] <- ( loc1[2,]*loc2[2,] ) * 0.5 #cis
+mat[6,] <- ( loc1[2,]*loc2[2,] ) * 0.5 #trans
+
+#this is what genotype.freq looks like
+                      Freq.
+SS1SS2       9.960060e-01
+SS1RS2       1.994006e-03
+SS1RR2       9.980010e-07
+RS1SS2       1.994006e-03
+RS1RS2_cis   1.996002e-06
+RS1RS2_trans 1.996002e-06
+RS1RR2       1.998000e-09
+RR1SS2       9.980010e-07
+RR1RS2       1.998000e-09
+RR1RR2       1.000000e-12
+```
+
+aarg createArray2() fails if you pass named variables to it, e.g. sex=sex rather than sex=c('m','f')
+seems like mget might solve, but :
+mget('sex', inherits=TRUE)
+Error: value for ‘sex’ not found
+
+may be able to use this from SO
+get_args <- function () {
+as.list( match.call(
+    def = sys.function( -1 ),
+    call = sys.call(-1)) )[-1]
+
+}
+
+BUT from the commandLine it does seem to work ??
+```
+> sex2 = c('f','m')
+> createArray2( sex = sex2 )
+sex
+f m 
+0 0 
+```
+Ahhh so someohow it does work if the variable is in the Global environment.
+
+eventually by trial & error found this solution :
+  #fails
+  #dimnames1 <- lapply(listArgs,function(x){eval.parent(x,n=1)})
+  #works
+  #eval.parent(listArgs$sex)
+  #[1] "f" "m"
+  #fails
+  #dimnames1 <- lapply(listArgs,eval.parent)  
+  #works!! n=3 but I'm not sure why !!!
+  dimnames1 <- lapply(listArgs,function(x){eval.parent(x,n=3)}) 
+ 
+ 
+**11/5/15** 1.30-5.45 4.25hrs   
+checking current testthat difference
+changing from `expect_identical` to `expect_equal` sorted it 
+refactoring gamete calculations into createGametes() function 
+ 
+
+**12/5/15** 9.45-14 4.25hrs 2.30-5.45 3.25 7.5hrs
+
+sorting random mating & maybe getting to nub of cis/trans ?
+
+Beths random mating code :
+```
+      f.m.SS1SS2 <- 0
+      f.m.SS1RS2 <- 0
+      f.m.SS1RR2 <- 0
+      
+      f.m.RS1SS2 <- 0
+      f.m.RS1RS2_cis <- 0			#RS1RS2
+      f.m.RS1RS2_trans <- 0		#RS1SR2
+      f.m.RS1RR2 <- 0
+      
+      f.m.RR1SS2 <- 0
+      f.m.RR1RS2 <- 0 
+      f.m.RR1RR2 <- 0
+      
+      # SS male with SS female
+      f.m.SS1SS2 <- f.m.SS1SS2 + ( G.m.S1.S2 * G.f.S1.S2 )
+      # SS male with SR female
+      f.m.SS1RS2 <- f.m.SS1RS2 + ( G.m.S1.S2 * G.f.S1.R2 )
+      # SS male with RS female
+      f.m.RS1SS2 <- f.m.RS1SS2 + ( G.m.S1.S2 * G.f.R1.S2 )
+      # SS male with RR female
+      f.m.RS1RS2_cis <- f.m.RS1RS2_cis + ( G.m.S1.S2 * G.f.R1.R2 )
+      
+      # SR male with SS female
+      f.m.SS1RS2 <- f.m.SS1RS2 + ( G.m.S1.R2 * G.f.S1.S2 )
+      # SR male with SR female
+      f.m.SS1RR2 <- f.m.SS1RR2 + ( G.m.S1.R2 * G.f.S1.R2 )
+      # SR male with RS female
+      f.m.RS1RS2_trans <- f.m.RS1RS2_trans + ( G.m.S1.R2 * G.f.R1.S2 )
+      # SR male with RR female
+      f.m.RS1RR2 <- f.m.RS1RR2 + ( G.m.S1.R2 * G.f.R1.R2 )
+      
+      # RS male with SS female
+      f.m.RS1SS2 <- f.m.RS1SS2 + ( G.m.R1.S2 * G.f.S1.S2 )
+      # RS male with SR female
+      f.m.RS1RS2_trans <- f.m.RS1RS2_trans + ( G.m.R1.S2 * G.f.S1.R2 )
+      # RS male with RS female
+      f.m.RR1SS2 <- f.m.RR1SS2 + ( G.m.R1.S2 * G.f.R1.S2 )
+      # RS male with RR female
+      f.m.RR1RS2 <- f.m.RR1RS2 + ( G.m.R1.S2 * G.f.R1.R2 )
+      
+      # RR male with SS female
+      f.m.RS1RS2_cis <- f.m.RS1RS2_cis + ( G.m.R1.R2 * G.f.S1.S2 ) 
+      # RR male with SR female
+      f.m.RS1RR2 <- f.m.RS1RR2 + ( G.m.R1.R2 * G.f.S1.R2 )
+      # RR male with RS female
+      f.m.RR1RS2 <- f.m.RR1RS2 + ( G.m.R1.R2 * G.f.R1.S2 )
+      # RR male with RR female
+      f.m.RR1RR2 <- f.m.RR1RR2 + ( G.m.R1.R2 * G.f.R1.R2 )
+```
+
+Beth only has 10 combinations (including cis/trans), this is because RS is usually same as SR, and in all the names R goes first.
+```
+genotypes <- c( "SS1SS2", "SS2RS2", "SS1RR2", 
+                "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+                "RR1SS2", "RR1RS2", "RR1RR2")
+```                            
+
+
+for randomMating this loop creates 16 combinations
+including cis/trans
+
+```
+  counter <- 0
+  
+  for( m2 in c('S2','R2'))
+  {
+    for( m1 in c('S1','R1'))
+    {
+      for( f2 in c('S2','R2'))
+      {
+        for( f1 in c('S1','R1'))
+        {
+          counter <- counter+1
+          cat(paste(counter, m1,f1,m2,f2,"\n"))
+        }
+      }
+    }
+  }
+```
+1 S1 S1 S2 S2 
+2 S1 R1 S2 S2 
+3 S1 S1 S2 R2 
+4 S1 R1 S2 R2 
+5 R1 S1 S2 S2 
+6 R1 R1 S2 S2 
+7 R1 S1 S2 R2 
+8 R1 R1 S2 R2 
+9 S1 S1 R2 S2 
+10 S1 R1 R2 S2 
+11 S1 S1 R2 R2 
+12 S1 R1 R2 R2 
+13 R1 S1 R2 S2 
+14 R1 R1 R2 S2 
+15 R1 S1 R2 R2 
+16 R1 R1 R2 R2 
+
+reformat slightly :
+1 SS1 SS2
+2 SR1 SS2
+3 SS1 SR2
+4 SR1 SR2
+5 RS1 SS2
+6 RR1 SS2
+7 RS1 SR2
+8 RR1 SR2
+9 SS1 RS2
+10 SR1 RS2
+11 SS1 RR2
+12 SR1 RR2
+13 RS1 RS2
+14 RR1 RS2
+15 RS1 RR2
+16 RR1 RR2
+
+Perhaps I can do the calculations on these 16 & then aggregate to produce the 10 ?
+
+```
+#these are other ways of creating the 16
+
+#as an array
+arr <- createArray2(loc1all1=c('S','R'),loc1all2=c('S','R'),loc2all1=c('S','R'),loc2all2=c('S','R'))
+
+#as a dataframe
+dF <- expand.grid(loc1all1=c('S','R'),loc1all2=c('S','R'),loc2all1=c('S','R'),loc2all2=c('S','R'))
+> dF
+   loc1all1 loc1all2 loc2all1 loc2all2
+1         S        S        S        S
+2         R        S        S        S
+3         S        R        S        S
+4         R        R        S        S
+5         S        S        R        S
+6         R        S        R        S
+7         S        R        R        S
+8         R        R        R        S
+9         S        S        S        R
+10        R        S        S        R
+11        S        R        S        R
+12        R        R        S        R
+13        S        S        R        R
+14        R        S        R        R
+15        S        R        R        R
+16        R        R        R        R
+
+genotypes <- paste0(dF[,1],dF[,2]," ",dF[,3],dF[,4])
+#[1] "SS SS" "RS SS" "SR SS" "RR SS" "SS RS" "RS RS" "SR RS" "RR RS" "SS SR" "RS SR" "SR SR" "RR SR" "SS RR" "RS RR" "SR RR" "RR RR"
+
+> length(genotypes)
+[1] 16
+
+#or could miss out the space
+
+l1a1 <- substr(genotypes,1,1)
+l1a2 <- substr(genotypes,2,2)
+l2a1 <- substr(genotypes,4,4)
+l2a2 <- substr(genotypes,5,5)
+
+#these are homozygous at both loci and have 1:1 between expanded & contracted genotypes
+which(l1a1==l1a2 & l2a1==l2a2)
+[1]  1  4 13 16
+
+#this gets the cis/trans
+which(!(l1a1==l1a2 | l2a1==l2a2))
+[1]  6  7 10 11
+
+But I might not to be this fancy. If I do all the working in the expanded genotype storage, and then just have a single function to do the conversion ??
+
+genotypesContract()
+or genotypesLong2Short()
+
+```
+ 
+done : convert from the expanded genotype storage to the contracted one. 
+ 
+Beware I do seem to have occasional small difference between runModel & runModel2. I set the random seed so that the difference is consistent.
+
+It now seems only to turn up if I have >20 scenarios.
+ 
+It's not to do with randomMating() or genotypesLong2Short because they are not fully implemented yet.
+
+Failure(@testRefactoring.r#21): refactoring named variables with arrays doesn't change results 
+runModel2(input, produce.plots = FALSE) not equal to runModel(input, produce.plots = FALSE)
+Component "results": Component 25: Mean relative difference: 6.391493e-08
+
+It does show some very small differences, but I suspect they are just rounding errors, e.g. this is how they start out. (and the M,F columns just contain 1 despite showing this difference here)
+
+```
+listOut2$results[[25]] - listOut$results[[25]]
+
+       Gen          m.R1          m.R2          m.LD          f.R1          f.R2          f.LD             M             F
+[1,]   0  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00
+  [2,]   0  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00
+  [3,]   0  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00 -2.220446e-16 -2.220446e-16
+  [4,]   0  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00
+  [5,]   0 -2.168404e-19 -2.168404e-19  0.000000e+00 -2.168404e-19 -2.168404e-19  0.000000e+00 -1.110223e-16 -1.110223e-16
+```
+
+tested that my new W.bar calc works :
+W.bar
+        m         f 
+0.1000036 0.1000036 
+Browse[2]> W.bar.m
+   a.m_00 
+0.1000036 
+Browse[2]> W.bar.f
+   a.f_00 
+0.1000036 
+
+**13/5/15** 10-14 2
+ 
+dealing with cis/trans :
+```
+namesLoci <- c('SS1SS2','SS1RS2','SS1RR2',
+               'RS1SS2','RS1RS2cis','RS1RS2trans','RS1RR2',
+               'RR1SS2','RR1RS2','RR1RR2')
+#or
+namesLoci <- rownames( genotype.freq )
+sex <- c("F","M")
+f <- createArray2( sex=sex, loci=namesLoci )
+#i then may be able to refactor more later
+```
+Plus see randomMating() which uses something like below, and then genotypesLong2Short.r to convert from the expanded genotype format.
+```
+  counter <- 0
+  
+  for( m2 in c('S2','R2'))
+  {
+    for( m1 in c('S1','R1'))
+    {
+      for( f2 in c('S2','R2'))
+      {
+        for( f1 in c('S1','R1'))
+        {
+          counter <- counter+1
+          cat(paste(counter, m1,f1,m2,f2,"\n"))
+        }
+      }
+    }
+  }
+```
+
+deleting old code from runModel2() 
+
+* done to f[m,loci] : sort storage of f.m.RS1RS2_cis
+* done : refactor gamete calculations : G.m.R1.R2 <- G.m.R1.R2 + f.m.RS1RS2_cis ...
+* done : sort calc of W.bar.m from Windiv
+* done : remove reliance on W.m.SS1SS2 etc. (Windiv)
+* done : remove reliance on a.m_00 etc.
+
+So far down from 1590 lines to 685, with only a bit in new functions 
+
+**20/5/15** 11- in liverpool meeting with Beth and train back
+
+New bit from the manuscript by Ian about including sex-linked genes by a bit of trickery.
+
+It is also possible to allow one of the loci to be sex-linked; here we assume that sex linkage is at Locus 1, and ‘conventional’ sex-determination i.e. that the females is hemozygous sex (XX), the male is XY, and that the gene exists only on the X chromosome. This option is important as Anopheles gambiae has only 2 autosomes and one sex chromosome; approximately ??% of the genes are on the X in this species.
+
+The female genotype frequencies are as given on Table S1 and as described in Equation 4 and Equation 5  because females have two copies of the X chromosome. Locus 1 is homozygous in the male so heterozygotes are impossible at this locus; in this case the allele inherited by males at locus 1  is the maternal-derived one (because they get their X chromosome from their mother and the Y from the father). Hence the male genotypes can be derived by a process similar to that of females and autosomes as shown on Table S2. The males will be simulated  as “RR” or “SS” at the locus even though, in reality” they will be either “R-“ or “S-“. An inherent assumption is therefore that the hemizgous males “R-“ and “S-“ have the same fitness as the equivalent “RR” and “SS” females; this seems reasonable given dosage compensation and is an assumption commonly made.
+
+The male “diploid” genotypes are derived by a similar process to that above and the genotypes are as given on Table S2. The calculation become slightly more complicated to those given above but the same process occurs i.e. Equation 4 becomes
+
+Equation 6
+
+The next genotype can be produced by two combinations so Equation 5 becomes
+
+Equation 7 ...
+
+IH thinks this short-cut will work because selection will be OK, and the males will also correctly pass on their maternal X-linked allele (Table 4). We need to discuss this.
+
+It just means we need edit the code slightly. i.e. calculate the female genotypes then if locus 1 in autosomal just set the male frequencies equal to the females (as we do already), else re-calculate the male frequencies according to Table S2.
+
+end of bit from manuscript
+I think this is the important part for implementation :
+
+we assume that sex linkage is at Locus 1, females XX, the male XY, 
+and that the gene exists only on the X chromosome. 
+
+If sex-linked Locus 1 is homozygous in the male so heterozygotes are impossible at this locus 
+the allele inherited by males at locus 1 is the maternal-derived one 
+(because they get their X chromosome from their mother and the Y from the father). 
+males will be simulated  as RR or SS at the locus even though, in reality they will be either R- or S-
+
+
+I think this change needs to be made in the randomMating() function.
+Currently i think randomMating() doesn't differentiate between the sex of the offspring.
+
+Does sex linkage have further implications in terms of the generation of gametes ? maybe not 
  
  
 ### TO DO  
 
+1. try to stop man pages being tracked by git, thy ar already in git ignore but I think I may need to do git delete or something delete them from the repo to stop git from tracking them
+1. further develop sex-linkage in randomMating(), allow option to be passed as arg, plus may need to look at calculating genotypes of both m&f in runModel2()
+
+Remember.
+It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
+
+Good simple test
+```
+input <- setInputOneScenario(max_gen=5)
+tst2 <- runModel2(input)
+tst <- runModel(input)
+```
+
+1. submit stackoverflow question about createArray2(), including about n=3 in eval.parent
 1. what to call createArray2() ? maybe namedArray, or arrayNamed() ? could even put back in the option to pass the fill value ? submit to stackoverflow ?
 
 1. is there a way I can easily run single & combined deployments for the same scenario ?
@@ -1371,8 +1773,8 @@ revert changes for now and come back to
 * or ask Beth to send me the input.csv used to produce tables 8 & 9 in 'Brief_full-genotype-tables.pdf'
 * maybe comparing the files in full-dom_CD.csv & SD in C:\Dropbox\Levick et al IR manuscript will help me.
 
-1. before May 15th move Spark and Glimmer shiny apps
-1. I should have included unit testing on my CV
+
+1. I should include unit testing on my CV
 
 1. go through the paper and check which bits relate to which in the code. Maybe create a table ? Could I create the table from R ? but actually much of the functionality is still in runModel() and needs to be put into functions.
 
@@ -1418,10 +1820,6 @@ fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
 
 
 
-
-
-
-
 ### variable naming conventions
 **SS1, RS1, RR1** homozygous susceptible, heterozygous or homozygous resistant genotypes at each locus.   
 With 2 loci there are ten possible genotypes (including cis & trans forms of the double heterozygous).  
@@ -1454,7 +1852,7 @@ rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2",
 Different W fitness variables
 `W.RR1_00 : [locus, niche1, niche2]` single locus (Wloci)
 `W.RR1SS2_0b :   [locus1, locus2, niche1, niche2]` niche (Wniche)
-`W.m.SS1SS2 : [sex, locus1, locus2]` sex (Windiv)
+`W.m.SS1SS2 : [sex, locus1, locus2]` (Windiv)
 
 
 ### refactoring, what I have done
@@ -1479,8 +1877,9 @@ Want to do:
 1. rename W to ?fitness : fitnessLocus, fitnessNiche and fitnessIndiv
 
 
-Question.
-What if `a.m_A0 > 0` but `niche_A0 == 0` ?
+Questions.
+1. check on calibration 104
+1. What if `a.m_A0 > 0` but `niche_A0 == 0` ?
 The ifelse clauses allow niches to be toggled on/off, i.e. a fitness can be given for A0
 but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
 
