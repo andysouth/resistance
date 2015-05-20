@@ -10,7 +10,14 @@
 #' @param G array with frequencies of gametes
 #' 
 #' @examples 
-#' #randomMating() 
+#' namesLoci <- c( "SS1SS2", "SS1RS2", "SS1RR2", 
+#'                 "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+#'                 "RR1SS2", "RR1RS2", "RR1RR2")
+#' sex2 <- c("m","f")
+#' #f  = genotype frequencies before selection
+#' f <- createArray2( sex=sex2, loci=namesLoci )
+#' G <- createGametes( f = f, recomb_rate = 0.5 )
+#' fGenotypeExpanded <- randomMating(G) 
 #' @return array with frequencies of genotypes in expanded format
 #' @export
 
@@ -43,8 +50,23 @@ randomMating <- function( G)
           fGenotypeExpanded[f1,m1,f2,m2] <- G['m',m1,m2] * G['f',f1,f2]
           
           #created genotype frequencies
-          #beth just does for males to start
-          #f['m',]
+          #beth just does for males and copies to females because they were the same
+          
+          #starting to think about how to add sex linkage
+          #If sex-linked Locus 1 is homozygous in the male so heterozygotes are impossible at this locus 
+          #the allele inherited by males at locus 1 is the maternal-derived one 
+          #(because they get their X chromosome from their mother and the Y from the father). 
+          #males will be simulated as RR or SS at the locus even though, in reality they will be either R- or S-
+          sexLinked <- TRUE
+          isMale <- TRUE
+          if (sexLinked & isMale)
+          {
+            #one simple way of coding
+            #not the fastest but keeps code volume low
+            #heterozygotes at locus1 are impossible so set to 0
+            if(f1!=m1)
+              fGenotypeExpanded[f1,m1,f2,m2] <- 0
+          }
         }
       }
     }

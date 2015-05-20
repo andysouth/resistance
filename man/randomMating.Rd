@@ -21,6 +21,13 @@ by \code{\link{genotypesLong2Short}}
 This is refactored from code in runModel()
 }
 \examples{
-#randomMating()
+namesLoci <- c( "SS1SS2", "SS1RS2", "SS1RR2",
+                "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
+                "RR1SS2", "RR1RS2", "RR1RR2")
+sex2 <- c("m","f")
+#f  = genotype frequencies before selection
+f <- createArray2( sex=sex2, loci=namesLoci )
+G <- createGametes( f = f, recomb_rate = 0.5 )
+fGenotypeExpanded <- randomMating(G)
 }
 
