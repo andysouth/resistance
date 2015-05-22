@@ -282,18 +282,15 @@ runModel2 <- function(input,
       
       # In calibration 1011, between generations 5 and 12 selection is relaxed
       # fitnesses use relaxed selection fitnesses calculated above
-      if( calibration == 1011 & i==2 ){
-        relax <- TRUE
-      }else{
-        relax <- FALSE
-      }
+      if( calibration == 1011 & i==2 ) relax <- TRUE
+      else relax <- FALSE
       
-      if( relax == TRUE & (2<k) & (k<12)){
+      if( relax & (2<k) & (k<12)){
         
         # relaxed selection fitnesses
         Windiv[] <- 0.1
         
-      } else if( relax == TRUE & (k>11) & (k<15)){
+      } else if( relax & (k>11) & (k<15)){
         
         # non relaxed fitnesses
         Windiv[] <- 0.1
@@ -303,7 +300,7 @@ runModel2 <- function(input,
         Windiv[,'RR1','RS2'] <- 1
         Windiv[,'RR1','RR2'] <- 1
         
-      } else if( relax == TRUE & (k>14) ){
+      } else if( relax & (k>14) ){
         
         # relaxed selection fitnesses
         Windiv[] <- 0.1
