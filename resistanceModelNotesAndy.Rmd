@@ -1709,7 +1709,7 @@ deleting old code from runModel2()
 
 So far down from 1590 lines to 685, with only a bit in new functions 
 
-**20/5/15** 11- in liverpool meeting with Beth and train back
+**20/5/15** 11-4 in liverpool meeting with Beth and train back
 
 New bit from the manuscript by Ian about including sex-linked genes by a bit of trickery.
 
@@ -1746,10 +1746,44 @@ Currently i think randomMating() doesn't differentiate between the sex of the of
 
 Does sex linkage have further implications in terms of the generation of gametes ? maybe not 
  
+**22/5/15**
+To stop things being tracked by git that you have just added to gitignore
+```
+git rm --cached `git ls-files -i -X .gitignore` 
+``` 
+Then I just did commit from RStudio.
+
+1. somehow I've broken the check
+Failure(@testRefactoring.r#12): refactoring named variables with arrays doesn't change results 
+runModel2(input, produce.plots = FALSE) not equal to runModel(input, produce.plots = FALSE)
+Component "results": Component 1: 'is.NA' value mismatch: 186 in current 0 in target
+Its because of Warning messages like this:
+1: In runModel2(input) : Male frequencies before selection total != 1 0.997966163681722
+
+Perhaps I need to make the checks less sensitive ??
+Is it because I re-enabled checks that had been disabled by Beth ?
+I reduced the tolerance in checks, runs OK, but tests still fail.
+
+Points to some difference having crept in ...
+
+difference is in 
+genotype outputs in generations after 1
+all those starting with RS1
+
+to do with object genotype ....
+Aha! problems were due to my new sex-linked changes that were operating without me realising.
+So I should probaly remove the tolerances I put in. and work out how to reassign the impossible genotype freqs.
+ 
  
 ### TO DO  
 
-1. try to stop man pages being tracked by git, thy ar already in git ignore but I think I may need to do git delete or something delete them from the repo to stop git from tracking them
+1. check on implementation of sexLinkage in randomMating()
+
+
+
+
+1. think I can remove genotype.freq it is the same as f['m',], I might want to create an fstart[] outside of the generations loop. This was prompted because previously genotype.freq was the same for males and females and it adds an unecessary extra layer of potential confusion
+
 1. further develop sex-linkage in randomMating(), allow option to be passed as arg, plus may need to look at calculating genotypes of both m&f in runModel2()
 
 Remember.
