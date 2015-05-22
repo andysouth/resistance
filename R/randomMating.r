@@ -8,6 +8,8 @@
 #' This is refactored from code in runModel()
 #' 
 #' @param G array with frequencies of gametes
+#' @param sexLinked, whether sex linked
+#' @param isMale whether male for sex linkage
 #' 
 #' @examples 
 #' namesLoci <- c( "SS1SS2", "SS1RS2", "SS1RR2", 
@@ -21,7 +23,9 @@
 #' @return array with frequencies of genotypes in expanded format
 #' @export
 
-randomMating <- function( G)
+randomMating <- function( G,
+                          sexLinked = FALSE,
+                          isMale = FALSE)
 {
   
   #create array with named dimensions to hold results
@@ -47,26 +51,40 @@ randomMating <- function( G)
           #cat(paste(counter, m1,f1,m2,f2,"\n"))
           #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,"\n"))
           
-          fGenotypeExpanded[f1,m1,f2,m2] <- G['m',m1,m2] * G['f',f1,f2]
+          fThisGenotype <- G['m',m1,m2] * G['f',f1,f2]
+          
+          if (sexLinked & isMale)
+          {
+            #one simple way of coding
+            #not the fastest but keeps code volume low
+            #heterozygotes at locus1 are impossible so set to 0
+            #and add to the freq
+            if(f1!=m1)
+            {
+              fGenotypeExpanded[f1,m1,f2,m2] <- 0
+              #todo !!check this works
+              #add to the homozygotes
+              fGenotypeExpanded[f1,f1,f2,m2] <- fGenotypeExpanded[f1,f1,f2,m2] + fThisGenotype
+              
+            }
+
+          } else
+            #if no sex linkage or not a male offspring
+          {
+            fGenotypeExpanded[f1,m1,f2,m2] <- fThisGenotype            
+          }
+          
+
           
           #created genotype frequencies
-          #beth just does for males and copies to females because they were the same
+          #beth did for males only and copied to females because they were the same
           
           #starting to think about how to add sex linkage
           #If sex-linked Locus 1 is homozygous in the male so heterozygotes are impossible at this locus 
           #the allele inherited by males at locus 1 is the maternal-derived one 
           #(because they get their X chromosome from their mother and the Y from the father). 
           #males will be simulated as RR or SS at the locus even though, in reality they will be either R- or S-
-          sexLinked <- TRUE
-          isMale <- TRUE
-          if (sexLinked & isMale)
-          {
-            #one simple way of coding
-            #not the fastest but keeps code volume low
-            #heterozygotes at locus1 are impossible so set to 0
-            if(f1!=m1)
-              fGenotypeExpanded[f1,m1,f2,m2] <- 0
-          }
+
         }
       }
     }
