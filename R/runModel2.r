@@ -319,11 +319,12 @@ runModel2 <- function(input,
       # fs = genotype frequencies after selection
       f <- createArray2( sex=sex2, loci=namesLoci )
       fs <- createArray2( sex=sex2, loci=namesLoci )      
-      #f['m', ] <- genotype.freq[,]
+
       #? todo can I assume that the loci will be in the same order because I've derived the names the same ? 
       #if not may be able to use positions of rownames(genotype.freq) in colnames(f)
       f['m', ] <- genotype.freq[]
       f['f', ] <- genotype.freq[]
+      
       
       #these warnings allow for rounding differences
       if ( !isTRUE( all.equal(1, sum(f['m',])  )))
@@ -370,49 +371,33 @@ runModel2 <- function(input,
       ## Gametes
       
       # Estimated here from before selection frequencies to estimate linkage disequilibrium 
-
       G <- createGametes( f = f, recomb_rate = recomb_rate ) 
       
-      
-      ### Linkage Disequilibrium ####
-      ## Disequibilibrium of resistant allele in gametes ##
+      ## Linkage Disequilibrium of resistant allele in gametes
       # Male
-      ## Frequency of allele patterns
-      #!r
+      # Frequency of allele patterns
       x.R1.S2 <- G['m','R1','S2']/2
       x.S1.R2 <- G['m','R1','S2']/2
       x.R1.R2 <- G['m','R1','R2']
-#       x.R1.S2 <- G.m.R1.S2/2
-#       x.S1.R2 <- G.m.R1.S2/2
-#       x.R1.R2 <- G.m.R1.R2
       
-      ## Frequency of alleles at each locus
+      # Frequency of alleles at each locus
       R1 <- x.R1.S2 + x.R1.R2		# frequency of R allele at locus 1
       R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2
-      
       m.D <- x.R1.R2 - (R1 * R2)
       
       # Female
-      ## Frequency of allele patterns
-      #!r
+      # Frequency of allele patterns
       x.R1.S2 <- G['f','R1','S2']/2
       x.S1.R2 <- G['f','R1','S2']/2
       x.R1.R2 <- G['f','R1','R2']
-#       x.R1.S2 <- G.f.R1.S2/2
-#       x.S1.R2 <- G.f.R1.S2/2
-#       x.R1.R2<- G.f.R1.R2
-      
-      
-      ## Frequency of alleles at each locus
+
+      # Frequency of alleles at each locus
       R1 <- x.R1.S2 + x.R1.R2		# frequency of R allele at locus 1
       R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2
-      
       f.D <- x.R1.R2 - (R1 * R2)
       
-      # print to results matrix
-      # linkage disequilibrium
+      # print linkage disequilibrium to results matrix
       results[k,4] <- m.D
-      # linkage disequilibrium
       results[k,7] <- f.D
       
       # Finding D'
@@ -452,6 +437,7 @@ runModel2 <- function(input,
       r2 <- D/denom						# use this and D to find r2
       
       results[k,11] <- r2					# prints to column eleven of results matrix
+      
       
       ############################################
       ### Frequency of alleles following selection
