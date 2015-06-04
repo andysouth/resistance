@@ -18,8 +18,13 @@
 #' sex2 <- c("m","f")
 #' #f  = genotype frequencies before selection
 #' f <- createArray2( sex=sex2, loci=namesLoci )
+#' #assign all of both parents to one genotype for convenience
+#' f['m','RS1RS2_trans'] <- 1
+#' f['f','RS1RS2_trans'] <- 1
 #' G <- createGametes( f = f, recomb_rate = 0.5 )
 #' fGenotypeExpanded <- randomMating(G) 
+#' #and for sex linked
+#' fGenotypeExpanded2 <- randomMating(G, sexLinked=TRUE, isMale=TRUE) 
 #' @return array with frequencies of genotypes in expanded format
 #' @export
 
@@ -35,60 +40,87 @@ randomMating <- function( G,
   #l2a2 : locus2 allele2
   fGenotypeExpanded <- createArray2(l1a1=c('S1','R1'),l1a2=c('S1','R1'),l2a1=c('S2','R2'),l2a2=c('S2','R2'))
   
+  
+  #created genotype frequencies
+  #beth did for males only and copied to females because they were the same
+  
+  #If sex-linked Locus 1 is homozygous in the male so heterozygotes are impossible at this locus 
+  #the allele inherited by males at locus 1 is the maternal-derived one 
+  #(because they get their X chromosome from their mother and the Y from the father). 
+  #males will be simulated as RR or SS at the locus even though, in reality they will be either R- or S-
+  
+  
   counter <- 0
   
-  # m1,2 the male parent derived gamete at locus1 & 2
-  # f1,2 the female parent equivalent  
-  for( m2 in c('S2','R2'))
+  #the simple non sex linked case
+  if (!sexLinked | !isMale)
   {
-    for( m1 in c('S1','R1'))
+    # m1,2 the male parent derived gamete at locus1 & 2
+    # f1,2 the female parent equivalent  
+    for( m2 in c('S2','R2'))
     {
-      for( f2 in c('S2','R2'))
+      for( m1 in c('S1','R1'))
       {
-        for( f1 in c('S1','R1'))
+        for( f2 in c('S2','R2'))
         {
-          counter <- counter+1
-          #cat(paste(counter, m1,f1,m2,f2,"\n"))
-          #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,"\n"))
-          
-          fThisGenotype <- G['m',m1,m2] * G['f',f1,f2]
-          
-          if (sexLinked & isMale)
+          for( f1 in c('S1','R1'))
           {
-            #one simple way of coding
-            #not the fastest but keeps code volume low
-            #heterozygotes at locus1 are impossible so set to 0
-            #and add to the freq
-            if(f1!=m1)
-            {
-              fGenotypeExpanded[f1,m1,f2,m2] <- 0
-              #todo !!check this works
-              #add to the homozygotes
-              fGenotypeExpanded[f1,f1,f2,m2] <- fGenotypeExpanded[f1,f1,f2,m2] + fThisGenotype
-              
-            }
-
-          } else
-            #if no sex linkage or not a male offspring
-          {
-            fGenotypeExpanded[f1,m1,f2,m2] <- fThisGenotype            
+            counter <- counter+1
+            #cat(paste(counter, m1,f1,m2,f2,"\n"))
+            #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,"\n"))
+            
+            fGenotypeExpanded[f1,m1,f2,m2] <- G['m',m1,m2] * G['f',f1,f2]
           }
-          
-
-          
-          #created genotype frequencies
-          #beth did for males only and copied to females because they were the same
-          
-          #starting to think about how to add sex linkage
-          #If sex-linked Locus 1 is homozygous in the male so heterozygotes are impossible at this locus 
-          #the allele inherited by males at locus 1 is the maternal-derived one 
-          #(because they get their X chromosome from their mother and the Y from the father). 
-          #males will be simulated as RR or SS at the locus even though, in reality they will be either R- or S-
-
         }
       }
-    }
+    }    
+  } else #i.e. if is sexLinked and male offspring
+  {
+    # m1,2 the male parent derived gamete at locus1 & 2
+    # f1,2 the female parent equivalent  
+    for( m2 in c('S2','R2'))
+    {
+      for( m1 in c('S1','R1'))
+      {
+        for( f2 in c('S2','R2'))
+        {
+          for( f1 in c('S1','R1'))
+          {
+            counter <- counter+1
+            #cat(paste(counter, m1,f1,m2,f2,"\n"))
+            #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,"\n"))
+            
+            fThisGenotype <- G['m',m1,m2] * G['f',f1,f2]
+            
+            #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,": ",signif(fThisGenotype),"\n"))
+            #cat(paste0(counter," ",substr(m1,1,1),f1," ",substr(m2,1,1),f2,": ",signif(fThisGenotype),"   "))
+            
+            #BEWARE the logic here is quite tricky
+            #but the warning at the end does now confirm that it works
+            
+            #heterozygotes at locus1 are impossible so add to the homozygotes instead
+            if(f1!=m1)
+            {
+              #add to the homozygotes : f1,f1
+              fGenotypeExpanded[f1,f1,f2,m2] <- fGenotypeExpanded[f1,f1,f2,m2] + fThisGenotype
+              #cat(paste0("add to ",f1,f1,f2,m2,"\n"))
+            } else #i.e. if not heterozygous at locus 1
+            {
+              #just add to this genotype
+              #have to add rather than set in case this is a homozygote that has already been added to by previous condition
+              fGenotypeExpanded[f1,m1,f2,m2] <- fGenotypeExpanded[f1,m1,f2,m2] + fThisGenotype
+              #cat(paste0("set    ",f1,m1,f2,m2,"\n"))
+            }
+          }
+        }
+      }
+    }    
+      
   }
+  
+#allow for rounding differences in the warning
+if ( !isTRUE( all.equal(1, sum(fGenotypeExpanded)  )))
+  warning("genotype frequencies after random mating don't sum to 1 ", sum(fGenotypeExpanded) ) 
   
 return( fGenotypeExpanded )
   
