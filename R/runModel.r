@@ -1,6 +1,8 @@
-#' run the model scenarios specified in the input object
+#' DEPRECATED run the model scenarios specified in the input object
 #' 
-#' run model scenarios and put the results for each in a results object
+#' this has been replaced by \code{\link{runModel2}} in which code has been moved to helper functions and 
+#' data structures have been converted to arrays. A test in the testthat folder checks that the two functions continue
+#' to generate the same results. This does not cope with sex linkage \code{\link{runModel2}} does.
 #' 
 #' @param input a matrix with parameters in rows and scenarios in columns
 #' @param calibration one of a limited set of integers effecting how scenarios are run
