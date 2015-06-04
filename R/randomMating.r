@@ -106,7 +106,7 @@ randomMating <- function( G,
               #cat(paste0("add to ",f1,f1,f2,m2,"\n"))
             } else #i.e. if not heterozygous at locus 1
             {
-              #just add to this genotype
+              #just add to this genotype : f1,m2
               #have to add rather than set in case this is a homozygote that has already been added to by previous condition
               fGenotypeExpanded[f1,m1,f2,m2] <- fGenotypeExpanded[f1,m1,f2,m2] + fThisGenotype
               #cat(paste0("set    ",f1,m1,f2,m2,"\n"))
