@@ -41,7 +41,7 @@ resistSimple <- function(...)
   # Run Model 
   # creates listOut$results, listOut$genotype & listOut$fitness
   # set produce.plots = FALSE so I can just have one plot later
-  listOut <- runModel( input, produce.plots = FALSE )
+  listOut <- runModel2( input, produce.plots = FALSE )
   
   # Plot R and S allele frequencies over generations by M&F
   genplot <- plotallele.freq.andy( listOut$results[[1]] ) 
