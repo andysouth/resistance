@@ -57,6 +57,7 @@
 #' @param niche_AB insecticide niche toggle hi1 hi2 0=off 1=on
 #' @param niche_Ab insecticide niche toggle hi1 lo2 0=off 1=on
 #' @param niche_aB insecticide niche toggle lo1 hi2 0=off 1=on
+#' @param sexLinked whether resistance is sex linked, default=0(FALSE)
 #' 
 #' @return named vector
 #' @export
@@ -112,11 +113,12 @@ setInputOneScenario <- function( calibration = 100,
                                  niche_ab	=	0	,
                                  niche_AB	=	1	,
                                  niche_Ab	=	0	,
-                                 niche_aB	=	0
+                                 niche_aB	=	0 ,
+                                 sexLinked = 0
                                  )
 {
   
-  input <- matrix( ncol=1, nrow=52 )
+  input <- matrix( ncol=1, nrow=53 )
   
   input[1] <- calibration
   input[2] <- max_gen
@@ -171,7 +173,8 @@ setInputOneScenario <- function( calibration = 100,
   input[	51	] <-	niche_Ab
   input[	52	] <-	niche_aB
   
-  
+  input[	53	] <-	sexLinked
+    
   a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
   if ( a.m != 1 ){		 
   	stop("male exposures must total one, currently: ", a.m )

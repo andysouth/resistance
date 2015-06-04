@@ -13,6 +13,9 @@
 #' tst <- runModel2(input)
 #' input <- setInputOneScenario(max_gen=5)
 #' tst <- runModel2(input)
+#' #sex linked
+#' input <- setInputOneScenario(sexLinked=1)
+#' tst <- runModel2(input) 
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
@@ -162,6 +165,13 @@ runModel2 <- function(input,
     niche['A','B'] <- input[50,i]
     niche['A','b'] <- input[51,i]
     niche['a','B'] <- input[52,i]
+    
+    #andy to read new sexLinked parameter, if not present set to FALSE
+    sexLinked <- FALSE
+    if (nrow(input) > 52)
+      sexLinked <- as.logical(input[53,i]) #0 to FALSE, 1 to TRUE 
+    
+    
     
     #### end of reading inputs into parameters
     
@@ -536,7 +546,7 @@ runModel2 <- function(input,
       # copied to females when frequencies generated at start of loop
 
       # initially by calculating 'expanded' genotypes which I can convert back later
-      fGenotypeExpanded <- randomMating(G)
+      fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked)
       
       f['m',] <- genotypesLong2Short(fGenotypeExpanded)
       

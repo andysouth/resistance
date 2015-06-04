@@ -1,4 +1,4 @@
-#' create input parameters matrix
+#' create input parameters matrix from a file or hardcoded scenarios
 #' 
 #' Creates a matrix with parameters in rows and scenarios in columns.  
 #' Either from a csv file or hardcoded scenarios set by the calibration argument.
@@ -7,6 +7,8 @@
 #' @param inFile parameters filename
 #' @param calibration one of a limited set of integers effecting how scenarios are run 
 #' @param save.fitvals whether to save fitness scores to csv 0=no, 1=yes 
+#' 
+#' @seealso \code{\link{setInputOneScenario}} and \code{\link{setInputSensiScenarios}} for creating input objects from passed arguments
 #' 
 #' @return matrix
 #' @export
@@ -36,7 +38,7 @@ createInputMatrix <- function(params.csv,
   ## Scenario 1 Calibration 1011 - Fig 1 Curtis ####
   if( !params.csv && calibration == 1011 ){  
     
-    input <- matrix( ncol=2, nrow=52 )
+    input <- matrix( ncol=2, nrow=53 )
     
     input[1,1] <- calibration   # calibration a code to run specific set of scenarios
     input[2,1] <- 18            # max_gen number of generations
@@ -99,6 +101,7 @@ createInputMatrix <- function(params.csv,
     input[51,1] <- 0  # niche_Ab insecticide niche toggle hi1 lo2 0=off 1=on
     input[52,1] <- 0  # niche_aB insecticide niche toggle lo1 hi2 0=off 1=on
  
+    input[53,1] <- 0  # sexLinked 0=FALSE 1=TRUE
     
     #a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
     #if ( a.m != 1 ){		 
@@ -116,7 +119,7 @@ createInputMatrix <- function(params.csv,
   
   # Calibration 1012 - Fig 2 Curtis: Sequential (B,A) and then combination treatments
   if( !params.csv && calibration == 1012 ){
-    input <- matrix( ncol=3, nrow=52 )
+    input <- matrix( ncol=3, nrow=53 )
     colnames(input) <- c("B (HCH)", "A (DDT)","Combination")
     ### Sequential Treatment 
     ## Column 1 - Scenario 1, Insecticide B (Dieldrin)
@@ -257,6 +260,9 @@ createInputMatrix <- function(params.csv,
     input[51,1] <- 0
     input[52,1] <- 0
     
+    input[53,1] <- 0  # sexLinked 0=FALSE 1=TRUE
+    
+    
     ## Scenario 2 - Insecticide A (DDT) ####
     input[1,2] <- calibration
     
@@ -394,6 +400,8 @@ createInputMatrix <- function(params.csv,
     
     input[51,2] <- 0
     input[52,2] <- 0
+    
+    input[53,1] <- 0  # sexLinked 0=FALSE 1=TRUE
     
     ### Scenario 3 Combination Treatment ####
     input[1,3] <- calibration
@@ -533,6 +541,8 @@ createInputMatrix <- function(params.csv,
     
     input[51,3] <- 0
     input[52,3] <- 0
+    
+    input[53,1] <- 0  # sexLinked 0=FALSE 1=TRUE
   }
   
   if( !params.csv ){
@@ -547,7 +557,7 @@ createInputMatrix <- function(params.csv,
                           "Dominance coefficient L1 in a,-","Dominance coefficient L1 in A,-","Dominance coefficient L2 in -,-","Dominance coefficient L2 in -,b",           
                           "Dominance coefficient L2 in -,B","Selection coefficient L1 in a","Selection coefficient L1 in A","Selection coefficient L2 in b",            
                           "Selection coefficient L2 in B","Fitness cost of R at L1 in -,-","Fitness cost of R at L2 in -,-","Niche -,- on (1/0)",                       
-                          "Niche a,- on","Niche A,- on","Niche -,b on","Niche -,B on","Niche a,b on","Niche A,B on","Niche A,b on","Niche a,B on" )
+                          "Niche a,- on","Niche A,- on","Niche -,b on","Niche -,B on","Niche a,b on","Niche A,B on","Niche A,b on","Niche a,B on","sexLinked" )
   }
   
   
