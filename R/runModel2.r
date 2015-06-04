@@ -193,13 +193,36 @@ runModel2 <- function(input,
     colnames(genotype) <- c("gen", "SS1SS2", "SS1RS2", "SS1RR2", 
                             "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                             "RR1SS2", "RR1RS2", "RR1RR2")
-    # make.genotypemat function will use this data and make a matrix of the genotype frequencies
-    # frequencies of genotypes before selection - in HW equilibrium and same in male and female
-    # needs name of matrix and takes corresponding frequency of resistant allele in function call
+    
+    #######################
+    ## genotype frequencies
+    
+    # set for male and for female: before first round of selection these are the same values
+    # frequencies at end of loop are recycled (unless callibration=102)
+    
+    # make.genotypemat function makes a matrix of the genotype frequencies
+    # frequencies of genotypes before selection - in HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
     
-    # Check for errors
-    if ( sum(genotype.freq)!=1 ) stop("genotype frequencies don't sum to 1 :",sum(genotype.freq) )		
+    namesLoci <- rownames( genotype.freq )
+    sex2 <- c("m","f")
+    # f  = genotype frequencies before selection
+    # fs = genotype frequencies after selection
+    f <- createArray2( sex=sex2, loci=namesLoci )
+    fs <- createArray2( sex=sex2, loci=namesLoci )      
+    
+    #setting genotype freq at start to same for m & f 
+    f['m', ] <- genotype.freq[]
+    f['f', ] <- genotype.freq[]
+    
+    
+    #these warnings allow for rounding differences
+    if ( !isTRUE( all.equal(1, sum(f['m',])  )))
+      warning("Male frequencies before selection total != 1 ", sum(f['m',]) ) 
+    if ( !isTRUE( all.equal(1, sum(f['f',])  )))
+      warning("Female frequencies before selection total != 1 ", sum(f['f',]) )  
+    
+    
 
     #########################
     ## Single locus fitnesses
@@ -315,33 +338,8 @@ runModel2 <- function(input,
         # relaxed selection fitnesses
         Windiv[] <- 0.1
       }
-      
-      #######################
-      ## genotype frequencies
-      
-      # extracted from genotype frequency matrix generated above from initial value of P (frequency of R allele)
-      # set for male and for female: before first round of selection these are the same values
-      # frequencies at end of loop are put back into genotype.freq (unless callibration=102)
-      
-      namesLoci <- rownames( genotype.freq )
-      sex2 <- c("m","f")
-      # f  = genotype frequencies before selection
-      # fs = genotype frequencies after selection
-      f <- createArray2( sex=sex2, loci=namesLoci )
-      fs <- createArray2( sex=sex2, loci=namesLoci )      
 
-      #? todo can I assume that the loci will be in the same order because I've derived the names the same ? 
-      #if not may be able to use positions of rownames(genotype.freq) in colnames(f)
-      f['m', ] <- genotype.freq[]
-      f['f', ] <- genotype.freq[]
-      
-      
-      #these warnings allow for rounding differences
-      if ( !isTRUE( all.equal(1, sum(f['m',])  )))
-        warning("Male frequencies before selection total != 1 ", sum(f['m',]) ) 
-      if ( !isTRUE( all.equal(1, sum(f['f',])  )))
-        warning("Female frequencies before selection total != 1 ", sum(f['f',]) )        
-
+      #genotype frequency code that was here has been moved to before the loop start
       
       ### Prints record of genotype proportions each generation
       genotype[k,1] <- k	
@@ -525,7 +523,7 @@ runModel2 <- function(input,
       for(sex in c('m','f'))
       {
         if ( !isTRUE( all.equal(1, sum(fs[sex,])  )))
-          warning(sex," gamete frequencies total != 1 ", sum(fs[sex,]) )         
+          warning(sex," genotype frequencies after selection total != 1 ", sum(fs[sex,]) )         
       }
 
       ###########
@@ -542,34 +540,29 @@ runModel2 <- function(input,
       ###################
       ## Random Mating ##
 
-      # calculated just for males here
-      # copied to females when frequencies generated at start of loop
-
-      # initially by calculating 'expanded' genotypes which I can convert back later
-      fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked)
+      # males & females will only be different if sexLinked=TRUE
       
+      # males
+      # initially by calculating 'expanded' genotypes
+      fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=TRUE)
       f['m',] <- genotypesLong2Short(fGenotypeExpanded)
       
-      #print( paste( "Genotype totals after mating = ", sum(f['m',]) ) )
+      # females
+      fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=FALSE)
+      f['f',] <- genotypesLong2Short(fGenotypeExpanded)      
       
       
-      ## Puts frequencies back into genotype frequency matrix to restart the loop
+      #these warnings allow for rounding differences
+      if ( !isTRUE( all.equal(1, sum(f['m',])  )))
+        warning("Male genotype frequencies generation",k,", total != 1 ", sum(f['m',]) ) 
+      if ( !isTRUE( all.equal(1, sum(f['f',])  )))
+        warning("Female genotype frequencies generation",k,", total != 1 ", sum(f['f',]) )  
+      
+      #calibration 102
+      #genotype frequencies reset to what they were at start of loop
       if( calibration == 102 ){
-        genotype.freq <- genotype.freq 
-      }else{
-        ## reprints genotype.freq with new frequencies from gametes
-        genotype.freq[1,] <- f['m','SS1SS2'] #f.m.SS1SS2
-        genotype.freq[2,] <- f['m','SS1RS2'] #f.m.SS1RS2
-        genotype.freq[3,] <- f['m','SS1RR2'] #f.m.SS1RR2
-        
-        genotype.freq[4,] <- f['m','RS1SS2'] #f.m.RS1SS2
-        genotype.freq[5,] <- f['m','RS1RS2_cis'] #f.m.RS1RS2_cis
-        genotype.freq[6,] <- f['m','RS1RS2_trans'] #f.m.RS1RS2_trans
-        genotype.freq[7,] <- f['m','RS1RR2'] #f.m.RS1RR2
-        
-        genotype.freq[8,] <- f['m','RR1SS2'] #f.m.RR1SS2
-        genotype.freq[9,] <- f['m','RR1RS2'] #f.m.RR1RS2
-        genotype.freq[10,] <- f['m','RR1RR2'] #f.m.RR1RR2
+        f['m', ] <- genotype.freq[]
+        f['f', ] <- genotype.freq[]
       }
       
     }	# end of generation loop 
