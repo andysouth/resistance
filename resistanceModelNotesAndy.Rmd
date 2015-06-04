@@ -1773,18 +1773,95 @@ all those starting with RS1
 to do with object genotype ....
 Aha! problems were due to my new sex-linked changes that were operating without me realising.
 So I should probaly remove the tolerances I put in. and work out how to reassign the impossible genotype freqs.
+done 
  
+**4/6/15** thurs 12.15- 
+
+checking on implementation of sexLinkage in randomMating() 
+ 
+sexLinked probably needs to be included as an extra paramter in input (but should make it robust to cope if an input file doesn't have the sex-linked option)
+
+be careful because this could break previous model runs
+
+genotype.freq mostly removed it was the same as f['m',]. Creation of f & fs moved to before the generations loop. This was prompted because previously genotype.freq was the same for males and females and it adds an unecessary extra layer of potential confusion.
+ 
+added calculating genotypes of both m&f in runModel2() to allow sex linkage.
+ 
+bug in random mating with sex linkage genotypes aren't summing to 1
+
+fGenotypeExpanded for non sex-linked looks like the top one
+In the lower one the R1 homozgotes should sum to 1 too
+
+    l1a2
+l1a1     S1     R1
+  S1 0.0625 0.0625
+  R1 0.0625 0.0625
+
+    l1a2
+l1a1    S1     R1
+  S1 0.125 0.0000
+  R1 0.000 0.0625
+
+Fixed now :
+with this bit of code :
+```
+#heterozygotes at locus1 are impossible so add to the homozygotes instead
+if(f1!=m1)
+{
+  #add to the homozygotes : f1,f1
+  fGenotypeExpanded[f1,f1,f2,m2] <- fGenotypeExpanded[f1,f1,f2,m2] + fThisGenotype
+} else #i.e. if not heterozygous at locus 1
+{
+  #just add to this genotype : f1,m1
+  #have to add rather than set in case this is a homozygote that has already been added to by previous condition
+  fGenotypeExpanded[f1,m1,f2,m2] <- fGenotypeExpanded[f1,m1,f2,m2] + fThisGenotype
+}
+```
+
+Created a new shiny app in shinyCurtis2 and run from runUI2.R to look at graphs with & without sex linkage side by side. Initially these gave identical results, which was because resistSimple() called the old runModel() which doesn't allow sex linkage. Try it again now.
+
+Cool, now I am getting a difference between locus1 & locus2. However males & females still have the same results, is that what would be expected ?
+
+Maybe it's because of the way that results are output from Beths one sex system ?
+Where does the graph get the data from ?
+
+genplot <- plotallele.freq.andy( listOut$results[[1]] ) 
+
+  # Males
+  lines( mat[,1], mat[,2], col="darkblue", lwd=2, lty=13 )
+  lines( mat[,1], mat[,3], col="green", lwd=2, lty=14 )
+  # Females
+  lines( mat[,1], mat[,5], col="red",lwd=2, lty=15 )
+  lines( mat[,1], mat[,6], col="orange", lwd=2, lty=16 )
+
+so its columns 2,3,5 & 6 I'm interested in
+
+so where is listOut$results[[1]] filled ?
+in runModel2()     listOut$results[[i]] <- results
+& further back :
+```
+      ## frequency of resistance alleles
+      m.R1 <- sum(f['m',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS1",colnames(f))]))
+      m.R2 <- sum(f['m',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS2",colnames(f))]))
+      f.R1 <- sum(f['f',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS1",colnames(f))]))
+      f.R2 <- sum(f['f',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS2",colnames(f))]))   
+      results[k,2] <- m.R1
+      results[k,3] <- m.R2
+      results[k,5] <- f.R1
+      results[k,6] <- f.R2
+```
+
+Seems that this should be doing the right thing. Maybe the allele frequencies overall don't change, because for the males they just redistributed from heterozygotes to homozygotes.
+
+
  
 ### TO DO  
 
-1. check on implementation of sexLinkage in randomMating()
 
 
+1. be careful that runModel & runModel2 should no longer generate same results when sex linkage is set (but i don't think this should break current testthat tests)
 
 
-1. think I can remove genotype.freq it is the same as f['m',], I might want to create an fstart[] outside of the generations loop. This was prompted because previously genotype.freq was the same for males and females and it adds an unecessary extra layer of potential confusion
-
-1. further develop sex-linkage in randomMating(), allow option to be passed as arg, plus may need to look at calculating genotypes of both m&f in runModel2()
 
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
@@ -1812,7 +1889,6 @@ tst <- runModel(input)
 
 1. go through the paper and check which bits relate to which in the code. Maybe create a table ? Could I create the table from R ? but actually much of the functionality is still in runModel() and needs to be put into functions.
 
-1. Maybe create a model diagram perhaps from diagrammer ?
 
 1. maybe separate out classification trees from sensiAn1
 
