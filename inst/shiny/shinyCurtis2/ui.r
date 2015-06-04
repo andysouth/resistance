@@ -12,8 +12,8 @@ shinyUI(fluidPage(
   #h4("Left plot is without sex linkage in resistance, right plot is with sex linkage"),
   
   fluidRow( 
-    column(5, h5("resistance not sex linked"), plotOutput('plot') ),
-    column(5, h5("resistance sex linked"), plotOutput('plotSexLinked') )
+    column(5, h4("resistance not sex linked"), plotOutput('plot') ),
+    column(5, h4("resistance sex linked"), plotOutput('plotSexLinked') )
   ),
     
   hr(),
