@@ -16,6 +16,14 @@
 #' #sex linked
 #' input <- setInputOneScenario(sexLinked=1)
 #' tst <- runModel2(input) 
+#' #sequential insecticide use
+#' #? should I assume that exposure to the 2nd insecticide has been set to 0
+#' #? I should probably check
+#' #setting calibration & exposures to insecticides as the same for mf
+#' #this doesn't quite seem to work yet, freq of R stays at 0
+#' input <- setInputOneScenario(calibration=1013, a.m_A0 = 0.9, a.m_00 = 0.1, a.m_AB = 0, a.f_A0 = 0.9, a.f_00 = 0.1, a.f_AB = 0)
+#' #can either set calibration to 1013 as an arg to setInput or runModel2()
+#' tst <- runModel2(input)
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
@@ -306,6 +314,13 @@ runModel2 <- function(input,
       }
     }
 
+    #andy added for running sequential insecticide scenarios
+    # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
+    # Ian suggests values of 0.1, 0.25 and 0.5
+    # I may need to pass it as an extra input argument
+    criticalPoint <- 0.5 
+    criticalPoint1Reached <- FALSE #only used for sequential, calibration 1013
+    
     #######################################################
     ## generation loop to run model from initial conditions 
     
@@ -374,6 +389,39 @@ runModel2 <- function(input,
       #if( calibration == 1013 && m.R1 > 0.4999 || calibration == 1013 && m.R2 > 0.4999 ){
       #stop( (paste("Frequency of R allele at or over 0.5, generation = ", k)) )
       #}				  
+      
+      # andy : todo sequential insecticide use for sensitivity analysis
+      # use insecticide1 until resistance >= critical point 
+      # switch to insecticide2 until 2nd resistance allele >= critical point. 
+      # Record total generations for both insecticides.
+      # is it OK to asses just resistance in males ?
+      # can I switch insecticides here ?
+      # how will I record in the output file ?
+      # can I then record or extract num generations until the 2nd threshold is reached ?
+      # something like :
+      # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
+      # Ian suggests values of 0.1, 0.25 and 0.5
+      # I may need to pass it as an extra input argument
+      criticalPoint <- 0.5 #this can go before generation loop
+      #todo this MUST go before generation loop
+      criticalPoint1Reached <- FALSE 
+      if ( calibration == 1013 ) #or some other code for my new sequential
+      {
+        if (m.R1 >= criticalPoint && !criticalPoint1Reached )
+        {
+          #switch to 2nd insecticide alone at same exposure as first one
+          a.m_0B <- a.f_0B <- a.m_A0
+          #set exposure to first insecticide to 0
+          a.f_A0 <- a.m_A0 <- 0
+        }
+        if (m.R2 >= criticalPoint && criticalPoint1Reached )
+        {
+          cat("critical point for 2nd insecticide reached at generation",k)
+        }
+      }
+      
+      
+      
       
       ##########
       ## Gametes
