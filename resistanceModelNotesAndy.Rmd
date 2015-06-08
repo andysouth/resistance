@@ -1853,14 +1853,110 @@ in runModel2()     listOut$results[[i]] <- results
 
 Seems that this should be doing the right thing. Maybe the allele frequencies overall don't change, because for the males they just redistributed from heterozygotes to homozygotes.
 
+**5/6/15**
+
+Instructions emailed to Ian & Beth to run UI2
+require(devtools)
+install_github('AndySouth/resistance')
+require(resistance)
+runUI2()
+
+Ians feedback on UI2 (sex-linkage)
+
+The R script runs fine. The results are as I would have expected given that locus 1 is sex-linked and locus 2 is autosomal i.e. resistance evolves faster at the sex-linked locus.
+
+The dynamics at locus 2 appear unchanged...I therefore assume the drugs were deployed individually i.e. not as a combination?
+
+But I thought they were applied as a combination.
+The exposure comes from here in the UI :
+
+ h5("Exposure to each insecticide"),
+ numericInput("a.m_AB", "same for both insecticides in Curtis", 0.5, min = 0.1, max = 0.9, step = 0.1)
+
+and is set here in server :
+a.m_AB = input$a.m_AB,
+a.f_AB = input$a.m_AB, #set f to same as m
+
+are these the correct parameters to set ??
+yes i think so.
+
+
+Thanks Ian,
+In relation to your 2nd comment, from the UI, both a.m_AB and a.f_AB
+are set from the box with "Exposure to each insecticide".
+
+It's my understanding that should result in exposure to high levels of
+both insecticides (i.e. in combination).
+
+Is that correct Beth ?
+
+Didn't get a reply from Beth yet.
+From Ian :
+OK, I was just speculating that if resistnce at locus 1 was spreading faster due to sex-linkage then so might resistnce at locus2 through genic linkage and hitch-hiking. I'll give its some more thought over the weekend.
+
+
+**8/6/15** on train to liverpool 4.30-9.30
+**The plan for running the sensitivity analysis for the first paper**
+
+Edited from Ians text in the paper.
+
+For each parameter combination 2 strategies : 
+A) single ‘new’ insecticide alone
+B) ‘new’ insecticide in combination with ‘older’ insecticide 
+
+The simulation output was the ratio of number of generations for resistance  to the ‘new’ insecticide  to reach a given allele frequency when in combination compared to on its own.
+
+A ratio >1 indicates that combination is better. 
+
+Five threshold frequencies were investigated: 0.05, 0.1, 0.2, 0.5, 0.8.
+
+But in the document :
+"Suggested sensitivity analysis.docx" it talks about sequential and 2 mixture optoins.
+
+Sequential use:, use one insecticide until resistance frequency reaches critical point, then switch insecticide until second resistance allele frequency reaches the critical point. Record time in total generations for the two insecticides.
+
+Mixture option 1. Deploy mixture and record time in generations until EITHER frequency reaches the critical point
+
+Mixture, option 2: deploy mixture until one resistance allele reaches the critical point, then stop using that insecticide in the mixture. Record time until both resistance allele frequencies reach critical point.
+
+Easy by post-processing : Mixture 1 : set exposure to both insecticides
+Trickier : Sequential
+Trickiest : Mixture 2
+
+Mixture 1 : set exposure to both insecticides and post process to get time until critical points for EITHER insecticide is reached.
+Sequential : set callibration to 1013, add bit to runModel2() to switch from insecticide1 to insecticide2 when critical point for the first insecticide is reached. Post process results file to find the time that the 2nd critical point is reached.
+
+Tried adding a sequential insecticide scenario as an example to runModel2(), doesn't seem to be working yet, or maybe I just haven't passed it the correct args.
+
+aha, i think probably because the niche toggles not switched on. Can I set all of these to on by default so that this problem doesn't happen again ?? done
+
+resistance to 2nd insecticide still seems not to rise.
+
+It may be because I need to reset the fitnesses (which happens before gen loop):           
+
+Windiv[sex,locus1,locus2] <- sum( a[sex,,] * Wniche[locus1,locus2,,])
+and could put this into a function called setFitness() or the like.
+
+
+
+
+
+
 
  
 ### TO DO  
 
+1. Questions for Ian
++ do we want to do sequential & mixtures for the first sensitivity analysis ?
++ what are the maximum generations that we are running for ? How do we deal with runs where critical point isn't reached in max generations.
++ is it OK to asses just resistance in males ?
 
+
+1. write out how I'm going to run the sensitivity analysis so I can do a final check with Ian while I'm in Liverpool.
+
+1. think about whether we are able to run sequential insecticide scenarios with the current setup.
 
 1. be careful that runModel & runModel2 should no longer generate same results when sex linkage is set (but i don't think this should break current testthat tests)
-
 
 
 Remember.
@@ -1900,8 +1996,6 @@ tst <- runModel(input)
 
 1. add some defensive checks, e.g. for sensible input variables
 
-1. submit travel claim 
-
 1. create a vignette from first shiny app documenting how the model works
 
 1. finish tidying documentation of reading in input vars in createInputMatrix()
@@ -1909,8 +2003,6 @@ tst <- runModel(input)
 1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
 1. edit/refactor runModel carefully
 1. check out the part about running sequential insecticide scenarios
-
-1. spend some time developing my understanding of how the model works
 1. submit tilde bug report
 
 
