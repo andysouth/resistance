@@ -400,23 +400,23 @@ runModel2 <- function(input,
       # can I then record or extract num generations until the 2nd threshold is reached ?
       # something like :
       # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
-      # Ian suggests values of 0.1, 0.25 and 0.5
-      # I may need to pass it as an extra input argument
-      criticalPoint <- 0.5 #this can go before generation loop
-      #todo this MUST go before generation loop
-      criticalPoint1Reached <- FALSE 
+      # Ian suggests values of 0.1, 0.25 and 0.5, set before the generation loop
       if ( calibration == 1013 ) #or some other code for my new sequential
       {
         if (m.R1 >= criticalPoint && !criticalPoint1Reached )
         {
           #switch to 2nd insecticide alone at same exposure as first one
-          a.m_0B <- a.f_0B <- a.m_A0
+          #for both m&f
+          a[,'0','B'] <- a[,'A','0']
           #set exposure to first insecticide to 0
-          a.f_A0 <- a.m_A0 <- 0
+          #for both m&f
+          a[,'A','0'] <- 0
+          criticalPoint1Reached <- TRUE
+          cat("critical point for 1st insecticide reached at generation",k,"\n")
         }
         if (m.R2 >= criticalPoint && criticalPoint1Reached )
         {
-          cat("critical point for 2nd insecticide reached at generation",k)
+          cat("critical point for 2nd insecticide reached at generation",k,"\n")
         }
       }
       
