@@ -314,12 +314,13 @@ runModel2 <- function(input,
       }
     }
 
-    #andy added for running sequential insecticide scenarios
+    # instead sequential scenarios can be done by post-processing
+    # andy added for running sequential insecticide scenarios
     # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
     # Ian suggests values of 0.1, 0.25 and 0.5
     # I may need to pass it as an extra input argument
-    criticalPoint <- 0.5 
-    criticalPoint1Reached <- FALSE #only used for sequential, calibration 1013
+#     criticalPoint <- 0.5 
+#     criticalPoint1Reached <- FALSE #only used for sequential, calibration 1013
     
     #######################################################
     ## generation loop to run model from initial conditions 
@@ -390,6 +391,7 @@ runModel2 <- function(input,
       #stop( (paste("Frequency of R allele at or over 0.5, generation = ", k)) )
       #}				  
       
+      # instead the below can be done by post processing
       # andy : todo sequential insecticide use for sensitivity analysis
       # use insecticide1 until resistance >= critical point 
       # switch to insecticide2 until 2nd resistance allele >= critical point. 
@@ -401,24 +403,24 @@ runModel2 <- function(input,
       # something like :
       # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
       # Ian suggests values of 0.1, 0.25 and 0.5, set before the generation loop
-      if ( calibration == 1013 ) #or some other code for my new sequential
-      {
-        if (m.R1 >= criticalPoint && !criticalPoint1Reached )
-        {
-          #switch to 2nd insecticide alone at same exposure as first one
-          #for both m&f
-          a[,'0','B'] <- a[,'A','0']
-          #set exposure to first insecticide to 0
-          #for both m&f
-          a[,'A','0'] <- 0
-          criticalPoint1Reached <- TRUE
-          cat("critical point for 1st insecticide reached at generation",k,"\n")
-        }
-        if (m.R2 >= criticalPoint && criticalPoint1Reached )
-        {
-          cat("critical point for 2nd insecticide reached at generation",k,"\n")
-        }
-      }
+#       if ( calibration == 1013 ) #or some other code for my new sequential
+#       {
+#         if (m.R1 >= criticalPoint && !criticalPoint1Reached )
+#         {
+#           #switch to 2nd insecticide alone at same exposure as first one
+#           #for both m&f
+#           a[,'0','B'] <- a[,'A','0']
+#           #set exposure to first insecticide to 0
+#           #for both m&f
+#           a[,'A','0'] <- 0
+#           criticalPoint1Reached <- TRUE
+#           cat("critical point for 1st insecticide reached at generation",k,"\n")
+#         }
+#         if (m.R2 >= criticalPoint && criticalPoint1Reached )
+#         {
+#           cat("critical point for 2nd insecticide reached at generation",k,"\n")
+#         }
+#       }
       
       
       
