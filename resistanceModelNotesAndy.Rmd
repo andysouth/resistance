@@ -1938,6 +1938,17 @@ Windiv[sex,locus1,locus2] <- sum( a[sex,,] * Wniche[locus1,locus2,,])
 and could put this into a function called setFitness() or the like.
 
 
+** 9/6/15 ** 4-5
+
+Chatting with Ian & working out that both sequential and mixture2 scenarios can also be done by post-processing of the output file.
+
+Now looking at setting up sensiAnPaper1() to run the sensitivity analysis for the paper.
+Realising that I might not be able to call sensiAn1 and setInputSensiScenarios() because of some of the dependencies between parameters.
+
+Particularly that `P_2` needs to be set as a proprtion of `P_1`.
+
+Actually sensiAnPaper1() can be much more straightforward if it has hardcoded args and doesn't need to be so flexible.
+
 
 
 
