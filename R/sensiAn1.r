@@ -22,7 +22,7 @@ sensiAn1 <- function( nScenarios = 10,
 
   #run the model using input which sets num scenarios
   #suppress plotting to speed
-  listOut <- runModel(input, produce.plots = FALSE)
+  listOut <- runModel2(input, produce.plots = FALSE)
   
   #plot all scenario results on top of each other
   plotallele.freq.andy(listOut)
