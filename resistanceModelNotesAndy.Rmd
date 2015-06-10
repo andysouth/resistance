@@ -1894,6 +1894,7 @@ Didn't get a reply from Beth yet.
 From Ian :
 OK, I was just speculating that if resistnce at locus 1 was spreading faster due to sex-linkage then so might resistnce at locus2 through genic linkage and hitch-hiking. I'll give its some more thought over the weekend.
 
+be careful that runModel & runModel2 should no longer generate same results when sex linkage is set (but i don't think this should break current testthat tests)
 
 **8/6/15** on train to liverpool 4.30-9.30
 **The plan for running the sensitivity analysis for the first paper**
@@ -1950,24 +1951,20 @@ Particularly that `P_2` needs to be set as a proprtion of `P_1`.
 Actually sensiAnPaper1() can be much more straightforward if it has hardcoded args and doesn't need to be so flexible.
 
 
+** 10/6/15 ** train back from liverpool
 
-
+modifying sensiAnPaper1() to run the different insecticideUsed scenarios
+started sensiPostProc() to do post-processing
 
 
  
 ### TO DO  
 
-1. Questions for Ian
-+ do we want to do sequential & mixtures for the first sensitivity analysis ?
-+ what are the maximum generations that we are running for ? How do we deal with runs where critical point isn't reached in max generations.
-+ is it OK to asses just resistance in males ?
+1. work on sensiPostProc() It will need to be quite clever. It will take the output files from insecticide1, insecticide2 and mixture and use these to calculate timeToResistance critical points for sequential, mixture1 & mixture2 scenarios.
 
+1. do the output files from runModel2() have the input params attached or do I need to save inputs & outputs separately ? The latter may be a good plan to avoid having to rerun long simulations if I want to investigate outputs further later.
 
-1. write out how I'm going to run the sensitivity analysis so I can do a final check with Ian while I'm in Liverpool.
-
-1. think about whether we are able to run sequential insecticide scenarios with the current setup.
-
-1. be careful that runModel & runModel2 should no longer generate same results when sex linkage is set (but i don't think this should break current testthat tests)
+1. maybe rename sensiAnPaper1 to something more informative
 
 
 Remember.
