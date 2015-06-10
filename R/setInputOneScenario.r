@@ -12,6 +12,7 @@
 #' @param P_1 locus 1 frequency of resistance allele
 #' @param P_2 locus 2 frequency of resistance allele
 #' @param recomb_rate recombination rate
+#' @param a array to set all exposure params, a[sex,loc1,loc2], overrides a.m_00 etc.
 #' @param a.m_00 insecticide exposure male no1 no2
 #' @param a.m_a0 insecticide exposure male lo1 no2
 #' @param a.m_A0 insecticide exposure male hi1 no2
@@ -69,6 +70,7 @@ setInputOneScenario <- function( calibration = 100,
                                  P_1 = 0.001,
                                  P_2 = 0.001,
                                  recomb_rate = 0.5,
+                                 a = NULL,
                                  a.m_00 = 0.1,
                                  a.m_a0 = 0,
                                  a.m_A0 = 0,
@@ -127,6 +129,28 @@ setInputOneScenario <- function( calibration = 100,
   input[5] <- P_1
   input[6] <- P_2
   input[7] <- recomb_rate
+  #allowing exposure parameters to be set from a single array
+  if (!is.null(a))
+  {
+    a.m_00 <- a['m','0','0']
+    a.m_a0 <- a['m','a','0']
+    a.m_A0 <- a['m','A','0']
+    a.m_0b <- a['m','0','b']
+    a.m_0B <- a['m','0','B']
+    a.m_ab <- a['m','a','b']
+    a.m_AB <- a['m','A','B']
+    a.m_Ab <- a['m','A','b']
+    a.m_ab <- a['m','a','b']
+    a.f_00 <- a['f','0','0']
+    a.f_a0 <- a['f','a','0']
+    a.f_A0 <- a['f','A','0']
+    a.f_0b <- a['f','0','b']
+    a.f_0B <- a['f','0','B']
+    a.f_ab <- a['f','a','b']
+    a.f_AB <- a['f','A','B']
+    a.f_Ab <- a['f','A','b']
+    a.f_ab <- a['f','a','b']
+  }
   input[8] <- a.m_00
   input[9] <- a.m_a0
   input[10] <- a.m_A0
@@ -188,7 +212,10 @@ setInputOneScenario <- function( calibration = 100,
  #set rownames of input to the use variable names
  #trying to avoid code repetition and potential for confusion
  #BEWARE this relies on the arguments being specified in the function in the correct order
- rownames(input) <- names(formals()) 
+ rnames <- names(formals())
+ #remoce the array a from the arg list
+ rnames <- rnames[rnames!="a"]
+ rownames(input) <- rnames 
   
  return(input)
   
