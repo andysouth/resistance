@@ -9,14 +9,19 @@
 #' other until that too reaches the critical point. Record total time.
 #' 
 #' @param criticalPoints vector of resistance critical points where insecticide is deemed no longer useful
-#' #@param proabably need to give it names for results files/objects
+#' @param inAndOutMix output object for mixture from sensiAnPaperPart()
+#' @param inAndOutI1 output object for insecticide1 (commoner and first) from sensiAnPaperPart()
+#' @param inAndOutI2 output object for insecticide2 (rarer and secound) from sensiAnPaperPart()
 #' 
 #' @examples
 #' #sensiPostProc()
 #' @return todo
 #' @export
 #' 
-sensiPostProc <- function( criticalPoints = c(0.1,0.25,0.5) )
+sensiPostProc <- function( criticalPoints = c(0.1,0.25,0.5),
+                           inAndOutMix,
+                           inAndOutI1,
+                           inAndOutI2 )
 {
   #1) sequential : time to resistance for each insecticide in isolation
   
