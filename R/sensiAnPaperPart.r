@@ -93,7 +93,7 @@ sensiAnPaperPart <- function( nScenarios = 10,
   
 listOut <- runModel2(input, produce.plots = FALSE) 
   
-return(input)
-#return(listOut)
+#return(input)
+return(listOut)
   
 }
