@@ -1957,6 +1957,14 @@ modifying sensiAnPaper1() to run the different insecticideUsed scenarios
 started sensiPostProc() to do post-processing
 
 
+** 24/6/15 ** in liverpool before talking to Ian
+
+checking where I have got to.
+
+I'm going to renam sensiAnPaper1 to sensiAnPaperPart()
+then create a sensiAnPaperAll() to run everything (although in practice unlikely to run it all at once)
+
+
  
 ### TO DO  
 
@@ -1964,7 +1972,6 @@ started sensiPostProc() to do post-processing
 
 1. do the output files from runModel2() have the input params attached or do I need to save inputs & outputs separately ? The latter may be a good plan to avoid having to rerun long simulations if I want to investigate outputs further later.
 
-1. maybe rename sensiAnPaper1 to something more informative
 
 
 Remember.
