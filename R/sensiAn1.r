@@ -1,4 +1,4 @@
-#' sensitivity analysis first attempt
+#' superceded sensitivity analysis first attempt - not used in the paper analysis
 #' 
 #' 
 #' @param nScenarios number of scenarios 
