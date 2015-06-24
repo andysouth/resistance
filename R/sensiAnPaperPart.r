@@ -1,8 +1,7 @@
-#' sensitivity analysis for the first paper
+#' one of model runs for sensitivity analysis for the first paper
 #' 
 #' codes in parameters and ranges
-#' not sure whether to run all 3 insecticide scenarios
-#' from within the function, or have to run it 3 times
+#' needs to be run at least 3 times, once for each insecticide regime
 #' 
 #' @param nScenarios number of scenarios 
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
@@ -15,7 +14,7 @@
 #' @return todo
 #' @export
 #' 
-sensiAnPaper1 <- function( nScenarios = 10,
+sensiAnPaperPart <- function( nScenarios = 10,
                            insecticideUsed = 'mixture')
 {
   #create empty object to hold input matrix for return
