@@ -8,9 +8,9 @@ output: html_document
 ```{r}
   library(resistance)
 
-outFolder <- "C:\\Dropbox\\resistanceResults\\"
+  outFolder <- "C:\\Dropbox\\resistanceResults\\"
 
-  nScenarios <- 1000
+  nScenarios <- 100
   ## do model runs
   listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture' )
   listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1' )
@@ -18,8 +18,13 @@ outFolder <- "C:\\Dropbox\\resistanceResults\\"
   
   ## save results objects as rda for re-use
   save(listOutMix, file=paste(outFolder,'listOutMix.rda'))
-  
+  save(listOutI1, file=paste(outFolder,'listOutI1.rda'))
+  save(listOutI2, file=paste(outFolder,'listOutI2.rda'))    
 ```  
+
+### now want to calculate the times to reach critical points and add them on to the input file 
+### for different scenarios
+### or will sensiPostProc() sort that ?
 
   
   
