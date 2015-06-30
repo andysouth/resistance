@@ -36,9 +36,12 @@ runModel2 <- function(input,
   #replacing 3 results lists with a list of 3 lists
   listOut <- list( results=list(), fitness=list(), genotype=list() )
 
-  
-  ## Run through columns of matrix "input" to run model for each scenario set
+  ## Scenario loop
+  ## inputs for each scenario are stored in columns of 'input'
   for (i in 1:ncol( input ) ){
+    
+    if (i%%10==0) cat("in sensiAnPaperPart() scenario",i,"/",nScenarios,'\n')
+    
     ### Calibrations ###
     calibration <- input[1,i]
     
