@@ -1964,13 +1964,90 @@ checking where I have got to.
 I'm going to renam sensiAnPaper1 to sensiAnPaperPart()
 then create a sensiAnPaperAll() to run everything (although in practice unlikely to run it all at once)
 
+** 29/6/15 **
+little on sensiPostProc()
+
+** 30/6/15 **
+moved sensiAnPaper1All() into an rmarkdown file - because in reality I'm not likely to run it all at once.
+
+Beths work just uses male allele frequencies to assess criticalPoints m.R1 & f.R1 are the same for now, but it might be safer for me to use an average.
+
+~ added the input matrix onto the listOut output object in runModel2() to help with post processing
+Slight issue that this has now broken my testthat tests !!
+
+
+How can m.R2 and f.R2 be greater than 1 (e.g. they start at 1.7455 in first run) ?
+Is this because the frequency of R2 is set too high at start ?
+
+m.R2 is calculated at line 801 in the older runModel.r and line 376 in runModel2
+
+Frequency of resistance allele to the 2nd insecticide is starting above 1.
+
+m.R2 <- ( f.m.SS1RR2 + f.m.RS1RR2 + f.m.RR1RR2 ) + ( 0.5 * (f.m.SS1RS2 + f.m.RS1RS2_cis + f.m.RS1RS2_trans + f.m.RR1RS2 ) )
+
+#refactored
+m.R2 <- sum(f['m',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS2",colnames(f))]))
+ 
+Can I create a reproducible example ? or should I just ask first ?
+
+What is the starting value of P_2 the starting frequency of resistance to insecticide2 ?
+For the first dodgy run
+listOutMix$input['P_2',1]
+    P_2 
+1.74551 
+
+Aha yes, so maybe i should put something in to stop it going above 1 ??
+
+I think problem was because I set the upper limit on P_2 to 100 rather than 1 (based upon Ians table).
+
+FRom Ian :
+A trick one that..
+
+I think my first instinct was to not restrict one insecticide resistance frequency to be always  less than the other. But we would have to censor the inputs because if frequency at locus 1  is 0.1 then the frequency at locus 2 cannot be 100 times higher.
+
+I think we should go with your suggestion i.e. recognise that frequency at one locus will always be less than at the other and the lower frequency occurs at Locus 2. I would maybe go from 0.0001 to 1 under these circumstances so we get a wide range of starting frequency ratios.
+
+Cool findResistancePoints() seems to be working
+
+> findResistancePoints(listOut, locus=1)
+           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14] [,15] [,16] [,17] [,18] [,19]
+gen_cP0.1     9   10    5   36    4    3    5   19   48    77    12    10     3     2     4     3    31    36     5   
+gen_cP0.25   20   20   27   70   15   16   11   41   72   120    19    16    17     5     8     9    54    71    20   
+gen_cP0.5    27   29   39   89   28   25   18   56   97   146    25    23    36     9    12    16    73    95    39   
+> findResistancePoints(listOut, locus=2)
+           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14] [,15] [,16] [,17] [,18] [,19] 
+gen_cP0.1     4   31   21   76   25   14    7   30   23   301    59     8    34     2    25    91    19    26    97   
+gen_cP0.25    8   48   45  128   56   26   16   40   35   334    79    12    42     5    30   118    29    53   134   
+gen_cP0.5    13   61   62  154   77   36   24   51   48   357    90    17    51     9    34   133    39    81   166   
+> findResistancePoints(listOut, locus='either')
+           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14] [,15] [,16] [,17] [,18] [,19]
+gen_cP0.1     4   10    5   36    4    3    5   19   23    77    12     8     3     2     4     3    19    26     5 
+gen_cP0.25    8   20   27   70   15   16   11   40   35   120    19    12    17     5     8     9    29    53    20   
+gen_cP0.5    13   29   39   89   28   25   18   51   48   146    25    17    36     9    12    16    39    81    39   
+> findResistancePoints(listOut, locus='both')
+           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14] [,15] [,16] [,17] [,18] [,19]
+gen_cP0.1     9   31   21   76   25   14    7   30   48   301    59    10    34     2    25    91    31    36    97   
+gen_cP0.25   20   48   45  128   56   26   16   41   72   334    79    16    42     5    30   118    54    71   134   
+gen_cP0.5    27   61   62  154   77   36   24   56   97   357    90    23    51     9    34   133    73    95   166   
+
+but the 2nd mixture scenario is the tricky bit because 
+
+need to know which of the 2 insecticides reached the critical point first, and the resistance level of the other. I think I'll need to create a special function.
+
+findResistancePointsMixResponsive()
+
 
  
 ### TO DO  
 
-1. work on sensiPostProc() It will need to be quite clever. It will take the output files from insecticide1, insecticide2 and mixture and use these to calculate timeToResistance critical points for sequential, mixture1 & mixture2 scenarios.
 
-1. do the output files from runModel2() have the input params attached or do I need to save inputs & outputs separately ? The latter may be a good plan to avoid having to rerun long simulations if I want to investigate outputs further later.
+1. create findResistancePointsMixResponsive()
+
+
+1. fix the testthat tests to avoid new input addition
+
+
+1. work on sensiPostProc() It will need to be quite clever. It will take the output files from insecticide1, insecticide2 and mixture and use these to calculate timeToResistance critical points for sequential, mixture1 & mixture2 scenarios. Try to make it as modular as possible.
 
 
 
@@ -1996,9 +2073,6 @@ tst <- runModel(input)
 * maybe comparing the files in full-dom_CD.csv & SD in C:\Dropbox\Levick et al IR manuscript will help me.
 
 
-1. I should include unit testing on my CV
-
-1. go through the paper and check which bits relate to which in the code. Maybe create a table ? Could I create the table from R ? but actually much of the functionality is still in runModel() and needs to be put into functions.
 
 
 1. maybe separate out classification trees from sensiAn1
@@ -2016,10 +2090,11 @@ tst <- runModel(input)
 1. finish tidying documentation of reading in input vars in createInputMatrix()
 
 1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
-1. edit/refactor runModel carefully
-1. check out the part about running sequential insecticide scenarios
 1. submit tilde bug report
 
+Want to do:
+1. rename a to exposure
+1. rename W to ?fitness : fitnessLocus, fitnessNiche and fitnessIndiv
 
 ### suggestion from Beth
 could provide a .csv file with the Curtis scenarios set up
@@ -2034,7 +2109,6 @@ in the wild in Beths code :
 fs.m.RS1RS2_cis <- f.m.RS1RS2_cis
 fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
 ```
-
 
 
 ### variable naming conventions
@@ -2071,7 +2145,6 @@ Different W fitness variables
 `W.RR1SS2_0b :   [locus1, locus2, niche1, niche2]` niche (Wniche)
 `W.m.SS1SS2 : [sex, locus1, locus2]` (Windiv)
 
-
 ### refactoring, what I have done
 Replaced the following collections of individual variables with arrays :
 (To reduce code volume, reduce risk of mistyped variable names and allow objects to be passed between functions. Also potentially allows it to cope with more loci and/or niches later).
@@ -2080,25 +2153,23 @@ Replaced the following collections of individual variables with arrays :
 a.m_a0 ... *18 2*3*3  to: a[sex, niche1, niche2]
 W.m.SS1SS2 ... *18 2*3*3 to:  Windiv[sex, locus1, locus2]
 W.RR1SS2_0b ... *81 3*3*3*3 to: Wniche[locus1, locus2, niche1, niche2] 
-
-
-still todo
 W.RR1_00 etc. with Wloci[loci, niche1, niche2]
 
 because of cis/trans:
 f.m.SS1SS2 ... *19 2*3*3+1 to: f[sex, genotype]
-
 ```
-Want to do:
-1. rename a to exposure
-1. rename W to ?fitness : fitnessLocus, fitnessNiche and fitnessIndiv
 
-
-Questions.
-1. check on calibration 104
-1. What if `a.m_A0 > 0` but `niche_A0 == 0` ?
-The ifelse clauses allow niches to be toggled on/off, i.e. a fitness can be given for A0
-but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
+### outputs ###
+From runModel2()
+A list of 3 lists of one or more scenarios: 
+1. results : by generation freq of R allele at each loci in each sex plus linkage stuff
+    columns include Gen, m.R1, m.R2, f.R1, f.R2
+2. genotype : frequencies of each of the ten genotypes, per generation
+3. fitness : fitness scores of each genotype/niche combination (table 4. of Main Document)
+4. input
+e.g. 
+listOut$results[1] gives a results matrix for the first scenario
+listOutMix$input gives the inputs for all scenarios
 
 
 
