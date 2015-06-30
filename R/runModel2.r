@@ -40,7 +40,7 @@ runModel2 <- function(input,
   ## inputs for each scenario are stored in columns of 'input'
   for (i in 1:ncol( input ) ){
     
-    if (i%%10==0) cat("in sensiAnPaperPart() scenario",i,"/",nScenarios,'\n')
+    if (i%%10==0) cat("in sensiAnPaperPart() scenario",i,"/",ncol( input ),'\n')
     
     ### Calibrations ###
     calibration <- input[1,i]
@@ -62,6 +62,8 @@ runModel2 <- function(input,
     ## User enters value of P - frequency of resistance allele at locus 1&2 respectively
     P_1 <- input[5,i]	# locus 1
     P_2	<- input[6,i]	# locus 2
+    
+    if ( P_1 > 1 | P_2 >1 ) warning('input resistance frequence >1 P_1:',P_1,' P_2:',P_2,'\n')
     
     # From this, the function HW will find the proportions of each genotype
     # RR = p, RS = pq, SS = q, P = p = R
