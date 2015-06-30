@@ -7,9 +7,9 @@
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
 #' 
 #' @examples
-#' inputAndResults <- sensiAnPaper1( 5, insecticideUsed = 'mixture' )
-#' inputAndResults <- sensiAnPaper1( 5, insecticideUsed = 'insecticide1' )
-#' inputAndResults <- sensiAnPaper1( 5, insecticideUsed = 'insecticide2' )
+#' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'mixture' )
+#' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide1' )
+#' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide2' )
 #' #colnames(inputAndResults)
 #' @return todo
 #' @export
@@ -22,6 +22,9 @@ sensiAnPaperPart <- function( nScenarios = 10,
   
   for(i in 1:nScenarios)
   {
+    if (i%%10==0) cat("in sensiAnPaperPart() scenario",i,"/",nScenarios)
+    
+    
     #* todo : there might be a better way  doing this *
     #* by generating vectors of samples for each scenario at the same time *
     max_gen <- 500
