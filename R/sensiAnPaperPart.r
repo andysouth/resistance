@@ -22,7 +22,8 @@ sensiAnPaperPart <- function( nScenarios = 10,
   
   for(i in 1:nScenarios)
   {
-    if (i%%10==0) cat("in sensiAnPaperPart() scenario",i,"/",nScenarios)
+    #no this counter shouldn't go here because this is just creation of the input file
+    #if (i%%100==0) cat("in sensiAnPaperPart() scenario",i,"/",nScenarios,'\n')
     
     
     #* todo : there might be a better way  doing this *
@@ -31,7 +32,9 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     #insecticide2 is always rarer than insecticide1 (because P_2 is multiplied by P_1)
     P_1 <- runif(1, min=0.01, max=0.1)
-    P_2 <- runif(1, min=0.01, max=100) * P_1
+    #possible bug, i think this should be max=1 rather than max=100
+    #P_2 <- runif(1, min=0.01, max=100) * P_1
+    P_2 <- runif(1, min=0.01, max=1) * P_1
     
     #exposure to insecticide
     #**todo should I create an exposure array here, initialise it with 0s
