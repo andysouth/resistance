@@ -1,0 +1,34 @@
+---
+title: "sensiAnPaper1All"
+output: html_document
+---
+
+### All code for the sensitivity analysis for the first paper
+
+```{r}
+  library(resistance)
+
+outFolder <- "C:\\Dropbox\\resistanceResults\\"
+
+  nScenarios <- 1000
+  ## do model runs
+  listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture' )
+  listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1' )
+  listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2' )
+  
+  ## save results objects as rda for re-use
+  save(listOutMix, file=paste(outFolder,'listOutMix.rda'))
+  
+```  
+
+  
+  
+  ## post processing
+  #sensiPostProc( inAndOutMix = inAndOutMix,
+  #               inAndOutI1 = inAndOutI1,
+  #               inAndOutI2 = inAndOutI2 )
+  
+  
+  #return(listOut)
+  
+}
