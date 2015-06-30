@@ -34,7 +34,7 @@ runModel2 <- function(input,
  
   ### Lists to store results ####
   #replacing 3 results lists with a list of 3 lists
-  listOut <- list( results=list(), fitness=list(), genotype=list() )
+  listOut <- list( results=list(), fitness=list(), genotype=list(), input=input )
 
   ## Scenario loop
   ## inputs for each scenario are stored in columns of 'input'
