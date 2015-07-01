@@ -5,6 +5,12 @@ output: html_document
 
 ### All code for the sensitivity analysis for the first paper
 
+The main question is under which scenarios are mixtures better than sequential ?
+
+This breaks down into these subsidiary quetsions :
+1. Under which scenarios is the time to resistance for either insecticide quicker for 
+
+
 ```{r}
   library(resistance)
 
@@ -23,16 +29,56 @@ output: html_document
 ```  
 
 ### now want to calculate the times to reach critical points and add them on to the input file 
-### for different scenarios
-### or will sensiPostProc() sort that ?
-
+### for different insecticide strategies, sequential, mix1 and mix2
+```{r}
+  #1) sequential : time to resistance for each insecticide in isolation
+  #inputs : inAndOutI1, inAndOutI2
+  #find time to criticalPoint for insecticide1
+  #find time to criticalPoint for insecticide2
+  #add together
+  resistPoints1 <- findResistancePoints(listOutI1, locus=1)
+  resistPoints2 <- findResistancePoints(listOutI2, locus=2)  
+  
+  resistPointsSeq <- resistPoints1 + resistPoints2
   
   
-  ## post processing
-  #sensiPostProc( inAndOutMix = inAndOutMix,
-  #               inAndOutI1 = inAndOutI1,
-  #               inAndOutI2 = inAndOutI2 )
+  #2) mixture1 : time to resistance for either insecticide when used in a mixture
+  #inputs : inAndOutMix
+  #find time to criticalPoint for EITHER insecticide in mixture  
+  resistPointsMix1 <- findResistancePoints(listOutMix, locus='either')  
+  #todo - to be comparable I think this should be for when resistance to BOTH insecticides is reached
   
+  #3) mixture2 : when resistance to one insecticide in the mixture reached, switch to sole use of the 
+  #   other until that too reaches the critical point. Record total time.
+  # what I actually need to do is start with mixture find the first critical point
+  # (need to know which of the insecticides it is)
+  # then I need to go to the single run for the other insecticide & starting at 
+  # it's current resistance point find out how many more generations to go
+  #inputs : inAndOutI1, inAndOutI2, inAndOutMix
+  
+  #resistPointsMix2 <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+```
+  
+### calculate the difference between sequential & mixture scenarios
+```{r}
+  
+  # easy to calc for which scenarios mixture1 is 'better' i.e. longer to resistance
+  #boolean
+  resistBetterMix1SeqBoolean <- resistPointsMix1 > resistPointsSeq
+  #converted to 0/1
+  resistBetterMix1Seq <- plyr::aaply(resistBetterMix1SeqBoolean,.margins=c(1,2),.fun=as.numeric)
+  #rename rows ready for binding on to inputs
+  rownames(resistBetterMix1Seq) <- gsub('gen','betterMix1Seq', rownames(resistBetterMix1Seq))
+  
+```
+  
+  
+### here I want a file with the inputs (just one value for exposure)
+### with extra columns for seq
+```{r}
+treeInput <- rbind( listOutMix$input, resistBetterMix1Seq ) 
+  
+```
   
   #return(listOut)
   
