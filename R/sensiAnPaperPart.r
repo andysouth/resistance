@@ -5,6 +5,7 @@
 #' 
 #' @param nScenarios number of scenarios 
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
+#' @param randomSeed an integer to set seed, NULL for not setting it
 #' 
 #' @examples
 #' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'mixture' )
@@ -15,8 +16,12 @@
 #' @export
 #' 
 sensiAnPaperPart <- function( nScenarios = 10,
-                           insecticideUsed = 'mixture')
+                           insecticideUsed = 'mixture',
+                           randomSeed = 1 )
 {
+  #set random seed
+  if (!is.null(randomSeed)) set.seed(randomSeed)
+  
   #create empty object to hold input matrix for return
   input <- NULL
   
@@ -34,6 +39,7 @@ sensiAnPaperPart <- function( nScenarios = 10,
     P_1 <- runif(1, min=0.01, max=0.1)
     #possible bug, i think this should be max=1 rather than max=100
     #P_2 <- runif(1, min=0.01, max=100) * P_1
+    #to do maybe make this independent of P_1 ?
     P_2 <- runif(1, min=0.0001, max=1) * P_1
     
     #exposure to insecticide
