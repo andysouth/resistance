@@ -1,6 +1,7 @@
 #' Find number of generations to reach critical points of resistance
 #' 
-#' and finds the number of generations it takes for the R allele frequency to reach passed criticalPoints
+#' Post processes model output files to find the number of generations it takes 
+#' for the R allele frequency to reach passed criticalPoints.
 #' Returns NA if freq does not reach 
 #' refactored from timetoFifty()
 
@@ -23,10 +24,7 @@ findResistancePoints <- function( listOut,
   #could first create matrix to receive the results, name rows including gen_cP for generations to reach criticalPoints
   resistGens <- matrix( nrow=length(criticalPoints), ncol=numScenarios, dimnames=list(paste0('gen_cP',criticalPoints) ) )
     
-  #should i go through criticalPoints or scenarios first ?
-  #if i go through scenarios first I might be able to do all
-  #critical points at once
-  
+  #for each scenario (model run based on one set of parameters)
   for(scenarioNum in 1:numScenarios)
   {
     #for each critical point
