@@ -21,12 +21,22 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    criticalPoints = c(0.1,0.25,0.5) 
                                    ){
   
+  #find generations to reach max resistance points
+  #to help with setting x axis
+  maxGensI1 <- findResistancePoints(amat, locus=1, criticalPoints = criticalPoints)
+  maxGensI2 <- findResistancePoints(bmat, locus=2, criticalPoints = criticalPoints)  
+  maxGensMix <- findResistancePoints(combmat, locus='both', criticalPoints = criticalPoints)    
+  
+  maxGens <- max( (maxGensI1+maxGensI2), maxGensMix )
+  
+  
   f <- c(1:100)				## for y axis 
   fl <- log10(f)				
   par(pty="s") 
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
-        xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
+        xlim=c(1,maxGens), ylim=c(0,(max(fl))),
+        #xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
         xlab="Generation", ylab="Allele Frequency", main=main)
   
   # plotting combination scenario (in combmat)
@@ -43,7 +53,9 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   abline( h=(log10(100*max(criticalPoints)) ) )
   
   # add axis labels
-  axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
+  #axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
+  #default x axis
+  axis( side=1 )
   ylabs <- c(1,5,10,50)
   ylabsnames <- c("1%", "5%", "10%", "50%")
   logylabs <- log10( ylabs )
@@ -68,14 +80,20 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   lines( hch_gens, hch, col="blue", lty=2 )
   lines( ddt_gens, ddt, col="red", lty=2 )
   
-  abline( v = 31, col="black" )
+  #when the switch is made, was hardcoded by Beth
+  #abline( v = 31, col="black" )
+  #yval <- log10( 3 )			
+  #text(27, yval, "Switch to DDT", srt=90, cex=0.75) 
   
-  yval <- log10( 2 )
-  legend( 105, yval, legend=c("Sequential", "Combination","R at Locus 1 (DDT)", "R at Locus 2(HCH)"), 
-          col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.7 )
+  #? I don't quite get why this should be I2
+  abline( v = max(maxGensI2), col="grey", lty=2 )  
   
-  yval <- log10( 3 )			
-  text(27, yval, "Switch to DDT", srt=90, cex=0.75) 			
+#   yval <- log10( 2 )
+#   legend( 105, yval, legend=c("Sequential", "Combination","R at Locus 1 (DDT)", "R at Locus 2(HCH)"), 
+#           col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.7 )
+    legend( 'bottomright', legend=c("Sequential", "Combination", "Insecticide 1", "Insecticide 2"), 
+            col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.7 )  
+			
   
   box()
   
