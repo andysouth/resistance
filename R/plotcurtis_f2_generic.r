@@ -14,7 +14,7 @@
 #' @return list of plot components
 #' @export
 
-plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol, r1col, r2col ){
+plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col=3 ){
   
   f <- c(1:100)				## for y axis 
   fl <- log10(f)				
