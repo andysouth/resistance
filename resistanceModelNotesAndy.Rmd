@@ -2041,7 +2041,6 @@ Quick review of what needs to go into the final decision tree.
 
 slight rethink : I want the input files to be mostly the same for I1,I2 & mixture, so that they can be added together in combined scenarios.
 
-
 I added a set.seed into sensiAnPaperPart()
 This shows the input files for diffeerent insecticide strategies are now the same.
 
@@ -2051,9 +2050,22 @@ tst2 <- listOutI1$input[c('P_1','P_2','a.f_A0','phi.SS1_A0','phi.SS2_0B','h.RS1_
 identical(as.numeric(tst),as.numeric(tst2))
 
 
+** 6/7/15 **
+`plotcurtis_f2_generic` : a function allowing mixture & individual scenarios to be compared, similar to Curtis Fig2. 
+
+In creating a shiny app to display this, I could allow user to select parameters, but then the run might take a little while because it has to do 3 runs (I1,I2,mix) & post processing. Quicker may be to display my sensitivity analysis results & allow user to step through scenarios. + include printing out the input values used (& maybe even their relative position within ranges). 
+
+
+
 
  
 ### TO DO  
+
+
+
+
+
+1. should I create a little shiny app allowing the mixture & sequential scenarios to be compared ?
 
 1. CHECK MODEL RUNS ARE DOING WHAT I THINK. Currently seems that resistance is quicker for mixtures under all scenarios (or very nearly all)
 
