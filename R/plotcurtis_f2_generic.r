@@ -10,11 +10,16 @@
 #' @param gencol column number containing generation
 #' @param r1col column number containing frequency of allele at R1
 #' @param r2col column number containing frequency of allele at R2
+#' @param main title for the plot
+#' @param criticalPoints critical resistance points to be displayed in the plot
 #' 
 #' @return list of plot components
 #' @export
 
-plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col=3 ){
+plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col=3,
+                                   main="Rise of resistance; sequential insecticides v mixtures",
+                                   criticalPoints = c(0.1,0.25,0.5) 
+                                   ){
   
   f <- c(1:100)				## for y axis 
   fl <- log10(f)				
@@ -22,7 +27,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
-        xlab="Generation", ylab="Allele Frequency", main="Frequency of R allele through time.")
+        xlab="Generation", ylab="Allele Frequency", main=main)
   
   # plotting combination scenario (in combmat)
   # set frequencies in vectors as log10 percentages from frequencies
@@ -30,11 +35,13 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   R2 <- log10( 100 * combmat[,r2col] )
   # set generations in vector
   gens <- combmat[,gencol]		
-  # add alele frequencies as lines to the plot
+  # add allele frequencies as lines to the plot
   lines( gens, R1, col="red" )
   lines( gens, R2, col="darkblue" )
-  # add line at 50%
-  abline( h=(log10(50) ) )
+  
+  # add line at maximum of critical points
+  abline( h=(log10(100*max(criticalPoints)) ) )
+  
   # add axis labels
   axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
   ylabs <- c(1,5,10,50)
@@ -44,8 +51,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   ## Single insecticide scenarios
   # Only plots up to generation where 0.5 is first reached/exceeded, so this generation is found
-  hch_cutoff <- min(which((bmat[,r2col])>0.5))
-  ddt_cutoff <- min(which((amat[,r1col])>0.5))
+  hch_cutoff <- min(which((bmat[,r2col])>max(criticalPoints)))
+  ddt_cutoff <- min(which((amat[,r1col])>max(criticalPoints)))
   
   # set results columns as vectors from single insecticide treatment
   hch <- bmat[1:hch_cutoff,r2col]	# trim vector to point where freq of R > 0.5
