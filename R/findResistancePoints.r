@@ -22,7 +22,7 @@
 
 
 findResistancePoints <- function( listOut,
-                                  locus = 1,
+                                  locus,
                                   criticalPoints = c(0.1,0.25,0.5)
                                   ){
   
