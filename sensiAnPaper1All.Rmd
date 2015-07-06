@@ -10,8 +10,8 @@ The main question is under which scenarios are mixtures better than sequential ?
 This breaks down into these subsidiary quetsions :
 1. Under which scenarios is the time to resistance for either insecticide quicker for 
 
-
-```{r}
+<!-- eval=FALSE to stop slow code being executed --> 
+```{r, eval=FALSE}
   library(resistance)
 
   outFolder <- "C:\\Dropbox\\resistanceResults\\"
@@ -27,9 +27,15 @@ This breaks down into these subsidiary quetsions :
   listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2' )
   
   ## save results objects as rda for re-use
-  save(listOutMix, file=paste(outFolder,'listOutMix.rda'))
-  save(listOutI1, file=paste(outFolder,'listOutI1.rda'))
-  save(listOutI2, file=paste(outFolder,'listOutI2.rda'))    
+  save(listOutMix, file=paste0(outFolder,'listOutMix.rda'))
+  save(listOutI1, file=paste0(outFolder,'listOutI1.rda'))
+  save(listOutI2, file=paste0(outFolder,'listOutI2.rda'))   
+  
+  ## to load previously saved runs, e.g. these that I added 100 onto filename
+  load(file=paste0(outFolder,'listOutMix_100.rda'))
+  load(file=paste0(outFolder,'listOutI1_100.rda'))
+  load(file=paste0(outFolder,'listOutI2_100.rda'))
+    
 ```  
 
 ### now want to calculate the times to reach critical points and add them on to the input file 
@@ -40,10 +46,10 @@ This breaks down into these subsidiary quetsions :
   #find time to criticalPoint for insecticide1
   #find time to criticalPoint for insecticide2
   #add together
-  resistPoints1 <- findResistancePoints(listOutI1, locus=1)
-  resistPoints2 <- findResistancePoints(listOutI2, locus=2)  
+  resistPointsI1 <- findResistancePoints(listOutI1, locus=1)
+  resistPointsI2 <- findResistancePoints(listOutI2, locus=2)  
   
-  resistPointsSeq <- resistPoints1 + resistPoints2
+  resistPointsSeq <- resistPointsI1 + resistPointsI2
   
   
   #2) mixture1 : time to resistance for either insecticide when used in a mixture
@@ -61,20 +67,61 @@ This breaks down into these subsidiary quetsions :
   #inputs : inAndOutI1, inAndOutI2, inAndOutMix
   
   #resistPointsMix2 <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+  
+  #4) mixture3 : time to resistance for both insecticides when used in a mixture
+  #inputs : inAndOutMix
+  #find time to criticalPoint for BOTH insecticide in mixture  
+  resistPointsMix3 <- findResistancePoints(listOutMix, locus='both')
+  
 ```
   
 ### calculate the difference between sequential & mixture scenarios
 ```{r}
   
-  # easy to calc for which scenarios mixture1 is 'better' i.e. longer to resistance
-  #boolean
+  require('plyr')
+  
+  ## is mix1 better than sequential ?
+  #T/F
   resistBetterMix1SeqBoolean <- resistPointsMix1 > resistPointsSeq
-  #converted to 0/1
+  #convert to 0/1
   resistBetterMix1Seq <- plyr::aaply(resistBetterMix1SeqBoolean,.margins=c(1,2),.fun=as.numeric)
   #rename rows ready for binding on to inputs
   rownames(resistBetterMix1Seq) <- gsub('gen','betterMix1Seq', rownames(resistBetterMix1Seq))
   
   #in 100 runs for all 3 critical points sequential was better than mix1 all the time
+  
+  ## is mix3 better than sequential ?
+  #T/F
+  resistBetterMix3SeqBoolean <- resistPointsMix3 > resistPointsSeq
+  #convert to 0/1
+  resistBetterMix3Seq <- plyr::aaply(resistBetterMix3SeqBoolean,.margins=c(1,2),.fun=as.numeric)
+  #rename rows ready for binding on to inputs
+  rownames(resistBetterMix3Seq) <- gsub('gen','betterMix3Seq', rownames(resistBetterMix3Seq))
+  
+  #in 100 runs only one critical point run combination was mix3 better
+  
+  #check1
+  #plot the 2 individual results & the mixture, just to check what is going on
+  #the mixture one looks superficially similar to the individual ones superimposed
+  x11()
+  plotallele.freq.andy(listOutMix)
+  x11()
+  plotallele.freq.andy(listOutI1)
+  x11()
+  plotallele.freq.andy(listOutI2)
+  
+  #check2
+  #what is the absolute difference between mix3 & sequential ?
+  #looks plausible
+  resistDifferenceMix3Seq <- resistPointsMix3 - resistPointsSeq
+  
+  #check3 is their a difference between the mix & the individual strategies
+  #looks mostly plausible, occasionally there are 0s
+  resistDifferenceMix1I1 <- resistPointsMix1 - resistPointsI1
+  resistDifferenceMix1I2 <- resistPointsMix1 - resistPointsI2  
+  
+  ## is mix2 better than sequential ?  
+  # I might expect it to be similar to mix3
   
   
 ```
