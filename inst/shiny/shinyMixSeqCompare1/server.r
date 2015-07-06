@@ -42,5 +42,31 @@ shinyServer(function(input, output) {
   })
   
   
+  output$tableInputVals <- renderTable({
+    
+    
+    cat("in tableInputVals\n")
+    
+    #inputs are actually mostly all the same for In1,In2 & Mix
+    #code below is copied from sensiAnPaper1All.Rmd
+    
+    treeInput <- listOutMix$input
+    
+    #input files in listOutMix, listOutIn1 & listOutI2 are the same if the runs are done with default randomSeed 
+    #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
+    #I could just rename one to exposure
+    rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+    
+    #hardcode which variables to include in the tree analysis here
+    #to keep it simple and transparent
+    treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+    treeInput <- treeInput[ treePredictors, ]
+    
+    #new code here
+    #select just the params for this scenario
+    treeInput <- treeInput[ ,input$scenarioNum,drop=FALSE ]
+    
+  }) #end tableRasterAtts 
+    
   
 })

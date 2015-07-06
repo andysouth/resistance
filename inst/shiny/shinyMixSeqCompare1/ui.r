@@ -4,15 +4,35 @@
 
 library(shiny)
 
+# shinyUI(pageWithSidebar(
+#   headerPanel("explore resistance sensitivity analysis results"),
+#   sidebarPanel(
+#     numericInput('scenarioNum','choose a scenario number', value=1, min=1, max=100, step=1 )
+#  
+#   ),
+#   mainPanel(
+#     #plotOutput('plotTest')
+#     plotOutput('plot')
+#     )
+# ))
 
-shinyUI(pageWithSidebar(
-  headerPanel("explore resistance sensitivity analysis results"),
-  sidebarPanel(
-    numericInput('scenarioNum','choose a scenario number', value=1, min=1, max=100, step=1 )
- 
-  ),
-  mainPanel(
-    #plotOutput('plotTest')
-    plotOutput('plot')
+shinyUI(fluidPage(
+  
+  title = "Insecticide Mixture Explorer",
+
+  
+  fluidRow(
+    column(2,
+           numericInput('scenarioNum','choose a run no.', value=1, min=1, max=100, step=1 ),
+           helpText('100 runs are stored, use arrows on right of box to step through them'),
+           helpText('In all runs resistance seems to arise later with sequential use.')
+    ),
+    column(2, 
+           helpText('input values for this run'),
+           tableOutput('tableInputVals')
+    ),
+    column(5,
+           plotOutput('plot')
     )
+  )
 ))
