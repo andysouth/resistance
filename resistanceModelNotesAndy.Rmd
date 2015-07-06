@@ -2036,23 +2036,44 @@ need to know which of the 2 insecticides reached the critical point first, and t
 
 findResistancePointsMixResponsive()
 
+** 31/6/15 **
+Quick review of what needs to go into the final decision tree.
+
+slight rethink : I want the input files to be mostly the same for I1,I2 & mixture, so that they can be added together in combined scenarios.
+
+
+I added a set.seed into sensiAnPaperPart()
+This shows the input files for diffeerent insecticide strategies are now the same.
+
+tst <- listOutMix$input[c('P_1','P_2','a.f_AB','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B'),]
+#note a.f_A0 rather than a.f_AB
+tst2 <- listOutI1$input[c('P_1','P_2','a.f_A0','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B'),]
+identical(as.numeric(tst),as.numeric(tst2))
+
+
 
  
 ### TO DO  
 
+1. CHECK MODEL RUNS ARE DOING WHAT I THINK. Currently seems that resistance is quicker for mixtures under all scenarios (or very nearly all)
 
 1. create findResistancePointsMixResponsive()
 
+1. review how to answer these questions.
+Main question is : Tree1 is mixture better (0/1), Tree2 is mixture better by >20%.
 
 1. fix the testthat tests to avoid new input addition
 
+1. work further on sensiAnPaper1All 
 
-1. work on sensiPostProc() It will need to be quite clever. It will take the output files from insecticide1, insecticide2 and mixture and use these to calculate timeToResistance critical points for sequential, mixture1 & mixture2 scenarios. Try to make it as modular as possible.
+1. decide whether to do main runs with P_2 dependent on P_1 or not
 
 
 
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
+
+Main question is : Tree1 is mixture better (0/1), Tree2 is mixture better by >20%.
 
 Good simple test
 ```
@@ -2074,12 +2095,7 @@ tst <- runModel(input)
 
 
 
-
-1. maybe separate out classification trees from sensiAn1
-
 1. in susana's script the 'outcome' is 0/1 if used in our case that would seem to lose a lot of information about the outcomes ? Even timeToFifty would be better for us.
-
-1. write a function to calculate timeToThreshold for all scenarios based on listOut, allow user to specify which locus.
 
 1. maybe add option in setInputSensiScenarios to save input object as a csv or rda.
 
@@ -2170,7 +2186,7 @@ A list of 3 lists of one or more scenarios:
 e.g. 
 listOut$results[1] gives a results matrix for the first scenario
 listOutMix$input gives the inputs for all scenarios
-
+listOutMix$input[c('P_1','P_2'),] gives selected inputs
 
 
 
