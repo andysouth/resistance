@@ -10,11 +10,14 @@ The main question is under which scenarios are mixtures better than sequential ?
 This breaks down into these subsidiary quetsions :
 1. Under which scenarios is the time to resistance for either insecticide quicker for 
 
-<!-- eval=FALSE to stop slow code being executed --> 
-```{r, eval=FALSE}
+```{r}
   library(resistance)
 
   outFolder <- "C:\\Dropbox\\resistanceResults\\"
+```
+
+<!-- eval=FALSE to stop slow code being executed --> 
+```{r, eval=FALSE}
 
   #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same with exception of exposure
   
@@ -31,12 +34,17 @@ This breaks down into these subsidiary quetsions :
   save(listOutI1, file=paste0(outFolder,'listOutI1.rda'))
   save(listOutI2, file=paste0(outFolder,'listOutI2.rda'))   
   
+    
+```  
+
+```{r}
   ## to load previously saved runs, e.g. these that I added 100 onto filename
   load(file=paste0(outFolder,'listOutMix_100.rda'))
   load(file=paste0(outFolder,'listOutI1_100.rda'))
   load(file=paste0(outFolder,'listOutI2_100.rda'))
     
-```  
+```
+
 
 ### now want to calculate the times to reach critical points and add them on to the input file 
 ### for different insecticide strategies, sequential, mix1 and mix2
@@ -103,12 +111,19 @@ This breaks down into these subsidiary quetsions :
   #check1
   #plot the 2 individual results & the mixture, just to check what is going on
   #the mixture one looks superficially similar to the individual ones superimposed
-  x11()
+  #x11()
   plotallele.freq.andy(listOutMix)
-  x11()
+  #x11()
   plotallele.freq.andy(listOutI1)
-  x11()
+  #x11()
   plotallele.freq.andy(listOutI2)
+  
+  #I should be able to compare single scenarios
+  #yes this works, but not too useful
+  plotallele.freq.andy( list(results=list(listOutMix$results[[1]], listOutI1$results[[1]] )) )
+  #this is a modifdeied version of Beths function
+  #allowing curtis fig2 to be applied to any scenario
+  plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
   
   #check2
   #what is the absolute difference between mix3 & sequential ?
@@ -124,7 +139,18 @@ This breaks down into these subsidiary quetsions :
   # I might expect it to be similar to mix3
   
   
+  # comparing sensitivity inputs to those used by Beth to reproduce curtis fig2
+  inputCurtis <- createInputMatrix(FALSE)
+  inputSensiMix <- listOutMix$input
+  
+  input <- cbind(inputCurtis, inputSensiMix)
+  write.csv(input, file=paste0(outFolder,'inputCurtisSensiCompare.csv'))
+  
+  
 ```
+
+
+
   
   
 ### bind results onto input file
@@ -150,7 +176,7 @@ This breaks down into these subsidiary quetsions :
 ```
   
 ### do tree analysis
-```{r}
+```{r, eval=FALSE}
   require(rpart)
   
   #transpose
