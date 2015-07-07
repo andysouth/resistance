@@ -401,7 +401,7 @@ createInputMatrix <- function(params.csv,
     input[51,2] <- 0
     input[52,2] <- 0
     
-    input[53,1] <- 0  # sexLinked 0=FALSE 1=TRUE
+    input[53,2] <- 0  # sexLinked 0=FALSE 1=TRUE
     
     ### Scenario 3 Combination Treatment ####
     input[1,3] <- calibration
@@ -513,7 +513,9 @@ createInputMatrix <- function(params.csv,
     input[35,3] <- 0
     
     input[36,3] <- 0
-    input[37,3] <- 0.00016	#Dominance coefficient in B
+    #input[37,3] <- 0.00016	#Dominance coefficient in B
+    #? should this be the same as the value in ,2 & ,1
+    input[37,3] <- 0.0016	#Dominance coefficient in B
     
     # s = selection coefficient
     input[38,3] <- 0
@@ -544,7 +546,7 @@ createInputMatrix <- function(params.csv,
     input[51,3] <- 0
     input[52,3] <- 0
     
-    input[53,1] <- 0  # sexLinked 0=FALSE 1=TRUE
+    input[53,3] <- 0  # sexLinked 0=FALSE 1=TRUE
   }
   
   if( !params.csv ){
