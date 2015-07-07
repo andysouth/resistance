@@ -444,8 +444,10 @@ createInputMatrix <- function(params.csv,
     input[12,3] <- 0
     
     #todo check this is wanted
-    input[13,3] <-
-      input[14,3] <- 0.9	#Niche A,B
+    #input[13,3] <-
+    #i think it was a bug it made total exposure > 1 (it set ab to 0.9 and total to 1.9)
+    input[13,3] <- 0
+    input[14,3] <- 0.9	#Niche A,B
     
     input[15,3] <- 0
     input[16,3] <- 0
