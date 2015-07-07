@@ -183,6 +183,8 @@ runModel2 <- function(input,
     sexLinked <- FALSE
     if (nrow(input) > 52)
       sexLinked <- as.logical(input[53,i]) #0 to FALSE, 1 to TRUE 
+    #extra check in case NA value gets in
+    if ( is.na(sexLinked) | !is.logical(sexLinked) ) sexLinked <- FALSE
     
     
     
