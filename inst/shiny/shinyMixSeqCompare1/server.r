@@ -3,6 +3,7 @@
 #to view mixtures versus sequential in pre-run sensitivity analysis results
 
 library(shiny)
+#install_github('AndySouth/resistance')
 library(resistance)
 
 
