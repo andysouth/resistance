@@ -2,6 +2,7 @@
 #andy south 8/7/15
 
 library(shiny)
+#install_github('AndySouth/resistance')
 library(resistance)
 
 
