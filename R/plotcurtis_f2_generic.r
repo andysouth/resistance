@@ -30,7 +30,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   maxGens <- max( (maxGensI1+maxGensI2), maxGensMix )
   
   minf <- min( combmat[,r1col], combmat[,r2col] )
-  cat("in plotcurtis_f2_generic minf:",minf," ", log10(minf),"\n")
+  #cat("in plotcurtis_f2_generic minf:",minf," ", log10(minf),"\n")
   
   f <- c((100*minf):100)				## for y axis
   #f <- c(1:100)				## for y axis 
