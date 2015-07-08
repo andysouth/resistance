@@ -46,31 +46,8 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     #exposure to insecticide
     #exposure array initialise with 0s in loop so that previous values are zeroed
-    #to minimise complications with setting mf & ensuring exposures sum to 1
-    #added option for setInputOneScenario() to accept the array
-    a <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
-    #depends on whether this is insecticide1, insecticide2 or mixture
-    exposureVal <- runif(1, min=0.1, max=0.9)
-    if (insecticideUsed == "insecticide1")
-    {
-      #for both m&f
-      a[,'A','0'] <- exposureVal
-      a[,'0','0'] <- 1 - a[,'A','0']      
-    } else if (insecticideUsed == "insecticide2")
-    {
-      #for both m&f
-      a[,'0','B'] <- exposureVal
-      a[,'0','0'] <- 1 - a[,'0','B']        
-    } else if (insecticideUsed == "mixture")
-    {
-      #for both m&f
-      a[,'A','B'] <- exposureVal
-      a[,'0','0'] <- 1 - a[,'A','B']         
-    } else
-    {
-      stop("insecticideUsed neds to be one of (insecticide1, insecticide2, mixture) it is ",insecticideUsed)
-    }
-
+    exposure <- runif(1, min=0.1, max=0.9)
+    a <- setExposure(exposure=exposure, insecticideUsed = insecticideUsed) 
   
     #fitness of SS in presence of insecticide to which it encodes resistance
     phi.SS1_A0 <- runif(1, min=0.1, max=0.4)
