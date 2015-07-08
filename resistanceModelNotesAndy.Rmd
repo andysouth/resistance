@@ -2119,15 +2119,17 @@ Good news that this correction seemed to make the graph closer to Curtis.
     #? should this be the same as the value in ,2 & ,1
     input[37,3] <- 0.0016	#Dominance coefficient in B
 
+** 7/7/15 **
+new version of UI comparing scenarios with greater differences in dominance.
+Still doesn't produce something similar to curtis fig2 where mixture does much better.
+
 
  
 ### TO DO  
 
 
 
-
-
-1. should I create a little shiny app allowing the mixture & sequential scenarios to be compared ?
+1. should I create a little shiny app mimicing curtis fig2, & allowing usr to modify params, to see how to keep the mixtures doing better ?
 
 1. CHECK MODEL RUNS ARE DOING WHAT I THINK. Currently seems that resistance is quicker for mixtures under all scenarios (or very nearly all)
 
