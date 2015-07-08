@@ -6,7 +6,7 @@
 #' @return list of plot components
 #' @export
 
-runcurtis_f2 <- function( max_gen = 250,
+runcurtis_f2 <- function( max_gen = 300,
                           P_1 = 0.01,
                           P_2 = 0.01,
                           recomb_rate = 0.5,
