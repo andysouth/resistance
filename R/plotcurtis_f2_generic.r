@@ -29,13 +29,17 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   maxGens <- max( (maxGensI1+maxGensI2), maxGensMix )
   
+  minf <- min( combmat[,r1col], combmat[,r2col] )
+  cat("in plotcurtis_f2_generic minf:",minf," ", log10(minf),"\n")
   
-  f <- c(1:100)				## for y axis 
+  f <- c((100*minf):100)				## for y axis
+  #f <- c(1:100)				## for y axis 
   fl <- log10(f)				
   par(pty="s") 
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
-        xlim=c(1,maxGens), ylim=c(0,(max(fl))),
+        #xlim=c(1,maxGens), ylim=c(0,(max(fl))),
+        xlim=c(1,maxGens), ylim=c(min(fl),(max(fl))),
         #xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
         xlab="Generation", ylab="Allele Frequency", main=main)
   
@@ -56,8 +60,10 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   #axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
   #default x axis
   axis( side=1 )
-  ylabs <- c(1,5,10,50)
-  ylabsnames <- c("1%", "5%", "10%", "50%")
+#   ylabs <- c(1,5,10,50)
+#   ylabsnames <- c("1%", "5%", "10%", "50%")
+  ylabs <- c(0.1,1,5,10,50)
+  ylabsnames <- c("0.1%", "1%", "5%", "10%", "50%")
   logylabs <- log10( ylabs )
   axis( side=2, at=logylabs, labels=ylabsnames, tick=T )
   
