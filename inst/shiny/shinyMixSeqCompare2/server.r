@@ -22,7 +22,7 @@ shinyServer(function(input, output) {
   
   output$plot <- renderPlot({
     
-    cat("in plot scenario:", input$scenarioNum,"\n")
+    #cat("in plot scenario:", input$scenarioNum,"\n")
     
     if (input$scenarioNum > 0)
       plotcurtis_f2_generic( listOutMix$results[[input$scenarioNum]], listOutI2$results[[input$scenarioNum]], listOutI1$results[[input$scenarioNum]] )
@@ -43,10 +43,10 @@ shinyServer(function(input, output) {
   })
   
   
-  output$tableInputVals <- renderTable({
+  output$tableInputVals <- renderTable(digits=5, { 
     
     
-    cat("in tableInputVals\n")
+    #cat("in tableInputVals\n")
     
     #inputs are actually mostly all the same for In1,In2 & Mix
     #code below is copied from sensiAnPaper1All.Rmd
