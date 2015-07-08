@@ -2123,13 +2123,42 @@ Good news that this correction seemed to make the graph closer to Curtis.
 new version of UI comparing scenarios with greater differences in dominance.
 Still doesn't produce something similar to curtis fig2 where mixture does much better.
 
+created runcurtis_f2() to do runs to recreate curtis fig2. recreates it fine.
 
+created shinyFig2Curtis, that calls runcurtis_f2()
+
+for some reason it currently doesn't recreate the curtis plot.
+what inputs are wrong in shinyFig2Curtis ?
+aha! the difference was just `P_1 & P_2` which were set to 0.1 rather than 0.01
+aha2, even after that fixed, something still not quite right
+
+this was because phi.SS2_0B = 1 was set to 0 instead. This is the fitness of exposed susceptibles.
+(1 suggests that the susceptible is completely fit in presence of the insecticide which doesn't seem right).
+
+yes phi.SS2_0B seems key :
+compare these 2:
+```{r}
+#curtis default phi.SS2_0B = 1 : mixture better than sequence
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+#reduce phi.SS2_0B to 0.6 : mixture same as sequence
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.6 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+
+```
+
+How does that relate to this comment from the paper ?
+In particular, Curtis [1] allowed the resistant and sensitive homozygotes to survive DDT exposure with finesses of 50% and 27% respectively (caption to his Figure 2).
+ 
  
 ### TO DO  
 
+1. why can't shinyapps find resistance for this :
+Deployment completed: https://andysouth.shinyapps.io/shinyFig2Curtis
+Warning message:
+In FUN(X[[i]], ...) :
+  Package 'resistance' not available in repository or locally
 
-
-1. should I create a little shiny app mimicing curtis fig2, & allowing usr to modify params, to see how to keep the mixtures doing better ?
+1. work out what to do if critical threshold not reached in findResistancePoints()
+causes : Error in plot.window(...) : need finite 'xlim' values
 
 1. CHECK MODEL RUNS ARE DOING WHAT I THINK. Currently seems that resistance is quicker for mixtures under all scenarios (or very nearly all)
 
