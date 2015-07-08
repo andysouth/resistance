@@ -25,6 +25,7 @@ shinyUI(fluidPage(
     column(2,
            numericInput('scenarioNum','choose a run no.', value=1, min=1, max=100, step=1 ),
            helpText('100 runs are stored, use arrows on right of box to step through them'),
+           helpText('NEW runs with greater differences in dominances'),
            helpText('In all runs resistance seems to arise later with sequential use.')
     ),
     column(2, 
