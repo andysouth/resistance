@@ -40,7 +40,7 @@ shinyUI(fluidPage(
            #numericInput("a.m_B", "insecticide2:", 0.5, min = 0.1, max = 0.9, step = 0.1)
     ),    
     column(2, offset = 0,
-           h5("Fitness of susceptibles(SS) exposed to insecticide"),
+           h5("Selection against susceptibles(SS) exposed to insecticide"),
            numericInput("phi.SS1_A0", "locus1:", 0.73, min = 0, max = 1, step = 0.05),
            numericInput("phi.SS2_0B", "locus2:", 1, min = 0, max = 1, step = 0.05)
     ),
