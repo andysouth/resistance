@@ -264,6 +264,11 @@ runModel2 <- function(input,
       }
     }
     
+    #error check for fitnesses > 1 or < 0
+    if ( any(Wloci > 1 | Wloci < 0 ) ) 
+      warning( sum(Wloci > 1 | Wloci < 0 ), "locus fitness values (Wloci) are >1 or <0")
+    
+    
     ##################################################
     ## Two locus fitnesses in two insecticide Niche
     
@@ -307,6 +312,10 @@ runModel2 <- function(input,
       }
     }
     
+    #error check for fitnesses > 1 or < 0
+    if ( any(Wniche > 1 | Wniche < 0 ) ) 
+      warning( sum(Wniche > 1 | Wniche < 0 ), "niche fitness values (Wniche) are >1 or <0")
+    
     #####################################################################
     ## Calculating fitness based on 2 locus fitness and exposure to niche
     
@@ -321,6 +330,10 @@ runModel2 <- function(input,
       }
     }
 
+    #error check for fitnesses > 1 or < 0
+    if ( any(Wloci > 1 | Wloci < 0 ) ) 
+      warning( sum(Wloci > 1 | Wloci < 0 ), "locus fitness values (Wloci) are >1 or <0")
+    
     # instead sequential scenarios can be done by post-processing
     # andy added for running sequential insecticide scenarios
     # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
