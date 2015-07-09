@@ -85,6 +85,8 @@ findResistancePoints <- function( listOut,
     }    
   }
 
+  #replace any NAs with 999 to show that resistance not reached
+  resistGens[is.na(resistGens)] <- 999
   
   #listOut$input['sexLinked',]
   
