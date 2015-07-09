@@ -50,8 +50,8 @@ sensiAnPaperPart <- function( nScenarios = 10,
     a <- setExposure(exposure=exposure, insecticideUsed = insecticideUsed) 
   
     #selection against SS in presence of insecticide to which it encodes resistance
-    phi.SS1_A0 <- runif(1, min=0.6, max=1)
-    phi.SS2_0B <- runif(1, min=0.6, max=1)    
+    phi.SS1_A0 <- runif(1, min=0.4, max=1)
+    phi.SS2_0B <- runif(1, min=0.4, max=1)    
       
     #dominance of resistance
 #     h.RS1_A0 <- runif(1, min=0, max=1)
@@ -61,10 +61,14 @@ sensiAnPaperPart <- function( nScenarios = 10,
     h.RS1_A0 <- 10^-(runif(1, min=0, max=5))
     h.RS2_0B <- 10^-(runif(1, min=0, max=5))     
     
+    #selective advantage of resistance
+#     s.RR1_A0 <- runif(1, min=0.2, max=1)
+#     s.RR2_0B <- runif(1, min=0.2, max=1)     
     
-    #selective advantage
-    s.RR1_A0 <- runif(1, min=0.2, max=1)
-    s.RR2_0B <- runif(1, min=0.2, max=1)       
+    # Ian suggested this should be dependent on phi to ensure fitness of RR stays below 1 
+    s.RR1_A0 <- runif(1, min=0.2, max=1) * phi.SS1_A0
+    s.RR2_0B <- runif(1, min=0.2, max=1) * phi.SS2_0B
+    
     
     inputOneScenario <- setInputOneScenario( max_gen = max_gen,
       
