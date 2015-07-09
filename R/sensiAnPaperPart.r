@@ -49,9 +49,9 @@ sensiAnPaperPart <- function( nScenarios = 10,
     exposure <- runif(1, min=0.1, max=0.9)
     a <- setExposure(exposure=exposure, insecticideUsed = insecticideUsed) 
   
-    #fitness of SS in presence of insecticide to which it encodes resistance
-    phi.SS1_A0 <- runif(1, min=0.1, max=0.4)
-    phi.SS2_0B <- runif(1, min=0.1, max=0.4)    
+    #selection against SS in presence of insecticide to which it encodes resistance
+    phi.SS1_A0 <- runif(1, min=0.6, max=1)
+    phi.SS2_0B <- runif(1, min=0.6, max=1)    
       
     #dominance of resistance
 #     h.RS1_A0 <- runif(1, min=0, max=1)
