@@ -43,7 +43,7 @@ shinyServer(function(input, output) {
   })
   
   
-  output$tableInputVals <- renderTable({
+  output$tableInputVals <- renderTable(digits=5,{
     
     
     cat("in tableInputVals\n")
