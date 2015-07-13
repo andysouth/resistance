@@ -23,7 +23,7 @@ This breaks down into these subsidiary quetsions :
   
   
   nScenarios <- 100
-  #nScenarios <- 10
+  #nScenarios <- 1000
   ## do model runs
   listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture' )
   listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1' )
@@ -39,9 +39,9 @@ This breaks down into these subsidiary quetsions :
 
 ```{r}
   ## to load previously saved runs, e.g. these that I added 100 onto filename
-  load(file=paste0(outFolder,'listOutMix_100.rda'))
-  load(file=paste0(outFolder,'listOutI1_100.rda'))
-  load(file=paste0(outFolder,'listOutI2_100.rda'))
+  load(file=paste0(outFolder,'listOutMix_100_4.rda'))
+  load(file=paste0(outFolder,'listOutI1_100_4.rda'))
+  load(file=paste0(outFolder,'listOutI2_100_4.rda'))
     
 ```
 
@@ -73,8 +73,7 @@ This breaks down into these subsidiary quetsions :
   # then I need to go to the single run for the other insecticide & starting at 
   # it's current resistance point find out how many more generations to go
   #inputs : inAndOutI1, inAndOutI2, inAndOutMix
-  
-  #resistPointsMix2 <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+  resistPointsMix2 <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
   
   #4) mixture3 : time to resistance for both insecticides when used in a mixture
   #inputs : inAndOutMix
@@ -96,8 +95,29 @@ This breaks down into these subsidiary quetsions :
   #rename rows ready for binding on to inputs
   rownames(resistBetterMix1Seq) <- gsub('gen','betterMix1Seq', rownames(resistBetterMix1Seq))
   
-  #in 100 runs for all 3 critical points sequential was better than mix1 all the time
-  
+  rowSums(resistBetterMix1Seq)/ncol(resistBetterMix1Seq)
+  #100runs
+  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #                .25                   .26                   .30   
+  #1000runs
+  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #               .178                  .232                  .238 
+
+  ## is mix2 better than sequential ?
+  #T/F
+  resistBetterMix2SeqBoolean <- resistPointsMix2 > resistPointsSeq
+  #convert to 0/1
+  resistBetterMix2Seq <- plyr::aaply(resistBetterMix2SeqBoolean,.margins=c(1,2),.fun=as.numeric)
+  #rename rows ready for binding on to inputs
+  rownames(resistBetterMix2Seq) <- gsub('gen','betterMix2Seq', rownames(resistBetterMix2Seq))
+
+    
+  rowSums(resistBetterMix2Seq)/ncol(resistBetterMix2Seq)  
+  #1000runs
+  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #             0.471                0.568                0.551 
+    
+    
   ## is mix3 better than sequential ?
   #T/F
   resistBetterMix3SeqBoolean <- resistPointsMix3 > resistPointsSeq
@@ -106,45 +126,51 @@ This breaks down into these subsidiary quetsions :
   #rename rows ready for binding on to inputs
   rownames(resistBetterMix3Seq) <- gsub('gen','betterMix3Seq', rownames(resistBetterMix3Seq))
   
-  #in 100 runs only one critical point run combination was mix3 better
+  #tally runs where mix3 better than seq
+  rowSums(resistBetterMix3Seq)/ncol(resistBetterMix3Seq)
+  #100runs
+  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #                  .83                   .75                   .72 
+  #1000runs
+  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #                .794                  .726                  .673   
   
   #check1
   #plot the 2 individual results & the mixture, just to check what is going on
   #the mixture one looks superficially similar to the individual ones superimposed
   #x11()
-  plotallele.freq.andy(listOutMix)
-  #x11()
-  plotallele.freq.andy(listOutI1)
-  #x11()
-  plotallele.freq.andy(listOutI2)
+#   plotallele.freq.andy(listOutMix)
+#   #x11()
+#   plotallele.freq.andy(listOutI1)
+#   #x11()
+#   plotallele.freq.andy(listOutI2)
   
   #I should be able to compare single scenarios
   #yes this works, but not too useful
-  plotallele.freq.andy( list(results=list(listOutMix$results[[1]], listOutI1$results[[1]] )) )
+  # plotallele.freq.andy( list(results=list(listOutMix$results[[1]], listOutI1$results[[1]] )) )
   #this is a modifdeied version of Beths function
   #allowing curtis fig2 to be applied to any scenario
-  plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
+  #plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
   
   #check2
-  #what is the absolute difference between mix3 & sequential ?
-  #looks plausible
-  resistDifferenceMix3Seq <- resistPointsMix3 - resistPointsSeq
-  
-  #check3 is their a difference between the mix & the individual strategies
-  #looks mostly plausible, occasionally there are 0s
-  resistDifferenceMix1I1 <- resistPointsMix1 - resistPointsI1
-  resistDifferenceMix1I2 <- resistPointsMix1 - resistPointsI2  
+#   #what is the absolute difference between mix3 & sequential ?
+#   resistDifferenceMix3Seq <- resistPointsMix3 - resistPointsSeq
+#   
+#   #check3 is their a difference between the mix & the individual strategies
+#   #looks mostly plausible, occasionally there are 0s
+#   resistDifferenceMix1I1 <- resistPointsMix1 - resistPointsI1
+#   resistDifferenceMix1I2 <- resistPointsMix1 - resistPointsI2  
   
   ## is mix2 better than sequential ?  
   # I might expect it to be similar to mix3
   
   
   # comparing sensitivity inputs to those used by Beth to reproduce curtis fig2
-  inputCurtis <- createInputMatrix(FALSE)
-  inputSensiMix <- listOutMix$input
-  
-  input <- cbind(inputCurtis, inputSensiMix)
-  write.csv(input, file=paste0(outFolder,'inputCurtisSensiCompare.csv'))
+#   inputCurtis <- createInputMatrix(FALSE)
+#   inputSensiMix <- listOutMix$input
+#   
+#   input <- cbind(inputCurtis, inputSensiMix)
+#   write.csv(input, file=paste0(outFolder,'inputCurtisSensiCompare.csv'))
   
   
 ```
@@ -169,45 +195,80 @@ This breaks down into these subsidiary quetsions :
   treeInput <- treeInput[ treePredictors, ]
   
 
-
+  #bind results onto predictors
   treeInput <- rbind( treeInput, resistBetterMix1Seq )
-  #todo add other results rows here  
+  treeInput <- rbind( treeInput, resistBetterMix2Seq )
+  treeInput <- rbind( treeInput, resistBetterMix3Seq )
   
 ```
   
 ### do tree analysis
 ```{r, eval=FALSE}
-  require(rpart)
+  require(rpart.plot)
   
   #transpose
   treeInput <- t(treeInput)
   #convert to a dataframe
   treeInput <- data.frame(treeInput)
-  
+  #create string with predictor names in
   treePredictorString <- paste(treePredictors, collapse="+")
-  treeResponse <- 'betterMix1Seq_cP0.5'
-  
-  #at 0.5 level
-  tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
-  #getting error number of rows of matrices must match (see arg 2)
-  #may be becuase all vals are 0 ??
-  #yes when I added some 1s it worked OK
-  #treeInput$betterMix1Seq_cP0.5[1:5] <- 1
   
   
-  #using as.formula
-  #tree <- rpart::rpart(as.formula(paste("res ~",argString)), data = inputAndResults, method = 'class')  
-  #hardcoded args
-  #tree <- rpart(res ~ h.RS1_A0 + h.RS2_0B, data = inputAndResults, method = 'class')
-  #tree <- rpart(betterMix1Seq_cP0.5 ~ h.RS1_A0 + h.RS2_0B, data = treeInput, method = 'class')  
+  treeResponses <- c( rownames(resistBetterMix1Seq),
+                      rownames(resistBetterMix2Seq),
+                      rownames(resistBetterMix3Seq) )
   
-  
-  plot(tree) #plots tree
-  text(tree) #labels tree
+  #to do trees & plots for all response variables
+  for( treeResponse in treeResponses )
+  {
+    x11()
+    #png(paste0(outFolder,"tree",treeResponse,".png"))
     
+    tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
+    treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+    #adds in no. scenarios correctly and incorrectly classified
+    #prp(tree, extra=1, varlen = 10, main=treeResponse)
+    prp(treePruned, extra=1, varlen = 10, main=treeResponse)
+    
+    #dev.off()
+    savePlot(paste0(outFolder,"tree",treeResponse,".png"), type='png')     
+  }
+  
+  
+  
+#   treeResponse <- 'betterMix1Seq_cP0.5'
+#   tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
+#   
+#   #if get error number of rows of matrices must match (see arg 2)
+#   #is because all vals are 0
+# 
+#   plot(tree) #plots tree
+#   text(tree) #labels tree
+#   #branch predictors 2 phis & P_2  
+#     
+#   #for mix3 (resistance to both)
+#   x11()
+#   treeResponse <- 'betterMix3Seq_cP0.5'
+#   tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class')  
+#   plot(tree) #plots tree
+#   text(tree) #labels tree  
+#   
+#   #branch predictors 2 phis & P_1
+#   
+#   #or from rpart.plot
+#   #prp(tree)
+#   
+#   #adds in no. scenarios correctly and incorrectly classified
+#   prp(tree, extra=1, varlen = 10, main=treeResponse)
+#   savePlot(paste0(outFolder,"tree",treeResponse,".png"), type='png')
+  
+  #prp(tree, extra=1,box.col=c("pink","palegreen3")[tree$frame$yval],cex=0.5,yesno.yshift=-2)
+  
+    #susanas code
     #pruning tree
     #   treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
     #   plot(treePruned) #plots tree
     #   text(treePruned) #labels tree 
+    # prp(prunned_tree, extra=1,box.col=c("pink", "palegreen3")[prunned_tree$frame$yval],cex=0.5,yesno.yshift=-2)
   
 ```  
