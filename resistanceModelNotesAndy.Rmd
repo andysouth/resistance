@@ -2148,30 +2148,126 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 How does that relate to this comment from the paper ?
 In particular, Curtis [1] allowed the resistant and sensitive homozygotes to survive DDT exposure with finesses of 50% and 27% respectively (caption to his Figure 2).
  
+packageDescription('resistance')
+
+GithubSHA1: 7858f1edc0022233c0cd26f84be64e1a9bd0cd04 
+            7858f1edc0022233c0cd26f84be64e1a9bd0cd04
+ 
+This shows that the installed package is the latest version from github.
+
+problem was because I hadn't updated tghe NAMESPACE Ctrl Shift D
+
+reran model with new ranges for phi vals (0.6 to 1)
+(but still need to sort finite 'xlim' values errors)
+
+e.g. scenario 2
+
+Email from Ian, showing section vi of sensitivity doc.
+
+We have to ensure the fitness of the RS and RR genotypes does not exceed 1.0 as this is the reference (maximum value of the SS genotype in the absence of insecticide. The fitness of the SS homozygote is determined by the ϕ values in Table 3 i.e. as 1- ϕ. Hence the values of s must be less than ϕ. I suggested we set s=x ϕ where x comes for a uniform distribution between 0.2 and 1.0”
+
+This relates to this bit of code :
+
+      for( exposure in c('lo','hi') )
+      {
+        Wloci[ paste0('SS',locusNum), exposure] <-  1 - phi[locusNum, exposure] 
+        
+        Wloci[ paste0('RS',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
+                                                   (h[locusNum, exposure] * s[locusNum, exposure])
+        
+        Wloci[ paste0('RR',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
+                                                   (s[locusNum, exposure])
+      }
+      
+
+Wloci[RR] <- (1-phi) + s
+
+so s must be < phi to keep Wloci[RR] below 1
+
+added in checks for fitnesses >1 or <0 in runModel2
+
+
+initial tree looks promising :
+for mix1 better than sequential:
+phi.SS2_0B < 0.66
+phi.SS1_AO < 0.68
+P_2 > 0.033
+
+
+** 10/7/15 **
+installed rpart.plot
+for prp function used by susana
+
+created loop to do all plots, with titles and save
+
+repeated runs for 500 scenarios, took about an hour.
+ 
+** 11/7/15 **
+running 1000 scenarios
+started at 10.15, check timestamp on outputs to see how long it took
+
+** 13//7/15 **
+
+done created findResistancePointsMixResponsive() for mix2
+
+analysing 1000 runs
+
+  #1000runs
+  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #              0.178                0.232                0.238 
+  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #              0.471                0.568                0.551 
+  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #              0.794                0.726                0.673 
+rounded
+  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #              0.18                0.23                0.24 
+  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #              0.47                0.57                0.55 
+  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #              0.79                0.73                0.67 
+  
+essentially
+mix1 : 0.2
+mix2 : 0.5
+mix3 : 0.7
+
+
+alas the trees are more complicated, but that might be fixed by pruning them ?
+maybe not ... 
+does work well for :
+betterMix1Seq_cP0.1
+ 
+BUT wierdly seems that plots look better (ie much fewer branches) when done individually than when saved in the loop.
+
+is it something to do with interaction between prp and savePlot() ?
+ 
+Now I seem to be getting a different result each time ????? 
+ 
+ 
+ 
  
 ### TO DO  
 
-1. why can't shinyapps find resistance for this :
-Deployment completed: https://andysouth.shinyapps.io/shinyFig2Curtis
-Warning message:
-In FUN(X[[i]], ...) :
-  Package 'resistance' not available in repository or locally
+1. try to get some simple trees
+
+1. decide how to format table of results
+1. put some results together for Ian, not sure how to do trees
+1. include a couple of contrasting graphs, to make a story. e.g. one where mixture better and one where sequential. Maybe number points on the figs.
+
+1. it might be that the tyree results are not useful ??
+
+1. sort order of insecticides for sequential figures
 
 1. work out what to do if critical threshold not reached in findResistancePoints()
 causes : Error in plot.window(...) : need finite 'xlim' values
 
-1. CHECK MODEL RUNS ARE DOING WHAT I THINK. Currently seems that resistance is quicker for mixtures under all scenarios (or very nearly all)
-
-1. create findResistancePointsMixResponsive()
 
 1. review how to answer these questions.
 Main question is : Tree1 is mixture better (0/1), Tree2 is mixture better by >20%.
 
 1. fix the testthat tests to avoid new input addition
 
-1. work further on sensiAnPaper1All 
-
-1. decide whether to do main runs with P_2 dependent on P_1 or not
 
 
 
@@ -2293,6 +2389,9 @@ listOut$results[1] gives a results matrix for the first scenario
 listOutMix$input gives the inputs for all scenarios
 listOutMix$input[c('P_1','P_2'),] gives selected inputs
 
+# current best UIs
+https://andysouth.shinyapps.io/shinyMixSeqCompare1
+https://andysouth.shinyapps.io/shinyFig2Curtis
 
 
 
