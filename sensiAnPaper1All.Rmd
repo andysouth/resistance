@@ -280,7 +280,15 @@ This breaks down into these subsidiary quetsions :
     prp(treePruned, extra=1, varlen = 10, main=treeResponse)
     
     #dev.off()
-    savePlot(paste0(outFolder,"tree",treeResponse,".png"), type='png')     
+    #savePlot(paste0(outFolder,"tree",treeResponse,".png"), type='png')
+    savePlot(paste0(outFolder,"tree",treeResponse,".jpg"), type='jpg')
+        
+    #trying to limit num levels a different way using maxdepth
+    tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class', maxdepth=3) 
+    #adds in no. scenarios correctly and incorrectly classified
+    prp(tree, extra=1, varlen = 10, main=treeResponse)
+    savePlot(paste0(outFolder,"tree",treeResponse,"depth3.jpg"), type='jpg')
+    
   }
   
   
