@@ -39,9 +39,9 @@ This breaks down into these subsidiary quetsions :
 
 ```{r}
   ## to load previously saved runs, e.g. these that I added 100 onto filename
-  load(file=paste0(outFolder,'listOutMix_100_4.rda'))
-  load(file=paste0(outFolder,'listOutI1_100_4.rda'))
-  load(file=paste0(outFolder,'listOutI2_100_4.rda'))
+  load(file=paste0(outFolder,'listOutMix_1000.rda'))
+  load(file=paste0(outFolder,'listOutI1_1000.rda'))
+  load(file=paste0(outFolder,'listOutI2_1000.rda'))
     
 ```
 
@@ -137,7 +137,6 @@ This breaks down into these subsidiary quetsions :
   
   #check1
   #plot the 2 individual results & the mixture, just to check what is going on
-  #the mixture one looks superficially similar to the individual ones superimposed
   #x11()
 #   plotallele.freq.andy(listOutMix)
 #   #x11()
@@ -175,6 +174,56 @@ This breaks down into these subsidiary quetsions :
   
 ```
 
+### finding when mixtures are >20% better
+### repeating calculation of the difference between sequential & mixture scenarios
+```{r}
+  
+  require('plyr')
+  
+  ## is mix1 better than sequential ?
+  #T/F
+  resistBetterMix1SeqBoolean20 <- resistPointsMix1 > (1.2 * resistPointsSeq)
+  #convert to 0/1
+  resistBetterMix1Seq20 <- plyr::aaply(resistBetterMix1SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
+  #rename rows ready for binding on to inputs
+  rownames(resistBetterMix1Seq20) <- gsub('gen','betterMix1Seq20', rownames(resistBetterMix1Seq20))
+  
+  rowSums(resistBetterMix1Seq20)/ncol(resistBetterMix1Seq20)
+  #1000runs
+ #betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+ #                 0.136                  0.175                  0.173 
+
+  ## is mix2 better than sequential ?
+  #T/F
+  resistBetterMix2SeqBoolean20 <- resistPointsMix2 > (1.2 * resistPointsSeq)
+  #convert to 0/1
+  resistBetterMix2Seq20 <- plyr::aaply(resistBetterMix2SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
+  #rename rows ready for binding on to inputs
+  rownames(resistBetterMix2Seq20) <- gsub('gen','betterMix2Seq20', rownames(resistBetterMix2Seq20))
+
+    
+  rowSums(resistBetterMix2Seq20)/ncol(resistBetterMix2Seq20)  
+  #1000runs
+#  betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+#                  0.241                  0.326                  0.313 
+    
+    
+  ## is mix3 better than sequential ?
+  #T/F
+  resistBetterMix3SeqBoolean20 <- resistPointsMix3 > (1.2 * resistPointsSeq)
+  #convert to 0/1
+  resistBetterMix3Seq20 <- plyr::aaply(resistBetterMix3SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
+  #rename rows ready for binding on to inputs
+  rownames(resistBetterMix3Seq20) <- gsub('gen','betterMix3Seq20', rownames(resistBetterMix3Seq20))
+  
+  #tally runs where mix3 better than seq
+  rowSums(resistBetterMix3Seq20)/ncol(resistBetterMix3Seq20)
+  #1000runs
+#  betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+#                  0.672                  0.560                  0.488   
+  
+  
+```
 
 
   
