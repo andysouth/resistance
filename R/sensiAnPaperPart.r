@@ -1,7 +1,11 @@
-#' one of model runs for sensitivity analysis for the first paper
+#' set inputs and run model for the sensitivity analysis for the first paper
 #' 
-#' codes in parameters and ranges
-#' needs to be run at least 3 times, once for each insecticide regime
+#' sets input parameter ranges,  
+#' draws random numbers for the specified number of scenarios,   
+#' runs the model.   
+#' needs to be run 3 times, once for each insecticide strategy 'insecticide1','insecticide2', & 'mixture'.
+#' Setting the random seed by default means that it can be run for the 3 strategies and will generate the 
+#' same inputs for each.
 #' 
 #' @param nScenarios number of scenarios 
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
@@ -12,7 +16,7 @@
 #' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide1' )
 #' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide2' )
 #' #colnames(inputAndResults)
-#' @return todo
+#' @return a list containing results and inputs
 #' @export
 #' 
 sensiAnPaperPart <- function( nScenarios = 10,
@@ -27,12 +31,11 @@ sensiAnPaperPart <- function( nScenarios = 10,
   
   for(i in 1:nScenarios)
   {
-    #no this counter shouldn't go here because this is just creation of the input file
-    #if (i%%100==0) cat("in sensiAnPaperPart() scenario",i,"/",nScenarios,'\n')
     
+    #there's probably a better way  doing this
+    #by generating vectors of samples for each scenario at the same time
+    #but this works
     
-    #* todo : there might be a better way  doing this *
-    #* by generating vectors of samples for each scenario at the same time *
     max_gen <- 500
     
     #insecticide2 is always rarer than insecticide1 (because P_2 is multiplied by P_1)
@@ -47,32 +50,32 @@ sensiAnPaperPart <- function( nScenarios = 10,
     P_1 <- 10^-(runif(1, min=1, max=4))
     P_2 <- 10^-(runif(1, min=1, max=4))  
     
-    #exposure to insecticide
-    #exposure array initialise with 0s in loop so that previous values are zeroed
+    ## exposure to insecticide
     exposure <- runif(1, min=0.1, max=0.9)
+    #this sets exposures according to whether insecticide1,2 or mixture
     a <- setExposure(exposure=exposure, insecticideUsed = insecticideUsed) 
   
-    #selection against SS in presence of insecticide to which it encodes resistance
+    
+    ## selection against SS in presence of insecticide to which it encodes resistance
     phi.SS1_A0 <- runif(1, min=0.4, max=1)
     phi.SS2_0B <- runif(1, min=0.4, max=1)    
       
-    #dominance of resistance
+    
+    ## dominance of resistance
     h.RS1_A0 <- runif(1, min=0, max=1)
     h.RS2_0B <- runif(1, min=0, max=1)    
-    
     #to try to get very different (& some very low, values of dominance)
     #h.RS1_A0 <- 10^-(runif(1, min=0, max=5))
     #h.RS2_0B <- 10^-(runif(1, min=0, max=5))     
     
-    #selective advantage of resistance
-#     s.RR1_A0 <- runif(1, min=0.2, max=1)
-#     s.RR2_0B <- runif(1, min=0.2, max=1)     
-    
+    ## selective advantage of resistance
+    #s.RR1_A0 <- runif(1, min=0.2, max=1)
+    #s.RR2_0B <- runif(1, min=0.2, max=1)     
     # Ian suggested this should be dependent on phi to ensure fitness of RR stays below 1 
     s.RR1_A0 <- runif(1, min=0.2, max=1) * phi.SS1_A0
     s.RR2_0B <- runif(1, min=0.2, max=1) * phi.SS2_0B
     
-    
+    ## put the generated values into an input matrix, using defaults for non specified parameters
     inputOneScenario <- setInputOneScenario( max_gen = max_gen,
       
                         P_1 = P_1,
@@ -93,10 +96,11 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     input <- cbind(input, inputOneScenario)
   }
-  
+
+## run the model for all of the input scenarios    
 listOut <- runModel2(input, produce.plots = FALSE) 
   
-#return(input)
+
 return(listOut)
   
 }
