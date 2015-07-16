@@ -40,9 +40,12 @@ sensiAnPaperPart <- function( nScenarios = 10,
     #possible bug, i think this should be max=1 rather than max=100
     #P_2 <- runif(1, min=0.01, max=100) * P_1
     #now both set to be independent of each other
-    P_1 <- runif(1, min=0.0001, max=0.1)    
-    P_2 <- runif(1, min=0.0001, max=0.1)
-
+    #P_1 <- runif(1, min=0.0001, max=0.1)    
+    #P_2 <- runif(1, min=0.0001, max=0.1)
+    #now set to log-uniform 
+    #select ‘x’ from uniform -1 to -4 and set to 10^x to give equal weight to each log interval.
+    P_1 <- 10^-(runif(1, min=1, max=4))
+    P_2 <- 10^-(runif(1, min=1, max=4))  
     
     #exposure to insecticide
     #exposure array initialise with 0s in loop so that previous values are zeroed
@@ -54,12 +57,12 @@ sensiAnPaperPart <- function( nScenarios = 10,
     phi.SS2_0B <- runif(1, min=0.4, max=1)    
       
     #dominance of resistance
-#     h.RS1_A0 <- runif(1, min=0, max=1)
-#     h.RS2_0B <- runif(1, min=0, max=1)    
+    h.RS1_A0 <- runif(1, min=0, max=1)
+    h.RS2_0B <- runif(1, min=0, max=1)    
     
     #to try to get very different (& some very low, values of dominance)
-    h.RS1_A0 <- 10^-(runif(1, min=0, max=5))
-    h.RS2_0B <- 10^-(runif(1, min=0, max=5))     
+    #h.RS1_A0 <- 10^-(runif(1, min=0, max=5))
+    #h.RS2_0B <- 10^-(runif(1, min=0, max=5))     
     
     #selective advantage of resistance
 #     s.RR1_A0 <- runif(1, min=0.2, max=1)
