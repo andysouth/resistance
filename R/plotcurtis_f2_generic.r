@@ -97,7 +97,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
 #   yval <- log10( 2 )
 #   legend( 105, yval, legend=c("Sequential", "Combination","R at Locus 1 (DDT)", "R at Locus 2(HCH)"), 
 #           col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.7 )
-    legend( 'bottomright', legend=c("Sequential", "Combination", "Insecticide 1", "Insecticide 2"), 
+    legend( 'bottomright', legend=c("Sequential", "Mixture", "Insecticide 1", "Insecticide 2"), 
             col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.7 )  
 			
   
