@@ -24,7 +24,11 @@ shinyUI(fluidPage(
   fluidRow(
     column(2,
            numericInput('scenarioNum','choose a run no.', value=1, min=1, max=100, step=1 ),
-           helpText('100 runs are stored, use arrows on right of box to step through them')
+           helpText('100 runs are stored, use arrows on right of box to step through them.'),
+           helpText('In sequential use insecticide1 is used until resistance reaches 50%, it is then replaced by insecticide2.'),
+           helpText('If the curve crossing the horizontal 50% line furthest to the right is solid that indicates resistance took longer to reach this level for the mixture.'),
+           helpText('If instead the curve to the right is dashed, resistance arose slower with sequential use.')
+           
     ),
     column(2, 
            helpText('input values for this run'),
