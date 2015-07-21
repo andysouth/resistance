@@ -51,7 +51,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   gens <- combmat[,gencol]		
   # add allele frequencies as lines to the plot
   lines( gens, R1, col="red" )
-  lines( gens, R2, col="darkblue" )
+  lines( gens, R2, col="blue" )
   
   # add line at maximum of critical points
   abline( h=(log10(100*max(criticalPoints)) ) )
@@ -69,13 +69,13 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   ## Single insecticide scenarios
   # Only plots up to generation where 0.5 is first reached/exceeded, so this generation is found
-  hch_cutoff <- min(which((bmat[,r2col])>max(criticalPoints)))
-  ddt_cutoff <- min(which((amat[,r1col])>max(criticalPoints)))
+  hch_cutoff <- min(which((amat[,r1col])>max(criticalPoints)))
+  ddt_cutoff <- min(which((bmat[,r2col])>max(criticalPoints)))
   
   # set results columns as vectors from single insecticide treatment
-  hch <- bmat[1:hch_cutoff,r2col]	# trim vector to point where freq of R > 0.5
+  hch <- amat[1:hch_cutoff,r1col]	# trim vector to point where freq of R > 0.5
   hch <- log10( 100 * hch )
-  ddt <- amat[1:ddt_cutoff,r1col]	# trim vector to point where freq of R > 0.5
+  ddt <- bmat[1:ddt_cutoff,r2col]	# trim vector to point where freq of R > 0.5
   ddt <- log10( 100 * ddt )
   
   hch_gens <- c(1:hch_cutoff)
@@ -83,16 +83,16 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   
   # add these as lines
-  lines( hch_gens, hch, col="blue", lty=2 )
-  lines( ddt_gens, ddt, col="red", lty=2 )
+  lines( hch_gens, hch, col="red", lty=2 )
+  lines( ddt_gens, ddt, col="blue", lty=2 )
   
   #when the switch is made, was hardcoded by Beth
   #abline( v = 31, col="black" )
   #yval <- log10( 3 )			
   #text(27, yval, "Switch to DDT", srt=90, cex=0.75) 
   
-  #? I don't quite get why this should be I2
-  abline( v = max(maxGensI2), col="grey", lty=2 )  
+  #when switch made from I1 to I2
+  abline( v = max(maxGensI1), col="grey", lty=2 )  
   
 #   yval <- log10( 2 )
 #   legend( 105, yval, legend=c("Sequential", "Combination","R at Locus 1 (DDT)", "R at Locus 2(HCH)"), 
