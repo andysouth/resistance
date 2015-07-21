@@ -2328,12 +2328,16 @@ run shinyMixSeqCompare1 in a window rather than the browser to enable copy and p
 
 copied 3 figs into the word doc. Note that run 9 is interesting. Mixture does much better than sequential.
 
-
+I'm a bit worried that the post-processed results for the new100 runs seem not to have changed even though
+ 
+ 
  
 ### TO DO  
 
 
-1. set 1000 runs to do tonight
+1. set 1000 runs to do tonight, rename outputs to 100
+1. restart the project to clear environment
+1. check carefully that the post-processing is doing what I think it is
 
 1. redo the word results doc
 
