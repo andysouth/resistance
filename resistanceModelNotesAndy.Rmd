@@ -2192,6 +2192,7 @@ for mix1 better than sequential:
 phi.SS2_0B < 0.66
 phi.SS1_AO < 0.68
 P_2 > 0.033
+P_1
 
 
 ** 10/7/15 **
@@ -2244,27 +2245,99 @@ is it something to do with interaction between prp and savePlot() ?
  
 Now I seem to be getting a different result each time ????? 
  
+** 14/7/15 **
+ 
+putting results document together. 
+ 
+Just checking that the results file for the 1000 runs looks like the figures & UI for the 100 runs 
+ 
+run3: sequential best (seq 28+29, mix3 50)
+run4: mixture best (seq 93+32, mix3 172)
+run5: resistance to one in mixture develops more slowly than both in sequence (seq 29+103, mix1 152)
+ 
+resistPointsI1[,1:5]
+           [,1] [,2] [,3] [,4] [,5]
+gen_cP0.1    38  999   11   57    7
+gen_cP0.25   48  999   21   82   22
+gen_cP0.5    53  999   28   93   29
+resistPointsI2[,1:5]
+           [,1] [,2] [,3] [,4] [,5]
+gen_cP0.1    64  210    7    4   91
+gen_cP0.25   90  250   21   21   99
+gen_cP0.5   102  268   29   32  103
+resistPointsMix1[,1:5]
+           [,1] [,2] [,3] [,4] [,5]
+gen_cP0.1    75  999    9   10   34
+gen_cP0.25   93  999   30   57  116
+gen_cP0.5   102  999   41   86  152
+resistPointsMix3[,1:5]
+           [,1] [,2] [,3] [,4] [,5]
+gen_cP0.1   168  999   21  129  191
+gen_cP0.25  199  999   38  159  202
+gen_cP0.5   213  999   50  172  207
  
  
+Now can I do the 20% better results ? 
+ betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+                 0.136                  0.175                  0.173 
+ betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+                 0.241                  0.326                  0.313 
+ betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+                 0.672                  0.560                  0.488  
+ 
+rounded
+ betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+                 0.14                  0.18                  0.17 
+ betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+                 0.24                  0.33                  0.31 
+ betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+                 0.67                  0.56                  0.49  
+ 
+ 
+Low phi values lead to sequential being better.
+e.g. https://andysouth.shinyapps.io/shinyMixSeqCompare1 
+runs 
+3: phi 0.53, 0.79
+19: phi 0.65, 0.44
+25: phi 0.60, 0.56
+ 
+** 15/7/15 ** 
+ 
+installed triangle package
+this to generate random deviates
+rtriangle(n, a=0, b=1, c=(a+b)/2)
+
+changed label 'combination' to 'mixture' in my generic curtis fig2 plot
+
+** 16/7/15 **
+reran 1000 sensitivity scenarios with new agreed input ranges
+& reran 100 scenarios and put them into shinyMixSeqCompare1
+
+check that the example runs still support the args the way they did before
+
+the 3 example plots that I pasted into the word doc seem to be identical to what they were before
+ARSE is it possible I didn't reload the package so that it used the old function version with the old input ranges ?
+
+yes I think that's what I did !
+
+rereran 100 runs and put them into shinyMixSeqCompare1
+
+sorted order of insecticides for sequential figures
+
+run shinyMixSeqCompare1 in a window rather than the browser to enable copy and pasting figures into word doc
+
+copied 3 figs into the word doc. Note that run 9 is interesting. Mixture does much better than sequential.
+
+
  
 ### TO DO  
 
-1. try to get some simple trees
 
-1. decide how to format table of results
-1. put some results together for Ian, not sure how to do trees
-1. include a couple of contrasting graphs, to make a story. e.g. one where mixture better and one where sequential. Maybe number points on the figs.
+1. set 1000 runs to do tonight
 
-1. it might be that the tyree results are not useful ??
-
-1. sort order of insecticides for sequential figures
-
-1. work out what to do if critical threshold not reached in findResistancePoints()
-causes : Error in plot.window(...) : need finite 'xlim' values
+1. redo the word results doc
 
 
-1. review how to answer these questions.
-Main question is : Tree1 is mixture better (0/1), Tree2 is mixture better by >20%.
 
 1. fix the testthat tests to avoid new input addition
 
@@ -2313,11 +2386,9 @@ Want to do:
 1. rename a to exposure
 1. rename W to ?fitness : fitnessLocus, fitnessNiche and fitnessIndiv
 
-### suggestion from Beth
-could provide a .csv file with the Curtis scenarios set up
-and then the need to set the calibration number and params.csv in the R script can be removed altogether
 
-### How best to refactor variables to arrays ?
+
+### refactoring variables to arrays ?
 Refactoring to arrays will reduce code volume, reduce risk of mistyped variable names and allow objects to be passed between functions.
 cis/trans makes it slightly tricky, but not all variables have cis/trans
 only used for genotype frequencies (f) and in output matrices fitness & genotype 
