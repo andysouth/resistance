@@ -11,6 +11,9 @@ This breaks down into these subsidiary quetsions :
 1. Under which scenarios is the time to resistance for either insecticide quicker for 
 
 ```{r}
+
+  #library(devtools)
+  #install_github('AndySouth/resistance')
   library(resistance)
 
   outFolder <- "C:\\Dropbox\\resistanceResults\\"
@@ -102,6 +105,9 @@ This breaks down into these subsidiary quetsions :
   #1000runs
   #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
   #               .178                  .232                  .238 
+  #new100
+  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #              0.18                 0.24                 0.25 
 
   ## is mix2 better than sequential ?
   #T/F
@@ -116,6 +122,9 @@ This breaks down into these subsidiary quetsions :
   #1000runs
   #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
   #             0.471                0.568                0.551 
+  #new100
+  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #              0.58                 0.57                 0.52 
     
     
   ## is mix3 better than sequential ?
@@ -133,7 +142,10 @@ This breaks down into these subsidiary quetsions :
   #                  .83                   .75                   .72 
   #1000runs
   #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
-  #                .794                  .726                  .673   
+  #                .794                  .726                  .673  
+  #new100
+  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #              0.83                 0.79                 0.72 
   
   #check1
   #plot the 2 individual results & the mixture, just to check what is going on
@@ -237,12 +249,18 @@ This breaks down into these subsidiary quetsions :
   #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
   #I could just rename one to exposure
   rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+
+  #add an extra predictor, the lower starting freq of resistance divided by the larger
+  startResistanceRatio <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+  treeInput <- rbind(treeInput,startResistanceRatio)  
   
   #hardcode which variables to include in the tree analysis here
   #to keep it simple and transparent
-  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
   treeInput <- treeInput[ treePredictors, ]
   
+
+
 
   #bind results onto predictors
   treeInput <- rbind( treeInput, resistBetterMix1Seq )
