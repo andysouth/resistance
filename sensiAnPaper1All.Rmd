@@ -25,8 +25,8 @@ This breaks down into these subsidiary quetsions :
   #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same with exception of exposure
   
   
-  nScenarios <- 100
-  #nScenarios <- 1000
+  #nScenarios <- 100
+  nScenarios <- 1000
   ## do model runs
   listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture' )
   listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1' )
@@ -108,6 +108,9 @@ This breaks down into these subsidiary quetsions :
   #new100
   #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
   #              0.18                 0.24                 0.25 
+  #new1000
+  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #             0.223                0.245                0.243 
 
   ## is mix2 better than sequential ?
   #T/F
@@ -125,7 +128,9 @@ This breaks down into these subsidiary quetsions :
   #new100
   #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
   #              0.58                 0.57                 0.52 
-    
+  #new1000
+  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #             0.558                0.563                0.534   
     
   ## is mix3 better than sequential ?
   #T/F
@@ -146,6 +151,9 @@ This breaks down into these subsidiary quetsions :
   #new100
   #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
   #              0.83                 0.79                 0.72 
+  #new1000
+  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #             0.820                0.747                0.677   
   
   #check1
   #plot the 2 individual results & the mixture, just to check what is going on
@@ -204,7 +212,10 @@ This breaks down into these subsidiary quetsions :
   #1000runs
  #betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
  #                 0.136                  0.175                  0.173 
-
+  #new1000
+ #betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+#                 0.163                  0.178                  0.182   
+  
   ## is mix2 better than sequential ?
   #T/F
   resistBetterMix2SeqBoolean20 <- resistPointsMix2 > (1.2 * resistPointsSeq)
@@ -218,7 +229,9 @@ This breaks down into these subsidiary quetsions :
   #1000runs
 #  betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
 #                  0.241                  0.326                  0.313 
-    
+  #new1000
+# betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+#                 0.283                  0.302                  0.283   
     
   ## is mix3 better than sequential ?
   #T/F
@@ -233,7 +246,9 @@ This breaks down into these subsidiary quetsions :
   #1000runs
 #  betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
 #                  0.672                  0.560                  0.488   
-  
+  #new1000
+# betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+#                 0.622                  0.536                  0.458   
   
 ```
 
@@ -260,13 +275,15 @@ This breaks down into these subsidiary quetsions :
   treeInput <- treeInput[ treePredictors, ]
   
 
-
-
   #bind results onto predictors
   treeInput <- rbind( treeInput, resistBetterMix1Seq )
   treeInput <- rbind( treeInput, resistBetterMix2Seq )
   treeInput <- rbind( treeInput, resistBetterMix3Seq )
-  
+  #add >20% results
+  treeInput <- rbind( treeInput, resistBetterMix1Seq20 )
+  treeInput <- rbind( treeInput, resistBetterMix2Seq20 )
+  treeInput <- rbind( treeInput, resistBetterMix3Seq20 )  
+
 ```
   
 ### do tree analysis
@@ -283,7 +300,11 @@ This breaks down into these subsidiary quetsions :
   
   treeResponses <- c( rownames(resistBetterMix1Seq),
                       rownames(resistBetterMix2Seq),
-                      rownames(resistBetterMix3Seq) )
+                      rownames(resistBetterMix3Seq),
+                      rownames(resistBetterMix1Seq20),
+                      rownames(resistBetterMix2Seq20),
+                      rownames(resistBetterMix3Seq20)
+                      )
   
   #to do trees & plots for all response variables
   for( treeResponse in treeResponses )
