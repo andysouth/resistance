@@ -2313,6 +2313,8 @@ changed label 'combination' to 'mixture' in my generic curtis fig2 plot
 reran 1000 sensitivity scenarios with new agreed input ranges
 & reran 100 scenarios and put them into shinyMixSeqCompare1
 
+
+** 21/7/15 **
 check that the example runs still support the args the way they did before
 
 the 3 example plots that I pasted into the word doc seem to be identical to what they were before
@@ -2330,18 +2332,68 @@ copied 3 figs into the word doc. Note that run 9 is interesting. Mixture does mu
 
 I'm a bit worried that the post-processed results for the new100 runs seem not to have changed even though
  
+** 22/7/15 **
+analysing 1000 rereruns 
+
+betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+               0.223                0.245                0.243 
+betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+               0.558                0.563                0.534 
+betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+               0.820                0.747                0.677 
+               
+rounded
+betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+               0.22                0.25                0.24
+betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+               0.56                0.56                0.53
+betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+               0.82                0.75                0.68
+               
+20% better :
+ betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+                 0.163                  0.178                  0.182 
+ betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+                 0.283                  0.302                  0.283 
+ betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+                 0.622                  0.536                  0.458 
+rounded               
+ betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+                 0.16                  0.18                  0.18 
+ betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+                 0.28                  0.30                  0.28 
+ betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+                 0.62                  0.54                  0.46 
+               
+
+reran trees
+ 
+Best ones :
+
+ 
+to try to find an approximate general rule 
+
+Favouring mixtures over sequential use.
+insecticide effectiveness (phi) > 0.7
+exposure < 0.7
+
+e.g. see treebetterMix2Seq_cP0.5.jpg
+
+
+I haven't done 20% better trees yet. Should I ?
+ 
  
  
 ### TO DO  
 
-
-1. set 1000 runs to do tonight, rename outputs to 100
-1. restart the project to clear environment
-1. check carefully that the post-processing is doing what I think it is
+1. choose 1 tree to present to Ian & maybe this should be the most useful applied one ?
+(which might be mix2 at 20% & 50% resistance)
 
 1. redo the word results doc
 
 
+1. I could add the combined mixture/individual (strategy 2) as a dotted line to plotcurtis_f2_generic()
+(and then could even add labels of 1,2,3 to where they cross the 50% line)
 
 1. fix the testthat tests to avoid new input addition
 
