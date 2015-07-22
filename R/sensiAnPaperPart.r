@@ -12,9 +12,10 @@
 #' @param randomSeed an integer to set seed, NULL for not setting it
 #' 
 #' @examples
-#' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'mixture' )
-#' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide1' )
-#' inputAndResults <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide2' )
+#' inputAndResultsMix <- sensiAnPaperPart( 5, insecticideUsed = 'mixture' )
+#' inputAndResultsI1 <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide1' )
+#' inputAndResultsI2 <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide2' )
+#' plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
 #' #colnames(inputAndResults)
 #' @return a list containing results and inputs
 #' @export
