@@ -2381,16 +2381,105 @@ e.g. see treebetterMix2Seq_cP0.5.jpg
 
 
 I haven't done 20% better trees yet. Should I ?
+done now
+
+** 23/7/15 **
+prettifying trees
+changed response from 0/1 to mixture/sequence 
+
+seems that it may have made the trees bigger, ARSE.
+
+is it to do with pruning ?
+
+tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"]
  
+** 30/7/15 **
+
+checking on trees, and why they seem to change when I tweak formatting options
+add a check into sensiAnPaper1All.Rmd
+
+The tree is the same at the top (if reversed) but has more branches when 0/1 was changed to sequence/mixture.
+
+treeResponse <- "betterMix2Seq_cP0.5"
+    
+tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"]
+#[1] 0.01
+
+What was this error before I made the conversion to text ?
+
+I tried converting back to numeric and I got the same big tree ...
+
+but the value of the error is lightly different :
+tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"]
+[1] 0.01072961
+
+This is what the cptable looks like for the numeric version
+numeric
+> tree$cptable
+          CP nsplit rel error    xerror       xstd
+1 0.34549356      0 1.0000000 1.0000000 0.03385148
+2 0.12875536      1 0.6545064 0.8047210 0.03285260
+3 0.05150215      2 0.5257511 0.6931330 0.03173289
+4 0.04184549      3 0.4742489 0.5107296 0.02889882
+5 0.01824034      5 0.3905579 0.4527897 0.02768814
+6 0.01287554      7 0.3540773 0.4163090 0.02683382
+7 0.01180258      8 0.3412017 0.4098712 0.02667504
+8 0.01072961     12 0.2939914 0.4012876 0.02645941
+9 0.01000000     13 0.2832618 0.4098712 0.02667504
+
+mixture/sequence
+> tree$cptable
+          CP nsplit rel error    xerror       xstd
+1 0.34549356      0 1.0000000 1.0000000 0.03385148
+2 0.12875536      1 0.6545064 0.7532189 0.03238844
+3 0.05150215      2 0.5257511 0.6287554 0.03088571
+4 0.04184549      3 0.4742489 0.4957082 0.02860113
+5 0.01824034      5 0.3905579 0.4699571 0.02806478
+6 0.01287554      7 0.3540773 0.4527897 0.02768814
+7 0.01180258      8 0.3412017 0.4420601 0.02744467
+8 0.01072961     12 0.2939914 0.4377682 0.02734549
+9 0.01000000     13 0.2832618 0.4442060 0.02749387
+
+Aha! when I repeat identical model, cptable is different 
+> tree$cptable
+          CP nsplit rel error    xerror       xstd
+1 0.34549356      0 1.0000000 1.0000000 0.03385148
+2 0.12875536      1 0.6545064 0.7618026 0.03247193
+3 0.05150215      2 0.5257511 0.6351931 0.03097749
+4 0.04184549      3 0.4742489 0.5085837 0.02885696
+5 0.01824034      5 0.3905579 0.4635193 0.02792537
+6 0.01287554      7 0.3540773 0.4248927 0.02704169
+7 0.01180258      8 0.3412017 0.4163090 0.02683382
+8 0.01072961     12 0.2939914 0.4098712 0.02667504
+9 0.01000000     13 0.2832618 0.4098712 0.02667504
+
+
+Can I get back to the nice smaller, neater tree ??
+
+
+http://stackoverflow.com/questions/29197213/what-is-the-difference-between-rel-error-and-x-error-in-a-rpart-decision-tree
+
+A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror.
+
+http://stackoverflow.com/questions/15318409/how-to-prune-a-tree-in-r
+
+This does that :
+
+nsplit <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"nsplit"][1]
+
+
+
+
+
  
  
 ### TO DO  
 
-1. choose 1 tree to present to Ian & maybe this should be the most useful applied one ?
-(which might be mix2 at 20% & 50% resistance)
+1. what is xerror in tree$cptable it seems to be not constant between analyses ??? It is the cross validation parameter.
 
-1. redo the word results doc
+1. compare sequence/mixture tree with 0/1 for 1 of the chosen trees
 
+1. is using the optimal error the way that susannah has suggested a problem ?
 
 1. I could add the combined mixture/individual (strategy 2) as a dotted line to plotcurtis_f2_generic()
 (and then could even add labels of 1,2,3 to where they cross the 50% line)
