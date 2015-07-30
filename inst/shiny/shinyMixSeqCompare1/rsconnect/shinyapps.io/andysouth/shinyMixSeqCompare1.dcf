@@ -1,8 +1,8 @@
 name: shinyMixSeqCompare1
 account: andysouth
 server: shinyapps.io
-bundleId: 215896
+bundleId: 223153
 url: https://andysouth.shinyapps.io/shinyMixSeqCompare1
-when: 1436199698.35289
+when: 1437481725.47792
 asMultiple: FALSE
 asStatic: FALSE
