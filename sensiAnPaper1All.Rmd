@@ -264,6 +264,10 @@ This breaks down into these subsidiary quetsions :
   #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
   #I could just rename one to exposure
   rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+  
+  #renaming other rownames to make nicer plots
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"  
 
   #add an extra predictor, the lower starting freq of resistance divided by the larger
   startResistanceRatio <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
@@ -271,9 +275,25 @@ This breaks down into these subsidiary quetsions :
   
   #hardcode which variables to include in the tree analysis here
   #to keep it simple and transparent
-  treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  #prettifying names
+  treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
   treeInput <- treeInput[ treePredictors, ]
   
+  #replace 0s & 1s with mixture/sequence to make plot clearer
+  repMix <- function(x){
+    x[x==0] <- 'sequence'
+    x[x==1] <- 'mixture'
+    x
+  }
+  
+  resistBetterMix1Seq <- repMix(resistBetterMix1Seq)
+  resistBetterMix2Seq <- repMix(resistBetterMix2Seq)
+  resistBetterMix3Seq <- repMix(resistBetterMix3Seq)
+
+  resistBetterMix1Seq20 <- repMix(resistBetterMix1Seq20)
+  resistBetterMix2Seq20 <- repMix(resistBetterMix2Seq20)
+  resistBetterMix3Seq20 <- repMix(resistBetterMix3Seq20)
 
   #bind results onto predictors
   treeInput <- rbind( treeInput, resistBetterMix1Seq )
@@ -287,13 +307,23 @@ This breaks down into these subsidiary quetsions :
 ```
   
 ### do tree analysis
-```{r, eval=FALSE}
+```{r, eval=TRUE}
   require(rpart.plot)
   
   #transpose
   treeInput <- t(treeInput)
+  
   #convert to a dataframe
-  treeInput <- data.frame(treeInput)
+  treeInput <- data.frame(treeInput, stringsAsFactors = FALSE)
+  
+  
+  #convert predictor columns back to numeric
+  #following this above : replace 0s & 1s with mixture/sequence to make plot clearer
+  filter <- !substr(names(treeInput),1,6) %in% 'better'
+  treeInput[,filter] <- lapply(treeInput[,filter],as.numeric) 
+  filter <- !filter
+  treeInput[,filter] <- lapply(treeInput[,filter],as.factor) 
+    
   #create string with predictor names in
   treePredictorString <- paste(treePredictors, collapse="+")
   
@@ -313,25 +343,86 @@ This breaks down into these subsidiary quetsions :
     #png(paste0(outFolder,"tree",treeResponse,".png"))
     
     tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
-    treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+    #treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+    
+    #http://stackoverflow.com/questions/29197213/what-is-the-difference-between-rel-error-and-x-error-in-a-rpart-decision-tree
+    #A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror.
+    
+    cpOptimal <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"CP"][1]
+    
+    treePruned <- prune(tree, cp=cpOptimal)
+    
+    
+    #to set box colours
+    cols <- ifelse(treePruned$frame$yval == 1, "red", "green3")
+    
     #adds in no. scenarios correctly and incorrectly classified
     #prp(tree, extra=1, varlen = 10, main=treeResponse)
-    prp(treePruned, extra=1, varlen = 10, main=treeResponse)
-    
+    #prp(treePruned, extra=1, varlen = 10, main=treeResponse, col=cols, border.col=cols)
+    #prp(treePruned, extra=1, varlen = 0, main=treeResponse, col=cols, border.col=cols)
+    prp(treePruned, extra=1, varlen = 0, main=treeResponse, box.col=cols, under=TRUE)
+            
     #dev.off()
     #savePlot(paste0(outFolder,"tree",treeResponse,".png"), type='png')
     savePlot(paste0(outFolder,"tree",treeResponse,".jpg"), type='jpg')
         
     #trying to limit num levels a different way using maxdepth
-    tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class', maxdepth=3) 
+    #tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class', maxdepth=3) 
     #adds in no. scenarios correctly and incorrectly classified
-    prp(tree, extra=1, varlen = 10, main=treeResponse)
-    savePlot(paste0(outFolder,"tree",treeResponse,"depth3.jpg"), type='jpg')
+    #prp(tree, extra=1, varlen = 10, main=treeResponse)
+    #savePlot(paste0(outFolder,"tree",treeResponse,"depth3.jpg"), type='jpg')
     
   }
+```  
+
+### testing tree analysis for paper
+```{r, eval=TRUE} 
+
+    x11()
+    
+    treeResponse <- "betterMix2Seq_cP0.5"
   
+    tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
+    treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+    
+    #to set box colours
+    cols <- ifelse(treePruned$frame$yval == 1, "red", "green3")
+    
+    #adds in no. scenarios correctly and incorrectly classified
+    #prp(treePruned, extra=1, varlen = 0, main=treeResponse, box.col=cols, under=TRUE)    
+    
+    cpOptimal <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"CP"][1]
+    
+    treePruned <- prune(tree, cp=cpOptimal)
+    
+    prp(treePruned, extra=1, varlen = 0, main=treeResponse, box.col=cols, under=TRUE)        
+    
   
+    #comparing it with 0/1 gives the same big tree
+    treeInput$betterMix2Seq_cP0.5numeric <- as.numeric(treeInput$betterMix2Seq_cP0.5) 
+    
+    treeResponse <- "betterMix2Seq_cP0.5numeric"
+    
+    tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
+    treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+    
+    #to set box colours
+    cols <- ifelse(treePruned$frame$yval == 1, "red", "green3")
+
+    prp(treePruned, extra=1, varlen = 0, main=treeResponse, box.col=cols, under=TRUE)    
+        
+    
+    #testing alternative pruning
+    #A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror.
+    treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
+    
   
+```  
+
+
+  
+   
+```    
 #   treeResponse <- 'betterMix1Seq_cP0.5'
 #   tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
 #   
@@ -366,5 +457,5 @@ This breaks down into these subsidiary quetsions :
     #   plot(treePruned) #plots tree
     #   text(treePruned) #labels tree 
     # prp(prunned_tree, extra=1,box.col=c("pink", "palegreen3")[prunned_tree$frame$yval],cex=0.5,yesno.yshift=-2)
-  
-```  
+```    
+
