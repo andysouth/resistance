@@ -82,6 +82,12 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   hch_cutoff <- min(which((amat[,r1col])>max(criticalPoints)))
   ddt_cutoff <- min(which((bmat[,r2col])>max(criticalPoints)))
   
+  # check if resistance has not been reached
+  # and prevent an error, by seeting to max generations from input
+  # beware this may have other unintended consequences
+  if (is.infinite(hch_cutoff)) hch_cutoff <- nrow(amat)
+  if (is.infinite(ddt_cutoff)) ddt_cutoff <- nrow(bmat)  
+  
   # set results columns as vectors from single insecticide treatment
   hch <- amat[1:hch_cutoff,r1col]	# trim vector to point where freq of R > 0.5
   hch <- log10( 100 * hch )
