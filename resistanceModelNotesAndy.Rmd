@@ -2468,6 +2468,16 @@ This does that :
 nsplit <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"nsplit"][1]
 
 
+** 31/7/15 **
+give more sensible error than "need finite 'xlim' values" from shiny curtis fig2 app
+set starting freq of resistance to 0.0001 for each to generate the error.
+
+this is when resistance is not reached within max generations.
+
+runcurtis_f2()
+plotcurtis_f2_generic()
+Error in 1:ddt_cutoff : result would be too long a vector
+
 
 
 
@@ -2475,11 +2485,7 @@ nsplit <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tr
  
 ### TO DO  
 
-1. what is xerror in tree$cptable it seems to be not constant between analyses ??? It is the cross validation parameter.
-
-1. compare sequence/mixture tree with 0/1 for 1 of the chosen trees
-
-1. is using the optimal error the way that susannah has suggested a problem ?
+1. give more sensible error than "need finite 'xlim' values" from shiny curtis fig2 app
 
 1. I could add the combined mixture/individual (strategy 2) as a dotted line to plotcurtis_f2_generic()
 (and then could even add labels of 1,2,3 to where they cross the 50% line)
