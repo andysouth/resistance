@@ -255,12 +255,10 @@ runModel2 <- function(input,
     
     
     ##################################################
-    ## Two locus fitnesses in two insecticide Niche
+    ### calculate two locus niche fitness in two insecticide Niche
     
-    # Fitness in specific niche is calculated by multipling fitness of two insecticides/absences present
-    # niches can be toggled off, i.e. a fitness can be given for A0
-    # but if only the niche A,B is toggled on, the fitness scores for A0 and Ab will be set to 0
-
+    # multiply fitness of two insecticides
+    # niches can be toggled off to get fitness of 0
 
     #refactored to replace 250+ lines in earlier version
 #     for( niche1 in dimnames(Wniche)$niche1)
@@ -305,8 +303,9 @@ runModel2 <- function(input,
     if ( any(Wniche > 1 | Wniche < 0 ) ) 
       warning( sum(Wniche > 1 | Wniche < 0 ), "niche fitness values (Wniche) are >1 or <0")
     
+    
     #####################################################################
-    ## Calculating fitness based on 2 locus fitness and exposure to niche
+    ## calculate individual fitness based on exposure to niche & 2 locus fitness
     
     for( sex in dimnames(Windiv)$sex)
     {
@@ -320,16 +319,17 @@ runModel2 <- function(input,
     }
 
     #error check for fitnesses > 1 or < 0
-    if ( any(Wloci > 1 | Wloci < 0 ) ) 
-      warning( sum(Wloci > 1 | Wloci < 0 ), "locus fitness values (Wloci) are >1 or <0")
+    if ( any(Windiv > 1 | Windiv < 0 ) ) 
+      warning( sum(Windiv > 1 | Windiv < 0 ), "individual fitness values (Wloci) are >1 or <0")
     
-    # instead sequential scenarios can be done by post-processing
-    # andy added for running sequential insecticide scenarios
+ 
+    # andy added this for running sequential insecticide scenarios   
+    # instead sequential scenarios now done by post-processing
     # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
-    # Ian suggests values of 0.1, 0.25 and 0.5
-    # I may need to pass it as an extra input argument
-#     criticalPoint <- 0.5 
-#     criticalPoint1Reached <- FALSE #only used for sequential, calibration 1013
+    # could be passed as an extra input argument
+    # criticalPoint <- 0.5 
+    # criticalPoint1Reached <- FALSE #only used for sequential, calibration 1013
+    
     
     #######################################################
     ## generation loop to run model from initial conditions 
@@ -339,7 +339,6 @@ runModel2 <- function(input,
     for (k in 1:max_gen){
       
       # In calibration 1011, between generations 5 and 12 selection is relaxed
-      # fitnesses use relaxed selection fitnesses calculated above
       if( calibration == 1011 & i==2 ) relax <- TRUE
       else relax <- FALSE
       
