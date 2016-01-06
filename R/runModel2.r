@@ -303,8 +303,12 @@ runModel2 <- function(input,
           for( locus1 in dimnames(Wniche)$locus1)
           {
             for( locus2 in dimnames(Wniche)$locus2)
-            {   
-              #
+            {
+              ###########################################################################
+              #6/1/16 i think ians new insecticide interaction parameter can just go here
+              #does in need to be just one param or 4 ?
+              #ΛAB, ΛAb, ΛaB or Λab 
+              #Wniche[locus1,locus2,niche1,niche2] <- interaction * Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
               Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
             }
           }          
