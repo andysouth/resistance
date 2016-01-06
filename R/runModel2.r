@@ -40,53 +40,51 @@ runModel2 <- function(input,
   ## inputs for each scenario are stored in columns of 'input'
   for (i in 1:ncol( input ) ){
     
-    if (i%%10==0) cat("in sensiAnPaperPart() scenario",i,"/",ncol( input ),'\n')
+    if (i%%10==0) cat("in runModel2() scenario",i,"/",ncol( input ),'\n')
     
-    ### Calibrations ###
+    # Calibrations
     calibration <- input[1,i]
     
-    ### Results Matrix ###
-    # Give number of generations
+    # max generations
     max_gen <- input[2,i]
     
-    ### Saving Parameters ###
-    # To save parameters in a matrix, set coll.fitvals to 1 ##
+    # to save parameters in a matrix, set coll.fitvals to 1
     coll.fitvals <- input[3,i]
-    # To save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
-    save.fitvals <- input[4,i]		## will OVERWRITE every time the matrix runs
-    ## so files will need to be renamed/moved to be kept.
+    # to save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
+    save.fitvals <- input[4,i]		
     
-    
-    ### Genotype Frequencies ###
-    ## setting up to get proportions of genotypes in population
-    ## User enters value of P - frequency of resistance allele at locus 1&2 respectively
-    P_1 <- input[5,i]	# locus 1
-    P_2	<- input[6,i]	# locus 2
-    
+    # frequency of resistance allele at locus 1&2 respectively
+    P_1 <- input[5,i]	
+    P_2	<- input[6,i]	
     if ( P_1 > 1 | P_2 >1 ) warning('input resistance frequence >1 P_1:',P_1,' P_2:',P_2,'\n')
     
-    # From this, the function HW will find the proportions of each genotype
-    # RR = p, RS = pq, SS = q, P = p = R
-    
-    ## Recombination ##
+    # Recombination
     recomb_rate <- input[7,i]		# recombination rate
     
-    ### small case = low concentration, upper case = high concentration, 0 = absence
-
-    ## Exposure levels of males and females to each insecticide niche ##
-    
     ## named arrays created to store model components
-    a <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
-    Wloci <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
-    Wniche <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
-    Windiv <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
-    niche <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
+    # exposure
+    a       <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+    # fitness by locus
+    Wloci   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+    # fitness by niche    
+    Wniche  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    # fitness by individual
+    Windiv  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+    # insecticide niche toggle
+    niche   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
     
-    s <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
-    phi <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
-    h <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
-    z <- createArray2(locusNum=c(1,2))
+    # selection coefficient
+    s       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
+    # fitness of one locus (baseline)
+    phi     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    # dominance coefficient
+    h       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    # fitness cost of resistance allele in no insecticide
+    z       <- createArray2(locusNum=c(1,2))
     
+
+    ## Exposure levels of males and females to each insecticide niche
+    # lower case = low concentration, upper case = high concentration, 0 = absence   
     
     # males
     a['m','0','0'] <- input[8,i]
@@ -126,12 +124,10 @@ runModel2 <- function(input,
       stop( paste("Error in female exposures: must total one: ", sum(a['f',,])) )
     }
     
-    ## Selection from distributions
     
     ## Fitness Values
     # Baseline of SS in each insecticide/concentration (NOT niche, see Table 3. of brief)
     # User entered fitness values to allow some survival of homozygote susceptible due to chance
-    # phi = baseline fitness value
     phi[1,'lo'] <- input[26,i]
     phi[1,'hi'] <- input[27,i]
     phi[2,'lo'] <- input[28,i]
@@ -140,8 +136,6 @@ runModel2 <- function(input,
     # fitness of SS in environment with no insecticide are set to 1
     Wloci['SS1','no'] <- input[30,i]
     Wloci['SS2','no'] <- input[31,i]    
-    
-    ## Dominance and selection coefficients
 
     # h = dominance coefficient
     h[1,'no'] <- input[32,i]
@@ -165,7 +159,7 @@ runModel2 <- function(input,
     #s[2,'no'] <- input[43,i]    
     
     ## Toggle Insecticide Niches on and off
-    # Allows for setting of specific combinations of insecticide niches to be used
+    # allows setting specific combinations of insecticide niches
     # if toggled FALSE the calculation of fitness in that niche is cancelled and results printed as 0
     # even if all set to TRUE, calibration == 1011||1012 will change the correct ones to OFF to run Curtis/Comparator
     
@@ -186,11 +180,9 @@ runModel2 <- function(input,
     #extra check in case NA value gets in
     if ( is.na(sexLinked) | !is.logical(sexLinked) ) sexLinked <- FALSE
     
-    
-    
     #### end of reading inputs into parameters
     
-    ## Set up matrices to output results to
+    # Set up matrices to output results to
     # matrix:results - for overall freq of R and S allele per locus per sex, LD and overall allele freq (i.e. 1)
     results <- matrix ( nrow = max_gen, ncol = 11 )
     colnames( results ) <- c( "Gen", "m.R1", "m.R2", "m.LD", 
@@ -209,13 +201,9 @@ runModel2 <- function(input,
                             "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                             "RR1SS2", "RR1RS2", "RR1RR2")
     
-    #######################
+
     ## genotype frequencies
     
-    # set for male and for female: before first round of selection these are the same values
-    # frequencies at end of loop are recycled (unless callibration=102)
-    
-    # make.genotypemat function makes a matrix of the genotype frequencies
     # frequencies of genotypes before selection - in HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
     
@@ -241,9 +229,6 @@ runModel2 <- function(input,
 
     #########################
     ## Single locus fitnesses
-    
-    #h[locusNum, exposure]
-    #phi[locusNum, exposure] where exposure is lo, hi
     
     #refactored and structure had to be changed slightly
     for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
