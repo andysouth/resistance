@@ -322,17 +322,10 @@ runModel2 <- function(input,
     if ( any(Windiv > 1 | Windiv < 0 ) ) 
       warning( sum(Windiv > 1 | Windiv < 0 ), "individual fitness values (Wloci) are >1 or <0")
     
- 
-    # andy added this for running sequential insecticide scenarios   
-    # instead sequential scenarios now done by post-processing
-    # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
-    # could be passed as an extra input argument
-    # criticalPoint <- 0.5 
-    # criticalPoint1Reached <- FALSE #only used for sequential, calibration 1013
-    
     
     #######################################################
-    ## generation loop to run model from initial conditions 
+    ## generation loop to run model from initial conditions
+    #######################################################    
     
     #browser()
     
@@ -343,9 +336,8 @@ runModel2 <- function(input,
       
       #genotype frequency code that was here now moved to before the loop start
       
-      ### Prints record of genotype proportions each generation
+      # save record of genotype proportions each generation
       genotype[k,1] <- k	
-      #r! replace 10 lines below
       #question is it right that only male frequencies seem to be saved ?
       genotype[k,2:11] <- f['m',]
       
@@ -364,57 +356,16 @@ runModel2 <- function(input,
       results[k,5] <- f.R1
       results[k,6] <- f.R2
       
-      
-      #!r recording total fitnesses for males and females
+      # record total fitnesses for males and females
       #question aren't these always 1
       results[k,8] <- sum(f['m',])
       results[k,9] <- sum(f['f',])
       
-      # 1013 - Fig 1. in Curtis, sequential application of insecticide
-      # stops loop running if this calibration is selected to change insecticide when condition met
-      # condition to change insecticide is that frequency of the R allele is >0.5 at locus under selection
-      #if( calibration == 1013 && m.R1 > 0.4999 || calibration == 1013 && m.R2 > 0.4999 ){
-      #stop( (paste("Frequency of R allele at or over 0.5, generation = ", k)) )
-      #}				  
+      # previous sequential insecticide code that was here now done post-processing
       
-      # instead the below can be done by post processing
-      # andy : todo sequential insecticide use for sensitivity analysis
-      # use insecticide1 until resistance >= critical point 
-      # switch to insecticide2 until 2nd resistance allele >= critical point. 
-      # Record total generations for both insecticides.
-      # is it OK to asses just resistance in males ?
-      # can I switch insecticides here ?
-      # how will I record in the output file ?
-      # can I then record or extract num generations until the 2nd threshold is reached ?
-      # something like :
-      # criticalPoint: frequency of resistance allele at which they are deemed of no further value.
-      # Ian suggests values of 0.1, 0.25 and 0.5, set before the generation loop
-#       if ( calibration == 1013 ) #or some other code for my new sequential
-#       {
-#         if (m.R1 >= criticalPoint && !criticalPoint1Reached )
-#         {
-#           #switch to 2nd insecticide alone at same exposure as first one
-#           #for both m&f
-#           a[,'0','B'] <- a[,'A','0']
-#           #set exposure to first insecticide to 0
-#           #for both m&f
-#           a[,'A','0'] <- 0
-#           criticalPoint1Reached <- TRUE
-#           cat("critical point for 1st insecticide reached at generation",k,"\n")
-#         }
-#         if (m.R2 >= criticalPoint && criticalPoint1Reached )
-#         {
-#           cat("critical point for 2nd insecticide reached at generation",k,"\n")
-#         }
-#       }
+
+      # Gametes from before selection frequencies to estimate linkage disequilibrium 
       
-      
-      
-      
-      ##########
-      ## Gametes
-      
-      # Estimated here from before selection frequencies to estimate linkage disequilibrium 
       G <- createGametes( f = f, recomb_rate = recomb_rate ) 
       
       ## Linkage Disequilibrium of resistant allele in gametes
@@ -440,7 +391,7 @@ runModel2 <- function(input,
       R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2
       f.D <- x.R1.R2 - (R1 * R2)
       
-      # print linkage disequilibrium to results matrix
+      # save linkage disequilibrium results
       results[k,4] <- m.D
       results[k,7] <- f.D
       
@@ -453,7 +404,8 @@ runModel2 <- function(input,
       p1q2 <- R1 * S2	# Find P1Q2 and P2Q1 (given P = loc 1 and 1 = R allele)
       p2q1 <- S1 * R2
       
-      if( p1q2 < p2q1 ){		#dmax is the lower of these two
+      #dmax is the lower of these two
+      if( p1q2 < p2q1 ){		
         dmax <- p1q2
       }else{
         dmax <- p2q1
@@ -483,8 +435,8 @@ runModel2 <- function(input,
       results[k,11] <- r2					# prints to column eleven of results matrix
       
       
-      ############################################
-      ### Frequency of alleles following selection
+      #####################################################
+      ## calculate genotype frequencies following selection
       
       if(calibration==103){		## no selection calibration
         
@@ -492,6 +444,11 @@ runModel2 <- function(input,
         fs <- f
         
       }else{
+        
+        #todo : address comment from Ian on ms 12/2015
+        #W.bar may not be necessary
+        #I had originally normalised these finesses by dividing by  Wbar. 
+        #In retrospect this was not necessary
         
         # W bar - Sum of numerators
         W.bar <- createArray2(sex=c('m','f'))
@@ -515,8 +472,7 @@ runModel2 <- function(input,
           }
         }
         
-        
-        ## Frequencies --- Calculated with selection
+        # doing calculation using W.bar from above
         
         for( sex in dimnames(Windiv)$sex)
         {
@@ -527,9 +483,7 @@ runModel2 <- function(input,
               #have to do cis/trans specially
               if ( locus1=='RS1' & locus2=='RS2' )
               {
-                #fs.f.RS1RS2_cis <- (f.f.RS1RS2_cis * W.f.RS1RS2) / W.bar.f
-                #fs.f.RS1RS2_trans <- (f.f.RS1RS2_trans * W.f.RS1RS2) / W.bar.f
-                fs[sex,'RS1RS2_cis'] <- (f[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
+                fs[sex,'RS1RS2_cis']   <- (f[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
                 fs[sex,'RS1RS2_trans'] <- (f[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
               }else
               {
@@ -540,7 +494,7 @@ runModel2 <- function(input,
         }
       }
       
-      ## Calibration 104, selection on one genotype
+      # calibration 104, selection on one genotype
       if( calibration == 104 ){
         
         x.m <- select.gen.m				## Setting fitness of genotype to select on as separate variable
@@ -554,16 +508,17 @@ runModel2 <- function(input,
         
       }
       
-      # Check for errors if genotype frequencies do not total 1.
-      # allow for rounding differences
+      # check that genotype frequencies total 1.
       for(sex in c('m','f'))
       {
+        # allow for rounding differences
         if ( !isTRUE( all.equal(1, sum(fs[sex,])  )))
           warning(sex," genotype frequencies after selection total != 1 ", sum(fs[sex,]) )         
       }
 
-      ###########
-      ## Gametes2
+      
+      ###############################
+      ## Gametes from after selection
 
       # Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
       # 1 - both parts of genotype contribute, 
@@ -572,6 +527,7 @@ runModel2 <- function(input,
       
       #note this uses fs, frequency of genotypes after selection
       G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
+      
       
       ###################
       ## Random Mating ##
@@ -594,14 +550,15 @@ runModel2 <- function(input,
       if ( !isTRUE( all.equal(1, sum(f['f',])  )))
         warning("Female genotype frequencies generation",k,", total != 1 ", sum(f['f',]) )  
       
-      #calibration 102
-      #genotype frequencies reset to what they were at start of loop
+      #calibration 102 : genotype frequencies reset to what they were at start of loop
       if( calibration == 102 ){
         f['m', ] <- genotype.freq[]
         f['f', ] <- genotype.freq[]
       }
       
-    }	# end of generation loop 
+      
+    }	####### end of generation loop 
+    
     
     
     ## Assign results matrices to lists for multiple runs
