@@ -338,32 +338,10 @@ runModel2 <- function(input,
     
     for (k in 1:max_gen){
       
-      # In calibration 1011, between generations 5 and 12 selection is relaxed
-      if( calibration == 1011 & i==2 ) relax <- TRUE
-      else relax <- FALSE
+      # In calibration 1011, selection relaxed for a set time
+      if( calibration == 1011 & i==2 ) Windiv <- relaxSelection(Windiv)      
       
-      if( relax & (2<k) & (k<12)){
-        
-        # relaxed selection fitnesses
-        Windiv[] <- 0.1
-        
-      } else if( relax & (k>11) & (k<15)){
-        
-        # non relaxed fitnesses
-        Windiv[] <- 0.1
-        #setting m,f at same time
-        Windiv[,'RS1','RS2'] <- 1
-        Windiv[,'RS1','RR2'] <- 1
-        Windiv[,'RR1','RS2'] <- 1
-        Windiv[,'RR1','RR2'] <- 1
-        
-      } else if( relax & (k>14) ){
-        
-        # relaxed selection fitnesses
-        Windiv[] <- 0.1
-      }
-
-      #genotype frequency code that was here has been moved to before the loop start
+      #genotype frequency code that was here now moved to before the loop start
       
       ### Prints record of genotype proportions each generation
       genotype[k,1] <- k	
