@@ -306,6 +306,7 @@ runModel2 <- function(input,
     
     #####################################################################
     ## calculate individual fitness based on exposure to niche & 2 locus fitness
+    #weighted average of fitness dependinng on exposure
     
     for( sex in dimnames(Windiv)$sex)
     {
@@ -313,6 +314,8 @@ runModel2 <- function(input,
       {
         for( locus2 in dimnames(Windiv)$locus2)
         {
+          # multiplies exposure by fitness for all niches & then sums
+          # creates a weighted average of exposure in each niche
           Windiv[sex,locus1,locus2] <- sum( a[sex,,] * Wniche[locus1,locus2,,])
         }
       }
@@ -347,6 +350,7 @@ runModel2 <- function(input,
       ##################################
       ## frequency of resistance alleles
       #todo this can be refactored further
+      #ian jan2015 there may be redundancy here if this also calc for gametes
       m.R1 <- sum(f['m',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS1",colnames(f))]))
       m.R2 <- sum(f['m',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS2",colnames(f))]))
       f.R1 <- sum(f['f',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS1",colnames(f))]))
@@ -435,6 +439,7 @@ runModel2 <- function(input,
       results[k,11] <- r2					# prints to column eleven of results matrix
       
       
+      
       #####################################################
       ## calculate genotype frequencies following selection
       
@@ -449,6 +454,7 @@ runModel2 <- function(input,
         #W.bar may not be necessary
         #I had originally normalised these finesses by dividing by  Wbar. 
         #In retrospect this was not necessary
+        #Ian said thi is necessary at this stage to ensure that the gamete frequencies in each sex sum to 1
         
         # W bar - Sum of numerators
         W.bar <- createArray2(sex=c('m','f'))
