@@ -14,7 +14,8 @@
 #' @export
 #' 
 setExposure <- function( exposure = 0.9,
-                         insecticideUsed = 'mixture' )
+                         insecticideUsed = 'mixture',
+                         maleExposureProp = 1)
 {
 
   #exposure to insecticide
@@ -24,23 +25,33 @@ setExposure <- function( exposure = 0.9,
   
   if (insecticideUsed == "insecticide1")
   {
+    #f
+    a['f','A','0'] <- exposure
+    #m
+    a['m','A','0'] <- exposure * maleExposureProp    
     #for both m&f
-    a[,'A','0'] <- exposure
     a[,'0','0'] <- 1 - a[,'A','0']      
   } else if (insecticideUsed == "insecticide2")
   {
+    #f
+    a['f','0','B'] <- exposure
+    #m
+    a['m','0','B'] <- exposure * maleExposureProp     
     #for both m&f
-    a[,'0','B'] <- exposure
     a[,'0','0'] <- 1 - a[,'0','B']        
   } else if (insecticideUsed == "mixture")
   {
+    #f
+    a['f','A','B'] <- exposure
+    #m
+    a['m','A','B'] <- exposure * maleExposureProp
     #for both m&f
-    a[,'A','B'] <- exposure
     a[,'0','0'] <- 1 - a[,'A','B']         
   } else
   {
     stop("insecticideUsed needs to be one of (insecticide1, insecticide2, mixture) it is ",insecticideUsed)
   }
-
+  
+  
   return(a)
 }
