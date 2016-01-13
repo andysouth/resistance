@@ -2478,14 +2478,219 @@ runcurtis_f2()
 plotcurtis_f2_generic()
 Error in 1:ddt_cutoff : result would be too long a vector
 
+fixed by adding in this code to plotcurtis_f2_generic() 
+  # check if resistance has not been reached
+  # and prevent an error, by seeting to max generations from input
+  # beware this may have other unintended consequences
+  if (is.infinite(hch_cutoff)) hch_cutoff <- nrow(amat)
+  if (is.infinite(ddt_cutoff)) ddt_cutoff <- nrow(bmat)  
+
+uploaded new version to shinyapps
+
+
+** 26/8/15 **
+submit invoice
+from contract : maximum of 25 days at 217 per day
+
+I spent 30.6 days (can claim some against tsetse work, or from future contract ...)
+
+
+** 6/10/15 **
+Chatting to Joe Lines at OpenMalaria TAG
+~ liked the shiny front end
+~ asked when he would be able to play with the model
+~ would like to see plots of parameter space, 2D & 3D when mixture better than sequential 
+~ suggested that Curtis does not say mixtures are bad (& that Ian may have slightly skewed impression)
+~~ I said that sentence in GPIRM might suggest that mixtures not as good
+~ he said with classification trees he would like to see an option to influence which branches are done first based upon the operational ability to alter them
+# to do re Joe
+~ send Joe link to the other shiny app
+~ send him the sentence from GPIRM
+~ ask Joe for a paper copy of GPIRM
+
+Pre-existing resistance to one insecticide in the mixture could accelerate the development of double resistant vector populations because of linkage disequilibrium (Figure A9.1). 
+ 
+ 
+GPIRM p121 "theoretical models suggest that mixtures might delay resistance longer than rotations
+or broad mosaics (1)."
+
+p122
+"there is general agreement that LLIN mixture products, when developed, could
+still contain pyrethroids, since the pyrethroid may still contribute
+to the effectiveness of the net despite resistance (this needs to
+be confirmed). Some agree that the rationale applies to IRS, and
+that pyrethroid mixtures could be considered in areas of pyrethroid
+resistance; others believe that this is inadvisable and likely to lead
+to rapid evolution of double resistance."
+
+p122 
+Pre-existing resistance to one insecticide in the mixture could accelerate the development of double resistant vector populations because of linkage disequilibrium (Figure A9.1).
+
+At current prices, rotations and mosaics are estimated to have the lowest cost effect among the IRS-based IRM interventions. They would increase the annual cost by 20–50%, whereas use of mixtures for IRS once developed, are projected to increase the cost by 30–100%, depending on the duration of the transmission
+season. Because mixtures have not yet been developed or marketed, the final cost could be higher or lower than current projections.
+
+
+1. World Health Organization. The technical basis for coordinated action against insecticide resistance: preserving the effectiveness of modern malaria vector control. Geneva, 2011.
+ 
+Curtis is ref. 7. 
+Perhaps I hadn't remembered very well what it said. Or maybe I was remembering more what is in the WHO 2011 publication ? Curtis paper not cited in WHO 2011.
+
+
+** 7/12/15 **
+
+email from Ian :
+
+I had a major session on the 2-locus insecticide-resistance manuscript over the weekend (in between DIY; what a dull life I live!). Anyway I am now fairly happy with it . I plan to submit a IR-modelling grant application on 12th January so would like to have the paper submitted by then. I am not sure if I will manage but at least it is a target... I assume you can see the current version in Dropbox.
+
+Andy,  can you commit a couple to days to it ,or however long it takes, charging to the malaria grant (i.e. the one working with Swiss TPH). Here is a shopping list, but I think #3 is the only one that may require a significant amount of coding
+
+
+As I note in the cover page:  The big change I made was that calculating fitness (equations 1 and 2) was previously described as occurring within the generations. In fact it does not depend on current genotype frequencies so only needs to be done once prior to each deployment scenario  i.e. before the simulation is iterated over the generations. Check the code...if it is  still calculated each generation, it can be moved out, calculated once prior to the iterations,  and computational speed may increase substantially. Andy, you might like to check that it does not currently depend on current genotype frequencies in the code.
+
+The classification trees are currently based on 1,000 samples. Can you increase them to 5,000. The tree for "combinations only better if last >20% longer" needs to be re-drawn with more transparent parameter names. I have updated Table 5 with some suggested variable names for the trees... feel free to change and/or shorten them if you wish. I assume it is trivial to rename the variables in the tree graphing package. I think we need the pruned trees (i.e. within 1 s.e.) for the main manuscript and the full, unpruned trees for the supplementary material.
+
+At the moment we simply re-create the results from Curtis. I think a slight extension will greatly improve the ms by demonstrating the flexibility of the methodology.   I have proposed two small extensions: as described on  Page 14/15. One is for biological realism i.e. male Anopheles mosquitoes are less likely to enter the house so will typically have lower exposure to the insecticide than females. The second is operational: even if we propose to deploy a mixture then various factors (theft, sloth, stock-outs etc) mean that one insecticide will often be absent from the mixture so the other insecticide is sprayed alone. As before, a sensitivity analysis with 5,000 runs. I think we just use these as examples then wrap up the ms by arguing that many other examples could be explored but we lack time/space so have focussed on describing the basic methodology to be used in future more policy-orientated publications
+
+
+That should keep you (or more accurately your computer) busy over Christmas. We can phone and discuss if you want, just nominate a time. I am away in Geneva Wed to Friday this week inclusive so could not talk then. Sorry I can't be here on Thursday for a pint but I'm sure you will manage.
+
+Best wishes,
+Ian
+
+Other bits from the manuscript itself :
+
+Jo Lines/Andy conversation at TAG. Suggest a few graphs where just change one parameter at a time. Need to resurrect our default parameters and easy to do….include them on Table 5 along with Curtis default parameters in other columns.
+
+Andy.
+Can we include the synergism/antagonism/cross-resistance factors Λ in the code; see calibration section of methods, page 6 and Table S1
+
+I think the classification trees each  need 10,000 rather than 1,000 runs. Don’t start clogging up your computer until we decide the final format.
+
+Recreate the “mixtures are only better if last 20% longer” classification tree for Figure 3. I know you have already done it but the nodes all had technical symbols that are difficult to interpret. They need simple names like in Figure 3A. I assume its just a question of changing the parameter names in a “R” plotting script.
+
+
+Run a new set of simulations using the “Curtis extended scenario” described on Page 16 to produce new classification trees again using the two criteria used previously i.e. (a) mixtures better if last >1 generation more than sequential (b) mixtures only better if last >20% longer
+
+page 8 :
+Our simulations will assume that the effects of insecticides in a mixture are multiplicative e.g. if the probability of surviving exposure to insecticide A alone is 0.3 and of surviving insecticide B alone is 0.2, then the probability of surviving expose to a  mixture of A and B is 0.3*0.2=0.06. In other words there is no synergy or antagonistic interactions between the insecticides. We do build flexibility into our methodology by scaling the fitnesses in niches where mosquitoes encounter both insecticides by a factor ΛAB, ΛAb, ΛaB or Λab (Table S1).  If insecticides are synergistic then Λ<1, but if insecticides are antagonistic, for example because they share the same target site or share a similar mechanism of (cross)resistance, then  Λ>1. This is a flexible approach but other strategies are also possible, for example if the insecticides are highly antagonistic then the fitness may be defined as the locus with the higher individual fitness factor, w.
+
+Where would this 'synergism/antagonism/cross-resistance' bit need to go in code ?
+scaling the fitnesses in niches where mosquitoes encounter both insecticides by a factor ΛAB, ΛAb, ΛaB or Λab (Table S1).  If insecticides are synergistic then Λ<1, but if insecticides are antagonistic, for example because they share the same target site or share a similar mechanism of (cross)resistance, then  Λ>1
+
+in runModel2.r, probably Wniche[locus1, locus2, niche1, niche2]
+Around line 300, just after this :
+ ## Two locus fitnesses in two insecticide Niche
+
+    for( nicheNum1 in 1:3 ) #todo get this 1:3 from somewhere
+    {
+      for( nicheNum2 in 1:3 ) #todo get this 1:3 from somewhere
+      { 
+        #temporary solution
+        #to get both niche (one of 0aAbB)
+        #and exposure (one of no,lo,hi)
+        niche1 <- dimnames(Wniche)$niche1[ nicheNum1 ]
+        niche2 <- dimnames(Wniche)$niche2[ nicheNum2 ]
+        exposure1 <- dimnames(Wloci)$exposure[ nicheNum1 ]
+        exposure2 <- dimnames(Wloci)$exposure[ nicheNum2 ]        
+        
+        #if this niche toggled off set fitness to 0
+        if (niche[niche1,niche2] == 0)
+        {
+          Wniche[,,niche1,niche2] <- 0
+        } else{
+          #otherwise set fitness to product of the 2 loci
+          for( locus1 in dimnames(Wniche)$locus1)
+          {
+            for( locus2 in dimnames(Wniche)$locus2)
+            {   
+              #6/1/16 i think ians new insecticide interaction parameter can just go here
+              #does in need to be just one param or 4 ?
+              #ΛAB, ΛAb, ΛaB or Λab 
+              #Wniche[locus1,locus2,niche1,niche2] <- interaction * Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
+              Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
+            }
+          }          
+        }
+      }
+    }
 
 
 
+
+** 18/12/15 **
+~ what do I need to do to get labels correct in all trees ?
+
+Looking at the requests from Ian.
+I think it would be better if he & I sat down to go through it before I spend time doing 1000s more runs.
+
+
+
+** 6/1/16 ** on train to liverpool
+
+Questions for Ian :
+~ I recomend a few days, maybe a week, finishing the restructurng of the model. It still doesn't conform well to good practice.
+done ~ we could go through the model itself, checking Ians code points.
+hat ~ What can we call the insecticide interaction parameter see 290 in runModel2() ?
+4 ~ Is it just 1 param or do we need 4 ?
+no ~ should I remove W.bar arounf line 460 in runModel2()
+~ can we go over the curtis extended scenario p16 ?
+
+
+Linkage dis is bad in the context of mixtures because mosquitos are resistant to both insecticides more often than would be expected by chance. So problem is when the mixture is in use. LD decreases by half each generation under free recombination (recomb rate 0.5) . As genes get closer on chromosome recomb rate decreases.
+ 
+
+9/1/16 on train back from liverpool game rollout workshop
+
+modifying setExposure() function to cope with Ians request for lower male exposure
+I can add it in as a param with a default of 1.
+
+13/1/16
+starting on the new 1 parameter at a time sensi analysis in sensiAnPaperPartOneAtATime.r
  
  
 ### TO DO  
 
-1. give more sensible error than "need finite 'xlim' values" from shiny curtis fig2 app
+See sensiAnPaperPartOneAtATime.r
+  #TODO I need to think more carefully about how to do this
+  #and maybe lookup to see if I can steal any existing sensi analysis type code
+  #and look back at my existing notes
+1. Graphs where just change one param at a time. Jo Lines/Andy conversation at TAG.
+
+Extended Curtis requests from Ian (still not quite sure how I will do)
+1. 'Male exposure' as a proportion of female (0.5 to 1)
+Exposure is held in array a, read from input file by sex, line 90.
+    a['m','0','0'] <- input[8,i]
+I can add a parameter to the setExposure() function which is called from sensiAnPaperPart.r
+
+
+1. 'correct deployment' for mixtures (0.5 to 1) the proportion correctly exposed to the mixture, the rest are divided equally by being exposed to high concentrations of each individual each e.g. exposure 0.8 and correct deployment 0.7 : 0.8x0.7=0.56 are exposed to niche AB, while [0.8x0.3]/2=0.12 are exposed to niche A and 0.12 are exposed to niche B.
+Again this can be added as a parameter to setExposure()
+
+
+Main actions required from Ians last email :
+
+1. Can we include the synergism/antagonism/cross-resistance factors Λ in the code; see calibration section of methods and Table S1. This is about how effect of >1 insecticide are combined. see my notes above for where this is in R code.
+1. Run a new set of simulations using the “Curtis extended scenario” described on Page 16 to produce new classification trees again using the two criteria used previously i.e. (a) mixtures better if last >1 generation more than sequential (b) mixtures only better if last >20% longer
+1. Graphs where just change one param at a time. Jo Lines/Andy conversation at TAG.
+1. Recreate the “mixtures are only better if last 20% longer” classification tree for Figure 3. Replace technical symbols with simple names like in Figure 3A. (see sensiAnPaper1All.Rmd rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure")
+1. once we have decided what to do increase sensitivity analysis to 5000 or 10000 runs & run new trees
+
+
+We the run a “Curtis extended scenario ” to further illustrate the processes. The simulations have two additional parameters in addition to those described above and on Table 5 i.e.
+
+•	A “male exposure” parameter which defines the proportion of males exposed to an insecticide niche as a percentage of the females; it is assumed to be the same for each insecticide niche and varies uniformly from 50% to 100%. So, for example if females are 20% unexposed, 56% exposed to ‘AB’ and 12% exposed to each of niches’ A’ and ‘B’.  If male exposure in 60% of the females their expose to niches ‘AB’,  ‘A’, and ‘B’ are  0.56*0.6= 33.6%, 0.12*0.6=7.2% and 0.12*0.6=7.2% respectively and the proportion unexposed rises to 0.2+(0.8*0.40)= 52%.
+
+•	A “correct deployment” parameter in the simulations examining the use of mixtures. Correct deployment is often not achieved for a variety of operational reasons and exposure to insecticides may not be as anticipated. In particular, mixtures may be mandated but not achieved for various reasons (such as stock-outs) such that the ‘mixtures’ are often replaced by the single insecticide that is available.  We vary this factor uniformly between 50% and 100% and the incorrectly exposed mosquitoes are equally divided into exposure of the single insecticides. So, for example, if exposure is 80% and correct deployment” is 70% then within that 80% exposure to insecticides 0.8x0.7= 56% are exposed to niche AB, while [0.8x0.3]/2= 12%are exposed to niche A and [0.8x0.3]/2= 12% are exposed to niche B. In reality, poor deployment will result in exposure to lots of other niches i.e. a, b, Ab, Ab, ab but we only examine high levels of insecticide here to avoid having to additionally define survival probabilities to low insecticide levels ‘a’ and ‘b’.
+
+
+
+1. look at investigating response by changing single parameters at a time (or can I use existing runs)
+results files are in 'C:\\Users\\andy\\Documents\\resistanceResultsBackup\\listOutI1_1000.rda'
+listOut2, & listOutMix
+
+1. create a vignette that shows how best to run current model
+
+1. I could ad something to shinyCurtis with a message at the top saying whether mixture or sequence better and maybe an arrow pointing to it.
 
 1. I could add the combined mixture/individual (strategy 2) as a dotted line to plotcurtis_f2_generic()
 (and then could even add labels of 1,2,3 to where they cross the 50% line)
@@ -2493,12 +2698,18 @@ Error in 1:ddt_cutoff : result would be too long a vector
 1. fix the testthat tests to avoid new input addition
 
 
+1. create functions fitnessLocus(), fitnessNiche(), fitnessIndiv()
 
 
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
 
 Main question is : Tree1 is mixture better (0/1), Tree2 is mixture better by >20%.
+
+### current state of play 18/12/15
+1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
+1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
+1. runModel2.r          : runs model for the passed scenarios
 
 Good simple test
 ```
@@ -2520,8 +2731,6 @@ tst <- runModel(input)
 
 
 
-1. in susana's script the 'outcome' is 0/1 if used in our case that would seem to lose a lot of information about the outcomes ? Even timeToFifty would be better for us.
-
 1. maybe add option in setInputSensiScenarios to save input object as a csv or rda.
 
 1. add some defensive checks, e.g. for sensible input variables
@@ -2531,7 +2740,7 @@ tst <- runModel(input)
 1. finish tidying documentation of reading in input vars in createInputMatrix()
 
 1. the curtis fig2 plot is produced from >1 scenario, do I want to get it into 1 'reactive' scenario
-1. submit tilde bug report
+
 
 Want to do:
 1. rename a to exposure
@@ -2566,10 +2775,10 @@ rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2",
 ```
 #### inputs
 ** a ** exposure to insecticide
-** phi ** fitness of one locus (baseline)
 ** W.SS1_00 & W.SS2_00** fitness of SS in no insecticide
-** h ** dominance coefficient
 ** s ** selection coefficient
+** phi ** fitness of one locus (baseline)
+** h ** dominance coefficient
 ** z ** fitness cost of resistance allele in no insecticide
 ** niche_ ** insecticide niche toggle
 
