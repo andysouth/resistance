@@ -280,6 +280,11 @@ This breaks down into these subsidiary quetsions :
   treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
   treeInput <- treeInput[ treePredictors, ]
   
+  #get the inputs here to use in ggplot investigation of model responses to inputs
+  #used in a later chunk
+  ggInput <- treeInput
+  
+  
   #replace 0s & 1s with mixture/sequence to make plot clearer
   repMix <- function(x){
     x[x==0] <- 'sequence'
@@ -459,3 +464,65 @@ This breaks down into these subsidiary quetsions :
     # prp(prunned_tree, extra=1,box.col=c("pink", "palegreen3")[prunned_tree$frame$yval],cex=0.5,yesno.yshift=-2)
 ```    
 
+### investigating response of time-to-resistance to individual input parameters
+### (while they all are varying so it may not work well)
+```{r, eval=TRUE} 
+
+  #uses ggInput calculated in earlier trunk
+  
+  #first needs to transpose rows to cols
+  ggInput_T <- t(ggInput)
+    
+  #function to transpose and add strategy column with the passed value
+  #also add on the input columns  
+  addStrategyColumn <- function(x, value, inputs){
+    x <- as.data.frame( t(x) )
+    x$strategy <- value
+    #transpose inputs
+    inputs <- as.data.frame( t(inputs) )
+    #cbind onto the outputs
+    x <- cbind(inputs,x)
+    x
+  }    
+    
+  resistPointsI1_T <- addStrategyColumn(resistPointsI1,"insecticide 1",ggInput) 
+  resistPointsI2_T <- addStrategyColumn(resistPointsI2,"insecticide 2",ggInput)   
+  resistPointsSeq_T <- addStrategyColumn(resistPointsSeq,"Sequential",ggInput) 
+  resistPointsMix1_T <- addStrategyColumn(resistPointsMix1,"Mixture 1",ggInput) 
+  resistPointsMix2_T <- addStrategyColumn(resistPointsMix2,"Mixture 2",ggInput) 
+  resistPointsMix3_T <- addStrategyColumn(resistPointsMix3,"Mixture 3",ggInput)     
+
+  ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
+                      resistPointsMix1_T, resistPointsMix2_T, resistPointsMix3_T)    
+  
+  #ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point() + facet_wrap( ~ cut)
+  
+  #cool working!
+  
+  #this one shows no discernible pattern
+  ggplot(ggInsOuts, aes(x=effectiveness_insecticide1, y=gen_cP0.5, color=strategy)) + geom_point() + facet_wrap( ~ strategy) + geom_smooth()
+  
+  #doing; for all inputs
+  names_inputs <- names(ggInsOuts)[1:10]
+  
+  for(i in names_inputs)
+  {
+    x11()
+    
+    y <- 'gen_cP0.5'
+    #color <- 'strategy'
+    #coloring by exposure shows its effect even when other params are varying
+    color <- 'exposure'    
+    
+    print( ggplot(ggInsOuts, aes_string(x=i, y=y, color=color)) + 
+             geom_point() + 
+             facet_wrap( ~ strategy) + 
+             geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+  }
+
+  #can I facet by particular parameter ranges ?
+  #or even subset the data for specific parameter ranges
+  
+  
+    
+```
