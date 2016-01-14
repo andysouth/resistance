@@ -2529,7 +2529,6 @@ Pre-existing resistance to one insecticide in the mixture could accelerate the d
 At current prices, rotations and mosaics are estimated to have the lowest cost effect among the IRS-based IRM interventions. They would increase the annual cost by 20–50%, whereas use of mixtures for IRS once developed, are projected to increase the cost by 30–100%, depending on the duration of the transmission
 season. Because mixtures have not yet been developed or marketed, the final cost could be higher or lower than current projections.
 
-
 1. World Health Organization. The technical basis for coordinated action against insecticide resistance: preserving the effectiveness of modern malaria vector control. Geneva, 2011.
  
 Curtis is ref. 7. 
@@ -2550,7 +2549,6 @@ As I note in the cover page:  The big change I made was that calculating fitness
 The classification trees are currently based on 1,000 samples. Can you increase them to 5,000. The tree for "combinations only better if last >20% longer" needs to be re-drawn with more transparent parameter names. I have updated Table 5 with some suggested variable names for the trees... feel free to change and/or shorten them if you wish. I assume it is trivial to rename the variables in the tree graphing package. I think we need the pruned trees (i.e. within 1 s.e.) for the main manuscript and the full, unpruned trees for the supplementary material.
 
 At the moment we simply re-create the results from Curtis. I think a slight extension will greatly improve the ms by demonstrating the flexibility of the methodology.   I have proposed two small extensions: as described on  Page 14/15. One is for biological realism i.e. male Anopheles mosquitoes are less likely to enter the house so will typically have lower exposure to the insecticide than females. The second is operational: even if we propose to deploy a mixture then various factors (theft, sloth, stock-outs etc) mean that one insecticide will often be absent from the mixture so the other insecticide is sprayed alone. As before, a sensitivity analysis with 5,000 runs. I think we just use these as examples then wrap up the ms by arguing that many other examples could be explored but we lack time/space so have focussed on describing the basic methodology to be used in future more policy-orientated publications
-
 
 That should keep you (or more accurately your computer) busy over Christmas. We can phone and discuss if you want, just nominate a time. I am away in Geneva Wed to Friday this week inclusive so could not talk then. Sorry I can't be here on Thursday for a pint but I'm sure you will manage.
 
@@ -2615,14 +2613,11 @@ Around line 300, just after this :
     }
 
 
-
-
 ** 18/12/15 **
 ~ what do I need to do to get labels correct in all trees ?
 
 Looking at the requests from Ian.
 I think it would be better if he & I sat down to go through it before I spend time doing 1000s more runs.
-
 
 
 ** 6/1/16 ** on train to liverpool
@@ -2639,14 +2634,57 @@ no ~ should I remove W.bar arounf line 460 in runModel2()
 Linkage dis is bad in the context of mixtures because mosquitos are resistant to both insecticides more often than would be expected by chance. So problem is when the mixture is in use. LD decreases by half each generation under free recombination (recomb rate 0.5) . As genes get closer on chromosome recomb rate decreases.
  
 
-9/1/16 on train back from liverpool game rollout workshop
+** 9/1/16 ** on train back from liverpool game rollout workshop
 
 modifying setExposure() function to cope with Ians request for lower male exposure
 I can add it in as a param with a default of 1.
 
-13/1/16
+** 13/1/16 **
 starting on the new 1 parameter at a time sensi analysis in sensiAnPaperPartOneAtATime.r
  
+** 14/1/16 **
+first see if I can make any informative plots with the existing sensitivity analysis data
+ 
+These outputs are the frequencies by generation of the resistance alleles for the different insecticides (1&2) 
+Gen, m.R1, m.R2, f.R1, f.R2
+ 
+I want to get to a single file that has inputs & time_to_resistance thresholds for each scenario.
+
+I must have something nearly like this already from sensiAnPaper1All.Rmd
+
+Yes : resistPointsI1,2,Mix etc.
+For each scenario these have gen_cP0.1,0.25,0.5 which is the number of generations taken to reach those resistance thresholds.
+
+The next chunk works out which strategy is better than which.
+
+Maybe I want to bind all the resistPoints together into one file and bind onto the inputs, so that we can look at how the inputs effect the time to resistance for the different strategies.
+
+I want input on the x axis & time to resistance on the y. (but there will be the issue that the y values will be affected by the changing values of other parameters too) Cross that bridge when I come to it.
+
+how to get data in format for ggplot2
+check the diamonds dataset in ggplot2 
+ 
+so I want to get as a dataframe with scenarios in rows, & columns for inputs & outputs
+
+so I can do something like :
+ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point()
+
+If I have a column that is strategy (insecticide1, insectide2, sequential, mixture)
+Then I would be able to facet by these later.
+
+ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point() + facet_wrap( ~ cut)
+
+This could be good as I can see the different strategies side by side.
+
+So I want columns :
+input1, input2 ... strategy, outputs : gen_cP0.1, 0.25, 0.5
+ 
+so the dataframe will have length=num strategies*num scenarios
+
+I'll need to rbind the strategies on top of each other.
+
+Some success with ggplot plots.
+
  
 ### TO DO  
 
@@ -2711,6 +2749,14 @@ Main question is : Tree1 is mixture better (0/1), Tree2 is mixture better by >20
 1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
 1. runModel2.r          : runs model for the passed scenarios
 
+Files :
+listOut* I1,I2, Mix : raw results for insecticide1,2 & mixture
+                    : results are in $results[[scenarioNum]]
+                    : e.g. listOutI1$results[[1]] has columns
+                    : colnames(listOutI1$results[[1]])
+                    : "Gen" "m.R1" "m.R2"  "m.LD" "f.R1"  "f.R2" "f.LD" "M"  "F"  "dprime" "r2"
+treeInput : a matrix with scenarios in columns, inputs & outputs in rows  
+
 Good simple test
 ```
 input <- setInputOneScenario(max_gen=5)
@@ -2720,15 +2766,6 @@ tst <- runModel(input)
 
 1. submit stackoverflow question about createArray2(), including about n=3 in eval.parent
 1. what to call createArray2() ? maybe namedArray, or arrayNamed() ? could even put back in the option to pass the fill value ? submit to stackoverflow ?
-
-1. is there a way I can easily run single & combined deployments for the same scenario ?
-* is it `niche_00` and `niche_AB`
-* or in `a.m_AB` insecticide exposure male hi1 hi2
-* do I also need to change "Starting frequency of resistance" ?
-* perhaps I can set up a simple example input to send to Beth ?
-* or ask Beth to send me the input.csv used to produce tables 8 & 9 in 'Brief_full-genotype-tables.pdf'
-* maybe comparing the files in full-dom_CD.csv & SD in C:\Dropbox\Levick et al IR manuscript will help me.
-
 
 
 1. maybe add option in setInputSensiScenarios to save input object as a csv or rda.
@@ -2748,8 +2785,8 @@ Want to do:
 
 
 
-### refactoring variables to arrays ?
-Refactoring to arrays will reduce code volume, reduce risk of mistyped variable names and allow objects to be passed between functions.
+### refactoring variables to arrays
+Refactoring to arrays reduces code volume, reduces risk of mistyped variable names and allow objects to be passed between functions.
 cis/trans makes it slightly tricky, but not all variables have cis/trans
 only used for genotype frequencies (f) and in output matrices fitness & genotype 
 in the wild in Beths code :
@@ -2764,7 +2801,6 @@ fs.m.RS1RS2_trans <- f.m.RS1RS2_trans
 With 2 loci there are ten possible genotypes (including cis & trans forms of the double heterozygous).  
 
 ** A, B, a, b, -** 2 insecticides at 3 levels; low(ab), high(AB), absent(--) resulting in 9 niches.  
-
 Locus1 relates to resistance for insecticide A, and locus2 for B. Locus2 does not effect exposure to A.  
 
 ```
