@@ -2685,12 +2685,24 @@ I'll need to rbind the strategies on top of each other.
 
 Some success with ggplot plots.
 
+** 15/1/16 **
+sent first version of ggplot doc (effectOfIndividualInputs.pdf) to Ian & Beth
+
+prettifying parameter names
+
  
 ### TO DO  
 
+# try changing plot symbol to open circles
+# maybe add in a loop to plot for all 3 resistance thresholds
+# maybe try removing reps with num generations 1000 ?
+# maybe try faceting by parameter ranges ?
+# lookup to see if I can steal any existing sensi analysis type code
+
+
+
 See sensiAnPaperPartOneAtATime.r
   #TODO I need to think more carefully about how to do this
-  #and maybe lookup to see if I can steal any existing sensi analysis type code
   #and look back at my existing notes
 1. Graphs where just change one param at a time. Jo Lines/Andy conversation at TAG.
 

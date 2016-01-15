@@ -85,26 +85,40 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   #input files in listOutMix, listOutIn1 & listOutI2 are the same if the runs are done with default randomSeed 
   #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
   #I could just rename one to exposure
+  #BEWARE risk if future changes
   rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
   
-  #renaming other rownames to make nicer plots
-  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
-  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"  
+  #hardcode which variables to include in analysis to keep it simple and transparent
+  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
 
+  treeInput <- treeInput[ treePredictors, ]
+  
   #add an extra predictor, the lower starting freq of resistance divided by the larger
   startResistanceRatio <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
   treeInput <- rbind(treeInput,startResistanceRatio)  
   
-  #hardcode which variables to include in the tree analysis here
-  #to keep it simple and transparent
-  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-  #prettifying names
-  treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-  treeInput <- treeInput[ treePredictors, ]
+  #renaming other rownames to make nicer plots
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+
+  rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
+  rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
+    
+  rownames(treeInput)[rownames(treeInput)=="h.RS1_A0"] <- "dominance_allele1"
+  rownames(treeInput)[rownames(treeInput)=="h.RS2_0B"] <- "dominance_allele2"
+  
+  rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
+  rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
+  
+  #subsetting now done above before names prettified
+  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  #treeInput <- treeInput[ treePredictors, ]
   
   #get the inputs here to use in ggplot investigation of model responses to inputs
   #used in a later chunk
   ggInput <- treeInput
+  
+    
 ```  
   
 
@@ -141,19 +155,24 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
                       resistPointsMix1_T, resistPointsMix2_T, resistPointsMix3_T)    
   
+  #prettify output names
+  names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.5"] <- "time_to_resistance0.5"
+  names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.25"] <- "time_to_resistance0.25"
+  names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.1"] <- "time_to_resistance0.1"
+  
   #ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point() + facet_wrap( ~ cut)
   
   #cool working!
   
   #exposure has the most noticeable effect
-  ggplot(ggInsOuts, aes(x=exposure, y=gen_cP0.25, color=strategy)) + 
+  ggplot(ggInsOuts, aes(x=exposure, y=time_to_resistance0.25, color=strategy)) + 
     geom_point() + 
     facet_wrap( ~ strategy) + 
     #geom_smooth(aes(x=exposure, y=gen_cP0.5, color=NULL))
     geom_smooth(colour='red', linetype='dashed',size=0.5) 
   
   #effectiveness of insecticide1 little noticeable effect
-#   ggplot(ggInsOuts, aes(x=effectiveness_insecticide1, y=gen_cP0.25, color=strategy)) + 
+#   ggplot(ggInsOuts, aes(x=effectiveness_insecticide1, y=time_to_resistance0.25, color=strategy)) + 
 #     geom_point() + 
 #     facet_wrap( ~ strategy) + 
 #     #geom_smooth(aes(x=effectiveness_insecticide1, y=gen_cP0.5, color=NULL)) 
@@ -172,8 +191,8 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   {
     #x11()
 
-    y <- 'gen_cP0.25'    
-    #y <- 'gen_cP0.5'
+    y <- 'time_to_resistance0.25'    
+    #y <- 'time_to_resistance0.5'
     #color <- 'strategy'
     #coloring by exposure shows its effect even when other params are varying
     color <- 'exposure'    
@@ -186,7 +205,8 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   }
 
   #can I facet by particular parameter ranges ?
-  #or even subset the data for specific parameter ranges
+  #might need to create a categorical var from the range and use that to facet 
+  #or subset the data for specific parameter ranges
   
 ```  
 

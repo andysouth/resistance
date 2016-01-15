@@ -41,7 +41,7 @@ This breaks down into these subsidiary quetsions :
 ```  
 
 ```{r}
-  ## to load previously saved runs, e.g. these that I added 100 onto filename
+  ## to load previously saved runs
   load(file=paste0(outFolder,'listOutMix_1000.rda'))
   load(file=paste0(outFolder,'listOutI1_1000.rda'))
   load(file=paste0(outFolder,'listOutI2_1000.rda'))
@@ -263,22 +263,34 @@ This breaks down into these subsidiary quetsions :
   #input files in listOutMix, listOutIn1 & listOutI2 are the same if the runs are done with default randomSeed 
   #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
   #I could just rename one to exposure
+  #BEWARE risk if future changes
   rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
   
-  #renaming other rownames to make nicer plots
-  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
-  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"  
+  #hardcode which variables to include in analysis to keep it simple and transparent
+  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+
+  treeInput <- treeInput[ treePredictors, ]
 
   #add an extra predictor, the lower starting freq of resistance divided by the larger
   startResistanceRatio <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
-  treeInput <- rbind(treeInput,startResistanceRatio)  
+  treeInput <- rbind(treeInput,startResistanceRatio)    
+    
+  #renaming other rownames to make nicer plots
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+
+  rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
+  rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
+    
+  rownames(treeInput)[rownames(treeInput)=="h.RS1_A0"] <- "dominance_allele1"
+  rownames(treeInput)[rownames(treeInput)=="h.RS2_0B"] <- "dominance_allele2"
   
-  #hardcode which variables to include in the tree analysis here
-  #to keep it simple and transparent
-  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-  #prettifying names
-  treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-  treeInput <- treeInput[ treePredictors, ]
+  rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
+  rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
+  
+  #subsetting now done above before names prettified
+  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  #treeInput <- treeInput[ treePredictors, ]
   
   #get the inputs here to use in ggplot investigation of model responses to inputs
   #used in a later chunk
@@ -468,10 +480,10 @@ This breaks down into these subsidiary quetsions :
 ### (while they all are varying so it may not work well)
 ```{r, eval=TRUE} 
 
-  #uses ggInput calculated in earlier trunk
+  #uses ggInput calculated in earlier chunk
   
   #first needs to transpose rows to cols
-  ggInput_T <- t(ggInput)
+  #ggInput_T <- t(ggInput)
     
   #function to transpose and add strategy column with the passed value
   #also add on the input columns  
