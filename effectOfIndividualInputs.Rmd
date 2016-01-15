@@ -1,0 +1,193 @@
+---
+  title: "effectOfIndividualInputs"
+  output: pdf_document
+  author: "Andy South"
+  date: "`r Sys.Date()`"
+---
+
+# Investigation into effects of individual inputs on time to reach resistance thresholds.
+# version 2 - in progress
+
+## Based on 1000 runs with all inputs varying at once which explains the variability at particular input values.
+## Within each figure the plots are divided into 6 sub-plots according to the insecticide use strategy and when the resistance threshold is reached
+1. insecticide 1 : sole use
+1. insecticide 2 : sole use
+1. Mixture 1 : threshold reached for either insecticide in mixture
+1. Mixture 2 : once threshold reached for either insecticide in mixture, switch to sole use of other until it too reaches threshold
+1. Mixture 3 : threshold reached for both insecticides in mixture
+1. Sequential : sole use of one insecticide, switch to other when threshold reached until it too reaches threshold
+
+These plots show gen_cP0.2, which is the number of generations to reach 20% resistance.
+
+Red dashed lines are a smoothed mean.
+
+The plots show a set of points at 1000 generations. The model is run for 500 generations, any runs which have not reached the resistance threshold by this time are given a value of 1000. This has little effect on questions of whether mixtures or sequential use is better, but does effect the plots presented here.
+
+
+```{r,echo=FALSE,results='hide'}
+
+  library(resistance)
+
+  outFolder <- "C:\\Dropbox\\resistanceResults\\"
+  
+  ## to load previously saved runs
+  load(file=paste0(outFolder,'listOutMix_1000.rda'))
+  load(file=paste0(outFolder,'listOutI1_1000.rda'))
+  load(file=paste0(outFolder,'listOutI2_1000.rda'))
+```
+
+
+```{r,echo=FALSE,results='hide'}
+### chunk copied from sensiAnPaper1All
+### now want to calculate the times to reach critical points and add them on to the input file 
+### for different insecticide strategies, sequential, mix1 and mix2  
+  
+  
+  #1) sequential : time to resistance for each insecticide in isolation
+  #inputs : inAndOutI1, inAndOutI2
+  #find time to criticalPoint for insecticide1
+  #find time to criticalPoint for insecticide2
+  #add together
+  resistPointsI1 <- findResistancePoints(listOutI1, locus=1)
+  resistPointsI2 <- findResistancePoints(listOutI2, locus=2)  
+  
+  resistPointsSeq <- resistPointsI1 + resistPointsI2
+  
+  
+  #2) mixture1 : time to resistance for either insecticide when used in a mixture
+  #inputs : inAndOutMix
+  #find time to criticalPoint for EITHER insecticide in mixture  
+  resistPointsMix1 <- findResistancePoints(listOutMix, locus='either')  
+  #todo - to be comparable I think this should be for when resistance to BOTH insecticides is reached
+  
+  #3) mixture2 : when resistance to one insecticide in the mixture reached, switch to sole use of the 
+  #   other until that too reaches the critical point. Record total time.
+  # what I actually need to do is start with mixture find the first critical point
+  # (need to know which of the insecticides it is)
+  # then I need to go to the single run for the other insecticide & starting at 
+  # it's current resistance point find out how many more generations to go
+  #inputs : inAndOutI1, inAndOutI2, inAndOutMix
+  resistPointsMix2 <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+  
+  #4) mixture3 : time to resistance for both insecticides when used in a mixture
+  #inputs : inAndOutMix
+  #find time to criticalPoint for BOTH insecticide in mixture  
+  resistPointsMix3 <- findResistancePoints(listOutMix, locus='both')
+  
+```
+
+```{r,echo=FALSE,results='hide'}
+### chunk copied from part of one in sensiAnPaper1All
+### bind results onto input file
+    
+  treeInput <- listOutMix$input
+  
+  #input files in listOutMix, listOutIn1 & listOutI2 are the same if the runs are done with default randomSeed 
+  #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
+  #I could just rename one to exposure
+  rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+  
+  #renaming other rownames to make nicer plots
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"  
+
+  #add an extra predictor, the lower starting freq of resistance divided by the larger
+  startResistanceRatio <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+  treeInput <- rbind(treeInput,startResistanceRatio)  
+  
+  #hardcode which variables to include in the tree analysis here
+  #to keep it simple and transparent
+  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  #prettifying names
+  treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  treeInput <- treeInput[ treePredictors, ]
+  
+  #get the inputs here to use in ggplot investigation of model responses to inputs
+  #used in a later chunk
+  ggInput <- treeInput
+```  
+  
+
+## This plot shows exposure which has the most noticeable pattern.
+```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
+
+  
+  library(ggplot2)
+  
+  #uses ggInput calculated in earlier chunk
+  
+  #first needs to transpose rows to cols
+  #ggInput_T <- t(ggInput)
+    
+  #function to transpose and add strategy column with the passed value
+  #also add on the input columns  
+  addStrategyColumn <- function(x, value, inputs){
+    x <- as.data.frame( t(x) )
+    x$strategy <- value
+    #transpose inputs
+    inputs <- as.data.frame( t(inputs) )
+    #cbind onto the outputs
+    x <- cbind(inputs,x)
+    x
+  }    
+    
+  resistPointsI1_T <- addStrategyColumn(resistPointsI1,"insecticide 1",ggInput) 
+  resistPointsI2_T <- addStrategyColumn(resistPointsI2,"insecticide 2",ggInput)   
+  resistPointsSeq_T <- addStrategyColumn(resistPointsSeq,"Sequential",ggInput) 
+  resistPointsMix1_T <- addStrategyColumn(resistPointsMix1,"Mixture 1",ggInput) 
+  resistPointsMix2_T <- addStrategyColumn(resistPointsMix2,"Mixture 2",ggInput) 
+  resistPointsMix3_T <- addStrategyColumn(resistPointsMix3,"Mixture 3",ggInput)     
+
+  ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
+                      resistPointsMix1_T, resistPointsMix2_T, resistPointsMix3_T)    
+  
+  #ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point() + facet_wrap( ~ cut)
+  
+  #cool working!
+  
+  #exposure has the most noticeable effect
+  ggplot(ggInsOuts, aes(x=exposure, y=gen_cP0.25, color=strategy)) + 
+    geom_point() + 
+    facet_wrap( ~ strategy) + 
+    #geom_smooth(aes(x=exposure, y=gen_cP0.5, color=NULL))
+    geom_smooth(colour='red', linetype='dashed',size=0.5) 
+  
+  #effectiveness of insecticide1 little noticeable effect
+#   ggplot(ggInsOuts, aes(x=effectiveness_insecticide1, y=gen_cP0.25, color=strategy)) + 
+#     geom_point() + 
+#     facet_wrap( ~ strategy) + 
+#     #geom_smooth(aes(x=effectiveness_insecticide1, y=gen_cP0.5, color=NULL)) 
+#     geom_smooth(colour='red', linetype='dashed',size=0.5) 
+  
+  
+```
+
+## In the following plots all inputs are plotted individually, the points are coloured by exposure, which allows us to see that, even as other inputs change, low times to resistance are associated with high exposure.
+```{r, eval=TRUE, echo=FALSE} 
+  
+  #doing; for all inputs
+  names_inputs <- names(ggInsOuts)[1:10]
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- 'gen_cP0.25'    
+    #y <- 'gen_cP0.5'
+    #color <- 'strategy'
+    #coloring by exposure shows its effect even when other params are varying
+    color <- 'exposure'    
+    
+    print( ggplot(ggInsOuts, aes_string(x=i, y=y, color=color)) + 
+             geom_point() + 
+             facet_wrap( ~ strategy) + 
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             geom_smooth(colour='red', linetype='dashed',size=0.5) )
+  }
+
+  #can I facet by particular parameter ranges ?
+  #or even subset the data for specific parameter ranges
+  
+```  
+
+
