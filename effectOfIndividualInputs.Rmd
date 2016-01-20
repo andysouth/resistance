@@ -155,6 +155,17 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
                       resistPointsMix1_T, resistPointsMix2_T, resistPointsMix3_T)    
   
+  #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+  #>1000 excludes sequential strategy that had a 999 in
+  #BEWARE would need to increase 1000 if I increase max generations in the runs
+  didntReachThresh <- which(ggInsOuts$gen_cP0.5 == 999 | ggInsOuts$gen_cP0.5 > 1000 |
+                            ggInsOuts$gen_cP0.25 == 999 | ggInsOuts$gen_cP0.25 > 1000 |
+                            ggInsOuts$gen_cP0.1 == 999 | ggInsOuts$gen_cP0.1 > 1000 )
+  
+  #subset by runs not making threshold
+  ggInsOuts <- ggInsOuts[-didntReachThresh,]
+  
+  
   #prettify output names
   names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.5"] <- "time_to_resistance0.5"
   names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.25"] <- "time_to_resistance0.25"
