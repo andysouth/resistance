@@ -24,9 +24,9 @@ This breaks down into these subsidiary quetsions :
 
   #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same with exception of exposure
   
-  
+  nScenarios <- 10  
   #nScenarios <- 100
-  nScenarios <- 1000
+  #nScenarios <- 1000
   ## do model runs
   listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture' )
   listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1' )
@@ -272,8 +272,12 @@ This breaks down into these subsidiary quetsions :
   treeInput <- treeInput[ treePredictors, ]
 
   #add an extra predictor, the lower starting freq of resistance divided by the larger
-  startResistanceRatio <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
-  treeInput <- rbind(treeInput,startResistanceRatio)    
+  resist_start_hi_div_lo <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+  treeInput <- rbind(treeInput,resist_start_hi_div_lo)    
+  
+  #20160122 add test for Ian of resistance1/resistance2
+  resist_start_1_div_2 <- treeInput['P_1',]/treeInput['P_2',]
+  treeInput <- rbind(treeInput,resist_start_1_div_2)  
     
   #renaming other rownames to make nicer plots
   rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
