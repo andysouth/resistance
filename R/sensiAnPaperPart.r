@@ -10,6 +10,8 @@
 #' @param nScenarios number of scenarios 
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
 #' @param randomSeed an integer to set seed, NULL for not setting it
+#' @param experiment effects which inputs to change, 
+#'    'extended' for adding reduced male exposure & incorrect deploymnet 
 #' 
 #' @examples
 #' inputAndResultsMix <- sensiAnPaperPart( 5, insecticideUsed = 'mixture' )
@@ -22,7 +24,8 @@
 #' 
 sensiAnPaperPart <- function( nScenarios = 10,
                            insecticideUsed = 'mixture',
-                           randomSeed = 1 )
+                           randomSeed = 1,
+                           experiment = "curtis1")
 {
   #set random seed
   if (!is.null(randomSeed)) set.seed(randomSeed)
@@ -53,8 +56,22 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     ## exposure to insecticide
     exposure <- runif(1, min=0.1, max=0.9)
+    
+    
+    if (experiment=='extended')
+    {
+      maleExposureProp <- runif(1, min=0.5, max=1)
+      correctMixDeployProp <- runif(1, min=0.5, max=1)          
+    } else
+    {
+      maleExposureProp <- 1
+      correctMixDeployProp <- 1     
+    }
+    
+    
     #this sets exposures according to whether insecticide1,2 or mixture
-    a <- setExposure(exposure=exposure, insecticideUsed = insecticideUsed) 
+    a <- setExposure(exposure=exposure, insecticideUsed=insecticideUsed,
+                     maleExposureProp=maleExposureProp, correctMixDeployProp=correctMixDeployProp) 
   
     
     ## selection against SS in presence of insecticide to which it encodes resistance
