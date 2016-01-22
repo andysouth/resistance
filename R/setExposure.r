@@ -6,6 +6,10 @@
 #' 
 #' @param exposure exposure to teh insecticide(s)
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
+#' @param maleExposureProp proportion tht males are exposed relative to f, default 1, likely to be <1
+#' @param correctMixDeployProp proportion of times that mixture is deployed correctly, 
+#'    assumes that when not deployed correctly the single insecticides are used instead
+#'    TODO check my understanding of this
 #' 
 #' @examples
 #' a <- setExposure( exposure='0.9', insecticideUsed = 'mixture' )
@@ -15,7 +19,8 @@
 #' 
 setExposure <- function( exposure = 0.9,
                          insecticideUsed = 'mixture',
-                         maleExposureProp = 1)
+                         maleExposureProp = 1,
+                         correctMixDeployProp = 1 )
 {
 
   #exposure to insecticide
@@ -30,7 +35,8 @@ setExposure <- function( exposure = 0.9,
     #m
     a['m','A','0'] <- exposure * maleExposureProp    
     #for both m&f
-    a[,'0','0'] <- 1 - a[,'A','0']      
+    a[,'0','0'] <- 1 - a[,'A','0']  
+    
   } else if (insecticideUsed == "insecticide2")
   {
     #f
@@ -38,15 +44,40 @@ setExposure <- function( exposure = 0.9,
     #m
     a['m','0','B'] <- exposure * maleExposureProp     
     #for both m&f
-    a[,'0','0'] <- 1 - a[,'0','B']        
+    a[,'0','0'] <- 1 - a[,'0','B']  
+    
   } else if (insecticideUsed == "mixture")
   {
     #f
-    a['f','A','B'] <- exposure
+    a['f','A','B'] <- exposure * correctMixDeployProp
     #m
-    a['m','A','B'] <- exposure * maleExposureProp
-    #for both m&f
-    a[,'0','0'] <- 1 - a[,'A','B']         
+    a['m','A','B'] <- a['f','A','B'] * maleExposureProp
+    
+    if ( correctMixDeployProp < 1 )
+    {
+      a['f','A','0'] <- (1 - correctMixDeployProp)/2 * exposure
+      
+      a['m','A','0'] <- a['f','A','0'] * maleExposureProp
+      
+      #m&f together
+      a[,'0','B'] <- a[,'A','0']    
+      a[,'0','0'] <- 1 - (a[,'A','B'] + a[,'A','0'] + a[,'0','B'])  
+      
+    } else
+    {
+      #if mixture applied correctly there are no single insecticide niches
+      #same answer would probably be reached by going through previous loop
+      #but this might make code clearer
+      a[,'0','0'] <- 1 - a[,'A','B']
+    }
+
+# old version without correctMixDeployProp
+#     #f
+#     a['f','A','B'] <- exposure
+#     #m
+#     a['m','A','B'] <- exposure * maleExposureProp
+#     #for both m&f
+#     a[,'0','0'] <- 1 - a[,'A','B']         
   } else
   {
     stop("insecticideUsed needs to be one of (insecticide1, insecticide2, mixture) it is ",insecticideUsed)
