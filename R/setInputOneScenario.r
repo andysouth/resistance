@@ -59,6 +59,9 @@
 #' @param niche_Ab insecticide niche toggle hi1 lo2 0=off 1=on
 #' @param niche_aB insecticide niche toggle lo1 hi2 0=off 1=on
 #' @param sexLinked whether resistance is sex linked, default=0(FALSE)
+#' @param maleExposureProp male exposure as a propoertion of female, default 1 for same, likely <1  
+#' @param correctMixDeployProp proportion of correct deployment of mixtures, 
+#'    if <1 other portion divided between single insecticides
 #' 
 #' @return named vector
 #' @export
@@ -116,11 +119,13 @@ setInputOneScenario <- function( calibration = 100,
                                  niche_AB	=	1	,
                                  niche_Ab	=	1	,
                                  niche_aB	=	1 ,
-                                 sexLinked = 0
+                                 sexLinked = 0,
+                                 maleExposureProp = 1,
+                                 correctMixDeployProp = 1  
                                  )
 {
   
-  input <- matrix( ncol=1, nrow=53 )
+  input <- matrix( ncol=1, nrow=55 )
   
   input[1] <- calibration
   input[2] <- max_gen
@@ -198,14 +203,21 @@ setInputOneScenario <- function( calibration = 100,
   input[	52	] <-	niche_aB
   
   input[	53	] <-	sexLinked
+  
+  #22/1/16 new variables for extended experiment
+  #they aren't used in runModel2() but are needed for post run analyses
+  input[	54	] <-	maleExposureProp
+  input[	55	] <-	correctMixDeployProp
     
   a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
-  if ( a.m != 1 ){		 
+  #if ( a.m != 1 ){
+  #these warnings allow for rounding differences
+  if ( !isTRUE( all.equal(1, a.m  ))){
   	stop("male exposures must total one, currently: ", a.m )
   	}
   
   a.f <- sum(a.f_00, a.f_a0, a.f_A0, a.f_0b, a.f_0B, a.f_ab, a.f_AB, a.f_Ab, a.f_aB)
-  if ( a.f != 1 ){		 
+  if ( !isTRUE( all.equal(1, a.f  ))){
     stop( "female exposures must total one, currently: ", a.f )
   	}
  

@@ -108,7 +108,9 @@ sensiAnPaperPart <- function( nScenarios = 10,
                         h.RS2_0B = h.RS2_0B,
                         
                         s.RR1_A0 = s.RR1_A0,
-                        s.RR2_0B = s.RR2_0B
+                        s.RR2_0B = s.RR2_0B,
+                        maleExposureProp = maleExposureProp,
+                        correctMixDeployProp = correctMixDeployProp  
                         )   
     
     
