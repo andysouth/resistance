@@ -2690,12 +2690,110 @@ sent first version of ggplot doc (effectOfIndividualInputs.pdf) to Ian & Beth
 
 prettifying parameter names
 
+** 20/1/16 ** on train to liverpool
+
+removed from plots runs where resistance threshold not reached
+
+** 22/1/16 ** with Ian in Liverpool
+I said realistically it would be a month before I could get started on the
+
+conventional wisdom of poor spraying increasing resistance is because poor spray thought not to kill heterozygotes. we see some o this effect in the dominannce param. Later we can loook at by the low exposure niches e.g. a vs A.
+We can look at in the next paper.
+
+Ian plans to submit to PLOS computationally biology with the aim that it's a flexible model that can address a bunch of situations. Do we want to be slightly carful to protect our IP ? e.g. in the first version w might not want to promote use by others (we'd need to do some more wrk to make it properly useable). I can discuss this with Ian when we are closer to publication.
+
+~ I did think that correctDeploymentProp only effects mixtureswhich would constrain tree analyses for whether mix better than seq, but actually analysis can still be done, you would just expect mix to be closer to seq.
+
+~ added maleExposureProp & correctMixDeployProp into tree & plot analyses, by adding on to the end of the input object. inputs are got from   treeInput <- listOutMix$input which is created by runModel2() just from the input object that is passed to it.
+
+~ added as an extra argument to sensiAnPaperPart() that would make less code repetition
+
+
+
+** 25/1/16 **
+added to effectOfIndividualInputs.Rmd
+~~ new predictors for males & deploy
+~~ calc of new ratio, copy from sensiAnPaperAll 
+
+13.40 started 1000 reps of the 'extended' experiment 
+< 50 mins to run
+
+This is what Susanan did for her 2012 model :
+
+Simulations to understand the influence of each parameter
+on the outcome variables (mean fitness and change
+in resistance allele frequency) were performed using latin
+hypercube sampling (LHS) to generate a data set and
+partial rank correlation coefficients (PRCC) calculated to
+provide a quantitative measure of the impact of each
+parameter [24]. LHS techniques were first developed to
+explore the behavior of complex models in economics,
+engineering, chemistry and physics and have been used in
+models predicting the impact of insecticide-treated nets
+on malaria transmission [25].
+
+The analysis was performed using R software [26] and
+implementation of LHS using package lhs. It does not
+allow for the specification of each variable distribution
+beforehand, so sampling was performed assuming a uniform
+distribution. Once the sample was generated, the
+uniform sample from a column (variable) could be transformed
+to the required distribution (Table 3) by using
+quantile functions (using the qtriangle comand in R).
+
+A data set of 3,000 replications was generated, with random
+parameter sets and the corresponding values of the
+outcome variables using equations 8, 9, 12 and 13. Ten
+replicates of this procedure were performed as suggested
+in [24] to investigate the predictive precision of model
+using LHS as the sampling method. This was achieved
+by analysing each replicate separately and verifying that
+results were consistent across ten replicates.
+ 
+** 26/1/16 **
+looking into prcc analysis of model outputs &  whether I might want tio use lhs.
+
+~ what is difference between lhs and what I have done
+~ check lhs package 
+~ lhs would ensure a more uniform distributions of samples across parameter space, i would think results are unlikely to be different to our monte-carlo approach.
+~ it might be tricky for the params where we haven't used a uniform distribution (although we probably could get around)
+~ some advice on using lhs package
+http://r.789695.n4.nabble.com/latin-hypercube-sampling-td4659028.html
+
+~ add PRCC code
+This provides some (dated) advice on running a sensitivity anlaysis including LHS & prcc
+https://cran.r-project.org/web/packages/pse/vignettes/pse_tutorial.pdf
+
+pcc function in package sensitivity may do what we want :
+https://cran.r-project.org/web/packages/sensitivity/sensitivity.pdf
+
+pcc computes the Partial Correlation Coefficients (PCC), or Partial Rank Correlation Coefficients
+(PRCC), which are sensitivity indices based on linear (resp. monotonic) assumptions, in the case of
+(linearly) correlated factors.
+
+~ or could use epiR package
+epi.prcc(dat) # where final column in dat is the output, all other columns are inputs
+
+
+ 
+ 
  
 ### TO DO  
 
-# try changing plot symbol to open circles
+
+~ If I would like to get prcc plots in a similar format to my existing plots.
+~ get data in form : 
+input1, input2, inputN, strategy 
+prcc vals,,             indecticide1
+
+
+
+
+
+# would it be useful for Ian for me to create an interactive shiny app to view the 1000 sim data. E.g. could just have the ggplot code with options to set the x value & colour by different inputs.
+
+
 # maybe add in a loop to plot for all 3 resistance thresholds
-# maybe try removing reps with num generations 1000 ?
 # maybe try faceting by parameter ranges ?
 # lookup to see if I can steal any existing sensi analysis type code
 
