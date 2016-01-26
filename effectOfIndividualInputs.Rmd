@@ -21,7 +21,9 @@ These plots show gen_cP0.2, which is the number of generations to reach 20% resi
 
 Red dashed lines are a smoothed mean.
 
-The plots show a set of points at 1000 generations. The model is run for 500 generations, any runs which have not reached the resistance threshold by this time are given a value of 1000. This has little effect on questions of whether mixtures or sequential use is better, but does effect the plots presented here.
+Runs where resistance thresholds have not been reached have been removed.
+
+Previous plots showed a set of points at 1000 generations. The model is run for 500 generations, any runs which have not reached the resistance threshold by this time are given a value of 1000. This has little effect on questions of whether mixtures or sequential use is better.
 
 
 ```{r,echo=FALSE,results='hide'}
@@ -31,9 +33,17 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   outFolder <- "C:\\Dropbox\\resistanceResults\\"
   
   ## to load previously saved runs
-  load(file=paste0(outFolder,'listOutMix_1000.rda'))
-  load(file=paste0(outFolder,'listOutI1_1000.rda'))
-  load(file=paste0(outFolder,'listOutI2_1000.rda'))
+#   load(file=paste0(outFolder,'listOutMix_1000.rda'))
+#   load(file=paste0(outFolder,'listOutI1_1000.rda'))
+#   load(file=paste0(outFolder,'listOutI2_1000.rda'))
+  
+  ## trying with the extended experiment _ex100
+  experiment <- 'extended'
+  load(file=paste0(outFolder,'listOutMix_ex1000.rda'))
+  load(file=paste0(outFolder,'listOutI1_ex1000.rda'))
+  load(file=paste0(outFolder,'listOutI2_ex1000.rda'))
+  
+  
 ```
 
 
@@ -91,11 +101,19 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   #hardcode which variables to include in analysis to keep it simple and transparent
   treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
 
+  #add these for extended analysis
+  if (experiment=='extended')
+    treePredictors <- c(treePredictors,'maleExposureProp','correctMixDeployProp')
+  
   treeInput <- treeInput[ treePredictors, ]
   
   #add an extra predictor, the lower starting freq of resistance divided by the larger
-  startResistanceRatio <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
-  treeInput <- rbind(treeInput,startResistanceRatio)  
+  resist_start_hi_div_lo <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+  treeInput <- rbind(treeInput,resist_start_hi_div_lo)    
+  
+  #20160122 add test for Ian of resistance1/resistance2
+  resist_start_1_div_2 <- treeInput['P_1',]/treeInput['P_2',]
+  treeInput <- rbind(treeInput,resist_start_1_div_2)   
   
   #renaming other rownames to make nicer plots
   rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
@@ -158,9 +176,9 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
   #>1000 excludes sequential strategy that had a 999 in
   #BEWARE would need to increase 1000 if I increase max generations in the runs
-  didntReachThresh <- which(ggInsOuts$gen_cP0.5 == 999 | ggInsOuts$gen_cP0.5 > 1000 |
-                            ggInsOuts$gen_cP0.25 == 999 | ggInsOuts$gen_cP0.25 > 1000 |
-                            ggInsOuts$gen_cP0.1 == 999 | ggInsOuts$gen_cP0.1 > 1000 )
+  didntReachThresh <- which(ggInsOuts$gen_cP0.5 == 999 | ggInsOuts$gen_cP0.5 > 500 |
+                            ggInsOuts$gen_cP0.25 == 999 | ggInsOuts$gen_cP0.25 > 500 |
+                            ggInsOuts$gen_cP0.1 == 999 | ggInsOuts$gen_cP0.1 > 500 )
   
   #subset by runs not making threshold
   ggInsOuts <- ggInsOuts[-didntReachThresh,]
@@ -177,7 +195,7 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   
   #exposure has the most noticeable effect
   ggplot(ggInsOuts, aes(x=exposure, y=time_to_resistance0.25, color=strategy)) + 
-    geom_point() + 
+    geom_point(shape=3) + 
     facet_wrap( ~ strategy) + 
     #geom_smooth(aes(x=exposure, y=gen_cP0.5, color=NULL))
     geom_smooth(colour='red', linetype='dashed',size=0.5) 
@@ -196,7 +214,13 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
 ```{r, eval=TRUE, echo=FALSE} 
   
   #doing; for all inputs
-  names_inputs <- names(ggInsOuts)[1:10]
+  if (experiment=='extended') {
+    num_inputs <- 13
+    } else {
+    num_inputs <- 11  
+    } 
+  
+  names_inputs <- names(ggInsOuts)[1:num_inputs]
   
   for(i in names_inputs)
   {
@@ -209,10 +233,11 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
     color <- 'exposure'    
     
     print( ggplot(ggInsOuts, aes_string(x=i, y=y, color=color)) + 
-             geom_point() + 
+             geom_point(shape=3) + 
              facet_wrap( ~ strategy) + 
              #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
-             geom_smooth(colour='red', linetype='dashed',size=0.5) )
+             geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             labs(title = i))
   }
 
   #can I facet by particular parameter ranges ?
@@ -221,4 +246,63 @@ The plots show a set of points at 1000 generations. The model is run for 500 gen
   
 ```  
 
+## Looking more closely at effect of the ratio between the level of resistance to the first insecticide divided by that of the second one. Restricting the x axis to lower values.
+```{r, eval=TRUE, echo=FALSE} 
+
+  i <- 'resist_start_1_div_2'
+  color <- "start_freq_allele2"
+  
+  print( ggplot(ggInsOuts, aes_string(x=i, y=y, color=color)) + 
+           geom_point(shape=3) + 
+           facet_wrap( ~ strategy) + 
+           #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+           geom_smooth(colour='red', linetype='dashed',size=0.5) +
+           labs(title = i) +
+           xlim(0,100)
+         )
+    
+```  
+
+#trying a PRCC analysis using the package sensitivity
+```{r, eval=TRUE, echo=FALSE} 
+
+  library(sensitivity)
+  
+# pcc(X, y, rank = FALSE, nboot = 0, conf = 0.95)
+# 
+# ## S3 method for class 'pcc'
+# plot(x, ylim = c(-1,1), ...)
+# 
+# Arguments
+# X a data frame containing model input variables
+# y a vector containing the responses 
+# rank logical. If TRUE, the analysis is done on the ranks.
+# nboot the number of bootstrap replicates.
+# conf the confidence level of the bootstrap confidence intervals.
+
+
+  #first attempt
+  by_strategy <- ggInsOuts[ggInsOuts$strategy=='insecticide 1',]
+  
+  x <- by_strategy[,1:num_inputs]
+  y <- by_strategy['time_to_resistance0.25']
+    
+  pcc_res <- pcc(x, y, rank=TRUE)
+  
+  #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
+  #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
+  #plot(pcc_res)
+  
+  #results are here I can probably rbind them together into a df that I can ggplot
+  #pcc_res$PRCC
+  
+  to_plot <- pcc_res$PRCC
+  to_plot$test <- c(1:nrow(to_plot))
+  to_plot$names <- rownames(to_plot)  
+  
+  ggplot( to_plot, aes_string(x='names',y='original') ) + 
+           geom_point(shape=3) +
+           theme(axis.text.x = element_text(angle = 45))
+    
+```  
 
