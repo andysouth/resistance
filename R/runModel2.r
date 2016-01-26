@@ -101,7 +101,9 @@ runModel2 <- function(input,
     a['m','A','b'] <- input[15,i]
     a['m','a','B'] <- input[16,i]      
     
-    if ( sum(a['m',,]) != 1 ){		 
+    #allow rounding errors
+    if ( !isTRUE( all.equal(1, sum(a['m',,])  ))){
+    #if ( sum(a['m',,]) != 1 ){		 
     	stop( paste("Error in male exposures: must total one: ", sum(a['m',,])) )
     	}
     
@@ -119,8 +121,10 @@ runModel2 <- function(input,
     
     a['f','A','b'] <- input[24,i]
     a['f','a','B'] <- input[25,i] 
-    
-    if ( sum(a['f',,]) != 1 ){		 
+
+    #allow rounding errors
+    if ( !isTRUE( all.equal(1, sum(a['f',,])  ))){    
+    #if ( sum(a['f',,]) != 1 ){		 
       stop( paste("Error in female exposures: must total one: ", sum(a['f',,])) )
     }
     
