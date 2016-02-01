@@ -96,7 +96,9 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
   #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
   #I could just rename one to exposure
   #BEWARE risk if future changes
-  rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+  #1/2/16 don't need this now because I've saved exposure from the single original random value
+  #rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+  
   
   #hardcode which variables to include in analysis to keep it simple and transparent
   treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
