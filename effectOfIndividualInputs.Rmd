@@ -211,7 +211,7 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
 ```
 
 ## In the following plots all inputs are plotted individually, the points are coloured by exposure, which allows us to see that, even as other inputs change, low times to resistance are associated with high exposure.
-```{r, eval=TRUE, echo=FALSE} 
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
   
   #doing; for all inputs
   if (experiment=='extended') {
@@ -247,7 +247,7 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
 ```  
 
 ## Looking more closely at effect of the ratio between the level of resistance to the first insecticide divided by that of the second one. Restricting the x axis to lower values.
-```{r, eval=TRUE, echo=FALSE} 
+```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
 
   i <- 'resist_start_1_div_2'
   color <- "start_freq_allele2"
@@ -264,7 +264,7 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
 ```  
 
 #trying a PRCC analysis using the package sensitivity
-```{r, eval=TRUE, echo=FALSE} 
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
 
   library(sensitivity)
   
@@ -280,29 +280,54 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
 # nboot the number of bootstrap replicates.
 # conf the confidence level of the bootstrap confidence intervals.
 
+  strategies <- unique(ggInsOuts$strategy)
+  
+  for(strategy in strategies)
+  {  
 
-  #first attempt
-  by_strategy <- ggInsOuts[ggInsOuts$strategy=='insecticide 1',]
-  
-  x <- by_strategy[,1:num_inputs]
-  y <- by_strategy['time_to_resistance0.25']
+
+    by_strategy <- ggInsOuts[ggInsOuts$strategy==strategy,]
     
-  pcc_res <- pcc(x, y, rank=TRUE)
-  
-  #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
-  #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
-  #plot(pcc_res)
-  
-  #results are here I can probably rbind them together into a df that I can ggplot
-  #pcc_res$PRCC
-  
-  to_plot <- pcc_res$PRCC
-  to_plot$test <- c(1:nrow(to_plot))
-  to_plot$names <- rownames(to_plot)  
-  
-  ggplot( to_plot, aes_string(x='names',y='original') ) + 
-           geom_point(shape=3) +
-           theme(axis.text.x = element_text(angle = 45))
+    x <- by_strategy[,1:num_inputs]
+    y <- by_strategy['time_to_resistance0.25']
+      
+    pcc_res <- pcc(x, y, rank=TRUE)
+    
+    #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
+    #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
+    #plot(pcc_res)
+    
+    #results are here I can probably rbind them together into a df that I can ggplot
+    #pcc_res$PRCC
+    
+    to_plot <- pcc_res$PRCC
+    #rename column 1 from 'original to PRCC
+    names(to_plot)[1] <- 'PRCC'
+    to_plot$inputs <- rownames(to_plot)  
+    
+    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+             geom_point(shape=1, colour='red') +
+             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             geom_hline(yintercept = 0, linetype=3) +
+             ylim(-1,1) +
+             ggtitle(paste(strategy,"PRCC")) +
+             xlab(NULL)
+          )
+  }
     
 ```  
+
+
+```{r, eval=FALSE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+  
+#trying to find apparent anomaly in PRCC analysis
+#what causes correctMixDeployProp to get a high PRCC score for I1 & 2 when its not used in those runs ??
+  
+tstI1 <- round(listOutI1$input,3)
+tstMix <- round(listOutMix$input,3)
+tstDif <- round(tstMix - tstI1,3) 
+
+
+  
+```
 
