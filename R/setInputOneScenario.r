@@ -13,6 +13,7 @@
 #' @param P_2 locus 2 frequency of resistance allele
 #' @param recomb_rate recombination rate
 #' @param a array to set all exposure params, a[sex,loc1,loc2], overrides a.m_00 etc.
+#' @param exposure the single exposure param used to generate the array, here just to allow saving for post-run analyses
 #' @param a.m_00 insecticide exposure male no1 no2
 #' @param a.m_a0 insecticide exposure male lo1 no2
 #' @param a.m_A0 insecticide exposure male hi1 no2
@@ -74,6 +75,7 @@ setInputOneScenario <- function( calibration = 100,
                                  P_2 = 0.001,
                                  recomb_rate = 0.5,
                                  a = NULL,
+                                 exposure = NULL,
                                  a.m_00 = 0.1,
                                  a.m_a0 = 0,
                                  a.m_A0 = 0,
@@ -208,6 +210,8 @@ setInputOneScenario <- function( calibration = 100,
   #they aren't used in runModel2() but are needed for post run analyses
   input[	54	] <-	maleExposureProp
   input[	55	] <-	correctMixDeployProp
+  #1/2/16 allowing saving of single exposure param just for use in post-run analyses
+  input[	56	] <-	exposure  
     
   a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
   #if ( a.m != 1 ){

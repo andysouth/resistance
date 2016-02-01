@@ -58,6 +58,10 @@ sensiAnPaperPart <- function( nScenarios = 10,
     exposure <- runif(1, min=0.1, max=0.9)
     
     
+    ## aha! BEWARE could this mess up the random seed
+    ## probably not because it is set to 'extended'
+    ## for all 3 runs
+    
     if (experiment=='extended')
     {
       maleExposureProp <- runif(1, min=0.5, max=1)
@@ -100,6 +104,7 @@ sensiAnPaperPart <- function( nScenarios = 10,
                         P_2 = P_2,
                         
                         a=a,
+                        exposure=exposure, 
                         
                         phi.SS1_A0 = phi.SS1_A0,
                         phi.SS2_0B = phi.SS2_0B,
