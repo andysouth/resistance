@@ -64,7 +64,7 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     if (experiment=='extended')
     {
-      maleExposureProp <- runif(1, min=0.5, max=1)
+      maleExposureProp <- runif(1, min=0, max=1)
       correctMixDeployProp <- runif(1, min=0.5, max=1)          
     } else
     {
