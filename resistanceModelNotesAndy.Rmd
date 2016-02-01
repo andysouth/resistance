@@ -2775,13 +2775,100 @@ pcc computes the Partial Correlation Coefficients (PCC), or Partial Rank Correla
 epi.prcc(dat) # where final column in dat is the output, all other columns are inputs
 
 
+I got sensitivity::pcc() working for a single strategy.
+
+
+** 28/1/16 **
+~ fixed diagonal axis labels.
+~ get sensitivity::pcc() working for all strategies & putting data into format for faceted plots. 
  
+** 29/1/16 **
+
+~ why does correctMixDeployProp seem to have an effect in the PRCC of insecticide1 when it shouldn't have any effect outside of mixtures ?
+
+In the plots againts time_to_resistance there is only a bit of a pattern for Mixture1 (time_to_R increaeses between 0.9 & 1 correct deployment).
+Points to it being a problem in the PRCC itself.
+
+~~ in setExposure() looks fine, its not applied to insecticide1 or 2
+
+other things it could be :
+~~ switched with another var in the call to setExposure
+~~ something about how runs are done in sensiAnPaperPart.r 
+~~ rows getting reordered within effectOfIndividualInputs.Rmd ?
+ 
+it is +vely correlated with time to resistance, so better application leads to longer times for resistance to be reached (not sure whether that is waht I would expect ?) 
+ 
+aha PRCC results are influenced by the presence of the other vars, if just do for exposure & deployProp deployProp goes down to 0.2. 
+x2 <- x[c('correctMixDeployProp','exposure')]
+pcc_res2 <- pcc(x2, y, rank=TRUE)
+pcc_res2$PRCC
+                       original
+correctMixDeployProp  0.2167706
+exposure             -0.5248086 
+ 
+I still don't quite understand why an essentially random var is correlated with the output ??
+
+This shows that there's very little correlation between the in & out, for insecticide1
+> cor(xy$time_to_resistance0.25,xy$correctMixDeployProp)
+[1] 0.003849606
+
+** 1/2/16 **
+
+Checking again on whats happening with correctMixDeployProp
+
+is the correlation similar for mixture1 as it is for insecticide1 ?
+
+could problem be that the inputs are got from a mix run ? shouldn't matter
+  treeInput <- listOutMix$input
+ 
+could it be something to do with the random number seed being disrupted by the extra params ? shouldn't happen
+
+i think the inputs should be identical. 
+
+
+I think it may be a correlation in the analysis.
+
+What I have done is generate inputs for 'male proportion' and 'correct mix deploy'.
+Correct mix deployment is not used in the individual insecticide runs, but it is still included as a potential predictor in the PRCC analysis.
+
+In the mixture scenarios 'correct mix deploy' effects exposure ...
+
+exposure is not a single variable in the simulation, but is it used as a single value as a predictor in the sensitivity & prcc analyses ?
+
+aha the exposure predictor is taken from the female AB (actually I think that is OK ??)
+although maybe not because it will be reduced by correct deploy and maybe by male (or maybe not ???)
+
+  rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+
+correctDeploy has a strong interaction with exposure in mixtures.
+
+When correct deploy is low in mixture runs exposure to AB is much lower because of corresponding exposure to A0 and 0B.
+
+But i think this shouldn't effect single insecticide runs.
+
+Am I sure I'm not mixing up rows somewhere in effectOfIndividualInputs.Rmd ??
+
+I could try setting the values of results for I1 and see if it propogates through.
+
+
+
+
+
+
+
  
  
 ### TO DO  
 
+~ rerun the trees for Ian
 
-~ If I would like to get prcc plots in a similar format to my existing plots.
+~ set 10000 runs going before yoga, but whether extended or normal curtis ?
+
+~ I might be able to do a PRCC of whether mixtures better than sequential (but actually thats what the trees do)
+
+~ I'd like to show prcc on an axis from 0-1 with diff sysmbols for neg & pos. We care about which are most imp. params, not whether they are pos or neg.
+
+~ If I would like to get prcc plots in a similar format to my existing plots. (but may not be space for axis labels)
 ~ get data in form : 
 input1, input2, inputN, strategy 
 prcc vals,,             indecticide1
