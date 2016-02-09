@@ -11,3 +11,5 @@
 resistanceModelNotesAndy.html
 #man pages
 man/*
+# pdfs
+*.pdf
