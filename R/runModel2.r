@@ -254,9 +254,10 @@ runModel2 <- function(input,
     }
     
     #error check for fitnesses > 1 or < 0
-    if ( any(Wloci > 1 | Wloci < 0 ) ) 
-      warning( sum(Wloci > 1 | Wloci < 0 ), "locus fitness values (Wloci) are >1 or <0")
-    
+    if ( any( Wloci > 1  ) ) 
+      warning( sum(Wloci > 1 ), " locus fitness values (Wloci) are >1 : ", Wloci[Wloci>1])
+    if ( any( Wloci < 0 ) ) 
+      warning( sum( Wloci < 0 ), " locus fitness values (Wloci) are <0")   
     
     ##################################################
     ### calculate two locus niche fitness in two insecticide Niche
@@ -304,9 +305,10 @@ runModel2 <- function(input,
     }
     
     #error check for fitnesses > 1 or < 0
-    if ( any(Wniche > 1 | Wniche < 0 ) ) 
-      warning( sum(Wniche > 1 | Wniche < 0 ), "niche fitness values (Wniche) are >1 or <0")
-    
+    if ( any(Wniche > 1  ) ) 
+      warning( sum(Wniche > 1  ), " niche fitness values (Wniche) are >1 ")
+    if ( any( Wniche < 0 ) ) 
+      warning( sum( Wniche < 0 ), " niche fitness values (Wniche) are <0")    
     
     #####################################################################
     ## calculate individual fitness based on exposure to niche & 2 locus fitness
@@ -326,9 +328,10 @@ runModel2 <- function(input,
     }
 
     #error check for fitnesses > 1 or < 0
-    if ( any(Windiv > 1 | Windiv < 0 ) ) 
-      warning( sum(Windiv > 1 | Windiv < 0 ), "individual fitness values (Wloci) are >1 or <0")
-    
+    if ( any(Windiv > 1 ) ) 
+      warning( sum(Windiv > 1  ), " individual fitness values (Wloci) are >1")
+    if ( any( Windiv < 0 ) ) 
+      warning( sum( Windiv < 0 ), " individual fitness values (Wloci) are <0")
     
     #######################################################
     ## generation loop to run model from initial conditions
