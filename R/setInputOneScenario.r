@@ -75,7 +75,7 @@ setInputOneScenario <- function( calibration = 100,
                                  P_2 = 0.001,
                                  recomb_rate = 0.5,
                                  a = NULL,
-                                 exposure = NULL,
+                                 #exposure = NULL, #has to go later to add on end of input to keep Beths code working
                                  a.m_00 = 0.1,
                                  a.m_a0 = 0,
                                  a.m_A0 = 0,
@@ -123,11 +123,15 @@ setInputOneScenario <- function( calibration = 100,
                                  niche_aB	=	1 ,
                                  sexLinked = 0,
                                  maleExposureProp = 1,
-                                 correctMixDeployProp = 1  
+                                 correctMixDeployProp = 1,
+                                 exposure = 0.9
                                  )
 {
   
-  input <- matrix( ncol=1, nrow=55 )
+  #input <- matrix( ncol=1, nrow=56 )
+  #now set size to 1 less than num args, the array a is not included in input
+  #otherwise I kept getting bug when adding extra args
+  input <- matrix( ncol=1, nrow=length(formals())-1)
   
   input[1] <- calibration
   input[2] <- max_gen
@@ -229,7 +233,7 @@ setInputOneScenario <- function( calibration = 100,
  #trying to avoid code repetition and potential for confusion
  #BEWARE this relies on the arguments being specified in the function in the correct order
  rnames <- names(formals())
- #remoce the array a from the arg list
+ #remove the array a from the arg list
  rnames <- rnames[rnames!="a"]
  rownames(input) <- rnames 
   
