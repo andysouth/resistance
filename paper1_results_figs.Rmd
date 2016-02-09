@@ -1,29 +1,31 @@
 ---
-  title: "effectOfIndividualInputs"
+  title: "paper1_results_figs"
   output: pdf_document
   author: "Andy South"
   date: "`r Sys.Date()`"
 ---
 
-# Investigation into effects of individual inputs on time to reach resistance thresholds.
+# Figures for paper 1 
 # version 2 - in progress
 
-## Based on 1000 runs with all inputs varying at once which explains the variability at particular input values.
-## Within each figure the plots are divided into 6 sub-plots according to the insecticide use strategy and when the resistance threshold is reached
-1. insecticide 1 : sole use
-1. insecticide 2 : sole use
-1. Mixture 1 : threshold reached for either insecticide in mixture
-1. Mixture 2 : once threshold reached for either insecticide in mixture, switch to sole use of other until it too reaches threshold
+## Based on 10000 runs with all inputs varying at once which explains the variability at particular input values.
+
+Comparing these insecticide use strategies:
+1. Single use
+1. Mixture 1 : threshold reached for either insecticide
+1. Mixture 2 : threshold reached for either insecticide, switch to sole use of other until it too reaches threshold
 1. Mixture 3 : threshold reached for both insecticides in mixture
 1. Sequential : sole use of one insecticide, switch to other when threshold reached until it too reaches threshold
 
-These plots show gen_cP0.2, which is the number of generations to reach 20% resistance.
+## Notable results
 
-Red dashed lines are a smoothed mean.
+1. Time-to-resistance is lowest for single use and for the first insecticide in a mixture. Time-to-resistance is highest for the 2nd insecticide in a mixture.
+1. In between these extremes, there is less difference between the alternative strategies of a) sequential and b) mixture switching to sole use. The latter takes slightly longer to reach the threshold.
+1. Exposure has the greatest effect on time-to-resistance, but as it has a similar effect across all strategies it has little influence on which strategy is preferable.
+1. Effectiveness of the insecticides is the one input that has a notably different effect on the strategies of a) sequential and b) mixture switching to sole use. Below an effectiveness of ~0.55 to 0.6 sequential takes longer, and above this 'mixture switching to sole use' takes longer. 
 
-Runs where resistance thresholds have not been reached have been removed.
 
-Previous plots showed a set of points at 1000 generations. The model is run for 500 generations, any runs which have not reached the resistance threshold by this time are given a value of 1000. This has little effect on questions of whether mixtures or sequential use is better.
+
 
 
 ```{r,echo=FALSE,results='hide'}
@@ -58,8 +60,7 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
 
 
 ```{r,echo=FALSE,results='hide'}
-### chunk copied from sensiAnPaper1All
-### now want to calculate the times to reach critical points and add them on to the input file 
+### calculate times to reach critical points and add them on to the input file 
 ### for different insecticide strategies, sequential, mix1 and mix2  
   
   
@@ -203,115 +204,153 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
   names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.25"] <- "time_to_resistance0.25"
   names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.1"] <- "time_to_resistance0.1"
   
-```
-
-# Plot time to resistance for each strategy using all sensitivity analysis values
-```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
-
-names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
-
-for(i in names_results)
-{
-  #x11()
-  
-  print( ggplot(ggInsOuts, aes_string(x='strategy',y=i, color='strategy')) + 
-      #ylim(0,450) +
-      coord_cartesian(xlim=c(1, 6), ylim=c(0, 350)) +
-      geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE)
-  )#end print
-}  
-
-  #can I facet by exposure ?
-  #exposure <- runif(1, min=0.1, max=0.9)
-  #why does it not look uniform ? must be because runs have been removed if too high
-  hist(ggInsOuts$exposure)
-  #create exposure bins
-  ggInsOuts$exposure_cat <- cut(ggInsOuts$exposure,breaks=c(0.1,0.3,0.5,0.7,0.9), labels=c("exposure 0.1-0.3","exposure 0.3-0.5","exposure 0.5-0.7","exposure 0.7-0.9"))
-  #or just 2
-  #ggInsOuts$exposure_cat <- cut(ggInsOuts$exposure,breaks=c(0.1,0.5,0.9), labels=c("exposure 0.1-0.5","exposure 0.5-0.9"))
-  #actually might be better to show just the 2 extremes
-  #ggSubset <- subset(ggInsOuts, exposure_cat==c("exposure 0.1-0.3","exposure 0.7-0.9"))
-  
-  print( ggplot(ggInsOuts, aes_string(x='strategy',y=i, color='strategy')) + 
-      #ylim(0,450) +
-      #scale_y_continuous( limits = c( 0,450 ) ) +
-      #to zoom in without changing data  
-      coord_cartesian(xlim=c(1, 6), ylim=c(0, 350)) +
-      facet_wrap( ~ exposure_cat, scales='fixed') +  
-      geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) #, scale='count')
-  )#end print
-   
-  
-# or trying as a dotplot, with these options it's very similar to violin
-#   print( ggplot(ggInsOuts, aes_string(x='strategy',y=i, color='strategy')) + 
-#       #ylim(0,450) +
-#       scale_y_continuous( limits = c( 0,450 ) ) +
-#       facet_wrap( ~ exposure_cat, scales='fixed') +  
-#       geom_dotplot(stackdir = 'center', binaxis='y', binwidth = 5 ,dotsize = 0.1, show.legend=FALSE) #, scale='count')
-#   )#end print  
- 
-  
-#now try the same faceting by effectiveness_insecticide1
-#doesn't really show much ...
-#so why does effectiveness come out so important in the trees ??  
-  #hist(ggInsOuts$effectiveness_insecticide1)  
-  #create effect1 bins
-  ggInsOuts$effect1_cat <- cut(ggInsOuts$effectiveness_insecticide1,breaks=c(0.4,0.6,0.8,1), labels=c("effect1 0.4-0.6","effect1 0.6-0.8","effect1 0.8-1"))    
-    
-  print( ggplot(ggInsOuts, aes_string(x='strategy',y=i, color='strategy')) + 
-      #ylim(0,450) +
-      #scale_y_continuous( limits = c( 0,450 ) ) +
-      #to zoom in without changing data  
-      coord_cartesian(xlim=c(1, 6), ylim=c(0, 250)) +
-      facet_wrap( ~ effect1_cat, scales='fixed', nrow=1) +  
-      geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) #, scale='count')
-  )#end print  
-
-## BEWARE what am I doing with putting mixture better than seq on each repeated input ....  
-      
-## !!try facetting by whether mixture or sequence better
-## initially just with the time to resistance
-## relies on ggInsOuts being prepared slightly differently from sensiAnPaper1All
-## aha! this is weird it actually shows much shorter times for mixture1, & mix2 but sequential fairly similar  
-#   print( ggplot(ggInsOuts, aes_string(x='strategy',y=i, color='strategy')) + 
-#       #ylim(0,450) +
-#       #scale_y_continuous( limits = c( 0,450 ) ) +
-#       #to zoom in without changing data  
-#       coord_cartesian(xlim=c(1, 6), ylim=c(0, 250)) +
-#       facet_wrap( ~ betterMix2Seq20_cP0.1, scales='fixed', nrow=1) +  
-#       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) #, scale='count')
-#   )#end print    
- 
-# or I could look at the values for exposure on the y axis
-#   print( ggplot(ggInsOuts, aes_string(x='strategy',y='exposure', color='strategy')) + 
-#       #ylim(0,450) +
-#       #scale_y_continuous( limits = c( 0,450 ) ) +
-#       #to zoom in without changing data  
-#       #coord_cartesian(xlim=c(1, 6), ylim=c(0, 250)) +
-#       facet_wrap( ~ betterMix2Seq20_cP0.1, scales='fixed', nrow=1) +  
-#       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) #, scale='count')
-#   )#end print  
-  
-  
-```
-
-
-#trying a PRCC analysis using the package sensitivity
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
-
   #doing; for all inputs
   if (experiment=='extended') {
     num_inputs <- 13
     } else {
     num_inputs <- 11  
-    }   
+    }
+  
+  #format data in a different way to enable PRCC on difference between sequential & mix2
+  #resistPointsMix2_T
+  #resistPointsSeq_T
+  
+  #columns to remove from first
+  indices1 <- which(names(resistPointsMix2_T) %in% c("gen_cP0.1","gen_cP0.5","strategy"))
+  #columns to add to 2nd  
+  indices2 <- which(names(resistPointsMix2_T) %in% c("gen_cP0.25"))  
+  #rename column in 2nd
+  tmp <- resistPointsSeq_T[indices2]
+  names(tmp) <- "gen_cP0.25seq"
+  
+  df_diff <- cbind(resistPointsMix2_T[-indices1], tmp)
+  
+  #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+  #>1000 excludes sequential strategy that had a 999 in
+  #BEWARE would need to increase 1000 if I increase max generations in the runs
+  didntReachThresh <- which( df_diff$gen_cP0.25 > 500 | df_diff$gen_cP0.25seq > 500 )
+  
+  #subset by runs not making threshold
+  df_diff <- df_diff[-didntReachThresh,]  
+  
+  
+  #df_diff$mix2_minus_seq0.25 <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
+  df_diff["mix2_minus_seq0.25"] <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
+  
+  #TODO : later do PRCC on df_diff["mix2_minus_seq0.25"]
+    
+```
+
+# Time-to-resistance across all input values
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
+
+#names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
+names_results <- c("time_to_resistance0.25")
+  
+ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 2"), ]  
+  
+for(i in names_results)
+{
+  #x11()
+  
+  print( ggplot(ggSubset, aes_string(x='strategy',y=i, color='strategy')) + 
+      #ylim(0,450) +
+      coord_cartesian( ylim=c(0, 350)) +
+      geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) +
+      scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mixture 1","Sequential","Mixture 2","Mixture 3"), labels = c("insecticide 1"="Sole use", "Mixture 1"="1st in mix","Sequential"="2nd in sequence", "Mixture 2"="2nd in mix\nswitch to sole", "Mixture 3"="2nd in mix" ) )
+
+  ) #end print
+}  
+  
+```
+
+# Difference between time-to-resistance for sequential and mixture2
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
+
+#names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
+# names_results <- c("mix2_minus_seq0.25")
+#   
+# ggSubset <- df_diff #[ !ggInsOuts$strategy %in% c("insecticide 2"), ]  
+#   
+# for(i in names_results)
+# {
+#   #x11()
+#   
+#   print( ggplot(ggSubset, aes_string(y=i)) + 
+#       #ylim(0,450) +
+#       #coord_cartesian( ylim=c(0, 350)) +
+#       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 )
+# 
+#   ) #end print
+# }  
+  
+```
+
+## How time-to-resistance is effected by input values for each insecticide use strategy
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+
+  names_inputs <- names(ggInsOuts)[1:num_inputs]
+  
+  ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- 'time_to_resistance0.25'    
+    
+    #print( ggplot(ggInsOuts, aes_string(x=i, y=y, colour="strategy")) + 
+    print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
+            #points not wanted if 10000
+             #geom_point(shape=3, show.legend=FALSE) + 
+             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             geom_smooth(linetype='dashed',size=1) +
+             #facet_wrap( ~ strategy) +
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             labs(title = i))
+  }
+  
+```
+
+## How difference in time-to-resistance for sequential and mixture3 is effected by input values
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+  ggSubset <- df_diff
+  
+  names_inputs <- names(ggSubset)[1:num_inputs]
+  
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- "mix2_minus_seq0.25"    
+    
+    print( ggplot(ggSubset, aes_string(x=i, y=y, colour="gen_cP0.25seq")) + #, colour="strategy")) + 
+            #points not wanted if 10000
+             geom_point(shape=3, show.legend=FALSE) + 
+             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             geom_smooth(linetype='dashed',size=1) +
+             #facet_wrap( ~ strategy) +
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             labs(title = i))
+  }
+  
+```
+
+
+# PRCC analysis for time-to-resistance subsetted by each insecticide use strategy
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+
   
   library(sensitivity)
   
 # pcc(X, y, rank = FALSE, nboot = 0, conf = 0.95)
-# 
-# ## S3 method for class 'pcc'
-# plot(x, ylim = c(-1,1), ...)
 # 
 # Arguments
 # X a data frame containing model input variables
@@ -359,34 +398,6 @@ for(i in names_results)
 
 
 
-## trying to highlight differences between sequential and mixture strategies in response of time-to-resistance to inputs
-```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
-  
-
-  names_inputs <- names(ggInsOuts)[1:num_inputs]
-  
-  ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
-  
-  for(i in names_inputs)
-  {
-    #x11()
-
-    y <- 'time_to_resistance0.25'    
-    
-    #print( ggplot(ggInsOuts, aes_string(x=i, y=y, colour="strategy")) + 
-    print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
-            #points not wanted if 10000
-             #geom_point(shape=3, show.legend=FALSE) + 
-             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
-             geom_smooth(linetype='dashed',size=1.5) +
-             #facet_wrap( ~ strategy) +
-             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
-             labs(title = i))
-  }
-  
-```
-
-
 
 ## response of resistance thresholds to individual inputs faceted by strategy
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
@@ -420,25 +431,8 @@ for(i in names_results)
 
 
 
-## Looking more closely at ratio between the level of resistance to the first insecticide divided by that of the second one. Restricting the x axis to lower values.
-## ?not very useful
-```{r, eval=FALSE, echo=FALSE, warning=FALSE} 
-
-  i <- 'resist_start_1_div_2'
-  color <- "start_freq_allele2"
-  
-  print( ggplot(ggInsOuts, aes_string(x=i, y=y, color=color)) + 
-           geom_point(shape=3) + 
-           facet_wrap( ~ strategy) + 
-           #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
-           geom_smooth(colour='red', linetype='dashed',size=0.5) +
-           labs(title = i) +
-           xlim(0,100)
-         )
-    
-```  
-
-##
+## Andys questions 
+1. In mixtures what causes resistance to the 2nd insecticide to arise more slowly when the first insecticide is removed from the mixture ?    
 
 
 
