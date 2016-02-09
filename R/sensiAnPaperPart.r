@@ -78,9 +78,12 @@ sensiAnPaperPart <- function( nScenarios = 10,
                      maleExposureProp=maleExposureProp, correctMixDeployProp=correctMixDeployProp) 
   
     
-    ## selection against SS in presence of insecticide to which it encodes resistance
-    phi.SS1_A0 <- runif(1, min=0.4, max=1)
-    phi.SS2_0B <- runif(1, min=0.4, max=1)    
+    ## effectiveness of insecticides, selection against SS in presence of that insecticide
+#     phi.SS1_A0 <- runif(1, min=0.4, max=1)
+#     phi.SS2_0B <- runif(1, min=0.4, max=1) 
+    #andy 5/2/13 reducing to avoid fitness error
+    phi.SS1_A0 <- runif(1, min=0.45, max=1)
+    phi.SS2_0B <- runif(1, min=0.45, max=1)
       
     
     ## dominance of resistance
@@ -92,10 +95,14 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     ## selective advantage of resistance
     #s.RR1_A0 <- runif(1, min=0.2, max=1)
-    #s.RR2_0B <- runif(1, min=0.2, max=1)     
+   # s.RR2_0B <- runif(1, min=0.2, max=1)     
     # Ian suggested this should be dependent on phi to ensure fitness of RR stays below 1 
-    s.RR1_A0 <- runif(1, min=0.2, max=1) * phi.SS1_A0
-    s.RR2_0B <- runif(1, min=0.2, max=1) * phi.SS2_0B
+    # 5/2/16 i'm concerned this adds in a correlation between inputs that might fudge our ability to see what's going on
+    # try going back to above
+    #s.RR1_A0 <- runif(1, min=0.2, max=1) * phi.SS1_A0
+    #s.RR2_0B <- runif(1, min=0.2, max=1) * phi.SS2_0B
+    s.RR1_A0 <- runif(1, min=0.1, max=0.45)
+    s.RR2_0B <- runif(1, min=0.1, max=0.45)     
     
     ## put the generated values into an input matrix, using defaults for non specified parameters
     inputOneScenario <- setInputOneScenario( max_gen = max_gen,
