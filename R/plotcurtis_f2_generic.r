@@ -13,6 +13,7 @@
 #' @param main title for the plot
 #' @param criticalPoints critical resistance points to be displayed in the plot
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
+#' @param addLabels add labels to plot for where strategies cross 50% line TRUE gives seq,mix1,mix2,mix3
 #' 
 #' @examples
 #' inputAndResultsMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -24,9 +25,12 @@
 #' @export
 
 plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col=3,
-                                   main="Rise of resistance; sequential insecticides v mixtures",
+                                   #main="Rise of resistance; sequential insecticides v mixtures",
+                                   main="",                                   
                                    criticalPoints = c(0.1,0.25,0.5),
-                                   addCombinedStrategy = FALSE
+                                   addCombinedStrategy = FALSE,
+                                   addStrategyLabels = TRUE,
+                                   strategyLabels = c("seq","mix1","comb","mix2")
                                    ){
   
   #find generations to reach max resistance points
@@ -101,11 +105,13 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   lines( hch_gens, hch, col="red", lty=2 )
   lines( ddt_gens, ddt, col="blue", lty=2 )
 
+  
+  cutoff_i1_mix <- min(which((combmat[,r1col])>max(criticalPoints)))
+  cutoff_i2_mix <- min(which((combmat[,r2col])>max(criticalPoints)))  
+  
   #andy added
   if( addCombinedStrategy )
   {
-    cutoff_i1_mix <- min(which((combmat[,r1col])>max(criticalPoints)))
-    cutoff_i2_mix <- min(which((combmat[,r2col])>max(criticalPoints)))      
     
     #trying to add a dotted line for the combined strategy
     #it should start at the point that the resistance to the first insecticide is reached
@@ -140,7 +146,6 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   }  
   
   
-  
   #when the switch is made, was hardcoded by Beth
   #abline( v = 31, col="black" )
   #yval <- log10( 3 )			
@@ -164,6 +169,46 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   }
  
 
+ #andy added
+ if( addStrategyLabels )
+   {
+    y <- log10(max(criticalPoints)*100)
+   
+    x_seq <- max(maxGensI1) + max(maxGensI2)
+
+    if ( cutoff_i1_mix < cutoff_i2_mix )
+       {
+         x_mix1 <- cutoff_i1_mix
+         x_mix3 <- cutoff_i2_mix
+       } else
+       {
+         x_mix1 <- cutoff_i2_mix
+         x_mix3 <- cutoff_i1_mix
+       }
+
+    #text(x_seq, y, strategyLabels[1])
+    #text(x_mix1, y, strategyLabels[2])
+    #text(x_mix3, y, strategyLabels[4])
+    at <- c(x_seq,x_mix1,x_mix3)
+  
+    if( addCombinedStrategy )
+      {
+        x_mix2 <- max(gens)
+        #text(x_mix2, y, strategyLabels[3])
+        at <- c(x_seq,x_mix1,x_mix2,x_mix3)
+       } else
+       {
+         strategyLabels <- strategyLabels[-3] 
+       }
+  
+    #or can I add these as an axis above
+    #horizontal labels
+    #axis(3, at=at, labels=strategyLabels, cex.axis=0.6, tcl=-0.3, padj=1, hadj=1 )
+    #vertical labels
+    axis(3, at=at, labels=strategyLabels, cex.axis=0.8, tcl=-0.3, padj=0, hadj=0.4, las=3 )
+        
+   }
+  
     			
   
   box()
