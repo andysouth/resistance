@@ -6,7 +6,7 @@
 ---
 
 # Figures for paper 1 
-# version 2 - in progress
+# version 3 - in progress
 
 ## Based on 10000 runs with all inputs varying at once which explains the variability at particular input values.
 
@@ -21,7 +21,8 @@ Comparing these insecticide use strategies:
 
 1. Time-to-resistance is lowest for single use and for the first insecticide in a mixture. Time-to-resistance is highest for the 2nd insecticide in a mixture.
 1. In between these extremes, there is less difference between the alternative strategies of a) sequential and b) mixture switching to sole use. The latter takes slightly longer to reach the threshold.
-1. Exposure has the greatest effect on time-to-resistance, but as it has a similar effect across all strategies it has little influence on which strategy is preferable.
+1. Exposure and effectiveness seem to be the most important inputs.
+1. Exposure has the greatest effect on time-to-resistance.
 1. Effectiveness of the insecticides is the one input that has a notably different effect on the strategies of a) sequential and b) mixture switching to sole use. Below an effectiveness of ~0.55 to 0.6 sequential takes longer, and above this 'mixture switching to sole use' takes longer. 
 
 
@@ -265,28 +266,6 @@ for(i in names_results)
   
 ```
 
-# Difference between time-to-resistance for sequential and mixture2
-
-```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
-
-#names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
-# names_results <- c("mix2_minus_seq0.25")
-#   
-# ggSubset <- df_diff #[ !ggInsOuts$strategy %in% c("insecticide 2"), ]  
-#   
-# for(i in names_results)
-# {
-#   #x11()
-#   
-#   print( ggplot(ggSubset, aes_string(y=i)) + 
-#       #ylim(0,450) +
-#       #coord_cartesian( ylim=c(0, 350)) +
-#       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 )
-# 
-#   ) #end print
-# }  
-  
-```
 
 ## How time-to-resistance is effected by input values for each insecticide use strategy
 
@@ -316,7 +295,7 @@ for(i in names_results)
   
 ```
 
-## How difference in time-to-resistance for sequential and mixture3 is effected by input values
+## How difference in time-to-resistance between sequential and mixture2 is effected by input values
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
   
@@ -331,16 +310,55 @@ for(i in names_results)
 
     y <- "mix2_minus_seq0.25"    
     
-    print( ggplot(ggSubset, aes_string(x=i, y=y, colour="gen_cP0.25seq")) + #, colour="strategy")) + 
+    print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
             #points not wanted if 10000
-             geom_point(shape=3, show.legend=FALSE) + 
+             geom_point(shape=1, colour="darkblue", alpha=0.2, show.legend=FALSE) + 
              #geom_smooth(colour='red', linetype='dashed',size=0.5) +
-             geom_smooth(linetype='dashed',size=1) +
+             geom_smooth(linetype='dashed',size=1, colour="red") +
              #facet_wrap( ~ strategy) +
              #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
-             labs(title = i))
+             labs(title = i) +
+             geom_hline(yintercept = 0, colour="white")
+           )
   }
   
+```
+
+
+# PRCC difference in time-to-resistance between sequential and mixture2
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+
+  
+  library(sensitivity)
+
+    
+    x <- df_diff[,1:num_inputs]
+    y <- df_diff["mix2_minus_seq0.25"]
+      
+    pcc_res <- pcc(x, y, rank=TRUE)
+    
+    #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
+    #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
+    #plot(pcc_res)
+    
+    #results are here I can probably rbind them together into a df that I can ggplot
+    #pcc_res$PRCC
+    
+    to_plot <- pcc_res$PRCC
+    #rename column 1 from 'original to PRCC
+    names(to_plot)[1] <- 'PRCC'
+    to_plot$inputs <- rownames(to_plot)  
+    
+    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+             geom_point(shape=1, colour='red') +
+             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             geom_hline(yintercept = 0, linetype=3) +
+             ylim(-1,1) +
+             ggtitle(paste("PRCC difference between sequential and mixture2")) +
+             xlab(NULL)
+          )
+
+    
 ```
 
 
