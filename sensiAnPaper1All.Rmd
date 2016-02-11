@@ -24,9 +24,10 @@ This breaks down into these subsidiary quetsions :
 
   #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same with exception of exposure
   
-  #nScenarios <- 10  
+  nScenarios <- 3  
   #nScenarios <- 100
-  nScenarios <- 1000
+  #nScenarios <- 1000  
+  #nScenarios <- 10000
   
   #to run 'extended' or not
   experiment <- 'extended' #'curtis'
@@ -37,25 +38,29 @@ This breaks down into these subsidiary quetsions :
   listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment=experiment )
   
   ## save results objects as rda for re-use
-  save(listOutMix, file=paste0(outFolder,'listOutMix.rda'))
-  save(listOutI1, file=paste0(outFolder,'listOutI1.rda'))
-  save(listOutI2, file=paste0(outFolder,'listOutI2.rda'))   
+  #save(listOutMix, file=paste0(outFolder,'listOutMix.rda'))
+  #save(listOutI1, file=paste0(outFolder,'listOutI1.rda'))
+  #save(listOutI2, file=paste0(outFolder,'listOutI2.rda'))   
   
-  save(listOutMix, file=paste0(outFolder,'listOutMix_ex1000.rda'))
-  save(listOutI1, file=paste0(outFolder,'listOutI1_ex1000.rda'))
-  save(listOutI2, file=paste0(outFolder,'listOutI2_ex1000.rda'))  
+  save(listOutMix, file=paste0(outFolder,'listOutMix_ex2_10000.rda'))
+  save(listOutI1, file=paste0(outFolder,'listOutI1_ex2_10000.rda'))
+  save(listOutI2, file=paste0(outFolder,'listOutI2_ex2_10000.rda'))  
      
+#   save(listOutMix, file=paste0(outFolder,'listOutMix_ex2_3.rda'))
+#   save(listOutI1, file=paste0(outFolder,'listOutI1_ex2_3.rda'))
+#   save(listOutI2, file=paste0(outFolder,'listOutI2_ex2_3.rda'))    
+  
 ```  
 
-```{r}
+```{r, eval=FALSE}
   ## to load previously saved runs
 #   load(file=paste0(outFolder,'listOutMix_1000.rda'))
 #   load(file=paste0(outFolder,'listOutI1_1000.rda'))
 #   load(file=paste0(outFolder,'listOutI2_1000.rda'))
 
-  load(file=paste0(outFolder,'listOutMix_ex1000.rda'))
-  load(file=paste0(outFolder,'listOutI1_ex1000.rda'))
-  load(file=paste0(outFolder,'listOutI2_ex1000.rda'))  
+  load(file=paste0(outFolder,'listOutMix_ex2_10000.rda'))
+  load(file=paste0(outFolder,'listOutI1_ex2_10000.rda'))
+  load(file=paste0(outFolder,'listOutI2_ex2_10000.rda'))  
       
 ```
 
@@ -337,28 +342,29 @@ This breaks down into these subsidiary quetsions :
   treeInput <- rbind( treeInput, resistBetterMix2Seq20 )
   treeInput <- rbind( treeInput, resistBetterMix3Seq20 )  
 
-```
-  
-### do tree analysis
-```{r, eval=TRUE}
-  require(rpart.plot)
-  
   #transpose
   treeInput <- t(treeInput)
   
   #convert to a dataframe
-  treeInput <- data.frame(treeInput, stringsAsFactors = FALSE)
+  treeInput <- data.frame(treeInput, stringsAsFactors = FALSE)  
   
+```
+  
+### do tree analysis
+```{r, eval=TRUE}
+  
+  require(rpart.plot)
   
   #convert predictor columns back to numeric
   #following this above : replace 0s & 1s with mixture/sequence to make plot clearer
-  filter <- !substr(names(treeInput),1,6) %in% 'better'
-  treeInput[,filter] <- lapply(treeInput[,filter],as.numeric) 
-  filter <- !filter
-  treeInput[,filter] <- lapply(treeInput[,filter],as.factor) 
+  results_columns <- substr(names(treeInput),1,6) %in% 'better'
+  input_columns <- !results_columns
+  treeInput[,input_columns] <- lapply(treeInput[,input_columns],as.numeric) 
+  treeInput[,results_columns] <- lapply(treeInput[,results_columns],as.factor) 
     
   #create string with predictor names in
-  treePredictorString <- paste(treePredictors, collapse="+")
+  #treePredictorString <- paste(treePredictors, collapse="+")
+  treePredictorString <- paste(colnames(treeInput)[input_columns], collapse="+")  
   
   
   treeResponses <- c( rownames(resistBetterMix1Seq),
@@ -492,65 +498,3 @@ This breaks down into these subsidiary quetsions :
     # prp(prunned_tree, extra=1,box.col=c("pink", "palegreen3")[prunned_tree$frame$yval],cex=0.5,yesno.yshift=-2)
 ```    
 
-### investigating response of time-to-resistance to individual input parameters
-### (while they all are varying so it may not work well)
-```{r, eval=TRUE} 
-
-  #uses ggInput calculated in earlier chunk
-  
-  #first needs to transpose rows to cols
-  #ggInput_T <- t(ggInput)
-    
-  #function to transpose and add strategy column with the passed value
-  #also add on the input columns  
-  addStrategyColumn <- function(x, value, inputs){
-    x <- as.data.frame( t(x) )
-    x$strategy <- value
-    #transpose inputs
-    inputs <- as.data.frame( t(inputs) )
-    #cbind onto the outputs
-    x <- cbind(inputs,x)
-    x
-  }    
-    
-  resistPointsI1_T <- addStrategyColumn(resistPointsI1,"insecticide 1",ggInput) 
-  resistPointsI2_T <- addStrategyColumn(resistPointsI2,"insecticide 2",ggInput)   
-  resistPointsSeq_T <- addStrategyColumn(resistPointsSeq,"Sequential",ggInput) 
-  resistPointsMix1_T <- addStrategyColumn(resistPointsMix1,"Mixture 1",ggInput) 
-  resistPointsMix2_T <- addStrategyColumn(resistPointsMix2,"Mixture 2",ggInput) 
-  resistPointsMix3_T <- addStrategyColumn(resistPointsMix3,"Mixture 3",ggInput)     
-
-  ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
-                      resistPointsMix1_T, resistPointsMix2_T, resistPointsMix3_T)    
-  
-  #ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point() + facet_wrap( ~ cut)
-  
-  #cool working!
-  
-  #this one shows no discernible pattern
-  ggplot(ggInsOuts, aes(x=effectiveness_insecticide1, y=gen_cP0.5, color=strategy)) + geom_point() + facet_wrap( ~ strategy) + geom_smooth()
-  
-  #doing; for all inputs
-  names_inputs <- names(ggInsOuts)[1:10]
-  
-  for(i in names_inputs)
-  {
-    x11()
-    
-    y <- 'gen_cP0.5'
-    #color <- 'strategy'
-    #coloring by exposure shows its effect even when other params are varying
-    color <- 'exposure'    
-    
-    print( ggplot(ggInsOuts, aes_string(x=i, y=y, color=color)) + 
-             geom_point() + 
-             facet_wrap( ~ strategy) + 
-             geom_smooth(aes_string(x=i, y=y, color=NULL)) )
-  }
-
-  #can I facet by particular parameter ranges ?
-  #or even subset the data for specific parameter ranges
-  
-  
-    
-```
