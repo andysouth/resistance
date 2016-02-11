@@ -29,7 +29,8 @@ runcurtis_f2 <- function( max_gen = 300,
                           s.RR2_0B	=	0.43	,
                           z.RR1_00	=	0	,
                           z.RR2_00	=	0	,
-                          sexLinked = 0 )
+                          sexLinked = 0 ,
+                          addCombinedStrategy = TRUE )
 {
   
   #fill exposure array I1
@@ -125,8 +126,8 @@ runcurtis_f2 <- function( max_gen = 300,
   #this is a modifdeied version of Beths function
   #allowing curtis fig2 to be applied to any scenario
   #plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
-  #be careful of arder
+  #be careful of order
   #mix,2,1
-  plotcurtis_f2_generic( listOut$results[[3]], listOut$results[[2]], listOut$results[[1]] )  
+  plotcurtis_f2_generic( listOut$results[[3]], listOut$results[[2]], listOut$results[[1]], addCombinedStrategy = addCombinedStrategy )  
   
 }
