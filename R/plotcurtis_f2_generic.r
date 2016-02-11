@@ -13,7 +13,8 @@
 #' @param main title for the plot
 #' @param criticalPoints critical resistance points to be displayed in the plot
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
-#' @param addLabels add labels to plot for where strategies cross 50% line TRUE gives seq,mix1,mix2,mix3
+#' @param addStrategyLabels add labels to plot for where strategies cross 50% line TRUE gives seq,mix1,mix2,mix3
+#' @param strategyLabels = c("seq","mix1","comb","mix2")
 #' 
 #' @examples
 #' inputAndResultsMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -119,26 +120,51 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
     #but remember that resistance may be reached for insecticide2 first
     if ( cutoff_i1_mix < cutoff_i2_mix )
     {
-      #finding which generations
-      #initially just use maxGens for end
-      #gens <- c( cutoff_i1_mix : (maxGens-cutoff_i1_mix) )
-      gens <- c( cutoff_i1_mix : (cutoff_i1_mix+length(ddt)-1 ) )
+      
+      #add a vertical line for switch from mix to single
+      abline( v = cutoff_i1_mix, col="grey", lty=3 ) 
+      
       #this is tricky
       #have to log the starting point
       #find resistance level for i2 at the point the cutoff is reached for i1
-      startR <- log10( 100 * combmat[cutoff_i1_mix,r2col] )      
+      startR <- log10( 100 * combmat[cutoff_i1_mix,r2col] ) 
+      
+      #take the values above the cutoff
+      comb <- ddt[ddt>startR]
+      #finding which generations
+      gens <- c( cutoff_i1_mix : (cutoff_i1_mix+length(comb)-1 ) )
+      
+      lines( gens, comb, col="blue", lty=3 )
+      
+      #old way of doing which I think was wrong
       #add the individual use line, with the difference between the indiv start and the new start
-      lines( gens, ddt-ddt[1]+startR, col="blue", lty=3 )
+      #lines( gens, ddt-ddt[1]+startR, col="blue", lty=3 )
+      
+      #
+
       
     } else #if cutoff_i2_mix <= cutoff_i1_mix
     {
       
+      #add a vertical line for switch from mix to single
+      abline( v = cutoff_i2_mix, col="grey", lty=3 ) 
+      
       gens <- c( cutoff_i2_mix : (cutoff_i2_mix+length(hch)-1 ) )
 
       #find resistance level for i1 at the point the cutoff is reached for i2            
-      startR <- log10( 100 * combmat[cutoff_i2_mix,r1col] )      
+      startR <- log10( 100 * combmat[cutoff_i2_mix,r1col] ) 
+      
+      #take the values above the cutoff
+      comb <- hch[hch>startR]
+      #finding which generations
+      gens <- c( cutoff_i2_mix : (cutoff_i2_mix+length(comb)-1 ) )
+      
+      lines( gens, comb, col="red", lty=3 )
+      
+      #old way of doing which I think was wrong
+      
       #add the individual use line, with the difference between the indiv start and the new start     
-      lines( gens, hch-hch[1]+startR, col="red", lty=3 )   
+      #lines( gens, hch-hch[1]+startR, col="red", lty=3 )   
       
     }
     
