@@ -3010,13 +3010,17 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 
 ** 11/2/16 **
 ~ added default curtis values to UI labels in server.r
+~ fixed plotting of combined strategy, i think I may not be doing it right 
  
- 
+** 12/2/16 **
+~ added position of Curtis inputs to the figures
+
+
  
  
 ### TO DO  
 
-~ check on plotting of combined strategy, i think I may not be doing it right
+
 
 ~ for the paper we could have a couple of figures that show how a relatively small change to effectiveness can alter the curtis plot.
 
