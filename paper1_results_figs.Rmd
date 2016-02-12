@@ -6,7 +6,7 @@
 ---
 
 # Figures for paper 1 
-# version 3 - in progress
+# version 4 - in progress
 
 ## Based on 10000 runs with all inputs varying at once which explains the variability at particular input values.
 
@@ -43,15 +43,18 @@ Comparing these insecticide use strategies:
   ## trying with the extended experiment _ex100
   experiment <- 'extended'
   
-  #remember these don't have new exposure column
   load(file=paste0(outFolder,'listOutMix_ex2_10000.rda'))
   load(file=paste0(outFolder,'listOutI1_ex2_10000.rda'))
-  load(file=paste0(outFolder,'listOutI2_ex2_10000.rda'))  
+  load(file=paste0(outFolder,'listOutI2_ex2_10000.rda'))
  
-# ex10000 runs showed effect of selection    
-#   load(file=paste0(outFolder,'listOutMix_ex10000.rda'))
-#   load(file=paste0(outFolder,'listOutI1_ex10000.rda'))
-#   load(file=paste0(outFolder,'listOutI2_ex10000.rda'))
+  # load(file=paste0(outFolder,'listOutMix_ex2_1000.rda'))
+  # load(file=paste0(outFolder,'listOutI1_ex2_1000.rda'))
+  # load(file=paste0(outFolder,'listOutI2_ex2_1000.rda'))
+  
+# very quick test data
+  # load(file=paste0(outFolder,'listOutMix_ex2_3.rda'))
+  # load(file=paste0(outFolder,'listOutI1_ex2_3.rda'))
+  # load(file=paste0(outFolder,'listOutI2_ex2_3.rda'))
   
   
 ```
@@ -150,6 +153,21 @@ Comparing these insecticide use strategies:
   #used in a later chunk
   ggInput <- treeInput
   
+  #create a curtisInputs dataframe for use later
+  curtisInputs <- data.frame("exposure"=0.9,
+                             "effectiveness_insecticide1"=0.73,
+                             "effectiveness_insecticide2"=1,
+                             "start_freq_allele1"=0.01,
+                             "start_freq_allele2"=0.01,
+                             "dominance_allele1"=0.17,
+                             "dominance_allele2"=0.0016,
+                             "selection_coef_allele1"=0.23,
+                             "selection_coef_allele2"=0.43,
+                             "maleExposureProp"=1,
+                             "correctMixDeployProp"=1,
+                             "resist_start_hi_div_lo"=1,
+                             "resist_start_1_div_2"=1)
+  
     
 ```  
   
@@ -158,7 +176,6 @@ Comparing these insecticide use strategies:
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
 # getting data into format for ggplot
   
-  library(ggplot2)
   
   #uses ggInput calculated in earlier chunk
   
@@ -246,6 +263,9 @@ Comparing these insecticide use strategies:
 
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
 
+
+  library(ggplot2)
+
 #names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
 names_results <- c("time_to_resistance0.25")
   
@@ -290,7 +310,14 @@ for(i in names_results)
              geom_smooth(linetype='dashed',size=1) +
              #facet_wrap( ~ strategy) +
              #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
-             labs(title = i))
+             labs(title = i) +
+             #add line for Curtis inputs
+             geom_vline(data = curtisInputs, aes_string(xintercept = i), linetype='dotted', colour='red') +
+             #tryting to get the vline into the legend fails
+             #geom_vline(data = curtisInputs, aes_string(xintercept = i, colour='"Curtis Fig.2"' ), linetype='dotted', show.legend=TRUE) +
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = i, y=210, label='"Curtis Fig.2"'), size=3, colour='red')
+             
+           )
   }
   
 ```
@@ -323,6 +350,24 @@ for(i in names_results)
   }
   
 ```
+
+# Some examples showing how changing effectiveness can alter the ranking of insecticide strategies
+### Curtis' Fig 2. inputs : mix2 > combined > mix1 > seq
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+```
+
+### decrease effectiveness of I2 from 1 to 0.85 : mix2 > combined > seq > mix1
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+```
+
+### also decrease effectiveness of I1 from 0.73 to 0.63 : seq > mix2 > combined > mix1
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.63 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+```
+
+
 
 
 # PRCC difference in time-to-resistance between sequential and mixture2
