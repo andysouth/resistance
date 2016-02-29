@@ -3015,14 +3015,140 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 ** 12/2/16 **
 ~ added position of Curtis inputs to the figures
 
+** 18/2/206 **
+Response email from Ian :
 
+Anyway I think the plots all look very nice, and give intuitive answers (but see point #1 below). My comments are
+ 
+(1)    It is very strange that “correct deployment” parameter has no impact on time until resistance in mixtures.
+
+(2)    Re your question at the end of the document i.e. “In mixtures what causes resistance to the 2nd insecticide to arise more slowly when the first insecticide is removed from the mixture ?”. Isn’t it the opposite i.e. if we compare Mixture 2 (where the first insecticide is removed) then doesn’t resistance spread more rapidly compared to when the first insecticide is retained (as in mixture 3)??
+
+(3)    This question stimulated me to look again at your definitions of mixtures etc on the front page of the document. I know its only a draft and we both know what it means but I took the liberty of expanding the definition as in the attachment. Can you check they are correct and hence that I have correctly understood your question addressed in the previous point (and, if so, you may want to cut-and-paste them into the document). I also suggested a potential change (i.e. that mixture 1 and 3 be combined because they only differ in their output measure). This would clarify the captions on the plots but it just depends how easily you could cut-and-paste such changes.
+ 
+One other thing that has just occurred to me. One option not considered by Curtis, but commonly proposed now, is to deploy  “mosaics” where insecticides are deployed singly but at the same time…so some fields/huts may have insecticide “A” while some will have insecticide “B”. Could we simulate these mosaics simply  by setting the “correct deployment” parameter to zero?? It would be  another good selling point for the manuscript. If it is straightforward to set up, I would do it, If not we could just note how we could do it in the ms. It really follows on from point #1 above… if correct deployment has no effect even when it reaches zero then it implies mosaics are as good as mixtures.
+
+Ians recomendations for captions :
+Single use of either insecticide. The outcome measure is time for resistance allele frequency to reach the user-defined threshold value (0.25 in these case)  
+
+Sequential : sole use of one insecticide, switch to other when threshold reached. Outcome measure is the time until frequency of resistance to the second insecticide reaches the threshold value.
+
+Mixture 1: Insecticides always used as a mixture. Outcome measure is the time until threshold reached for either insecticide i.e. the frequency of resistance alleles exceeds 0.25 at either locus
+
+Mixture 2 : insecticides initially deployed as mixtures until the threshold is reached for either insecticide, then switch to sole use of the other insecticide. Outcome measure is time until resistance allele frequencies exceed the threshold value for the second insecticide
+ 
+Mixture 3 : Insecticides always used as a mixture. The outcome measure is the time until the threshold allele frequency exceeds the threshold value at both loci.
+
+Actually, it would be much better if we combined mixture 1 and 3 and just note the difference in outcome measure. Mixture 3 could be renamed “Adaptive mixture”. In the figures the key could then be
+
+Single
+Sequential
+Mixture (either AI)*
+Mixture (both AIs)
+Adaptive mixture
+
+* I assume you know this but AI is short for “active ingredient” which the commercial developers much prefer to “insecticide” for reasons that elude me
+
+
+Which would be much easier for readers (and reviewers) to remember
+
+
+**26/2/16 **
+
+look at Ians point :
+Re your question at the end of the document i.e. “In mixtures what causes resistance to the 2nd insecticide to arise more slowly when the first insecticide is removed from the mixture ?”. Isn’t it the opposite i.e. if we compare Mixture 2 (where the first insecticide is removed) then doesn’t resistance spread more rapidly compared to when the first insecticide is retained (as in mixture 3)??
+
+Resistance spreads more rapidly when the 2nd insecticide is removed from a mixture. See Fig 1.
+
+Perhaps I should rename all references to mix 1,2 & 3 to avoid confusion of getting tangled up with this again.
+
+Sequential                                     or seq
+Mixture (either AI)   [mixture1] or 1st in mix or mix1
+Mixture (both AIs)    [mixture3] or 2nd in mix or mix2
+Adaptive mixture      [mixture2] or Adaptive mix or comb 
+ 
+ 
+Hi Ian,
+
+Firstly, yes you are right. Resistance spreads more rapidly in the responsive mixture strategy than when the first insecticide is retained.
+
+I agree that we need to rationalise the names to try to minimise this confusion. I would prefer to not use AI in labels if possible, but we can refer to in text. (but we can discuss).
+
+If we could agree consistent long, medium and short names as started below that would be very helpful. I can then go through my scripts and rename. I'll have to be very careful because I will need to rename mix2 to mixA & mix3 to mix2. So if I miss any of the first mix2s we'll get in a right pickle.
+
+Also can we agree on what to call the strategy that changes from mix to sole ? My fault that I've been variously calling it adaptive, responsive, combination. Is there a precedent ? Adaptive seems potentially confusing as it could be confused with being selected for. I have a slight preference for responsive. 
+
+Feel free to edit these below. Once we are agreed I'll print out and bluetac to my wall so that I stick to it !!
+
+Long Names (in text where space not an issue)
+Mixture (1st insecticide)   
+Mixture (2nd insecticide)
+Adaptive mixture (2nd insecticide)
+Sequential (2nd insecticide)
+
+Medium Names (plot labels where medium space)
+mix 1st              
+mix 2nd             
+mix adaptive
+sequential 2nd           
+
+Short Names (plot labels where v little space)
+mix1
+mix2
+mixA
+seq
+
+cheers,
+Andy 
+ 
+** 29/2/2016 **
+
+checking on correctMixDeployProp after Ian commented :
+
+(1)    It is very strange that “correct deployment” parameter has no impact on time until resistance in mixtures.
+
+In the plots the only effect was on mix1 that seemed to rise slightly.
+
+in setExposure() this is how it is done :
+
+    if ( correctMixDeployProp < 1 )
+    {
+      a['f','A','0'] <- (1 - correctMixDeployProp)/2 * exposure
+      
+      a['m','A','0'] <- a['f','A','0'] * maleExposureProp
+      
+      #m&f together
+      a[,'0','B'] <- a[,'A','0']    
+      a[,'0','0'] <- 1 - (a[,'A','B'] + a[,'A','0'] + a[,'0','B'])  
+      
+    }
+    
+Code seems as expected.
+
+Could anything about how the sequential & adaptive mixture scenarios are patched together influence this ?
+I don't think so. 
+
+#' @param correctMixDeployProp proportion of times that mixture is deployed correctly, 
+#'    assumes that when not deployed correctly the single insecticides are used instead
+
+~ Thinking about correctMixDeployProp, how do we choose which of the 2 insecticides is used singly ? It is divided between them. Maybe this is the issue ? Perhps splitting between the 2 single applications in the same simulation has a similar effect as the 'mixture' ?
+
+~ maybe write a function to produce a graphical output from setExposure() could put it into a UI to send to Ian.
+~~ effectively it just needs to visualise the array a.
+~~ I could firstly vis as a table rather than a graph
+~~ outputs : 2 tables side by side, a["f",,] & a["m",,]
+https://andysouth.shinyapps.io/shinyNiche/ 
  
  
 ### TO DO  
 
 
+~ checking on correctMixDeployProp
+~ add correctMixDeployProp into curtis shiny UI to enable checking mechanism
+~~ first add correctMixDeployProp into runcurtis_f2
 
-~ for the paper we could have a couple of figures that show how a relatively small change to effectiveness can alter the curtis plot.
+~ carefully implement strategy name changes
+
 
 effectI2 from 1 to 0.85, & resistance arises faster for mix1 than seq
 runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
@@ -3030,8 +3156,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 effectI2 from 1 to 0.5, & resistance arises faster for mix2 than seq
 runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
 
-
-~ play with shiny app to help my understanding of how modifying the params alters results
 
 ~ check code in findResistancePointsMixResponsive()
 
