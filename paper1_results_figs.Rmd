@@ -11,19 +11,26 @@
 ## Based on 10000 runs with all inputs varying at once which explains the variability at particular input values.
 
 Comparing these insecticide use strategies:
+
 1. Single use
-1. Mixture 1 : threshold reached for either insecticide
-1. Mixture 2 : threshold reached for either insecticide, switch to sole use of other until it too reaches threshold
-1. Mixture 3 : threshold reached for both insecticides in mixture
+1. Mixture (either AI) : threshold reached for either insecticide
+1. Adaptive mixture : threshold reached for either insecticide, switch to sole use of other until it too reaches threshold
+1. Mixture (both AIs) : threshold reached for both insecticides in mixture
 1. Sequential : sole use of one insecticide, switch to other when threshold reached until it too reaches threshold
+
+Renamed from previous naming system :
+Mixture (either AI)   [mixture1]
+Mixture (both AIs)    [mixture3]
+Adaptive mixture      [mixture2]
+
 
 ## Notable results
 
 1. Time-to-resistance is lowest for single use and for the first insecticide in a mixture. Time-to-resistance is highest for the 2nd insecticide in a mixture.
-1. In between these extremes, there is less difference between the alternative strategies of a) sequential and b) mixture switching to sole use. The latter takes slightly longer to reach the threshold.
+1. In between these extremes, there is less difference between the alternative strategies of a) sequential and b) adaptive mixture switching to sole use. The latter takes slightly longer to reach the threshold.
 1. Exposure and effectiveness seem to be the most important inputs.
 1. Exposure has the greatest effect on time-to-resistance.
-1. Effectiveness of the insecticides is the one input that has a notably different effect on the strategies of a) sequential and b) mixture switching to sole use. Below an effectiveness of ~0.55 to 0.6 sequential takes longer, and above this 'mixture switching to sole use' takes longer. 
+1. Effectiveness of the insecticides is the one input that has a notably different effect on the strategies of a) sequential and b) adaptive mixture switching to sole use. Below an effectiveness of ~0.55 to 0.6 sequential takes longer, and above this 'mixture switching to sole use' takes longer. 
 
 
 
@@ -259,7 +266,7 @@ Comparing these insecticide use strategies:
     
 ```
 
-# Time-to-resistance across all input values
+# Fig. x1 Time-to-resistance across all input values
 
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
 
@@ -279,15 +286,16 @@ for(i in names_results)
       #ylim(0,450) +
       coord_cartesian( ylim=c(0, 350)) +
       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) +
-      scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mixture 1","Sequential","Mixture 2","Mixture 3"), labels = c("insecticide 1"="Sole use", "Mixture 1"="1st in mix","Sequential"="2nd in sequence", "Mixture 2"="2nd in mix\nswitch to sole", "Mixture 3"="2nd in mix" ) )
-
+      #scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mixture 1","Sequential","Mixture 2","Mixture 3"), labels = c("insecticide 1"="Sole use", "Mixture 1"="1st in mix","Sequential"="2nd in sequence", "Mixture 2"="2nd in mix\nswitch to sole", "Mixture 3"="2nd in mix" ) )
+      scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mixture 1","Sequential","Mixture 2","Mixture 3"), labels = c("insecticide 1"="Sole use", "Mixture 1"="1st in mix","Sequential"="2nd in sequence", "Mixture 2"="adaptive mix", "Mixture 3"="2nd in mix" ) )
+      
   ) #end print
 }  
   
 ```
 
 
-## How time-to-resistance is effected by input values for each insecticide use strategy
+## Fig. x2 How time-to-resistance is effected by input values for each insecticide use strategy
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
   
@@ -322,7 +330,7 @@ for(i in names_results)
   
 ```
 
-## How difference in time-to-resistance between sequential and mixture2 is effected by input values
+## How difference in time-to-resistance between sequential and adaptive mixture is effected by input values
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
   
