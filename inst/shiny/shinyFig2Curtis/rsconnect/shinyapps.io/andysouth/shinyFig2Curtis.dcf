@@ -1,8 +1,9 @@
 name: shinyFig2Curtis
 account: andysouth
 server: shinyapps.io
-bundleId: 229870
-url: https://andysouth.shinyapps.io/shinyFig2Curtis
-when: 1438343385.20612
+appId: 50274
+bundleId: 383470
+url: https://andysouth.shinyapps.io/shinyFig2Curtis/
+when: 1456759211.95197
 asMultiple: FALSE
 asStatic: FALSE

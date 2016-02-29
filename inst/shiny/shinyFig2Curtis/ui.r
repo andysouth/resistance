@@ -51,6 +51,10 @@ shinyUI(fluidPage(
            h5("Selective advantage of resistance"),
            numericInput("s.RR1_A0", "locus1: 0.23", 0.23, min = 0, max = 1, step = 0.05),
            numericInput("s.RR2_0B", "locus2: 0.43", 0.43, min = 0, max = 1, step = 0.05)
+    ),
+    column(2, offset = 0,
+           h5("Extra params not included in Curtis"),
+           numericInput("correctMixDeployProp", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1)
     )
   ), #end fluid row
   fluidRow(

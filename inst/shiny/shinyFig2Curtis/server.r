@@ -36,7 +36,8 @@ shinyServer(function(input, output) {
                       phi.SS1_A0 = input$phi.SS1_A0,
                       phi.SS2_0B = input$phi.SS2_0B,
                       s.RR1_A0 = input$s.RR1_A0,
-                      s.RR2_0B = input$s.RR2_0B )
+                      s.RR2_0B = input$s.RR2_0B,
+                      correctMixDeployProp = input$correctMixDeployProp)
         
         #a hack to output the inputs
         cat("runcurtis_f2( P_1 =",input$P_1,",", 
@@ -47,7 +48,8 @@ shinyServer(function(input, output) {
                       "phi.SS1_A0 =",input$phi.SS1_A0,",",
                       "phi.SS2_0B =",input$phi.SS2_0B,",",
                       "s.RR1_A0 =",input$s.RR1_A0,",",
-                      "s.RR2_0B =",input$s.RR2_0B,")\n" )
+                      "s.RR2_0B =",input$s.RR2_0B,",",
+                      "correctMixDeployProp =",input$correctMixDeployProp,")\n" )
         
       }) #end isolate  
     } #end if ( input$aButtonRun > 0 ) 
