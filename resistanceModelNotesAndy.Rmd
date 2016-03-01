@@ -3139,15 +3139,53 @@ I don't think so.
 ~~ outputs : 2 tables side by side, a["f",,] & a["m",,]
 https://andysouth.shinyapps.io/shinyNiche/ 
  
+~ checking on correctMixDeployProp
+~ added correctMixDeployProp into curtis shiny UI to enable checking mechanism
+~~ first added correctMixDeployProp into runcurtis_f2 
+ 
+ 
+ 
  
 ### TO DO  
 
 
-~ checking on correctMixDeployProp
-~ add correctMixDeployProp into curtis shiny UI to enable checking mechanism
-~~ first add correctMixDeployProp into runcurtis_f2
-
 ~ carefully implement strategy name changes
+Find & replace todo : in sensiAnPaper1All.Rmd & paper1_results_figs.Rmd
+
+resistPointsMix2    resistPointsMix_A
+resistPointsMix3    resistPointsMix_2
+resistBetterMix2SeqBoolean  resistBetterMix_ASeqBoolean
+resistBetterMix2Seq         resistBetterMix_ASeq
+
+
+#### can I replace :
+Mix1 - Mix_1
+Mix2 - Mix_A
+Mix3 - Mix_2
+"Mixture 1" - "Mix either"
+"Mixture 2" - "Mix adaptive"
+"Mixture 3" - "Mix both"
+done mix2_minus_seq0.25          mixA_minus_seq0.25
+
+
+Long Names (in text where space not an issue)
+Mixture (either insecticide)   
+Mixture (both insecticides)
+Adaptive mixture (both insecticides)
+Sequential (both insecticides)
+
+Medium Names (plot labels where medium space)
+mix either              
+mix both             
+mix adaptive
+sequential           
+
+Short Names (plot labels where v little space)
+mix1
+mix2
+adapt
+seq
+
 
 
 effectI2 from 1 to 0.85, & resistance arises faster for mix1 than seq
