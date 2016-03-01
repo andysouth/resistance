@@ -14,7 +14,7 @@
 #' @param criticalPoints critical resistance points to be displayed in the plot
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
 #' @param addStrategyLabels add labels to plot for where strategies cross 50% line TRUE gives seq,mix1,mix2,mix3
-#' @param strategyLabels = c("seq","mix1","comb","mix2")
+#' @param strategyLabels = c("seq","mix1","adapt","mix2")
 #' 
 #' @examples
 #' inputAndResultsMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -31,7 +31,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    criticalPoints = c(0.1,0.25,0.5),
                                    addCombinedStrategy = FALSE,
                                    addStrategyLabels = TRUE,
-                                   strategyLabels = c("seq","mix1","comb","mix2")
+                                   strategyLabels = c("seq","mix1","adapt","mix2")
                                    ){
   
   #find generations to reach max resistance points
