@@ -6,7 +6,7 @@
 ---
 
 # Figures for paper 1 
-# version 4 - in progress
+# version 5 - in progress
 
 ## Based on 10000 runs with all inputs varying at once which explains the variability at particular input values.
 
@@ -88,7 +88,7 @@ Adaptive mixture      [mixture2]
   #2) mixture1 : time to resistance for either insecticide when used in a mixture
   #inputs : inAndOutMix
   #find time to criticalPoint for EITHER insecticide in mixture  
-  resistPointsMix1 <- findResistancePoints(listOutMix, locus='either')  
+  resistPointsMix_1 <- findResistancePoints(listOutMix, locus='either')  
   #todo - to be comparable I think this should be for when resistance to BOTH insecticides is reached
   
   #3) mixture2 : when resistance to one insecticide in the mixture reached, switch to sole use of the 
@@ -98,12 +98,12 @@ Adaptive mixture      [mixture2]
   # then I need to go to the single run for the other insecticide & starting at 
   # it's current resistance point find out how many more generations to go
   #inputs : inAndOutI1, inAndOutI2, inAndOutMix
-  resistPointsMix2 <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+  resistPointsMix_A <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
   
   #4) mixture3 : time to resistance for both insecticides when used in a mixture
   #inputs : inAndOutMix
   #find time to criticalPoint for BOTH insecticide in mixture  
-  resistPointsMix3 <- findResistancePoints(listOutMix, locus='both')
+  resistPointsMix_2 <- findResistancePoints(listOutMix, locus='both')
   
 ```
 
@@ -206,12 +206,12 @@ Adaptive mixture      [mixture2]
   resistPointsI1_T <- addStrategyColumn(resistPointsI1,"insecticide 1",ggInput) 
   resistPointsI2_T <- addStrategyColumn(resistPointsI2,"insecticide 2",ggInput)   
   resistPointsSeq_T <- addStrategyColumn(resistPointsSeq,"Sequential",ggInput) 
-  resistPointsMix1_T <- addStrategyColumn(resistPointsMix1,"Mixture 1",ggInput) 
-  resistPointsMix2_T <- addStrategyColumn(resistPointsMix2,"Mixture 2",ggInput) 
-  resistPointsMix3_T <- addStrategyColumn(resistPointsMix3,"Mixture 3",ggInput)     
+  resistPointsMix_1_T <- addStrategyColumn(resistPointsMix_1,"Mix either",ggInput) 
+  resistPointsMix_A_T <- addStrategyColumn(resistPointsMix_A,"Mix adaptive",ggInput) 
+  resistPointsMix_2_T <- addStrategyColumn(resistPointsMix_2,"Mix both",ggInput)     
 
   ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
-                      resistPointsMix1_T, resistPointsMix2_T, resistPointsMix3_T)    
+                      resistPointsMix_1_T, resistPointsMix_A_T, resistPointsMix_2_T)    
   
   #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
   #>1000 excludes sequential strategy that had a 999 in
@@ -237,18 +237,18 @@ Adaptive mixture      [mixture2]
     }
   
   #format data in a different way to enable PRCC on difference between sequential & mix2
-  #resistPointsMix2_T
+  #resistPointsMix_A_T
   #resistPointsSeq_T
   
   #columns to remove from first
-  indices1 <- which(names(resistPointsMix2_T) %in% c("gen_cP0.1","gen_cP0.5","strategy"))
+  indices1 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.1","gen_cP0.5","strategy"))
   #columns to add to 2nd  
-  indices2 <- which(names(resistPointsMix2_T) %in% c("gen_cP0.25"))  
+  indices2 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.25"))  
   #rename column in 2nd
   tmp <- resistPointsSeq_T[indices2]
   names(tmp) <- "gen_cP0.25seq"
   
-  df_diff <- cbind(resistPointsMix2_T[-indices1], tmp)
+  df_diff <- cbind(resistPointsMix_A_T[-indices1], tmp)
   
   #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
   #>1000 excludes sequential strategy that had a 999 in
@@ -286,8 +286,8 @@ for(i in names_results)
       #ylim(0,450) +
       coord_cartesian( ylim=c(0, 350)) +
       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) +
-      #scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mixture 1","Sequential","Mixture 2","Mixture 3"), labels = c("insecticide 1"="Sole use", "Mixture 1"="1st in mix","Sequential"="2nd in sequence", "Mixture 2"="2nd in mix\nswitch to sole", "Mixture 3"="2nd in mix" ) )
-      scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mixture 1","Sequential","Mixture 2","Mixture 3"), labels = c("insecticide 1"="Sole use", "Mixture 1"="1st in mix","Sequential"="2nd in sequence", "Mixture 2"="adaptive mix", "Mixture 3"="2nd in mix" ) )
+      #scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Sole use", "Mix either"="1st in mix","Sequential"="2nd in sequence", "Mix adaptive"="2nd in mix\nswitch to sole", "Mix both"="2nd in mix" ) )
+      scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Sole use", "Mix either"="1st in mix","Sequential"="2nd in sequence", "Mix adaptive"="adaptive mix", "Mix both"="2nd in mix" ) )
       
   ) #end print
 }  
@@ -360,17 +360,17 @@ for(i in names_results)
 ```
 
 # Some examples showing how changing effectiveness can alter the ranking of insecticide strategies
-### Curtis' Fig 2. inputs : mix2 > combined > mix1 > seq
+### Curtis' Fig 2. inputs : mix2 > adaptive > mix1 > seq
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
 ```
 
-### decrease effectiveness of I2 from 1 to 0.85 : mix2 > combined > seq > mix1
+### decrease effectiveness of I2 from 1 to 0.85 : mix2 > adaptive > seq > mix1
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
 ```
 
-### also decrease effectiveness of I1 from 0.73 to 0.63 : seq > mix2 > combined > mix1
+### also decrease effectiveness of I1 from 0.73 to 0.63 : seq > mix2 > adaptive > mix1
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.63 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
 ```
@@ -378,7 +378,7 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 
 
 
-# PRCC difference in time-to-resistance between sequential and mixture2
+# PRCC difference in time-to-resistance between sequential and mixture adaptive
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
 
   

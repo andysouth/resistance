@@ -52,7 +52,7 @@ This breaks down into these subsidiary quetsions :
   
 ```  
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
   ## to load previously saved runs
 #   load(file=paste0(outFolder,'listOutMix_1000.rda'))
 #   load(file=paste0(outFolder,'listOutI1_1000.rda'))
@@ -82,7 +82,7 @@ This breaks down into these subsidiary quetsions :
   #2) mixture1 : time to resistance for either insecticide when used in a mixture
   #inputs : inAndOutMix
   #find time to criticalPoint for EITHER insecticide in mixture  
-  resistPointsMix1 <- findResistancePoints(listOutMix, locus='either')  
+  resistPointsMix_1 <- findResistancePoints(listOutMix, locus='either')  
   #todo - to be comparable I think this should be for when resistance to BOTH insecticides is reached
   
   #3) mixture2 : when resistance to one insecticide in the mixture reached, switch to sole use of the 
@@ -92,12 +92,12 @@ This breaks down into these subsidiary quetsions :
   # then I need to go to the single run for the other insecticide & starting at 
   # it's current resistance point find out how many more generations to go
   #inputs : inAndOutI1, inAndOutI2, inAndOutMix
-  resistPointsMix2 <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+  resistPointsMix_A <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
   
   #4) mixture3 : time to resistance for both insecticides when used in a mixture
   #inputs : inAndOutMix
   #find time to criticalPoint for BOTH insecticide in mixture  
-  resistPointsMix3 <- findResistancePoints(listOutMix, locus='both')
+  resistPointsMix_2 <- findResistancePoints(listOutMix, locus='both')
   
 ```
   
@@ -108,67 +108,67 @@ This breaks down into these subsidiary quetsions :
   
   ## is mix1 better than sequential ?
   #T/F
-  resistBetterMix1SeqBoolean <- resistPointsMix1 > resistPointsSeq
+  resistBetterMix_1SeqBoolean <- resistPointsMix_1 > resistPointsSeq
   #convert to 0/1
-  resistBetterMix1Seq <- plyr::aaply(resistBetterMix1SeqBoolean,.margins=c(1,2),.fun=as.numeric)
+  resistBetterMix_1Seq <- plyr::aaply(resistBetterMix_1SeqBoolean,.margins=c(1,2),.fun=as.numeric)
   #rename rows ready for binding on to inputs
-  rownames(resistBetterMix1Seq) <- gsub('gen','betterMix1Seq', rownames(resistBetterMix1Seq))
+  rownames(resistBetterMix_1Seq) <- gsub('gen','betterMix_1Seq', rownames(resistBetterMix_1Seq))
   
-  rowSums(resistBetterMix1Seq)/ncol(resistBetterMix1Seq)
+  rowSums(resistBetterMix_1Seq)/ncol(resistBetterMix_1Seq)
   #100runs
-  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
   #                .25                   .26                   .30   
   #1000runs
-  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
   #               .178                  .232                  .238 
   #new100
-  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
   #              0.18                 0.24                 0.25 
   #new1000
-  #betterMix1Seq_cP0.1 betterMix1Seq_cP0.25  betterMix1Seq_cP0.5 
+  #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
   #             0.223                0.245                0.243 
 
   ## is mix2 better than sequential ?
   #T/F
-  resistBetterMix2SeqBoolean <- resistPointsMix2 > resistPointsSeq
+  resistBetterMix_ASeqBoolean <- resistPointsMix_A > resistPointsSeq
   #convert to 0/1
-  resistBetterMix2Seq <- plyr::aaply(resistBetterMix2SeqBoolean,.margins=c(1,2),.fun=as.numeric)
+  resistBetterMix_ASeq <- plyr::aaply(resistBetterMix_ASeqBoolean,.margins=c(1,2),.fun=as.numeric)
   #rename rows ready for binding on to inputs
-  rownames(resistBetterMix2Seq) <- gsub('gen','betterMix2Seq', rownames(resistBetterMix2Seq))
+  rownames(resistBetterMix_ASeq) <- gsub('gen','betterMix_ASeq', rownames(resistBetterMix_ASeq))
 
     
-  rowSums(resistBetterMix2Seq)/ncol(resistBetterMix2Seq)  
+  rowSums(resistBetterMix_ASeq)/ncol(resistBetterMix_ASeq)  
   #1000runs
-  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #betterMix_ASeq_cP0.1 betterMix_ASeq_cP0.25  betterMix_ASeq_cP0.5 
   #             0.471                0.568                0.551 
   #new100
-  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #betterMix_ASeq_cP0.1 betterMix_ASeq_cP0.25  betterMix_ASeq_cP0.5 
   #              0.58                 0.57                 0.52 
   #new1000
-  #betterMix2Seq_cP0.1 betterMix2Seq_cP0.25  betterMix2Seq_cP0.5 
+  #betterMix_ASeq_cP0.1 betterMix_ASeq_cP0.25  betterMix_ASeq_cP0.5 
   #             0.558                0.563                0.534   
     
   ## is mix3 better than sequential ?
   #T/F
-  resistBetterMix3SeqBoolean <- resistPointsMix3 > resistPointsSeq
+  resistBetterMix_2SeqBoolean <- resistPointsMix_2 > resistPointsSeq
   #convert to 0/1
-  resistBetterMix3Seq <- plyr::aaply(resistBetterMix3SeqBoolean,.margins=c(1,2),.fun=as.numeric)
+  resistBetterMix_2Seq <- plyr::aaply(resistBetterMix_2SeqBoolean,.margins=c(1,2),.fun=as.numeric)
   #rename rows ready for binding on to inputs
-  rownames(resistBetterMix3Seq) <- gsub('gen','betterMix3Seq', rownames(resistBetterMix3Seq))
+  rownames(resistBetterMix_2Seq) <- gsub('gen','betterMix_2Seq', rownames(resistBetterMix_2Seq))
   
   #tally runs where mix3 better than seq
-  rowSums(resistBetterMix3Seq)/ncol(resistBetterMix3Seq)
+  rowSums(resistBetterMix_2Seq)/ncol(resistBetterMix_2Seq)
   #100runs
-  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
   #                  .83                   .75                   .72 
   #1000runs
-  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
   #                .794                  .726                  .673  
   #new100
-  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
   #              0.83                 0.79                 0.72 
   #new1000
-  #betterMix3Seq_cP0.1 betterMix3Seq_cP0.25  betterMix3Seq_cP0.5 
+  #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
   #             0.820                0.747                0.677   
   
   #check1
@@ -189,12 +189,12 @@ This breaks down into these subsidiary quetsions :
   
   #check2
 #   #what is the absolute difference between mix3 & sequential ?
-#   resistDifferenceMix3Seq <- resistPointsMix3 - resistPointsSeq
+#   resistDifferenceMix_2Seq <- resistPointsMix_2 - resistPointsSeq
 #   
 #   #check3 is their a difference between the mix & the individual strategies
 #   #looks mostly plausible, occasionally there are 0s
-#   resistDifferenceMix1I1 <- resistPointsMix1 - resistPointsI1
-#   resistDifferenceMix1I2 <- resistPointsMix1 - resistPointsI2  
+#   resistDifferenceMix_1I1 <- resistPointsMix_1 - resistPointsI1
+#   resistDifferenceMix_1I2 <- resistPointsMix_1 - resistPointsI2  
   
   ## is mix2 better than sequential ?  
   # I might expect it to be similar to mix3
@@ -218,52 +218,52 @@ This breaks down into these subsidiary quetsions :
   
   ## is mix1 better than sequential ?
   #T/F
-  resistBetterMix1SeqBoolean20 <- resistPointsMix1 > (1.2 * resistPointsSeq)
+  resistBetterMix_1SeqBoolean20 <- resistPointsMix_1 > (1.2 * resistPointsSeq)
   #convert to 0/1
-  resistBetterMix1Seq20 <- plyr::aaply(resistBetterMix1SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
+  resistBetterMix_1Seq20 <- plyr::aaply(resistBetterMix_1SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
   #rename rows ready for binding on to inputs
-  rownames(resistBetterMix1Seq20) <- gsub('gen','betterMix1Seq20', rownames(resistBetterMix1Seq20))
+  rownames(resistBetterMix_1Seq20) <- gsub('gen','betterMix_1Seq20', rownames(resistBetterMix_1Seq20))
   
-  rowSums(resistBetterMix1Seq20)/ncol(resistBetterMix1Seq20)
+  rowSums(resistBetterMix_1Seq20)/ncol(resistBetterMix_1Seq20)
   #1000runs
- #betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+ #betterMix_1Seq20_cP0.1 betterMix_1Seq20_cP0.25  betterMix_1Seq20_cP0.5 
  #                 0.136                  0.175                  0.173 
   #new1000
- #betterMix1Seq20_cP0.1 betterMix1Seq20_cP0.25  betterMix1Seq20_cP0.5 
+ #betterMix_1Seq20_cP0.1 betterMix_1Seq20_cP0.25  betterMix_1Seq20_cP0.5 
 #                 0.163                  0.178                  0.182   
   
   ## is mix2 better than sequential ?
   #T/F
-  resistBetterMix2SeqBoolean20 <- resistPointsMix2 > (1.2 * resistPointsSeq)
+  resistBetterMix_ASeqBoolean20 <- resistPointsMix_A > (1.2 * resistPointsSeq)
   #convert to 0/1
-  resistBetterMix2Seq20 <- plyr::aaply(resistBetterMix2SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
+  resistBetterMix_ASeq20 <- plyr::aaply(resistBetterMix_ASeqBoolean20,.margins=c(1,2),.fun=as.numeric)
   #rename rows ready for binding on to inputs
-  rownames(resistBetterMix2Seq20) <- gsub('gen','betterMix2Seq20', rownames(resistBetterMix2Seq20))
+  rownames(resistBetterMix_ASeq20) <- gsub('gen','betterMix_ASeq20', rownames(resistBetterMix_ASeq20))
 
     
-  rowSums(resistBetterMix2Seq20)/ncol(resistBetterMix2Seq20)  
+  rowSums(resistBetterMix_ASeq20)/ncol(resistBetterMix_ASeq20)  
   #1000runs
-#  betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+#  betterMix_ASeq20_cP0.1 betterMix_ASeq20_cP0.25  betterMix_ASeq20_cP0.5 
 #                  0.241                  0.326                  0.313 
   #new1000
-# betterMix2Seq20_cP0.1 betterMix2Seq20_cP0.25  betterMix2Seq20_cP0.5 
+# betterMix_ASeq20_cP0.1 betterMix_ASeq20_cP0.25  betterMix_ASeq20_cP0.5 
 #                 0.283                  0.302                  0.283   
     
   ## is mix3 better than sequential ?
   #T/F
-  resistBetterMix3SeqBoolean20 <- resistPointsMix3 > (1.2 * resistPointsSeq)
+  resistBetterMix_2SeqBoolean20 <- resistPointsMix_2 > (1.2 * resistPointsSeq)
   #convert to 0/1
-  resistBetterMix3Seq20 <- plyr::aaply(resistBetterMix3SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
+  resistBetterMix_2Seq20 <- plyr::aaply(resistBetterMix_2SeqBoolean20,.margins=c(1,2),.fun=as.numeric)
   #rename rows ready for binding on to inputs
-  rownames(resistBetterMix3Seq20) <- gsub('gen','betterMix3Seq20', rownames(resistBetterMix3Seq20))
+  rownames(resistBetterMix_2Seq20) <- gsub('gen','betterMix_2Seq20', rownames(resistBetterMix_2Seq20))
   
   #tally runs where mix3 better than seq
-  rowSums(resistBetterMix3Seq20)/ncol(resistBetterMix3Seq20)
+  rowSums(resistBetterMix_2Seq20)/ncol(resistBetterMix_2Seq20)
   #1000runs
-#  betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+#  betterMix_2Seq20_cP0.1 betterMix_2Seq20_cP0.25  betterMix_2Seq20_cP0.5 
 #                  0.672                  0.560                  0.488   
   #new1000
-# betterMix3Seq20_cP0.1 betterMix3Seq20_cP0.25  betterMix3Seq20_cP0.5 
+# betterMix_2Seq20_cP0.1 betterMix_2Seq20_cP0.25  betterMix_2Seq20_cP0.5 
 #                 0.622                  0.536                  0.458   
   
 ```
@@ -325,22 +325,22 @@ This breaks down into these subsidiary quetsions :
     x
   }
   
-  resistBetterMix1Seq <- repMix(resistBetterMix1Seq)
-  resistBetterMix2Seq <- repMix(resistBetterMix2Seq)
-  resistBetterMix3Seq <- repMix(resistBetterMix3Seq)
+  resistBetterMix_1Seq <- repMix(resistBetterMix_1Seq)
+  resistBetterMix_ASeq <- repMix(resistBetterMix_ASeq)
+  resistBetterMix_2Seq <- repMix(resistBetterMix_2Seq)
 
-  resistBetterMix1Seq20 <- repMix(resistBetterMix1Seq20)
-  resistBetterMix2Seq20 <- repMix(resistBetterMix2Seq20)
-  resistBetterMix3Seq20 <- repMix(resistBetterMix3Seq20)
+  resistBetterMix_1Seq20 <- repMix(resistBetterMix_1Seq20)
+  resistBetterMix_ASeq20 <- repMix(resistBetterMix_ASeq20)
+  resistBetterMix_2Seq20 <- repMix(resistBetterMix_2Seq20)
 
   #bind results onto predictors
-  treeInput <- rbind( treeInput, resistBetterMix1Seq )
-  treeInput <- rbind( treeInput, resistBetterMix2Seq )
-  treeInput <- rbind( treeInput, resistBetterMix3Seq )
+  treeInput <- rbind( treeInput, resistBetterMix_1Seq )
+  treeInput <- rbind( treeInput, resistBetterMix_ASeq )
+  treeInput <- rbind( treeInput, resistBetterMix_2Seq )
   #add >20% results
-  treeInput <- rbind( treeInput, resistBetterMix1Seq20 )
-  treeInput <- rbind( treeInput, resistBetterMix2Seq20 )
-  treeInput <- rbind( treeInput, resistBetterMix3Seq20 )  
+  treeInput <- rbind( treeInput, resistBetterMix_1Seq20 )
+  treeInput <- rbind( treeInput, resistBetterMix_ASeq20 )
+  treeInput <- rbind( treeInput, resistBetterMix_2Seq20 )  
 
   #transpose
   treeInput <- t(treeInput)
@@ -367,12 +367,12 @@ This breaks down into these subsidiary quetsions :
   treePredictorString <- paste(colnames(treeInput)[input_columns], collapse="+")  
   
   
-  treeResponses <- c( rownames(resistBetterMix1Seq),
-                      rownames(resistBetterMix2Seq),
-                      rownames(resistBetterMix3Seq),
-                      rownames(resistBetterMix1Seq20),
-                      rownames(resistBetterMix2Seq20),
-                      rownames(resistBetterMix3Seq20)
+  treeResponses <- c( rownames(resistBetterMix_1Seq),
+                      rownames(resistBetterMix_ASeq),
+                      rownames(resistBetterMix_2Seq),
+                      rownames(resistBetterMix_1Seq20),
+                      rownames(resistBetterMix_ASeq20),
+                      rownames(resistBetterMix_2Seq20)
                       )
   
   #to do trees & plots for all response variables
@@ -419,7 +419,7 @@ This breaks down into these subsidiary quetsions :
 
     x11()
     
-    treeResponse <- "betterMix2Seq_cP0.5"
+    treeResponse <- "betterMix_ASeq_cP0.5"
   
     tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
     treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
@@ -438,9 +438,9 @@ This breaks down into these subsidiary quetsions :
     
   
     #comparing it with 0/1 gives the same big tree
-    treeInput$betterMix2Seq_cP0.5numeric <- as.numeric(treeInput$betterMix2Seq_cP0.5) 
+    treeInput$betterMix_ASeq_cP0.5numeric <- as.numeric(treeInput$betterMix_ASeq_cP0.5) 
     
-    treeResponse <- "betterMix2Seq_cP0.5numeric"
+    treeResponse <- "betterMix_ASeq_cP0.5numeric"
     
     tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
     treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
@@ -462,7 +462,7 @@ This breaks down into these subsidiary quetsions :
   
    
 ```    
-#   treeResponse <- 'betterMix1Seq_cP0.5'
+#   treeResponse <- 'betterMix_1Seq_cP0.5'
 #   tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
 #   
 #   #if get error number of rows of matrices must match (see arg 2)
@@ -474,7 +474,7 @@ This breaks down into these subsidiary quetsions :
 #     
 #   #for mix3 (resistance to both)
 #   x11()
-#   treeResponse <- 'betterMix3Seq_cP0.5'
+#   treeResponse <- 'betterMix_2Seq_cP0.5'
 #   tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class')  
 #   plot(tree) #plots tree
 #   text(tree) #labels tree  
