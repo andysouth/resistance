@@ -259,10 +259,10 @@ Adaptive mixture      [mixture2]
   df_diff <- df_diff[-didntReachThresh,]  
   
   
-  #df_diff$mix2_minus_seq0.25 <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
-  df_diff["mix2_minus_seq0.25"] <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
+  #df_diff$mixA_minus_seq0.25 <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
+  df_diff["mixA_minus_seq0.25"] <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
   
-  #TODO : later do PRCC on df_diff["mix2_minus_seq0.25"]
+  #TODO : later do PRCC on df_diff["mixA_minus_seq0.25"]
     
 ```
 
@@ -343,7 +343,7 @@ for(i in names_results)
   {
     #x11()
 
-    y <- "mix2_minus_seq0.25"    
+    y <- "mixA_minus_seq0.25"    
     
     print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
             #points not wanted if 10000
@@ -386,7 +386,7 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 
     
     x <- df_diff[,1:num_inputs]
-    y <- df_diff["mix2_minus_seq0.25"]
+    y <- df_diff["mixA_minus_seq0.25"]
       
     pcc_res <- pcc(x, y, rank=TRUE)
     
@@ -407,7 +407,7 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
              theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
              geom_hline(yintercept = 0, linetype=3) +
              ylim(-1,1) +
-             ggtitle(paste("PRCC difference between sequential and mixture2")) +
+             ggtitle(paste("PRCC difference between sequential and mixture adaptive")) +
              xlab(NULL)
           )
 
@@ -501,9 +501,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 ```
 
 
-
-## Andys questions 
-1. In mixtures what causes resistance to the 2nd insecticide to arise more slowly when the first insecticide is removed from the mixture ?    
 
 
 
