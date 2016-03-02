@@ -266,6 +266,8 @@ Adaptive mixture      [mixture2]
     
 ```
 
+---
+
 # Fig. x1 Time-to-resistance across all input values
 
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
@@ -294,7 +296,7 @@ for(i in names_results)
   
 ```
 
-
+---
 ## Fig. x2 How time-to-resistance is effected by input values for each insecticide use strategy
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
@@ -460,7 +462,8 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
              theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
              geom_hline(yintercept = 0, linetype=3) +
              ylim(-1,1) +
-             ggtitle(paste(strategy,"PRCC")) +
+             #ggtitle(paste(strategy,"PRCC")) +
+             ggtitle(paste(strategy,"time-to-resistance 0.25")) +
              xlab(NULL)
           )
   }
