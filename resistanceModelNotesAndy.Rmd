@@ -2489,9 +2489,7 @@ uploaded new version to shinyapps
 
 
 ** 26/8/15 **
-submit invoice
-from contract : maximum of 25 days at 217 per day
-
+submit invoice : from contract : maximum of 25 days at 217 per day
 I spent 30.6 days (can claim some against tsetse work, or from future contract ...)
 
 
@@ -3144,11 +3142,6 @@ https://andysouth.shinyapps.io/shinyNiche/
 ~~ first added correctMixDeployProp into runcurtis_f2 
  
  
- 
- 
-### TO DO  
-
-
 ~ carefully implement strategy name changes
 Find & replace todo : in sensiAnPaper1All.Rmd & paper1_results_figs.Rmd
 
@@ -3157,15 +3150,38 @@ resistPointsMix3    resistPointsMix_2
 resistBetterMix2SeqBoolean  resistBetterMix_ASeqBoolean
 resistBetterMix2Seq         resistBetterMix_ASeq
 
-
-#### can I replace :
+#### replacements done :
 Mix1 - Mix_1
 Mix2 - Mix_A
 Mix3 - Mix_2
 "Mixture 1" - "Mix either"
 "Mixture 2" - "Mix adaptive"
 "Mixture 3" - "Mix both"
-done mix2_minus_seq0.25          mixA_minus_seq0.25
+done mix2_minus_seq0.25          mixA_minus_seq0.25 
+ 
+ 
+done ~ record time spent & when was the last time I claimed on the previous contract ?
+Previous contract claimed 15 Sept 2015.
+submit invoice : from contract : maximum of 25 days at 217 per day
+I spent 30.6 days (can claim some against tsetse work, or from future contract ...)
+So time I spent in January on toggl should be on new contract/
+To the end of Feb :
+Hours		105:45:00
+Hours rounded		105.00
+Days (/7.5)		14.00
+Days remaining (from 85)		71.00 
+ 
+ 
+ 
+ 
+### TO DO  
+
+~ can I facet the PRCC mutliplots so I just get one axis ?
+
+~ start creating a proposed slimmed down figs doc (maybe as a word doc using pandoc) proposed for the paper
+~~ beware that if I send it to Ian as a doc, he will insert text into it that I may not be able to find.
+~~ maybe send it as a pdf first & change to a doc later to allow Ian to copy & paste the figs.
+~~ see paper1_results_figs_slimmed.Rmd
 
 
 Long Names (in text where space not an issue)
