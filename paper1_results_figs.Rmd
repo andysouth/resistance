@@ -296,7 +296,6 @@ for(i in names_results)
   
 ```
 
----
 ## Fig. x2 How time-to-resistance is effected by input values for each insecticide use strategy
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
@@ -332,7 +331,7 @@ for(i in names_results)
   
 ```
 
-## How difference in time-to-resistance between sequential and adaptive mixture is effected by input values
+## Fig. x3 How difference in time-to-resistance between sequential and adaptive mixture is effected by input values
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
   
@@ -360,6 +359,120 @@ for(i in names_results)
   }
   
 ```
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+  #can I do a 2D hexbin plot with x=exposure, y=effectiveness
+  #but do I just want to use 1 effectiveness, or maybe add both effectivenesses together ?
+  #bin colour : proportion of runs in which sequential better & could have diverging scale about 0.5
+  #I probably still need to tweak data first
+  #currently I have differences in times to resistance : mixA_minus_seq0.25
+  #what I think I want is the proportion of runs in which mix is better
+  #I can get that by setting to 0 & 1 and calc average
+  # tst_runs <- c(1,0,0,0)
+  # tst_runs <- c(1,1,1,0)
+  # mean(tst_runs)
+
+  ggSubset <- df_diff
+  #if mix-seq >1 resistance took longer for mix so mix is better
+  ggSubset$mixA_better_seq0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 > 0, 1, 0 )
+  ggSubset$seq_better_mixA0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 < 0, 1, 0 )
+  ggSubset$abs_diff <- abs(ggSubset$mixA_minus_seq0.25)
+  
+  #takes a long time to plot, initial version gave me count
+  #I want it to plot the mean
+  #check stackoverflow ..
+    
+    print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.25'))+
+             geom_hex()
+             #points not wanted if 10000
+             #geom_point(shape=1, colour="darkblue", alpha=0.2, show.legend=FALSE) + 
+             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             #geom_smooth(linetype='dashed',size=1, colour="red") +
+             #facet_wrap( ~ strategy) +
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             #labs(title = i) +
+             #geom_hline(yintercept = 0, colour="white")
+           )
+    
+    #interesting plot showing where sequence is better is restricted to higher values of exposure and effectiveness 
+    print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.25'))+
+             #geom_hex()
+             geom_point(alpha=0.2)  
+           ) 
+
+    #can I multiply the two effectivenesses together ?
+    #aha! yes that's even better
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_better_seq0.25))+
+             #geom_hex()
+             geom_point(alpha=0.2)  
+           )  
+    
+    #i think adding the effectivenesses may give an even better plot
+    #and makes it easier for the reader to interpret
+    #aha! yes that's even better
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mixA_better_seq0.25))+
+
+             geom_point(alpha=0.2)  
+           )  
+    
+    #facetted 0/1, labelled mix better, seq better
+    #if I get this sorted I could try to have +ve & -ve on the same scale
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mixA0.25))+
+             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+
+             theme(legend.position="none") +
+             geom_point(alpha=1)  
+           )     
+    
+    
+    
+    
+    #what if I do the difference rather than just 0/1
+    #aha! this is close to being the killer plot, just need to get the colour scale right 
+    #but the previous one may be clearer
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_minus_seq0.25))+
+             #geom_hex()
+             geom_point(alpha=1) +
+             #no adding grey outlines obscures the pattern
+             #geom_point(shape=21, colour='grey') +
+             #this one does look good but slight potential to see negatives above even though they aren't there
+             #could I modify the shapes to be different
+             #would a repeated, faceted plot solve that ?
+             #scale looks good but colours could do with being denser
+             #and I'm not sure that making the points that are close to zero white is a good idea ?
+             #although it does mean points that are only a few generations different do not obscure the pattern
+             #maybe I could explicitly do Ians 20% thing & colour those white
+             scale_colour_gradient2()
+
+             #didn't manage to get the colorBrewer scale to diverge from 0
+             #scale_colour_distiller("RdYlGn",type='div')
+            )     
+
+    #COOLIO !! I really like this figure.
+    library(viridis)
+    #try facetted showing generation differences, labelled mix better, seq better
+    #if I get this sorted I could try to have +ve & -ve on the same scale
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_diff))+
+             
+             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+
+             #YlGnBu looks really good except that the yellow points are very faint
+             #?viridis
+             #scale_colour_distiller(palette='YlGnBu', direction=1) +
+             #option="plasma" looks good too
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
+             theme_bw() +
+             #theme_minimal() +
+             geom_point(alpha=1)  
+           )       
+ 
+           
+     
+```
+
+
 
 # Some examples showing how changing effectiveness can alter the ranking of insecticide strategies
 ### Curtis' Fig 2. inputs : mix2 > adaptive > mix1 > seq

@@ -3159,6 +3159,7 @@ Mix3 - Mix_2
 "Mixture 3" - "Mix both"
 done mix2_minus_seq0.25          mixA_minus_seq0.25 
  
+** 2/3/2016 ** 
  
 done ~ record time spent & when was the last time I claimed on the previous contract ?
 Previous contract claimed 15 Sept 2015.
@@ -3171,17 +3172,48 @@ Hours rounded		105.00
 Days (/7.5)		14.00
 Days remaining (from 85)		71.00 
  
+~ modifying PRCC mutliplots to get just one axis 
+
+** 3/3/2016 **  
+
+msg from Ian :
+
+
+Aha! I've understood what he means by setting correct_deploy to 0, to study mosaics.
+
  
  
  
 ### TO DO  
+~ check stackoverflow for getting mean into hexbin plot
 
-~ can I facet the PRCC mutliplots so I just get one axis ?
+~ communicate my concern to Ian that figures I've spent quite a long time on just go into supplementary material where few will see them. Can we think of a way of getting these into a paper themselves ? e.g. if this first paper is targeted at policy people can we get a 2nd paper that is targetted at biologists and explores mechanisms ?
+
+
+~ can I change order of strategies in legend ?
+~ can I facet the smoothed scatter plots to get them to take up less space and avoid repeating legend ?
+~~ or I may be able to use a similar plot_grid() method
+
+~~ if I wanted to facet by inputs might need to restructure the data, put inputs into a single column to replace below :
+  for(i in names_inputs)
+  {
+    print( ggplot(ggSubset, aes_string(x=i
+
+
+~ Ian wants trees. Maybe just do one tree of resistance0.25 on whether seq or maxAdapt is better. 
+
+adaptive & sequential
+20% longer
+
 
 ~ start creating a proposed slimmed down figs doc (maybe as a word doc using pandoc) proposed for the paper
 ~~ beware that if I send it to Ian as a doc, he will insert text into it that I may not be able to find.
 ~~ maybe send it as a pdf first & change to a doc later to allow Ian to copy & paste the figs.
 ~~ see paper1_results_figs_slimmed.Rmd
+
+~ I could try a 2D plot with x=exposure, y=effectiveness & hexbin & colour cells according to proportion of runs where mix or seq is better.
+
+~~ seq is sometimes better than mix both. Where does that occur. The above plot might even help to answer that.
 
 
 Long Names (in text where space not an issue)
