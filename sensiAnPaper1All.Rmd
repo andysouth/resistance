@@ -115,20 +115,12 @@ This breaks down into these subsidiary quetsions :
   rownames(resistBetterMix_1Seq) <- gsub('gen','betterMix_1Seq', rownames(resistBetterMix_1Seq))
   
   rowSums(resistBetterMix_1Seq)/ncol(resistBetterMix_1Seq)
-  #100runs
-  #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
-  #                .25                   .26                   .30   
-  #1000runs
-  #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
-  #               .178                  .232                  .238 
-  #new100
-  #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
-  #              0.18                 0.24                 0.25 
+
   #new1000
   #betterMix_1Seq_cP0.1 betterMix_1Seq_cP0.25  betterMix_1Seq_cP0.5 
   #             0.223                0.245                0.243 
 
-  ## is mix2 better than sequential ?
+  ## is mix adaptive better than sequential ?
   #T/F
   resistBetterMix_ASeqBoolean <- resistPointsMix_A > resistPointsSeq
   #convert to 0/1
@@ -138,17 +130,11 @@ This breaks down into these subsidiary quetsions :
 
     
   rowSums(resistBetterMix_ASeq)/ncol(resistBetterMix_ASeq)  
-  #1000runs
-  #betterMix_ASeq_cP0.1 betterMix_ASeq_cP0.25  betterMix_ASeq_cP0.5 
-  #             0.471                0.568                0.551 
-  #new100
-  #betterMix_ASeq_cP0.1 betterMix_ASeq_cP0.25  betterMix_ASeq_cP0.5 
-  #              0.58                 0.57                 0.52 
   #new1000
   #betterMix_ASeq_cP0.1 betterMix_ASeq_cP0.25  betterMix_ASeq_cP0.5 
   #             0.558                0.563                0.534   
     
-  ## is mix3 better than sequential ?
+  ## is mix2 better than sequential ?
   #T/F
   resistBetterMix_2SeqBoolean <- resistPointsMix_2 > resistPointsSeq
   #convert to 0/1
@@ -158,15 +144,6 @@ This breaks down into these subsidiary quetsions :
   
   #tally runs where mix3 better than seq
   rowSums(resistBetterMix_2Seq)/ncol(resistBetterMix_2Seq)
-  #100runs
-  #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
-  #                  .83                   .75                   .72 
-  #1000runs
-  #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
-  #                .794                  .726                  .673  
-  #new100
-  #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
-  #              0.83                 0.79                 0.72 
   #new1000
   #betterMix_2Seq_cP0.1 betterMix_2Seq_cP0.25  betterMix_2Seq_cP0.5 
   #             0.820                0.747                0.677   
@@ -188,16 +165,13 @@ This breaks down into these subsidiary quetsions :
   #plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
   
   #check2
-#   #what is the absolute difference between mix3 & sequential ?
+#   #what is the absolute difference between mix2 & sequential ?
 #   resistDifferenceMix_2Seq <- resistPointsMix_2 - resistPointsSeq
 #   
 #   #check3 is their a difference between the mix & the individual strategies
 #   #looks mostly plausible, occasionally there are 0s
 #   resistDifferenceMix_1I1 <- resistPointsMix_1 - resistPointsI1
 #   resistDifferenceMix_1I2 <- resistPointsMix_1 - resistPointsI2  
-  
-  ## is mix2 better than sequential ?  
-  # I might expect it to be similar to mix3
   
   
   # comparing sensitivity inputs to those used by Beth to reproduce curtis fig2
@@ -318,7 +292,7 @@ This breaks down into these subsidiary quetsions :
   ggInput <- treeInput
   
   
-  #replace 0s & 1s with mixture/sequence to make plot clearer
+  #replace 0s & 1s with mixture/sequence to make tree plot clearer
   repMix <- function(x){
     x[x==0] <- 'sequence'
     x[x==1] <- 'mixture'

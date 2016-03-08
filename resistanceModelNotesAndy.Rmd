@@ -3178,19 +3178,35 @@ Days remaining (from 85)		71.00
 
 msg from Ian :
 
-
 Aha! I've understood what he means by setting correct_deploy to 0, to study mosaics.
 
+~ changed order of strategies in legend
  
+~ created new killer figure with added effectivenesses on the y & exposure on x.  
  
+** 8/3/2016 **
+
+~ add Curtis fig2 params to killer figure
+~ tricky adding to legend or labelling
+~ can I get legend for killer figure beneath ?
+~ can I derive a line for the border between when seq & mix better by fitting a line to the 0 values ?
+~ get the classification tree that matches my killer figure
+
+
  
 ### TO DO  
-~ check stackoverflow for getting mean into hexbin plot
 
-~ communicate my concern to Ian that figures I've spent quite a long time on just go into supplementary material where few will see them. Can we think of a way of getting these into a paper themselves ? e.g. if this first paper is targeted at policy people can we get a 2nd paper that is targetted at biologists and explores mechanisms ?
+~ improve classification tree heading
+~ add classification tree for >20% better
 
 
-~ can I change order of strategies in legend ?
+~ check with Ian what the best resistance threshold to focus on is. In Curtis Fig2 it is 50%. I have been using the 25% in my figs (but I could change). WHO thresholds are :
+
+~ I just had a thought. Is the effectiveness effect additive ? i.e. do 2 insecticides of effectiveness 0.7 have the same effect e.g. as one of 1 and the other of 1.4 ? 
+
+~ maybe communicate my concern to Ian that figures I've spent quite a long time on just go into supplementary material where few will see them. Can we think of a way of getting these into a paper themselves ? e.g. if this first paper is targeted at policy people can we get a 2nd paper that is targetted at biologists and explores mechanisms ?
+
+
 ~ can I facet the smoothed scatter plots to get them to take up less space and avoid repeating legend ?
 ~~ or I may be able to use a similar plot_grid() method
 
