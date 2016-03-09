@@ -18,6 +18,7 @@ date: "`r Sys.Date()`"
 1. Effectiveness of the insecticides is the one input that can change the average relative positioning of the strategies a) sequential and b) adaptive mixture. Below an effectiveness of ~0.55 to 0.6 sequential takes longer to reach the resistance threshold, and above this the adaptive mixture takes longer. 
 1. Exposure and effectiveness come out as the most important effect on the difference between the sequential and adpative mixture strategies.
 1. Exposure and effectiveness can be used to predict most of whether resistance will arise slower under the sequential or adaptive mixture strategy, either by a simple plot or using classification trees.
+1. The implication of additional operational costs of adaptive mixtures can be investigated. If a requirement of a 20% improvement in resistance is imposed then more runs favour sequential than mixture. 
 
 
 
@@ -504,7 +505,9 @@ for(i in names_results)
   df_same$seq_better_mixA0.25 <- 1
   #rbind them back onto other dataset
   ggSubset <- rbind( ggSubset, df_same)
-  
+
+  #add an option for 20% better, put the not in to get facets in correct order in ggplot later
+  ggSubset$mixA_not20pc_better_seq0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 / ggSubset$gen_cP0.25seq <= 0.2, 1, 0 )   
   
     #COOLIO !! I really like this figure.
     library(viridis)
@@ -543,10 +546,38 @@ for(i in names_results)
              geom_label(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"', hjust='"right"'), nudge_x=-0.02, size=3, colour='red')
            )       
 ```
+
+
 Grey triangles are those runs in which resistance reached the threshold at the same time in the two strategies (and are repeated in both panels). The grey line is a linear model through these same points. 
 
+\pagebreak
 
-## Fig. x6 Classification Tree
+## Fig. x6 Modifying the previous plot to show where resistance arises over 20% slower in an adaptive mixture strategy versus sequential.
+
+1. The line fitted to runs where resistance is reached at the same time for mixture and sequential is retained. Less of the parameter space favours the adaptive mixture under these constraints.
+
+```{r, eval=TRUE, echo=FALSE, fig.height=6} 
+
+  #modify the killer plot to show where mixtures are 20% better ?
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_diff))+
+             
+             facet_grid( ~ mixA_not20pc_better_seq0.25, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
+
+             theme_bw() +
+             #add point for Curtis inputs
+             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) +
+             #add a lm fitted to the 0 points abs_diff
+             geom_smooth(data=df_same, method = "lm", se = FALSE) 
+           )
+```
+
+
+## Fig. x7 Classification Trees for whether resistance arises slower with an adaptive mixture or sequential strategy. The upper plot shows when mixture is slower than sequential, the lower plot is for when the mixture is more than 20% slower.
+
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5} 
 
   #code copied from sensiAnPaper1All
@@ -561,6 +592,14 @@ Grey triangles are those runs in which resistance reached the threshold at the s
   #rename rows ready for binding on to inputs
   rownames(resistBetterMix_ASeq) <- gsub('gen','betterMix_ASeq', rownames(resistBetterMix_ASeq))
   
+  #20% better
+  resistBetterMix_ASeqBoolean20 <- resistPointsMix_A > (1.2 * resistPointsSeq)
+  #convert to 0/1
+  resistBetterMix_ASeq20 <- plyr::aaply(resistBetterMix_ASeqBoolean20,.margins=c(1,2),.fun=as.numeric)
+  #rename rows ready for binding on to inputs
+  rownames(resistBetterMix_ASeq20) <- gsub('gen','betterMix_ASeq20', rownames(resistBetterMix_ASeq20))
+
+  
   #replace 0s & 1s with mixture/sequence to make tree plot clearer
   repMix <- function(x){
     x[x==0] <- 'sequence'
@@ -569,8 +608,9 @@ Grey triangles are those runs in which resistance reached the threshold at the s
   }
   
   resistBetterMix_ASeq <- repMix(resistBetterMix_ASeq)
+  resistBetterMix_ASeq20 <- repMix(resistBetterMix_ASeq20)
   
-  treeInput <- rbind( treeInput, resistBetterMix_ASeq )
+  treeInput <- rbind( treeInput, resistBetterMix_ASeq, resistBetterMix_ASeq20 )
   
   #transpose
   treeInput <- t(treeInput)
@@ -590,30 +630,32 @@ Grey triangles are those runs in which resistance reached the threshold at the s
   #create string with predictor names in
   treePredictorString <- paste(colnames(treeInput)[input_columns], collapse="+") 
   
-  #just doing for one strategy, sensiAnPpaer1All.Rmd does for a bunch
-  treeResponse <- rownames(resistBetterMix_ASeq)[2] #2 is 25%
+  #just doing for a few strategies, sensiAnPpaer1All.Rmd does for a bunch
+  treeResponses <- c( rownames(resistBetterMix_ASeq)[2], #2 is 25%
+                      rownames(resistBetterMix_ASeq20)[2]
+                    )
   
   
-  tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
-  #treePruned <- prune(tree, cp=tree$cptable[which.min(tree$cptable[,"xerror"]),"CP"])
-  
-  #http://stackoverflow.com/questions/29197213/what-is-the-difference-between-rel-error-and-x-error-in-a-rpart-decision-tree
-  #A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror.
-  
-  cpOptimal <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"CP"][1]
-  
-  treePruned <- prune(tree, cp=cpOptimal)
-  
-  
-  #to set box colours
-  cols <- ifelse(treePruned$frame$yval == 1, "red", "green3")
-  
-  #adds in no. scenarios correctly and incorrectly classified
-  #prp(tree, extra=1, varlen = 10, main=treeResponse)
-  #prp(treePruned, extra=1, varlen = 10, main=treeResponse, col=cols, border.col=cols)
-  #prp(treePruned, extra=1, varlen = 0, main=treeResponse, col=cols, border.col=cols)
-  prp(treePruned, extra=1, varlen = 0, main='', box.col=cols, under=TRUE)
-  
+  #to do trees & plots for all response variables
+  for( treeResponse in treeResponses )
+  {
+    tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class') 
+    #http://stackoverflow.com/questions/29197213/what-is-the-difference-between-rel-error-and-x-error-in-a-rpart-decision-tree
+    #A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror.
+    
+    cpOptimal <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"CP"][1]
+    
+    treePruned <- prune(tree, cp=cpOptimal)
+    
+    #to set box colours
+    cols <- ifelse(treePruned$frame$yval == 1, "red", "green3")
+    
+    #adds in no. scenarios correctly and incorrectly classified
+    #prp(tree, extra=1, varlen = 10, main=treeResponse)
+    #prp(treePruned, extra=1, varlen = 10, main=treeResponse, col=cols, border.col=cols)
+    #prp(treePruned, extra=1, varlen = 0, main=treeResponse, box.col=cols, under=TRUE)
+    prp(treePruned, extra=1, varlen = 0, main='', box.col=cols, under=TRUE)
+    }
 
 ```
 

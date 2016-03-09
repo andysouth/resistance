@@ -3192,12 +3192,18 @@ Aha! I've understood what he means by setting correct_deploy to 0, to study mosa
 ~ can I derive a line for the border between when seq & mix better by fitting a line to the 0 values ?
 ~ get the classification tree that matches my killer figure
 
+** 9/3/2016 **
+
+~ creating 20% tree & plot
+~ got the 0 line onto the first facet of the 20% plot
 
  
 ### TO DO  
 
-~ improve classification tree heading
-~ add classification tree for >20% better
+reread Curtis to check the below ...
+
+From Ian
+~ I think the Curtis result (the one that said sequential was better) assumed effectiveness of both =1 and that exposure =0.9. I think that fits right at the top RH corner of the figure.
 
 
 ~ check with Ian what the best resistance threshold to focus on is. In Curtis Fig2 it is 50%. I have been using the 25% in my figs (but I could change). WHO thresholds are :
