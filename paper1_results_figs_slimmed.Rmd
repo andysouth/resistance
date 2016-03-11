@@ -236,21 +236,21 @@ date: "`r Sys.Date()`"
   tmp <- resistPointsSeq_T[indices2]
   names(tmp) <- "gen_cP0.25seq"
   
-  df_diff <- cbind(resistPointsMix_A_T[-indices1], tmp)
+  dif_mixA_seq <- cbind(resistPointsMix_A_T[-indices1], tmp)
   
   #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
   #>1000 excludes sequential strategy that had a 999 in
   #BEWARE would need to increase 1000 if I increase max generations in the runs
-  didntReachThresh <- which( df_diff$gen_cP0.25 > 500 | df_diff$gen_cP0.25seq > 500 )
+  didntReachThresh <- which( dif_mixA_seq$gen_cP0.25 > 500 | dif_mixA_seq$gen_cP0.25seq > 500 )
   
   #subset by runs not making threshold
-  df_diff <- df_diff[-didntReachThresh,]  
+  dif_mixA_seq <- dif_mixA_seq[-didntReachThresh,]  
   
   
-  #df_diff$mixA_minus_seq0.25 <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
-  df_diff["mixA_minus_seq0.25"] <- df_diff["gen_cP0.25"] - df_diff["gen_cP0.25seq"]
+  #dif_mixA_seq$mixA_minus_seq0.25 <- dif_mixA_seq["gen_cP0.25"] - dif_mixA_seq["gen_cP0.25seq"]
+  dif_mixA_seq["mixA_minus_seq0.25"] <- dif_mixA_seq["gen_cP0.25"] - dif_mixA_seq["gen_cP0.25seq"]
   
-  #TODO : later do PRCC on df_diff["mixA_minus_seq0.25"]
+  #TODO : later do PRCC on dif_mixA_seq["mixA_minus_seq0.25"]
     
 ```
 
@@ -449,8 +449,8 @@ for(i in names_results)
   library(sensitivity)
 
     
-    x <- df_diff[,1:num_inputs]
-    y <- df_diff["mixA_minus_seq0.25"]
+    x <- dif_mixA_seq[,1:num_inputs]
+    y <- dif_mixA_seq["mixA_minus_seq0.25"]
       
     pcc_res <- pcc(x, y, rank=TRUE)
     
@@ -488,7 +488,7 @@ for(i in names_results)
 ```{r, eval=TRUE, echo=FALSE, fig.height=6} 
   
 
-  ggSubset <- df_diff
+  ggSubset <- dif_mixA_seq
   #if mix-seq >1 resistance took longer for mix so mix is better
   ggSubset$mixA_better_seq0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 > 0, 1, 0 )
   ggSubset$seq_better_mixA0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 < 0, 1, 0 )

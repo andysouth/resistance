@@ -3177,15 +3177,11 @@ Days remaining (from 85)		71.00
 ** 3/3/2016 **  
 
 msg from Ian :
-
 Aha! I've understood what he means by setting correct_deploy to 0, to study mosaics.
-
 ~ changed order of strategies in legend
- 
 ~ created new killer figure with added effectivenesses on the y & exposure on x.  
  
 ** 8/3/2016 **
-
 ~ add Curtis fig2 params to killer figure
 ~ tricky adding to legend or labelling
 ~ can I get legend for killer figure beneath ?
@@ -3193,12 +3189,59 @@ Aha! I've understood what he means by setting correct_deploy to 0, to study mosa
 ~ get the classification tree that matches my killer figure
 
 ** 9/3/2016 **
-
 ~ creating 20% tree & plot
 ~ got the 0 line onto the first facet of the 20% plot
 
+** 10/3/2016 **
+~ looking at the manuscript
+
+I think the manuscript can be about describing development and results of a model that is a more generic version of Curtis. But we do not need to make the model useable by others at this stage. 
+
+** 11/3/2016 **
+manuscript
+
+current wordcount 9,300
+
+Details from Plos Computational Biol :
+Software Submissions
+PLOS Computational Biology publishes articles describing outstanding open source software of exceptional importance that has been shown to provide new biological insights, either as a part of the software article, or published elsewhere.
+
+The software must already be widely adopted, or have the promise of wide adoption by a broad community of users. Enhancements to existing published open source software will only be considered if those enhancements bring exceptional new capabilities. The software must be downloadable anonymously in source code form and licensed under an Open Source Initiative (OSI) compliant license. The source code must be accompanied with documentation on building and installing the software from source, as well as for using the software, including instructions on how a user can test the software on supplied test data. Software articles require a presubmission inquiry that includes explanations on how the above criteria are met.
+
+Format
+Articles should be concise (less than 3500 words, not including supplementary material) 
+
+Sentence on how the decisoin tree level decided.
+
+A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror
+xerror is the cross-validation error
+
+To avoid overfitting the number of levels was restricted to the minimum where the relative error plus the standard error was less than the cross-validation error.
+
+added mix both to paper1_results_figs.Rmd
+repeated all figs for 50% resistance in paper1_results_figs_slimmed_50.Rmd
+
+
  
 ### TO DO  
+
+In fig x1 sequential & adaptive mixture look very similar indeed ???
+
+Could I write a very short paper describing the shiny app that allows users to take the curtis figure & modify the code ? Where might it go ? It wouldn't need any of the sensitivity analysis etc. ? It could cite the paper with the snesitivity analysis.
+
+
+Repeat my killer fig for mixture both (because of slight uncertainty in the adaptive methodology)?
+
+
+Tables 3 & 4 in the manuscript- can we do these as a figure ?
+These address Curtis statement
+
+Do we want to go with a 50% threshold across all analyses to keep clearer ?
+
+
+
+An influential assertion is that mixtures may be counter-productive (made in the abstract and  repeated on page 261) where Curtis refers to his Example (vi) on his Table 1. Unfortunately, Curtis Figure 1 only shows the spread of resistance using a mixture and does not quantify the extent to which it is inferior to sequential use. However, the calibration used to replicate Curtis Figure 1 allows us to extend the one-generation argument presented in Curtis Table 1(vi) over the numerous generations required to simulate the spread of resistance (see later discussion of our Table 3).
+
 
 reread Curtis to check the below ...
 
@@ -3207,6 +3250,10 @@ From Ian
 
 
 ~ check with Ian what the best resistance threshold to focus on is. In Curtis Fig2 it is 50%. I have been using the 25% in my figs (but I could change). WHO thresholds are :
+
+Potential for me to look at in a 2nd paper :
+Differential exposure of males & females. (I have shown exposure is important so this could have a big effect).
+
 
 ~ I just had a thought. Is the effectiveness effect additive ? i.e. do 2 insecticides of effectiveness 0.7 have the same effect e.g. as one of 1 and the other of 1.4 ? 
 
@@ -3222,20 +3269,11 @@ From Ian
     print( ggplot(ggSubset, aes_string(x=i
 
 
-~ Ian wants trees. Maybe just do one tree of resistance0.25 on whether seq or maxAdapt is better. 
-
-adaptive & sequential
-20% longer
-
-
 ~ start creating a proposed slimmed down figs doc (maybe as a word doc using pandoc) proposed for the paper
 ~~ beware that if I send it to Ian as a doc, he will insert text into it that I may not be able to find.
 ~~ maybe send it as a pdf first & change to a doc later to allow Ian to copy & paste the figs.
 ~~ see paper1_results_figs_slimmed.Rmd
 
-~ I could try a 2D plot with x=exposure, y=effectiveness & hexbin & colour cells according to proportion of runs where mix or seq is better.
-
-~~ seq is sometimes better than mix both. Where does that occur. The above plot might even help to answer that.
 
 
 Long Names (in text where space not an issue)
@@ -3268,29 +3306,11 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 ~ check code in findResistancePointsMixResponsive()
 
 
-## might be good to facet by mixture sequence better and just have points of x=exposure, y=effectiveness_insecticide1
-
-
 ~ can I get plots to show just a subset of points ?
 
 ~ produce a graphich of the 3 diff mixture scenarios & sequential
 ~~ may be able to use the seriousGame plot method
 ~~ I could even show resistance curves next to it ?
-
-
-### My summary of results & thoughts
-
-Resistance to two insecticides arises more slowly if they are used in combination rather than sequentially. See violin plots.
-
-
-
-~ I'd like to show prcc on an axis from 0-1 with diff sysmbols for neg & pos. We care about which are most imp. params, not whether they are pos or neg.
-
-~ If I would like to get prcc plots in a similar format to my existing plots. (but may not be space for axis labels)
-~ get data in form : 
-input1, input2, inputN, strategy 
-prcc vals,,             indecticide1
-
 
 
 # would it be useful for Ian for me to create an interactive shiny app to view the 1000 sim data. E.g. could just have the ggplot code with options to set the x value & colour by different inputs.
@@ -3301,11 +3321,9 @@ prcc vals,,             indecticide1
 1. fix the testthat tests to avoid new input addition
 1. create functions fitnessLocus(), fitnessNiche(), fitnessIndiv()
 
-
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
 
-Main question is : Tree1 is mixture better (0/1), Tree2 is mixture better by >20%.
 
 ### current state of play 18/12/15
 1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
@@ -3331,7 +3349,6 @@ tst <- runModel(input)
 1. what to call createArray2() ? maybe namedArray, or arrayNamed() ? could even put back in the option to pass the fill value ? submit to stackoverflow 
 1. maybe add option in setInputSensiScenarios to save input object as a csv or rda.
 1. add some defensive checks, e.g. for sensible input variables
-
 
 
 Want to do:
