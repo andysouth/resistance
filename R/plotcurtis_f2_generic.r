@@ -106,9 +106,16 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   lines( hch_gens, hch, col="red", lty=2 )
   lines( ddt_gens, ddt, col="blue", lty=2 )
 
-  
+  # BEWARE if the cutoff is not reached for either of these they return Inf
   cutoff_i1_mix <- min(which((combmat[,r1col])>max(criticalPoints)))
   cutoff_i2_mix <- min(which((combmat[,r2col])>max(criticalPoints)))  
+  
+  if (cutoff_i1_mix == Inf | cutoff_i2_mix == Inf)
+  {
+    warning("critical point not reached for i1 or i2: cutoff_i1_mix=",cutoff_i1_mix," cutoff_i2_mix=",cutoff_i2_mix)
+    #don't add the combined(adaptive) strategy to the graph
+    addCombinedStrategy <- FALSE
+  }
   
   #andy added
   if( addCombinedStrategy )
