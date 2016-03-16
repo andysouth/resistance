@@ -233,26 +233,33 @@ date: "`r Sys.Date()`"
   #columns to remove from first
   indices1 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.1","gen_cP0.25","strategy"))
   #columns to add to 2nd  
-  indices2 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.5"))  
+  indices2 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.5")) 
   #rename column in 2nd
   tmp <- resistPointsSeq_T[indices2]
   names(tmp) <- "gen_cP0.5seq"
   
   dif_mixA_seq <- cbind(resistPointsMix_A_T[-indices1], tmp)
+  dif_mix2_seq <- cbind(resistPointsMix_2_T[-indices1], tmp)  
   
   #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
   #>1000 excludes sequential strategy that had a 999 in
   #BEWARE would need to increase 1000 if I increase max generations in the runs
   didntReachThresh <- which( dif_mixA_seq$gen_cP0.5 > 500 | dif_mixA_seq$gen_cP0.5seq > 500 )
-  
   #subset by runs not making threshold
   dif_mixA_seq <- dif_mixA_seq[-didntReachThresh,]  
   
-  
-  #dif_mixA_seq$mixA_minus_seq0.5 <- dif_mixA_seq["gen_cP0.5"] - dif_mixA_seq["gen_cP0.5seq"]
   dif_mixA_seq["mixA_minus_seq0.5"] <- dif_mixA_seq["gen_cP0.5"] - dif_mixA_seq["gen_cP0.5seq"]
   
-  #TODO : later do PRCC on dif_mixA_seq["mixA_minus_seq0.5"]
+  #for dif_mix2_seq
+  didntReachThresh <- which( dif_mix2_seq$gen_cP0.5 > 500 | dif_mix2_seq$gen_cP0.5seq > 500 )
+  #subset by runs not making threshold
+  dif_mix2_seq <- dif_mix2_seq[-didntReachThresh,]  
+  
+  dif_mix2_seq["mix2_minus_seq0.5"] <- dif_mix2_seq["gen_cP0.5"] - dif_mix2_seq["gen_cP0.5seq"]
+    
+
+  
+
     
 ```
 
@@ -281,8 +288,8 @@ for(i in names_results)
       #ylim(0,450) +
       coord_cartesian( ylim=c(0, 350)) +
       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) +
-      #scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Sole use", "Mix either"="1st in mix","Sequential"="2nd in sequence", "Mix adaptive"="2nd in mix\nswitch to sole", "Mix both"="2nd in mix" ) )
-      scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Sole use", "Mix either"="1st in mix","Sequential"="2nd in sequence", "Mix adaptive"="adaptive mix", "Mix both"="2nd in mix" ) )
+      ylab('time to resistance (gens)') +
+      scale_x_discrete("", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Seq (1st)", "Mix either"="Mix (1st)","Sequential"="Seq (2nd)", "Mix adaptive"="adaptive", "Mix both"="Mix (2nd)" ) )
       
   ) #end print
 }  
@@ -351,23 +358,7 @@ for(i in names_results)
     }
     
     
-    
     library(cowplot) # to enable setting relative heights of plots
-    
-    #draw_plot(p,x=0,y=0,width=.5,height = .5)
-    
-    # print( ggdraw() + #panel_border(remove = TRUE) +
-    #          draw_plot( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) +     
-    # #print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
-    #          geom_point(shape=1, colour='red') +
-    #          theme(axis.text.x = axis_text_x) +
-    #          #theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
-    #          geom_hline(yintercept = 0, linetype=3) +
-    #          ylim(-1,1) +
-    #          #ggtitle(paste(strategy,"PRCC")) +
-    #          ggtitle(paste(strategy,"time-to-resistance 0.5")) +
-    #          xlab(NULL)
-    #       , height= height))
     
     plotlist[[strategy_num]] <- ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) +     
              geom_point(shape=1, colour='red') +
@@ -380,7 +371,7 @@ for(i in names_results)
              xlab(NULL) 
   }
 
-    plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],plotlist[[4]],ncol=1, rel_heights=c(1,1,1,1.8))  
+  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],plotlist[[4]],ncol=1, rel_heights=c(1,1,1,1.8))  
   
       
 ```
@@ -398,8 +389,10 @@ for(i in names_results)
   #remove insecticide1 & 2 strategies
   ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
   #subset which output plots to show in the main paper
-  in_cols <- c("start_freq_allele1", "exposure","effectiveness_insecticide1",
-              "dominance_allele1","selection_coef_allele1","maleExposureProp")
+  # in_cols <- c("start_freq_allele1", "exposure","effectiveness_insecticide1",
+  #             "dominance_allele1","selection_coef_allele1","maleExposureProp")
+  in_cols <- c("exposure","effectiveness_insecticide1","dominance_allele1")  
+  
   out_cols <- c("time_to_resistance0.5","strategy")
   ggSubset <- ggSubset[, c(in_cols,out_cols) ]
   
@@ -451,14 +444,11 @@ for(i in names_results)
   library(sensitivity)
 
     
-    x <- dif_mixA_seq[,1:num_inputs]
-    y <- dif_mixA_seq["mixA_minus_seq0.5"]
+    #mixture2
+    x <- dif_mix2_seq[,1:num_inputs]
+    y <- dif_mix2_seq["mix2_minus_seq0.5"]
       
     pcc_res <- pcc(x, y, rank=TRUE)
-    
-    #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
-    #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
-    #plot(pcc_res)
     
     #results are here I can probably rbind them together into a df that I can ggplot
     #pcc_res$PRCC
@@ -474,10 +464,32 @@ for(i in names_results)
              geom_hline(yintercept = 0, linetype=3) +
              #theme_bw() +
              ylim(-1,1) +
-             #ggtitle(paste("PRCC difference between sequential and mixture adaptive")) +
              xlab(NULL)
           )
+
+    ## repeat code for adaptive
+    x <- dif_mixA_seq[,1:num_inputs]
+    y <- dif_mixA_seq["mixA_minus_seq0.5"]
+      
+    pcc_res <- pcc(x, y, rank=TRUE)
     
+    #results are here I can probably rbind them together into a df that I can ggplot
+    #pcc_res$PRCC
+    
+    to_plot <- pcc_res$PRCC
+    #rename column 1 from 'original to PRCC
+    names(to_plot)[1] <- 'PRCC'
+    to_plot$inputs <- rownames(to_plot)  
+    
+    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+             geom_point(shape=1, colour='red') +
+             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             geom_hline(yintercept = 0, linetype=3) +
+             #theme_bw() +
+             ylim(-1,1) +
+             xlab(NULL)
+          )    
+        
 ```
 
 
@@ -546,7 +558,26 @@ for(i in names_results)
              
              #add text for Curtis point
              geom_label(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"', hjust='"right"'), nudge_x=-0.02, size=3, colour='red')
-           )       
+           ) 
+    
+  # doing the lm outside of ggplot    
+  #df_same = ggSubset[which(ggSubset$mixA_minus_seq0.5==0),]
+  x1=df_same$exposure 
+  y1=df_same$effectiveness_insecticide1 + df_same$effectiveness_insecticide2
+  
+  l_mod <- lm(y1 ~ x1)
+  l_mod$coefficients
+  #(Intercept)           x 
+  #  0.9790948   0.6095132 
+  #l_mod$coefficients
+  #(Intercept)          x1 
+  #1.019330    0.560508
+  
+  #approximation
+  #x2 <- seq(0,1,0.1)
+  #y2 <- 0.6*x2+0.98
+  #plot(x2,y2)    
+    
 ```
 
 
@@ -652,11 +683,15 @@ Grey triangles are those runs in which resistance reached the threshold at the s
     #to set box colours
     cols <- ifelse(treePruned$frame$yval == 1, "red", "green3")
     
+    #add fig label
+    if (treeResponse == treeResponses[1]) main <- "A)" 
+    else  main <- "B)"
+
     #adds in no. scenarios correctly and incorrectly classified
     #prp(tree, extra=1, varlen = 10, main=treeResponse)
     #prp(treePruned, extra=1, varlen = 10, main=treeResponse, col=cols, border.col=cols)
     #prp(treePruned, extra=1, varlen = 0, main=treeResponse, box.col=cols, under=TRUE)
-    prp(treePruned, extra=1, varlen = 0, main='', box.col=cols, under=TRUE)
+    prp(treePruned, extra=1, varlen = 0, main=main, box.col=cols, under=TRUE)
     }
 
 ```
