@@ -3218,19 +3218,136 @@ xerror is the cross-validation error
 
 To avoid overfitting the number of levels was restricted to the minimum where the relative error plus the standard error was less than the cross-validation error.
 
-added mix both to paper1_results_figs.Rmd
+added mix both to paper1_results_figs.Rmd (because of my slight uncertainty in mix adaptive method)
 repeated all figs for 50% resistance in paper1_results_figs_slimmed_50.Rmd
+
+** 14/3/16 **
+
+Curtis contentious statement p261 :
+"Example vishows the, at first sight unexpected, point that the use of a mixture where the initial gene frequencies are unequal leads to a more rapid increase in the rarer of the genes."
+
+vi params ?
+exposure 0.9
+strt freq loc1 0.01
+strt freq loc2 0.001
+
+modify fig2 by setting freq1 from 0.01 to 0.001
+
+runcurtis_f2( P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 , correctMixDeployProp = 1 )
+
+when I changejust freq loc1 to 0.001 I get an error :
+Warning in min(which((combmat[, r1col]) > max(criticalPoints))) :
+  no non-missing arguments to min; returning Inf
+
+Trying to work it out with this run :
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.003 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 , correctMixDeployProp = 1 )
+
+in plotcurtis_f2_generic problem is here :
+
+  cutoff_i1_mix <- min(which((combmat[,r1col])>max(criticalPoints)))
+  cutoff_i2_mix <- min(which((combmat[,r2col])>max(criticalPoints)))  
+  
+  if (cutoff_i1_mix == Inf | cutoff_i2_mix == Inf)
+  {
+    warning("critical point not reached for i1 or i2: cutoff_i1_mix=",cutoff_i1_mix," cutoff_i2_mix=",cutoff_i2_mix)
+    #don't add the combined(adaptive) strategy to the graph
+    addCombinedStrategy <- FALSE
+  }
+
+
+in plotcurtis_f2_generic this calculation at the start seems to produce diff results than what they appear in the plot :
+  maxGensMix <- findResistancePoints(combmat, locus='both', criticalPoints = criticalPoints)
+
+maxGensMix
+           [,1]
+gen_cP0.1   294
+gen_cP0.25  999
+gen_cP0.5   999
+
+problem partly caused by max_gen default in run_curtis_f2 being 300
+
+runcurtis_f2 <- function( max_gen = 300,
+whereas in sensiAnPaperPart max_gen is set to 500
+
+probably I should set max_gen in run_curtis_f2 to 500 too so it is the same.
+
+yes, now this works, but P_2 = 0.001 still fails to reach threshold
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.002 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 , correctMixDeployProp = 1 )
+
+
+** 15/3/16 ** on train to liverpool
+
+Looking at the form of the results from modified curtis fig2 plots :
+~ in mixtures resistance in the final insecticide only rises after the 'first' one has become ineffective ~50%
+
+~ in curtis scenario reducing start freq of I2 from 0.01 to 0.002 makes it take longer but doesn't really alter the form of curves
+~ but then changing effectiveness of I2 from 1 to 0.95 makes a big difference.
+~ aha! seems that an effectiveness of 1 in one insecticide stops resistance rising in the other one until ~50% resistance. Reducing effectiveness to even 0.95 (or just 0.99) seems to remove this effect. At effectiveness I2 0.99 resistance to I1 rises slowly until 50% is reached then it accelerates.
+
+~ increasing dominance from 0.0016 to 0.02 doesn't radically alter curtis2 pattern
+
+
+** 16/3/16 ** meeting Ian in liverpool
+
+paper todo
+~ rename fig x1 y axis to "time in generations" or time (generations)
+~ rename y axes in fig x3 "time in generations" or time (generations)
+~ rename maleExposureProp to male_exposure
+~ rename correctMixDeployProp to correct_mix_deploy
+~ set variable names to be the same as above in table 5 of manuscript
+~ check again that correctMixDeploy is doing what we expect. Bit strange that in the plot against time-to-r the curves are completely level when in my curtis simulation it shows that decreasing the correct deploy does decrease time to resistance e.g. for mix2 from  
+done ~ change fig x3 to just exposure, effectiveness and dominance
+~ add diff between seq and standard mixture to fig x4
+~ Ian will send me the params to rerun the line from table vi (which is just for 1 generation)
+~ find the equation line of zero difference for the 0.5 threshold (and maybe for mix2 vs seq too ? )
+~ 
+
+~ for the 20% diff plot add the line that exactly 20% diff and keep colour scheme from killer plot
+~ see df_20pc
+~ how to make sure that the same points apear in each plot ?? maybe remove the facet column.
+
+Remember that effectiveness is proportion of the SS genotypes that die when exposed.
+
+Ian said, science is unsure what the effectiveness rates ofr insecticides are under field conditions. all sensitive mosquitos ar expected to die in a bottle assay. BUt under filed conditions where they briefly land on a net this may not be the case. experimental huts.
+
+IVCC are apparently asking if we could model 3 insecticides.
+
+Ian keen to keep sex-linkage & niches in. Say we have developed a general model and say we will explore more behaviour in future ...
+
+
 
 
  
 ### TO DO  
+
+I've done below for the mix-both plot, repeat it for mix-adaptive.
+Ian suggested adding in the maleProp effect to the x axis to see if that improves the split.
+To get the exposure of both M&F : x=exposure+exposure*maleExposureProp
+
+Qs for Ian
+~ is effectiveness of 1 possible/likely ? The pattern in the curtis plot relies quite heavily on it. Reducing it to just 0.98 changes pattern considerably. 
+~ are we confident enough about the mix adaptive strategy to focus the paper on it ? we could look at standard mix instead ?
+
+
+~ ask Ian where could I submit a paper explaining this resistance thing in simpler terms for dummies. If I want to get into anything sciency a first author paper would really help me out. It could concentrate just on the mechanism of how the model works rather than on the sensitivity outputs. It could have plot combinations, showing how the curves change in response to 1 param changing. I could start writing it now. It could go to ecological modelling or similar epidemiology journal (maybe ask Jo Lines).
+
+
+
+~ would be a good learning tool to have a UI similar to my current curtis fig2 one, but starting with the params equal for each insecticide
+
+Curtis contentious statement p261 :
+"... the use of a mixture where the initial gene frequencies are unequal leads to a more rapid increase in the rarer of the genes."
+Not supported by our results. We need to nail which results to use to show this.
+
+
+
+bumped into colin bannister on the train to london. he said he really ejoyed my talk. he said he would talk to me sometime about keeping the work going in a consultancy, difficult to do. He was on his way to london for a shellfish assessment.
 
 In fig x1 sequential & adaptive mixture look very similar indeed ???
 
 Could I write a very short paper describing the shiny app that allows users to take the curtis figure & modify the code ? Where might it go ? It wouldn't need any of the sensitivity analysis etc. ? It could cite the paper with the snesitivity analysis.
 
 
-Repeat my killer fig for mixture both (because of slight uncertainty in the adaptive methodology)?
 
 
 Tables 3 & 4 in the manuscript- can we do these as a figure ?
