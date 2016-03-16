@@ -3330,7 +3330,12 @@ Qs for Ian
 
 
 ~ ask Ian where could I submit a paper explaining this resistance thing in simpler terms for dummies. If I want to get into anything sciency a first author paper would really help me out. It could concentrate just on the mechanism of how the model works rather than on the sensitivity outputs. It could have plot combinations, showing how the curves change in response to 1 param changing. I could start writing it now. It could go to ecological modelling or similar epidemiology journal (maybe ask Jo Lines).
-
+~~ concise
+~~ focus on mechanisms
+~~ for non expert audience
+~~ dominance, exposure
+~~ draft something
+~~ ian suggested malaria journal
 
 
 ~ would be a good learning tool to have a UI similar to my current curtis fig2 one, but starting with the params equal for each insecticide
