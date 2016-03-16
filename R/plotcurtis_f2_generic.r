@@ -13,7 +13,7 @@
 #' @param main title for the plot
 #' @param criticalPoints critical resistance points to be displayed in the plot
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
-#' @param addStrategyLabels add labels to plot for where strategies cross 50% line TRUE gives seq,mix1,mix2,mix3
+#' @param addStrategyLabels add labels to plot for where strategies cross 0.5 line TRUE gives seq,mix1,mix2,mix3
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")
 #' 
 #' @examples
@@ -193,7 +193,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   if( addCombinedStrategy )
   {
     #added a dotted line for combined
-    legend( 'bottomright', legend=c("sequential", "mixture", "combined", "insecticide 1", "insecticide 2"), 
+    legend( 'bottomright', legend=c("sequential", "mixture", "adaptive", "insecticide 1", "insecticide 2"), 
             col=c("black","black","black","red", "blue"), lty=c(2,1,3,1,1), bty="n", cex=0.7 )     
   } else
   {
