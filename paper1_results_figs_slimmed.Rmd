@@ -371,7 +371,7 @@ for(i in names_results)
              geom_point(shape=1, colour='red') +
              theme(axis.text.x = axis_text_x) +
              geom_hline(yintercept = 0, linetype=3) +
-             #theme_bw() +
+             #theme_bw() + # to add in gridline but messes up other bits of plot
              #theme(panel.grid.major.y = element_line(color = "grey", size = 1)) +
              ylim(-1,1) +
              ggtitle(paste(strategy)) +

@@ -610,7 +610,7 @@ for(i in names_results)
            )     
     
 
-    #COOLIO !! I really like this figure.
+    #killer plot mix2 vs seq
     library(viridis)
     print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.25))+
              
@@ -637,6 +637,24 @@ for(i in names_results)
              geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
            )       
 
+    #modify killer plot to add in male exposure prop on x axis
+    library(viridis)
+    print( ggplot(ggSubset, aes(x=exposure+exposure*maleExposureProp, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.25))+
+             
+             facet_grid( ~ seq_better_mix20.25, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
+             theme_bw() +
+             #add point for Curtis inputs
+             geom_point(data = curtisInputs, aes(x=exposure+exposure*maleExposureProp, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides for both sexes') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) + 
+             #add text for Curtis point
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+           )       
+    
   #modify the killer plot to show where mixtures are 20% better ?
   print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.25))+
              
