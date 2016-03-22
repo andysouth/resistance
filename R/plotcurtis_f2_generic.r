@@ -1,8 +1,7 @@
 #' plot Resistance Allele frequencies over time
 #' 
 #' Recreates figure 2 of Curtis(1985)
-#' Plot of R at each locus 
-#' Prints total frequency of R allele at locus 1 (red) and locus 2 (blue)
+#' Plot frequency of resistance allele at locus 1 (red) and locus 2 (blue)
 #' 
 #' @param combmat combined insecticide results matrix 
 #' @param bmat single insecticide (hch) results matrix 
@@ -73,6 +72,12 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   #axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
   #default x axis
   axis( side=1 )
+  
+  #can I divide by 12 to show years ? but breaks would be ugly
+  #instead could allow xlab to be changed from Generation to Month ?
+  
+  
+  
 #   ylabs <- c(1,5,10,50)
 #   ylabsnames <- c("1%", "5%", "10%", "50%")
   ylabs <- c(0.1,1,5,10,50)
