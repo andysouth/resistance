@@ -2,11 +2,13 @@
 #' 
 #' 
 #' @param Windiv array of individual fitnesses
+#' @param k generation number
+#' 
 #' @return array of individual fitnesses modified
 
 #don't @export
 
-relaxSelection <- function(Windiv){
+relaxSelection <- function(Windiv, k){
   
 
   if( (2<k) & (k<12)){

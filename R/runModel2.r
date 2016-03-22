@@ -342,7 +342,7 @@ runModel2 <- function(input,
     for (k in 1:max_gen){
       
       # In calibration 1011, selection relaxed for a set time
-      if( calibration == 1011 & i==2 ) Windiv <- relaxSelection(Windiv)      
+      if( calibration == 1011 & i==2 ) Windiv <- relaxSelection(Windiv, k)      
       
       #genotype frequency code that was here now moved to before the loop start
       
