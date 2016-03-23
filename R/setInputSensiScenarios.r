@@ -12,7 +12,8 @@
 #' @examples
 #' setInputSensiScenarios( nScenarios=2, h.RS1_A0=c(0,1) )
 #' setInputSensiScenarios( nScenarios=3, P_1=c(0,0.5), P_2=c(0,0.5) )
-#' setInputSensiScenarios(20, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))
+#' setInputSensiScenarios(20, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), 
+#'                        s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))
 #' @return a matrix of input scenarios
 #' @export
 #' 

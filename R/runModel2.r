@@ -21,7 +21,9 @@
 #' #? I should probably check
 #' #setting calibration & exposures to insecticides as the same for mf
 #' #this doesn't quite seem to work yet, freq of R stays at 0
-#' input <- setInputOneScenario(calibration=1013, a.m_A0 = 0.9, a.m_00 = 0.1, a.m_AB = 0, a.f_A0 = 0.9, a.f_00 = 0.1, a.f_AB = 0)
+#' input <- setInputOneScenario(calibration=1013, 
+#'                              a.m_A0 = 0.9, a.m_00 = 0.1, a.m_AB = 0, 
+#'                              a.f_A0 = 0.9, a.f_00 = 0.1, a.f_AB = 0)
 #' #can either set calibration to 1013 as an arg to setInput or runModel2()
 #' tst <- runModel2(input)
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario

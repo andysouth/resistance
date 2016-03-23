@@ -13,11 +13,12 @@
 #' 
 #' @examples 
 #' createArray( sex = c('f','m') ) 
-#' #Wloci
-#' createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
-#' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
-#' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A') )
-#' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A'), niche2 = c('0','a','A') )
+#' 
+#' createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), 
+#'              niche1=c('0','a','A'), niche2=c('0','b','B') )
+#' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), 
+#'              locus2 = c('SS2','RS2','RR2'), 
+#'              niche1 = c('0','a','A'), niche2 = c('0','a','A') )
 #' 
 #' @return matrix
 #' @export

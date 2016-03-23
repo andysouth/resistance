@@ -5,13 +5,13 @@
 #' @param ... named dimensions to create in array e.g. dimname=c('name1','name2') 
 #' 
 #' @examples 
-#' createArray2( sex = c('f','m') ) 
-#' #Wloci
-#' createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
-#' createArray2( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
-#' createArray2( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A') )
-#' createArray2( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1 = c('0','a','A'), niche2 = c('0','a','A') )
+#' createArray( sex = c('f','m') ) 
 #' 
+#' createArray( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), 
+#'              niche1=c('0','a','A'), niche2=c('0','b','B') )
+#' createArray( sex = c('f','m'), locus1 = c('SS1','RS1','RR1'), 
+#'              locus2 = c('SS2','RS2','RR2'), 
+#'              niche1 = c('0','a','A'), niche2 = c('0','a','A') )#' 
 #' @return array
 #' @export
 

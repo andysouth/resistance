@@ -7,6 +7,7 @@
 #' needs to be run 3 times, once for each insecticide strategy 'insecticide1','insecticide2', & 'mixture'.
 #' 
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
+#' @param nSamples number of samples
 #' 
 #' @examples
 #' inputAndResultsMix <- sensiAnPaperPartOneAtATime( insecticideUsed = 'mixture' )
@@ -16,7 +17,7 @@
 #' @return a list containing results and inputs
 #' @export
 #' 
-sensiAnPaperPartOneAtATime <- function( insecticideUsed = 'mixture' )
+sensiAnPaperPartOneAtATime <- function( insecticideUsed = 'mixture', nSamples )
 {
   #set random seed
   #if (!is.null(randomSeed)) set.seed(randomSeed)

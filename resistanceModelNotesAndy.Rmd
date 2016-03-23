@@ -3300,7 +3300,6 @@ done ~ change fig x3 to just exposure, effectiveness and dominance
 ~ add diff between seq and standard mixture to fig x4
 ~ Ian will send me the params to rerun the line from table vi (which is just for 1 generation)
 ~ find the equation line of zero difference for the 0.5 threshold (and maybe for mix2 vs seq too ? )
-~ 
 
 ~ for the 20% diff plot add the line that exactly 20% diff and keep colour scheme from killer plot
 ~ see df_20pc
@@ -3314,11 +3313,61 @@ IVCC are apparently asking if we could model 3 insecticides.
 
 Ian keen to keep sex-linkage & niches in. Say we have developed a general model and say we will explore more behaviour in future ...
 
+~ asked Ian where could I submit a paper explaining this resistance thing in simpler terms for dummies. If I want to get into anything sciency a first author paper would really help me out. It could concentrate just on the mechanism of how the model works rather than on the sensitivity outputs. It could have plot combinations, showing how the curves change in response to 1 param changing. I could start writing it now. It could go to ecological modelling or similar epidemiology journal (maybe ask Jo Lines).
+~~ concise
+~~ focus on mechanisms
+~~ for non expert audience
+~~ dominance, exposure
+~~ draft something
+~~ ian suggested malaria journal
+~~ paper2_resistance_mechanisms_mixtures.Rmd
+
+
+** 22/3/16 **
+comments back from Ian on paper1
+
+One other thing for your "to do" list. I have made the point that Fig 4 (your x2) analyses the data summarised in Fig 3 (your x1).. which helps the flow of the paper. But we only present PRCC for 4 of the data shown in Figure 3 so it may worthwhile doing PRCC for the missing one i.e. time to resistance to first insecticide in sequential use. I assume that would be relatively easy to do and automate in the file?
+
+
+Fix x1
+I did Time to resistance (gens)~ Y axis label change to  "Time (gens)"
+done ~ X axis labels as in the figure legend i.e.  "Mix 1st"  "Mix both",  "Seq 1st" and "Seq both". I think "both" is better than "second" as it avoids any potential confusion between insecticide labelled 1 and 2.
+done ~ I think we decided to re-labelled "sole use" to "Seq 1st" for clarity
+done ~ You might also like to change "Adaptive mix" to just "Adaptive" to try and save some space which I think will become important later as graphs are scaled down to their published size.
+
+
+Fig x2.. can we make the labels identical to those above i.e., in order  "Seq both"  "Mix 1st"  "Adaptive both "   "Mix both".... A reviewer will wonder why we don't do all 5 outputs described in Fig x1 i.e. whey we omit "Seq 1st"
+
+Fig x3...Y axis label change to "Time (gens)".
+
+Fig x5 and x6....
+Can we change the Y axis label to just "Effectiveness of insecticides"... drop the word "added" as it is a bit ugly, makes the label longer and we now say it the sum of effectiveness in the figure legend.
+Can we change the X axis label to just "exposure"... do we need to say it is for "both insecticides"????
+
+
+** 23/3/16 **
+email from Ian
+
+We extensively look at how best to deploy 2 new insecticides, but not how to deploy one new insecticide when several others are in use and there is resistance to them….
+ 
+This Curtis argument was not about sequential vs mixtures (i.e. where we start off with 2 insecticides and decide how best to deploy them). It is simply this questions: “If I have a single new insecticide where resistance is presumably present at a very low frequency, should I deploy it on its own (sole use), or in combination with an existing insecticide whose resistance levels are high”; 
+
+Curtis defines allele B as the one encoding resistance to the new insecticide and which therefore has a lower starting frequency and asserted that, under these circumstances, deploying the new insecticide as a mixture would be counterproductive for allele B i.e. would drive resistance more quickly than when insecticide B was deployed alone.
+
+Can I show this by modifying the fig2 plot ?
+
+
+
 
 
 
  
 ### TO DO  
+
+
+1. add option to rescale x axis to years or months in plotcurtis_f2_generic, generation=1month
+1. tidy these notes
+
 
 I've done below for the mix-both plot, repeat it for mix-adaptive.
 Ian suggested adding in the maleProp effect to the x axis to see if that improves the split.
@@ -3328,14 +3377,6 @@ Qs for Ian
 ~ is effectiveness of 1 possible/likely ? The pattern in the curtis plot relies quite heavily on it. Reducing it to just 0.98 changes pattern considerably. 
 ~ are we confident enough about the mix adaptive strategy to focus the paper on it ? we could look at standard mix instead ?
 
-
-~ ask Ian where could I submit a paper explaining this resistance thing in simpler terms for dummies. If I want to get into anything sciency a first author paper would really help me out. It could concentrate just on the mechanism of how the model works rather than on the sensitivity outputs. It could have plot combinations, showing how the curves change in response to 1 param changing. I could start writing it now. It could go to ecological modelling or similar epidemiology journal (maybe ask Jo Lines).
-~~ concise
-~~ focus on mechanisms
-~~ for non expert audience
-~~ dominance, exposure
-~~ draft something
-~~ ian suggested malaria journal
 
 
 ~ would be a good learning tool to have a UI similar to my current curtis fig2 one, but starting with the params equal for each insecticide
@@ -3352,7 +3393,7 @@ In fig x1 sequential & adaptive mixture look very similar indeed ???
 
 Could I write a very short paper describing the shiny app that allows users to take the curtis figure & modify the code ? Where might it go ? It wouldn't need any of the sensitivity analysis etc. ? It could cite the paper with the snesitivity analysis.
 
-
+Note that in most functions (e.g. runcurtis_f2) there is a single exposure param for both insecticides. I could relatively easily allow different exposure for each insecticide. It is probably already possible by passing array:a directly.
 
 
 Tables 3 & 4 in the manuscript- can we do these as a figure ?
@@ -3382,19 +3423,7 @@ Differential exposure of males & females. (I have shown exposure is important so
 ~ maybe communicate my concern to Ian that figures I've spent quite a long time on just go into supplementary material where few will see them. Can we think of a way of getting these into a paper themselves ? e.g. if this first paper is targeted at policy people can we get a 2nd paper that is targetted at biologists and explores mechanisms ?
 
 
-~ can I facet the smoothed scatter plots to get them to take up less space and avoid repeating legend ?
-~~ or I may be able to use a similar plot_grid() method
 
-~~ if I wanted to facet by inputs might need to restructure the data, put inputs into a single column to replace below :
-  for(i in names_inputs)
-  {
-    print( ggplot(ggSubset, aes_string(x=i
-
-
-~ start creating a proposed slimmed down figs doc (maybe as a word doc using pandoc) proposed for the paper
-~~ beware that if I send it to Ian as a doc, he will insert text into it that I may not be able to find.
-~~ maybe send it as a pdf first & change to a doc later to allow Ian to copy & paste the figs.
-~~ see paper1_results_figs_slimmed.Rmd
 
 
 

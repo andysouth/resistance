@@ -16,9 +16,9 @@
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")
 #' 
 #' @examples
-#' inputAndResultsMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
-#' inputAndResultsI1 <- sensiAnPaperPart( 2, insecticideUsed = 'insecticide1' )
-#' inputAndResultsI2 <- sensiAnPaperPart( 2, insecticideUsed = 'insecticide2' )
+#' listOutMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
+#' listOutI1 <- sensiAnPaperPart( 2, insecticideUsed = 'insecticide1' )
+#' listOutI2 <- sensiAnPaperPart( 2, insecticideUsed = 'insecticide2' )
 #' plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
 #' 
 #' @return list of plot components

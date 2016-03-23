@@ -9,8 +9,9 @@
 #' #inputAndResults <- sensiAn1( h.RS1_A0=c(0.1,1))
 #' #colnames(inputAndResults)
 #' #inputAndResults <- sensiAn1( h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1) )
-#' #inputAndResults <- sensiAn1(500, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))
-#' @return todo
+#' #inputAndResults <- sensiAn1(500, h.RS1_A0=c(0.1,1), h.RS2_0B=c(0.1,1), 
+#' #                              s.RR1_A0=c(0.2,1), s.RR2_0B=c(0.2,1))
+#' @return dataframe
 #' @export
 #' 
 sensiAn1 <- function( nScenarios = 10,

@@ -275,6 +275,7 @@ date: "`r Sys.Date()`"
 
   library(ggplot2)
 
+
 #names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
 names_results <- c("time_to_resistance0.5")
   
@@ -288,8 +289,8 @@ for(i in names_results)
       #ylim(0,450) +
       coord_cartesian( ylim=c(0, 350)) +
       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) +
-      ylab('time to resistance (gens)') +
-      scale_x_discrete("", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Seq (1st)", "Mix either"="Mix (1st)","Sequential"="Seq (2nd)", "Mix adaptive"="adaptive", "Mix both"="Mix (2nd)" ) )
+      ylab('Time to resistance (gens)') +
+      scale_x_discrete("", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Seq 1st", "Mix either"="Mix 1st","Sequential"="Seq both", "Mix adaptive"="Adaptive", "Mix both"="Mix both" ) )
       
   ) #end print
 }  

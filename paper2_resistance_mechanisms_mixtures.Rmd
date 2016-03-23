@@ -73,11 +73,12 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 ## Todo
 
 1. look more at GPIRM
-1. mention Curtis
+1. mention Curtis but don't depend on it
 1. do I want y axis of resistance frequency plots to be on a log scale ?
 1. can I develop explanatory diagrams to describe the input parameters ?
 1. decide on base starting scenarios and how to modify params from that
 1. mention generation time of 1 month, maybe even rescale axes to years ?
+1. look at effect of sex linkage
 
 
 
