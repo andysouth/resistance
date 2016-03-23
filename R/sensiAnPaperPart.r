@@ -25,7 +25,8 @@
 sensiAnPaperPart <- function( nScenarios = 10,
                            insecticideUsed = 'mixture',
                            randomSeed = 1,
-                           experiment = "curtis1")
+                           experiment = "curtis1",
+                           old_insecticide = FALSE )
 {
   #set random seed
   if (!is.null(randomSeed)) set.seed(randomSeed)
@@ -53,6 +54,9 @@ sensiAnPaperPart <- function( nScenarios = 10,
     #select ‘x’ from uniform -1 to -4 and set to 10^x to give equal weight to each log interval.
     P_1 <- 10^-(runif(1, min=1, max=4))
     P_2 <- 10^-(runif(1, min=1, max=4))  
+    
+    #23/3/16 set freq high in this expt
+    if (old_insecticide) P_2 <- 0.5
     
     ## exposure to insecticide
     exposure <- runif(1, min=0.1, max=0.9)
