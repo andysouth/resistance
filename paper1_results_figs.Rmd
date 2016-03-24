@@ -135,8 +135,8 @@ Adaptive mixture      [mixture2]
   treeInput <- treeInput[ treePredictors, ]
   
   #add an extra predictor, the lower starting freq of resistance divided by the larger
-  resist_start_hi_div_lo <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
-  treeInput <- rbind(treeInput,resist_start_hi_div_lo)    
+  resist_start_lo_div_hi <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+  treeInput <- rbind(treeInput,resist_start_lo_div_hi)    
   
   #20160122 add test for Ian of resistance1/resistance2
   resist_start_1_div_2 <- treeInput['P_1',]/treeInput['P_2',]
@@ -172,7 +172,7 @@ Adaptive mixture      [mixture2]
                              "selection_coef_allele2"=0.43,
                              "maleExposureProp"=1,
                              "correctMixDeployProp"=1,
-                             "resist_start_hi_div_lo"=1,
+                             "resist_start_lo_div_hi"=1,
                              "resist_start_1_div_2"=1)
   
     
@@ -637,7 +637,8 @@ for(i in names_results)
              geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
            )       
 
-    #modify killer plot to add in male exposure prop on x axis
+    
+    #modify killer plot mix2 vs seq to add in male exposure prop on x axis
     library(viridis)
     print( ggplot(ggSubset, aes(x=exposure+exposure*maleExposureProp, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.25))+
              

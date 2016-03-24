@@ -3355,9 +3355,89 @@ This Curtis argument was not about sequential vs mixtures (i.e. where we start o
 Curtis defines allele B as the one encoding resistance to the new insecticide and which therefore has a lower starting frequency and asserted that, under these circumstances, deploying the new insecticide as a mixture would be counterproductive for allele B i.e. would drive resistance more quickly than when insecticide B was deployed alone.
 
 Can I show this by modifying the fig2 plot ?
+Although probably we would need to rerun a sensitivity type anlysis if we wanted to address this properly ...
+
+curtis f2
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+
+curtis f2 with i1 set to high starting freq (0.5 breaks plot slightly, but still seems to show that resistance for i2 takes longer in mixture)
+runcurtis_f2( P_1 = 0.5 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+
+curtis_f2 with P_1 changed from 0.01 to 0.45 : mix slower than seq
+runcurtis_f2( P_1 = 0.45 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43, addCombinedStrategy=FALSE )
+
+curtis_f2 with P_2 changed from 0.01 to 0.45 : mix slower than seq
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.45 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43, addCombinedStrategy=FALSE )
+
+similar with P_2 0.3
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.3 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43, addCombinedStrategy=FALSE )
+
+but what about the params for curtis_tab1_ex_iv ?
+Beths analysis table uses the same params I think.
+
+Hi Ian, 
+
+As a first step I've added an extra fig x8 onto the end of the figures document attached and in dropbox (I started to address figure tweaks, but have held fire on that while we sort this). Fig x8 addresses whether to keep using an old insecticide when a new one is introduced. It just increases the starting frequency of each resistance in turn to just below the threshold (0.49). I think this accomplishes the same as Beths table 4.
+
+Would I be able to alter the parameters to recreate Beths table3 and Curtis table 1 example vi in a similar way ? I couldn't quite work out which inputs to change.
+
+How would we investigate this in a sensitivity analysis ? Essentially we could repeat what we've done already but with unequal starting frequencies. We had the issue before of not wanting one frequency to be dependent on the other. So we could simply set P_1 to a low range as in current analysis, and then have P_2 at a higher range (e.g. 0.3-0.5). Or perhaps we don't need a range for the 'old' insecticide we could just set at 0.5 ?
+
+I'm slightly nervous about running more analyses but I could investigate this with a couple of days work. Then we would need to decide how to squeeze into the paper.
+
+Happy to chat,
+
+Andy
+
+### previous current state of play 23/3/16
+1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
+1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
+1. runModel2.r          : runs model for the passed scenarios
+1. paper1_results_figs_slimmed50.Rmd : final figures for paper
+
+What would I need to do ?
+
+1. sensiAnPaperPart.r : set new param ranges for P_2, perhaps add an argument to enable running them 
+1. sensiAnPaper1All.Rmd : rerun calling new version of sensiAnPaperPart, save results to something like : listOutMix_unequal_10000.rda
+1. paper1_results_figs_slimmed50.Rmd : save with new name, just rerun using the new results files
+
+perhaps do for 500 runs first ?
+
+reran new unequal scenarios with start_freq set to constant 0.5.
+first plots OK, but then get a weird thing where mixa_minus_seq0.5 is always -2. So mix adapative is always taking 2 generations less than sequential. I suspect this may be an artefact of detecting resistance thresholds when the threshold is already reached for i2.
+
+~ created pap1_figs_slimmed_50_unequal.Rmd
+~ all changes marked with #4unequal
+
+Seems that resistance is slower for mixtures in all replicates.
+For the 500 runs at least.
+
+** 23/3/16 **
+email from Ian
+
+I have been racking my brain to think if we can address this question using  data that have already been generated (and hence avoiding having to explain how we generated new data) . Rather than trying to explain it informally in an Email, then write it up, I went directly to step 2 and wrote the following as a draft paragraph for the ms…. Does it make sense???
+ 
+ 
+“We can analyse a subset of the sensitivity analysis to investigate this specific question of whether single  use of a new insecticide is better than deploying it as a mixture with a pre-existing insecticide which already has some resistance present in the population.  We selected runs where the starting frequency of resistance to insecticide 2 was > 10 fold higher than frequency of resistance to insecticide 1. We then compared the time for insecticide 1 resistance to reach 50% when deployed on its own, compared to time for resistance to insecticide 1 to reach 50% when deployed as a mixture with the pre-existing insecticide. As in the full analysis, we compute the ratio mixture/single for each run and generate a classification tree to see what circumstances favour what policy and, in particular whether the ratio of resistance starting frequencies has a large impact”
+ 
+ 
+I am assuming insecticide #1 is always deployed first in the sequential runs so the time to its resistance reaching 50% is already recorded. I am also assuming that in the mixture runs you have recorded  the time until resistance to each insecticide reaches 50% so you always have the data #1.
 
 
+this is the important bit from Ian :
+We selected runs where the starting frequency of resistance to insecticide 2 was > 10 fold higher than frequency of resistance to insecticide 1. We then compared the time for insecticide 1 resistance to reach 50% when deployed on its own, compared to time for resistance to insecticide 1 to reach 50% when deployed as a mixture with the pre-existing insecticide.
 
+I think it would be easier to do this by new runs, which is close to what what I've done in pap1_figs_slimmed_50_unequal. (although I might want to change the freq of the 'old' insecticide from a constant 0.5 to a range e.g. 0.2 - 0.5, but then would).
+
+Could I practically do what Ian has suggested ? 
+How many runs are there where the start freq of i2 is > 10 * i1 ?
+Where resist_start_1_div_2 < 0.1
+
+see in paper1_results_figs.rmd
+
+note my hi_div_lo was actually lo_div_hi, corrected in the figs_slimmed_50.rmd
+
+resist_start_hi_div_lo <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
 
 
 
@@ -3365,7 +3445,13 @@ Can I show this by modifying the fig2 plot ?
 ### TO DO  
 
 
-1. add option to rescale x axis to years or months in plotcurtis_f2_generic, generation=1month
+
+
+aha! had a thought. Can I highlight those runs in the killer plot where resist_start_1_div_2 < 0.1 ?
+
+probably need to do it for the mix2 graph rather than mixadaptive.
+
+
 1. tidy these notes
 
 
@@ -3476,10 +3562,12 @@ Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
 
 
-### current state of play 18/12/15
+### current state of play 23/3/16
 1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
 1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
 1. runModel2.r          : runs model for the passed scenarios
+1. paper1_results_figs_slimmed50.Rmd : final figures for paper
+
 
 Files :
 listOut* I1,I2, Mix : raw results for insecticide1,2 & mixture

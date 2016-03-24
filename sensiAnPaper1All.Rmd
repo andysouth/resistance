@@ -265,8 +265,8 @@ This breaks down into these subsidiary quetsions :
   treeInput <- treeInput[ treePredictors, ]
 
   #add an extra predictor, the lower starting freq of resistance divided by the larger
-  resist_start_hi_div_lo <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
-  treeInput <- rbind(treeInput,resist_start_hi_div_lo)    
+  resist_start_lo_div_hi <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+  treeInput <- rbind(treeInput,resist_start_lo_div_hi)    
   
   #20160122 add test for Ian of resistance1/resistance2
   resist_start_1_div_2 <- treeInput['P_1',]/treeInput['P_2',]
