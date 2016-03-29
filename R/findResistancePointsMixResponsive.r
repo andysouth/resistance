@@ -30,7 +30,7 @@ findResistancePointsMixResponsive <- function( listOutMix,
 
   numScenarios <- length(listOutMix$results) 
   
-  #could first create matrix to receive the results, name rows including gen_cP for generations to reach criticalPoints
+  #create matrix to receive the results, name rows including gen_cP for generations to reach criticalPoints
   resistGens <- matrix( nrow=length(criticalPoints), ncol=numScenarios, dimnames=list(paste0('gen_cP',criticalPoints) ) )
   
   
