@@ -317,7 +317,8 @@ for(i in names_results)
   strategies <- unique(ggInsOuts$strategy)
   
   #in main paper I want to just display sequential and mixture strategies
-  strategies <- strategies[-1:-2]
+  strategies <- c("Sequential", "Mix adaptive", "Mix both")
+  strat_name <- c("Seq both","Adaptive both","Mix both")
   
   plotlist <- list(length(strategies))
   
@@ -365,12 +366,12 @@ for(i in names_results)
              #theme_bw() +
              #theme(panel.grid.major.y = element_line(color = "grey", size = 1)) +
              ylim(-1,1) +
-             ggtitle(paste(strategy)) +
+             ggtitle(paste(strat_name[strategy_num])) +
              xlab(NULL) 
   }
 
-  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],plotlist[[4]],ncol=1, rel_heights=c(1,1,1,1.8))  
-  
+  #plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],plotlist[[4]],ncol=1, rel_heights=c(1,1,1,1.8))  
+  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],ncol=1, rel_heights=c(1,1,1.8))    
       
 ```
 
@@ -579,6 +580,61 @@ Red triangles are those runs in which resistance reached the threshold at the sa
 \pagebreak
 
     
+
+
+## Fig. x6 Modifying the previous plot to show where resistance arises over 20% slower in an adaptive mixture strategy versus sequential.
+
+1. The line fitted to runs where resistance is reached at the same time for mixture and sequential is retained. Less of the parameter space favours the adaptive mixture under these constraints.
+
+```{r, eval=TRUE, echo=FALSE, fig.height=6} 
+
+
+  df_20pc <- ggSubset[which(ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq > 0.19 & 
+                            ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq < 0.21  ),] 
+
+  #remove column it is faceted on to get line in both facets
+  col_indices <- colnames(df_20pc) != 'mixA_not20pc_better_seq0.5'
+  df_20pc <- df_20pc[,col_indices]
+
+
+  #modify the killer plot to show where mixtures are 20% better ?
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_diff))+
+             
+             facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
+
+             theme_bw() +
+             theme(legend.position = "bottom") +
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold", direction='horizontal')) + 
+             #add point for Curtis inputs
+             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) +
+             #add a lm fitted to the 0 points abs_diff
+             #geom_smooth(data=df_same, method = "lm", se = FALSE)
+             #todo change to where exactly 20% diff
+             geom_smooth(data=df_20pc, method = "lm", se = FALSE,colour='red', lwd=0.5)+
+             #can I subtley highlight the zero points which are repeated in each plot ?
+             geom_point(data=df_20pc, size=0.8, colour='red', shape=2) #, fill='white') 
+           )
+ 
+   
+  # doing the lm outside of ggplot    
+  x1=df_20pc$exposure 
+  y1=df_20pc$effectiveness_insecticide1 + df_20pc$effectiveness_insecticide2
+  
+  l_mod <- lm(y1 ~ x1)
+  l_mod$coefficients
+# (Intercept)          x1 
+#   1.3914547   0.2904911 
+  
+```
+
+\pagebreak
+
+
 ## Fig. x5.1 modified for mix2 vs seq 
 
 fewer runs where sequential gives slower resistance
@@ -669,59 +725,6 @@ fewer runs where sequential gives slower resistance
   #plot(x2,y2)    
     
 ```
-
-
-
-## Fig. x6 Modifying the previous plot to show where resistance arises over 20% slower in an adaptive mixture strategy versus sequential.
-
-1. The line fitted to runs where resistance is reached at the same time for mixture and sequential is retained. Less of the parameter space favours the adaptive mixture under these constraints.
-
-```{r, eval=TRUE, echo=FALSE, fig.height=6} 
-
-
-  df_20pc <- ggSubset[which(ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq > 0.19 & 
-                            ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq < 0.21  ),] 
-
-  #remove column it is faceted on to get line in both facets
-  col_indices <- colnames(df_20pc) != 'mixA_not20pc_better_seq0.5'
-  df_20pc <- df_20pc[,col_indices]
-
-
-  #modify the killer plot to show where mixtures are 20% better ?
-  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_diff))+
-             
-             facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
-
-             theme_bw() +
-             theme(legend.position = "bottom") +
-             scale_color_viridis(begin=1, end=0, option="viridis", 
-                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold", direction='horizontal')) + 
-             #add point for Curtis inputs
-             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
-             ylab('effectiveness of insecticides added') +
-             xlab('exposure to both insecticides') + 
-             #main points for the plot
-             geom_point(alpha=1, size=0.5) +
-             #add a lm fitted to the 0 points abs_diff
-             #geom_smooth(data=df_same, method = "lm", se = FALSE)
-             #todo change to where exactly 20% diff
-             geom_smooth(data=df_20pc, method = "lm", se = FALSE,colour='red', lwd=0.5)+
-             #can I subtley highlight the zero points which are repeated in each plot ?
-             geom_point(data=df_20pc, size=0.8, colour='red', shape=2) #, fill='white') 
-           )
- 
-   
-  # doing the lm outside of ggplot    
-  x1=df_20pc$exposure 
-  y1=df_20pc$effectiveness_insecticide1 + df_20pc$effectiveness_insecticide2
-  
-  l_mod <- lm(y1 ~ x1)
-  l_mod$coefficients
-# (Intercept)          x1 
-#   1.3914547   0.2904911 
-  
-```
-
 
 
 
