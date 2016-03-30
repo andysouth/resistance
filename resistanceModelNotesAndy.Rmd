@@ -3305,6 +3305,10 @@ done ~ change fig x3 to just exposure, effectiveness and dominance
 ~ see df_20pc
 ~ how to make sure that the same points apear in each plot ?? maybe remove the facet column.
 
+Qs for Ian
+~ is effectiveness of 1 possible/likely ? The pattern in the curtis plot relies quite heavily on it. Reducing it to just 0.98 changes pattern considerably. 
+~ are we confident enough about the mix adaptive strategy to focus the paper on it ? Ian said yes. He has said before that it just takes a couple of generations for frequencies to return to Hardy Weinberg.
+
 Remember that effectiveness is proportion of the SS genotypes that die when exposed.
 
 Ian said, science is unsure what the effectiveness rates ofr insecticides are under field conditions. all sensitive mosquitos ar expected to die in a bottle assay. BUt under filed conditions where they briefly land on a net this may not be the case. experimental huts.
@@ -3336,7 +3340,9 @@ done ~ I think we decided to re-labelled "sole use" to "Seq 1st" for clarity
 done ~ You might also like to change "Adaptive mix" to just "Adaptive" to try and save some space which I think will become important later as graphs are scaled down to their published size.
 
 
-Fig x2.. can we make the labels identical to those above i.e., in order  "Seq both"  "Mix 1st"  "Adaptive both "   "Mix both".... A reviewer will wonder why we don't do all 5 outputs described in Fig x1 i.e. whey we omit "Seq 1st"
+done ~ Fig x2.. can we make the labels identical to those above i.e., in order  "Seq both"  "Mix 1st"  "Adaptive both "   "Mix both".... A reviewer will wonder why we don't do all 5 outputs described in Fig x1 i.e. whey we omit "Seq 1st"
+We can make it clear we are looking at the most likely application strategies so we only show those when resistance reached for both. (largely it's a space thing and the others don't show anything different).
+
 
 Fig x3...Y axis label change to "Time (gens)".
 
@@ -3439,17 +3445,76 @@ note my hi_div_lo was actually lo_div_hi, corrected in the figs_slimmed_50.rmd
 
 resist_start_hi_div_lo <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
 
+aha! had a thought. Can I highlight those runs in the killer plot where resist_start_1_div_2 < 0.1 ?
+probably need to do it for the mix2 graph rather than mixadaptive.
+
+I tried and it didn't show the split I expected perhaps because the higher start resist isn't high enough.
+
+** 29/3/16 **
+
+spoke to Ian on the phone. He's still keener on reanalysing the current sensi results.  Because he said its more relevant where the existing insecticide has a resistance level of 5-10% (or even less).
+
+this is the important bit from Ian :
+We selected runs where the starting frequency of resistance to insecticide 2 was > 10 fold higher than frequency of resistance to insecticide 1. We then compared the time for insecticide 1 resistance to reach 50% when deployed on its own, compared to time for resistance to insecticide 1 to reach 50% when deployed as a mixture with the pre-existing insecticide.
+
+probably similar to :
+findResistancePointsMixResponsive()
+
+Effectively I think this is just comparing mixAdaptive with mixBoth for the subset of scenarios.
+
+Aha no actually isn't it comparing sole use with mixture 'new' insecticide, the different bit will be that its not quite the same as the current mix1 & mix2. Because I don't think we care about the resistance level of the 'old' insecticide.
+
+Maybe
+1 create a function to calc when resistance is reached for new+old
+2 create a 2nd func to calc when resistance reached for new on its own
+
+1) findResistancePointsOldPlusNew <- function( listOutMix,
+                                               listOutI1,
+                                               listOutI2 )
+                                               
+~ find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+~ if new==I1 get from mix time til resistance for I1
+~ if new==I2 get from mix time til resistance for I2                                               
+
+2) findResistancePointsNewOnly <- function( listOutI1,
+                                            listOutI2 )
+                                               
+~ find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+~ if new==I1 get from I1 time til resistance for I1
+~ if new==I2 get from I2 time til resistance for I2  
+
+For each get the outputs as 
+
+then create a dataframe : dif_mixnew_sole
 
 
+** 30/3/16 **
+
+~ rather than doing as above I can use the existing files for I1 & I2
+  resistPointsI1 <- findResistancePoints(listOutI1, locus=1)
+  resistPointsI2 <- findResistancePoints(listOutI2, locus=2)
+~ & then calc
+  resistPointsMixI1 <- findResistancePoints(listOutMix, locus=1)
+  resistPointsMixI2 <- findResistancePoints(listOutMix, locus=2)
+
+Then post-process from these files for when starting freq of I2 >10*I1
+
+A future thought. If I bit the bullet and allowed the simulation to represent adaptive strategies things might be much easier ? Also in future could I allow the effectiveness of insecticides to change over time, similar to how we have done in the game ?
+
+doing this in paper1_results_figs.Rmd
+
+now have :
+dif_oldnew_newonly["mix_minus_sole0.5"]
+ 
  
 ### TO DO  
 
 
+~ check on dif_oldnew_newonly["mix_minus_sole0.5"]
+
+# quick thought check, sequential is calculated by adding together the times for I1 & I2 in isolation, are we sure that is OK ? e.g. do we expect it to take same time for resistance to 2nd insecticide to reach threshold irrespective of the level of resistance to I1 even when I1 is not present.
 
 
-aha! had a thought. Can I highlight those runs in the killer plot where resist_start_1_div_2 < 0.1 ?
-
-probably need to do it for the mix2 graph rather than mixadaptive.
 
 
 1. tidy these notes
@@ -3459,9 +3524,7 @@ I've done below for the mix-both plot, repeat it for mix-adaptive.
 Ian suggested adding in the maleProp effect to the x axis to see if that improves the split.
 To get the exposure of both M&F : x=exposure+exposure*maleExposureProp
 
-Qs for Ian
-~ is effectiveness of 1 possible/likely ? The pattern in the curtis plot relies quite heavily on it. Reducing it to just 0.98 changes pattern considerably. 
-~ are we confident enough about the mix adaptive strategy to focus the paper on it ? we could look at standard mix instead ?
+
 
 
 

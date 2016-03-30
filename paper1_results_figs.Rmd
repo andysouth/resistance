@@ -109,8 +109,6 @@ Adaptive mixture      [mixture2]
 
 
 
-
-
 ```{r,echo=FALSE,results='hide'}
 ### chunk copied from part of one in sensiAnPaper1All
 ### bind results onto input file
@@ -267,10 +265,88 @@ Adaptive mixture      [mixture2]
   
   dif_mix2_seq["mix2_minus_seq0.25"] <- dif_mix2_seq["gen_cP0.25"] - dif_mix2_seq["gen_cP0.25seq"]
     
-
-  
-    
 ```
+
+
+```{r,echo=FALSE,results='hide'}
+### NEW part to analyse what happens when a new insecticide is added to an existing one
+### either to replace it or to continue in a mixture
+
+  # find the resistance points for I1 & I2 in a mixture 
+  #(diff than Mix_1 & 2 which is for 1st & 2nd threshold to be reached)
+  resistPointsMixI1 <- findResistancePoints(listOutMix, locus=1)
+  resistPointsMixI2 <- findResistancePoints(listOutMix, locus=2)
+
+  resistPointsMixI1_T <- addStrategyColumn(resistPointsMixI1,"I1inMix",ggInput) 
+  resistPointsMixI2_T <- addStrategyColumn(resistPointsMixI2,"I2inMix",ggInput)     
+  
+  #and use these from above
+  #resistPointsI1_T
+  #resistPointsI2_T
+  
+  #OldPlusNew 
+  # find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+  # if I1 < I2 use resistPointsMixI1_T
+  # if I2 < I1 use resistPointsMixI2_T                                               
+
+  #NewOnly
+  # if I1 < I2 use resistPointsI1_T
+  # if I2 < I1 use resistPointsI2_T     
+  
+  # find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+  # rember the inputs are copied onto the start of all resistPoints objects
+  
+  indicesI2_lessthan_I1 <- which( resistPointsI1_T$start_freq_allele2 < resistPointsI1_T$start_freq_allele1 )
+  #this shows about half, I also checked no equals which is good
+  #length(indicesI2_lessthan_I2)
+  #[1] 4983
+  
+  #NewOnly first make a copy from existing
+  resistPointsNewOnly <- resistPointsI1_T
+  #replace those values where I2 is the 'new' insecticide with lower resistance
+  resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+     resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]  
+  
+  #OldPlusNew first make a copy from existing
+  resistPointsOldPlusNew <- resistPointsMixI1_T
+  #replace those values where I2 is the 'new' insecticide with lower resistance
+  resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+  resistPointsMixI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] 
+    
+  resistPointsNewOnly$strategy <- "new only"
+  resistPointsOldPlusNew$strategy <- "old plus new"
+  
+  #BE CAREFUL
+  
+  #format data to enable PRCC on difference between the 2 strategies
+  #follow previous naming where
+  #OldPlusNew="gen_cP0.5", NewOnly="gen_cP0.5seq"
+  
+  
+  #columns to remove from first
+  indices1 <- which(names(resistPointsOldPlusNew) %in% c("gen_cP0.1","gen_cP0.25","strategy"))
+  #columns to add to 2nd  
+  indices2 <- which(names(resistPointsNewOnly) %in% c("gen_cP0.5")) 
+  #rename column in 2nd
+  tmp <- resistPointsNewOnly[indices2]
+  names(tmp) <- "gen_cP0.5seq"
+  
+  dif_oldnew_newonly <- cbind(resistPointsOldPlusNew[-indices1], tmp)
+  
+  
+  #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+  #>1000 excludes sequential strategy that had a 999 in
+  #BEWARE would need to increase 1000 if I increase max generations in the runs
+  didntReachThresh <- which( dif_oldnew_newonly$gen_cP0.5 > 500 | dif_oldnew_newonly$gen_cP0.5seq > 500 )
+  #subset by runs not making threshold
+  dif_oldnew_newonly <- dif_oldnew_newonly[-didntReachThresh,]  
+  
+  dif_oldnew_newonly["mix_minus_sole0.5"] <- dif_oldnew_newonly["gen_cP0.5"] - dif_oldnew_newonly["gen_cP0.5seq"]
+  
+
+```
+
+
 
 ---
 
