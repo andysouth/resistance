@@ -269,7 +269,7 @@ Adaptive mixture      [mixture2]
 
 
 ```{r,echo=FALSE,results='hide'}
-### NEW part to analyse what happens when a new insecticide is added to an existing one
+### 4/2016 NEW part to analyse what happens when a new insecticide is added to an existing one
 ### either to replace it or to continue in a mixture
 
   # find the resistance points for I1 & I2 in a mixture 
@@ -300,19 +300,29 @@ Adaptive mixture      [mixture2]
   #this shows about half, I also checked no equals which is good
   #length(indicesI2_lessthan_I2)
   #[1] 4983
+  #check whether this works
+  #check <- resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]
+  #aha! problem I was having is that I1 & I2 inputs are not swapped around
+  #if I wanted to swap the inputs for I1 & I2 around, would need to do other coefficients etc.
+  #much potential confusion
+  #might be better just to restrict to the runs in which I2 < I1
+  resistPointsNewOnly <- resistPointsI2_T[indicesI2_lessthan_I1, ]
+  resistPointsOldPlusNew <- resistPointsMixI2_T[indicesI2_lessthan_I1, ]  
   
-  #NewOnly first make a copy from existing
-  resistPointsNewOnly <- resistPointsI1_T
-  #replace those values where I2 is the 'new' insecticide with lower resistance
-  resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
-     resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]  
-  
-  #OldPlusNew first make a copy from existing
-  resistPointsOldPlusNew <- resistPointsMixI1_T
-  #replace those values where I2 is the 'new' insecticide with lower resistance
-  resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
-  resistPointsMixI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] 
+  # #this bit now replaced by the 2 previous lines
+  # #NewOnly first make a copy from existing
+  # resistPointsNewOnly <- resistPointsI1_T
+  # #replace those values where I2 is the 'new' insecticide with lower resistance
+  # resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+  #    resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]  
+  # 
+  # #OldPlusNew first make a copy from existing
+  # resistPointsOldPlusNew <- resistPointsMixI1_T
+  # #replace those values where I2 is the 'new' insecticide with lower resistance
+  # resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+  # resistPointsMixI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] 
     
+  
   resistPointsNewOnly$strategy <- "new only"
   resistPointsOldPlusNew$strategy <- "old plus new"
   
@@ -342,6 +352,44 @@ Adaptive mixture      [mixture2]
   dif_oldnew_newonly <- dif_oldnew_newonly[-didntReachThresh,]  
   
   dif_oldnew_newonly["mix_minus_sole0.5"] <- dif_oldnew_newonly["gen_cP0.5"] - dif_oldnew_newonly["gen_cP0.5seq"]
+  
+  
+  #*****************
+  # to check
+  # are there any cases where startfreqI1 > startfreqI2
+  # by my method above i don't think there should be
+  # i think min should be 1
+  min(dif_oldnew_newonly$resist_start_1_div_2)
+  max(dif_oldnew_newonly$resist_start_1_div_2)  
+  
+  min( dif_oldnew_newonly$start_freq_allele1 - dif_oldnew_newonly$start_freq_allele2)
+  max( dif_oldnew_newonly$start_freq_allele1 - dif_oldnew_newonly$start_freq_allele2)
+  
+  #resistPointsNewOnly
+  min(resistPointsNewOnly$resist_start_1_div_2)
+  max(resistPointsNewOnly$resist_start_1_div_2) 
+
+  # because I now just use runs where startfreq12 < I1
+  # resist_start_1_div_2 should be the inverse of resist_start_hi_div_lo
+  # or at least directly correlated
+  # yes they are all on a single curved line
+  # plot( resistPointsNewOnly$resist_start_1_div_2 ~ resistPointsNewOnly$resist_start_lo_div_hi)
+  
+  
+  
+  #****************
+  #not sure I need to do this because all results already show mixture better
+  #now I want to subset just those runs where start freq old is > 10 * new 
+  
+  
+  #proportion of runs in which mix better than sole
+  num_mix_better <- length(which(dif_oldnew_newonly["mix_minus_sole0.5"] > 0))
+  num_all <- nrow(dif_oldnew_newonly)
+  num_mix_better/num_all
+  #1
+  #?now mix always seems to be better
+  #which kind of makes sense, any insecticide better than none
+  
   
 
 ```
@@ -441,6 +489,68 @@ for(i in names_results)
   }
   
 ```
+
+## Fig. xx3 Using a new insecticide on its own or in combination with old
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+  ggSubset <- dif_oldnew_newonly
+  
+  names_inputs <- names(ggSubset)[1:num_inputs]
+  
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- "mix_minus_sole0.5"    
+    
+    print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
+             geom_point(shape=1, colour="darkblue", alpha=0.2, show.legend=FALSE) + 
+             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             geom_smooth(linetype='dashed',size=1, colour="red") +
+             #facet_wrap( ~ strategy) +
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             labs(title = i) +
+             geom_hline(yintercept = 0, colour="white")
+           )
+  }
+  
+```
+
+# Fig xxx PRCC difference in time-to-resistance between sole new and mix old+new
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+
+  
+  library(sensitivity)
+    
+    x <- dif_oldnew_newonly[,1:num_inputs]
+    y <- dif_oldnew_newonly["mix_minus_sole0.5"]
+      
+    pcc_res <- pcc(x, y, rank=TRUE)
+    
+    #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
+    #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
+    #plot(pcc_res)
+    
+    #results are here I can probably rbind them together into a df that I can ggplot
+    #pcc_res$PRCC
+    
+    to_plot <- pcc_res$PRCC
+    #rename column 1 from 'original to PRCC
+    names(to_plot)[1] <- 'PRCC'
+    to_plot$inputs <- rownames(to_plot)  
+    
+    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+             geom_point(shape=1, colour='red') +
+             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             geom_hline(yintercept = 0, linetype=3) +
+             ylim(-1,1) +
+             ggtitle(paste("PRCC benefit of mix old+new over sole new (old=1, new=2)")) +
+             xlab(NULL)
+          )
+```
+
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
   
@@ -777,7 +887,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 
   
   library(sensitivity)
-
     
     x <- dif_mixA_seq[,1:num_inputs]
     y <- dif_mixA_seq["mixA_minus_seq0.25"]
@@ -804,9 +913,9 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
              ggtitle(paste("PRCC difference between sequential and mixture adaptive")) +
              xlab(NULL)
           )
-
-    
 ```
+
+
 
 
 # PRCC analysis for time-to-resistance subsetted by each insecticide use strategy

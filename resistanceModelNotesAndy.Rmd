@@ -3423,12 +3423,9 @@ email from Ian
 
 I have been racking my brain to think if we can address this question using  data that have already been generated (and hence avoiding having to explain how we generated new data) . Rather than trying to explain it informally in an Email, then write it up, I went directly to step 2 and wrote the following as a draft paragraph for the ms…. Does it make sense???
  
- 
 “We can analyse a subset of the sensitivity analysis to investigate this specific question of whether single  use of a new insecticide is better than deploying it as a mixture with a pre-existing insecticide which already has some resistance present in the population.  We selected runs where the starting frequency of resistance to insecticide 2 was > 10 fold higher than frequency of resistance to insecticide 1. We then compared the time for insecticide 1 resistance to reach 50% when deployed on its own, compared to time for resistance to insecticide 1 to reach 50% when deployed as a mixture with the pre-existing insecticide. As in the full analysis, we compute the ratio mixture/single for each run and generate a classification tree to see what circumstances favour what policy and, in particular whether the ratio of resistance starting frequencies has a large impact”
  
- 
 I am assuming insecticide #1 is always deployed first in the sequential runs so the time to its resistance reaching 50% is already recorded. I am also assuming that in the mixture runs you have recorded  the time until resistance to each insecticide reaches 50% so you always have the data #1.
-
 
 this is the important bit from Ian :
 We selected runs where the starting frequency of resistance to insecticide 2 was > 10 fold higher than frequency of resistance to insecticide 1. We then compared the time for insecticide 1 resistance to reach 50% when deployed on its own, compared to time for resistance to insecticide 1 to reach 50% when deployed as a mixture with the pre-existing insecticide.
@@ -3506,11 +3503,246 @@ doing this in paper1_results_figs.Rmd
 now have :
 dif_oldnew_newonly["mix_minus_sole0.5"]
  
+BUT this is still for all runs (i.e. not just the ones where start freq of the old is > 10 * the new) 
+ 
+** 11/4/2016 **
+
+I think I want to plot this against each input variable to check whats going on, i.e. where is the mix better than sole use.
+
+dif_oldnew_newonly["mix_minus_sole0.5"]
+
+see Fig xx3
+
+In most (70%) runs mixture are better, but that does leave 30% where sole better.
+
+Eyeballing the plots suggests that exposure is still the most influential input. At high exposures the benefit of the mixture is less.
+
+May be something weird going on with start_freq_allele2, noticeable lack of runs where mix-sole < 0 as start_freq_allele2 gets higher ... 
+
+Are the inputs relating to allele1 & 2 still meaningfull with the post-processing that I do ?
+
+No.
+aha! problem I was having is that I1 & I2 inputs are not swapped around.
+
+  #might be better just to restrict to the runs in which I2 < I1
+  resistPointsNewOnly <- resistPointsI2_T[indicesI2_lessthan_I1, ]
+  resistPointsOldPlusNew <- resistPointsMixI2_T[indicesI2_lessthan_I1, ] 
+
+when I decided to restrict to runs where startfreqI2 < I1 mix seems to be better all the time ??
+
+? am I doing something wrong ?
+seems not
+
+Eyeballing fig xx3
+
+when I1 is the old :
+Most important inputs & their effect on the benefit of mixture are :
+exposure : reduces benefit of mixture
+effectiveness i1,old : increases benefit of mixture
+dominance i2,new : reduces benefit of the mixture
+selection coefficient i2 : reducces benefit of the mixture 
+
+My thoughts on mechanisms.
+The mixture does better because the old insecticide kills some mosquitoes that have developed resistance to the new, thus reducing rate of increase in resistance to the new. 
+Exposure. Low exposure reduces the benefits of mixtures. This could be because the beneficial effect of the old insecticide is reduced.
+Effectiveness of the old insecticide. High effectiveness increases the benefit of the mixture because more of the mosquitoes that have developed resistance to the new insecticide are killed.
+Dominance. High dominance of the new insecticide allele decreases the benefit of the mixture. High dominance in resistance to the new insecticide should allow more mosquitoes to escape the new insecticide therefore I would expect the benefit of the mixture to be greater. But its the other way around.
+
+I probably need to get straighter in my head how dominance works.
+Does dominance effect the relative performance of the 2 insecticides where mosquitos are exposed to both. i.e. Does high dominance of the new allele mean that a mosquito is more likely to survive the presence of the old insecticide ?
+
+To understand the mechanisms more I could look at the effects of the inputs on each strategy on its own.
+
+These results are consistent with previous ones.
+
+~ ran PRCC on the new results (confirmed same important params)
+
+copied new bits into keep_old_insecticide.Rmd and sent the pdf to Ian
+
+
+** 12/04/2016 **
+
+Ian was surprised that mixtures better in all runs.
+
+He suggested that The Curtis eg where sole better might be strange and not fall within our parameter space.
+
+~ check whether I can recreate some results from the new analysis by putting the params into the UI, or better by calling runcurtis_f2()
+
+e.g. first run in dif_oldnew_newonly
+mix : 180
+sole : 48
+difference : 132
+
+#a previous example
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.3 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43, addCombinedStrategy=FALSE )
+
+#putting params of 1st run in
+runcurtis_f2( P_1 = 0.0159762192 , P_2 = 0.0076494164 , h.RS1_A0 = 0.660797792 , h.RS2_0B = 0.629114044 , exposure = 0.5582827 , phi.SS1_A0 = 0.9441143 , phi.SS2_0B = 0.9695714 , s.RR1_A0 = 0.1216252 , s.RR2_0B = 0.1720911, addCombinedStrategy=FALSE )
+
+gives warning :
+critical point not reached for i1 or i2: cutoff_i1_mix=Inf cutoff_i2_mix=Inf
+
+is this because ?? :
+1. I've pasted wrong
+no
+2. an indexing issue means that inputs and results in the table are misaligned
+
+3. what i'm running in these new runs is different from whats done in the plot
+don't think so
+4. extra defaults no passed to the plot are different from those used in sensi runs
+***aha! could be maleExposureProp and correctMixDeployProp
+
+
+Looking at the plot sole use does look like it takes about 48 as in the results, but for I2 in the mix looks like it should take ~600 rather than 180 as suggested in the results.
+
+
+New corrected version :
+
+runcurtis_f2( P_1 = 0.0159762192 , P_2 = 0.0076494164 , h.RS1_A0 = 0.660797792 , h.RS2_0B = 0.629114044 , exposure = 0.5582827 , phi.SS1_A0 = 0.9441143 , phi.SS2_0B = 0.9695714 , s.RR1_A0 = 0.1216252 , s.RR2_0B = 0.1720911, addCombinedStrategy=FALSE, maleExposureProp = 0.90820779, correctMixDeployProp = 0.6008410 )
+
+YES this does now match. Hurrah!
+(also shows that maleExposureProp and/or correctMixDeployProp in isolation can have a big effect that I could explore in the mechanisms paper).
+
+Should I do for another result too, just to confirm ?
+
+
+Hi Ian,
+I would like to see if I can recreate Curtis Table 1, (vi).
+
+It makes my head hurt trying to work out what our inputs should be based on his table.
+
+Could you help me out by filling in the below * ? (or is it not possible and I'm missing something?).
+# start frequencies of each resistance allele
+P_1 = *, 
+P_2 = * , 
+# dominances
+h.RS1_A0 =  *, 
+h.RS2_0B =  *, 
+# exposures
+exposure =  *,
+# effectivenesses
+phi.SS1_A0 =  *, 
+phi.SS2_0B =  *, 
+# selection coefficients
+s.RR1_A0 =  *, 
+s.RR2_0B =  *  
+
+
+Here are the equivalent values used to recreate his figure 2.
+# start frequencies of each resistance allele
+P_1 = 0.01 , 
+P_2 = 0.01 , 
+# dominances
+h.RS1_A0 = 0.17 , 
+h.RS2_0B = 0.0016 , 
+# exposures
+exposure = 0.9 ,
+# effectivenesses
+phi.SS1_A0 = 0.73 , 
+phi.SS2_0B = 1 , 
+# selection coefficients
+s.RR1_A0 = 0.23 , 
+s.RR2_0B = 0.43 
+
+cheers,
+Andy
+
+Back from Ian :
+
+P_1 = 0.01,
+P_2 = 0.001,
+# dominances
+h.RS1_A0 =  1,
+h.RS2_0B =  1,
+# exposures
+exposure =  0.9,
+# effectivenesses
+phi.SS1_A0 =  1,
+phi.SS2_0B =  1,
+# selection coefficients
+s.RR1_A0 =  1,
+s.RR2_0B =  1 )
+
+runcurtis_f2( P_1 = 0.01,
+P_2 = 0.001,
+# dominances
+h.RS1_A0 =  1,
+h.RS2_0B =  1,
+# exposures
+exposure =  0.9,
+# effectivenesses
+phi.SS1_A0 =  1,
+phi.SS2_0B =  1,
+# selection coefficients
+s.RR1_A0 =  1,
+s.RR2_0B =  1,
+addCombinedStrategy=FALSE )
+ 
+This seems to generate a very rapid rise in resistance.
+
+and generrates this error in the graph :
+Error in xy.coords(x, y) : 'x' and 'y' lengths differ
+addCombinedStrategy=FALSE fixes the error
+
+i think I should switch i1 & 2 frequencies
+
+runcurtis_f2( P_1 = 0.001,
+P_2 = 0.01,
+# dominances
+h.RS1_A0 =  1,
+h.RS2_0B =  1,
+# exposures
+exposure =  0.9,
+# effectivenesses
+phi.SS1_A0 =  1,
+phi.SS2_0B =  1,
+# selection coefficients
+s.RR1_A0 =  1,
+s.RR2_0B =  1,
+addCombinedStrategy=FALSE,
+addStrategyLabels = FALSE )
+ 
+ 
+This seems to show that resistance to the new insecticide (red) rises faster when alone (dotted) than when in combination (solid) with an old insecticide at a higher frequency. This is contrary to what Curtis said.
+
+Also note that resistance arises much faster than in our sensitivity runs. I think  this is because the selection coefficients (1) are much higher than the range we use (0.1-0.45).
+
+
+** 15/4/16 **
+
+from Ian :
+I have re-read Curtis again and its that paragraph on page 261 that is causing all the problems i.e.
+ 
+“Example vi shows the, at first unexpected……”
+ 
+I guess the key phrase  is what he means by “more rapid”…I assume he means more rapid than using it on its own. But that doesn’t tally with your figure. His example is only a 1-genertion argument so I should be able to do some simple arithmetic. *Can you tell me what the allele frequencies were at generation 2 of your plot* and I’ll check against my arithmetic.
+
+
+to get allele freqs at gen 2 :
+
+
+tst$results[[2]][1:8,]
+ 
+ 
+ 
  
 ### TO DO  
 
+~ how to recreate Curtis Table 1, (vi)'the use of a mixture when the initial gene frequencies are unequal leads to a more rapid increase in the frequency of the rarer of the genes'.
 
-~ check on dif_oldnew_newonly["mix_minus_sole0.5"]
+
+
+
+
+~ remember this is still for all runs (i.e. not just the ones where start freq of the old is > 10 * the new) 
+
+~ **check this from above**
+~ I probably need to get straighter in my head how dominance works.
+Does dominance effect the relative performance of the 2 insecticides where mosquitos are exposed to both. i.e. Does high dominance of the new allele mean that a mosquito is more likely to survive the presence of the old insecticide ?
+
+To understand the mechanisms more I could look at the effects of the inputs on each strategy on its own.
+
+
 
 # quick thought check, sequential is calculated by adding together the times for I1 & I2 in isolation, are we sure that is OK ? e.g. do we expect it to take same time for resistance to 2nd insecticide to reach threshold irrespective of the level of resistance to I1 even when I1 is not present.
 

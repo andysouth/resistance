@@ -1,0 +1,512 @@
+---
+  title: "keep on an old insecticide in a mix ?"
+  output: pdf_document
+  author: "Andy South"
+  date: "`r Sys.Date()`"
+---
+  
+## new analysis April 2016 for paper1 : v2
+    
+Is keeping on an old insecticide in a mix better than just using a new insecticide on its own ?
+
+Short answer : Yes
+
+(part copied from paper1_results_figs.Rmd)
+
+This analysis uses previous sensitivity analysis runs :
+1. select out runs where the starting frequency of resistance to I1 > I2
+1. I didn't yet restrict to runs where there was a 10 fold difference in starting frequencies, seemed not to be necessary.
+  
+  
+# Notable results
+1. it is always better to keep on the old insecticide rather than using the new insecticide on its own.
+1. exposure (to both insecticides) and effectiveness of the old insecticide have the main effect on how much better the mixture is over sole use. Exposure has a positive effect, and effectiveness a negative effect on the benefit of the mixture.
+1. dominance and selection coefficient for the new insecticide have a lesser effect (also negative) on the benefit of the mixture 
+  
+  
+
+```{r,echo=FALSE,results='hide'}
+
+library(resistance)
+library(ggplot2)
+
+outFolder <- "C:\\Dropbox\\resistanceResults\\"
+
+## to load previously saved runs
+#   load(file=paste0(outFolder,'listOutMix_1000.rda'))
+#   load(file=paste0(outFolder,'listOutI1_1000.rda'))
+#   load(file=paste0(outFolder,'listOutI2_1000.rda'))
+
+## trying with the extended experiment _ex100
+experiment <- 'extended'
+
+load(file=paste0(outFolder,'listOutMix_ex2_10000.rda'))
+load(file=paste0(outFolder,'listOutI1_ex2_10000.rda'))
+load(file=paste0(outFolder,'listOutI2_ex2_10000.rda'))
+
+# load(file=paste0(outFolder,'listOutMix_ex2_1000.rda'))
+# load(file=paste0(outFolder,'listOutI1_ex2_1000.rda'))
+# load(file=paste0(outFolder,'listOutI2_ex2_1000.rda'))
+
+# very quick test data
+# load(file=paste0(outFolder,'listOutMix_ex2_3.rda'))
+# load(file=paste0(outFolder,'listOutI1_ex2_3.rda'))
+# load(file=paste0(outFolder,'listOutI2_ex2_3.rda'))
+
+
+```
+
+
+
+
+
+```{r,echo=FALSE,results='hide'}
+### calculate times to reach critical points and add them on to the input file 
+### for different insecticide strategies, sequential, mix1 and mix2  
+
+
+#1) sequential : time to resistance for each insecticide in isolation
+#inputs : inAndOutI1, inAndOutI2
+#find time to criticalPoint for insecticide1
+#find time to criticalPoint for insecticide2
+#add together
+resistPointsI1 <- findResistancePoints(listOutI1, locus=1)
+resistPointsI2 <- findResistancePoints(listOutI2, locus=2)  
+resistPointsSeq <- resistPointsI1 + resistPointsI2
+
+
+#2) mixture1 : time to resistance for either insecticide when used in a mixture
+#inputs : inAndOutMix
+#find time to criticalPoint for EITHER insecticide in mixture  
+resistPointsMix_1 <- findResistancePoints(listOutMix, locus='either')  
+#todo - to be comparable I think this should be for when resistance to BOTH insecticides is reached
+
+#3) mixture2 : when resistance to one insecticide in the mixture reached, switch to sole use of the 
+#   other until that too reaches the critical point. Record total time.
+# what I actually need to do is start with mixture find the first critical point
+# (need to know which of the insecticides it is)
+# then I need to go to the single run for the other insecticide & starting at 
+# it's current resistance point find out how many more generations to go
+#inputs : inAndOutI1, inAndOutI2, inAndOutMix
+resistPointsMix_A <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+
+#4) mixture3 : time to resistance for both insecticides when used in a mixture
+#inputs : inAndOutMix
+#find time to criticalPoint for BOTH insecticide in mixture  
+resistPointsMix_2 <- findResistancePoints(listOutMix, locus='both')
+
+```
+
+
+
+```{r,echo=FALSE,results='hide'}
+### chunk copied from part of one in sensiAnPaper1All
+### bind results onto input file
+
+treeInput <- listOutMix$input
+
+#input files in listOutMix, listOutIn1 & listOutI2 are the same if the runs are done with default randomSeed 
+#except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
+#I could just rename one to exposure
+#BEWARE risk if future changes
+#1/2/16 don't need this now because I've saved exposure from the single original random value
+#rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+
+
+#hardcode which variables to include in analysis to keep it simple and transparent
+treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+
+#add these for extended analysis
+if (experiment=='extended')
+  treePredictors <- c(treePredictors,'maleExposureProp','correctMixDeployProp')
+
+treeInput <- treeInput[ treePredictors, ]
+
+#add an extra predictor, the lower starting freq of resistance divided by the larger
+resist_start_lo_div_hi <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+treeInput <- rbind(treeInput,resist_start_lo_div_hi)    
+
+#20160122 add test for Ian of resistance1/resistance2
+resist_start_1_div_2 <- treeInput['P_1',]/treeInput['P_2',]
+treeInput <- rbind(treeInput,resist_start_1_div_2)   
+
+#renaming other rownames to make nicer plots
+rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
+rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+
+rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
+rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
+
+rownames(treeInput)[rownames(treeInput)=="h.RS1_A0"] <- "dominance_allele1"
+rownames(treeInput)[rownames(treeInput)=="h.RS2_0B"] <- "dominance_allele2"
+
+rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
+rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
+
+
+#get the inputs here to use in ggplot investigation of model responses to inputs
+#used in a later chunk
+ggInput <- treeInput
+
+#create a curtisInputs dataframe for use later
+curtisInputs <- data.frame("exposure"=0.9,
+                           "effectiveness_insecticide1"=0.73,
+                           "effectiveness_insecticide2"=1,
+                           "start_freq_allele1"=0.01,
+                           "start_freq_allele2"=0.01,
+                           "dominance_allele1"=0.17,
+                           "dominance_allele2"=0.0016,
+                           "selection_coef_allele1"=0.23,
+                           "selection_coef_allele2"=0.43,
+                           "maleExposureProp"=1,
+                           "correctMixDeployProp"=1,
+                           "resist_start_lo_div_hi"=1,
+                           "resist_start_1_div_2"=1)
+
+
+```  
+
+
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
+# getting data into format for ggplot
+
+
+#uses ggInput calculated in earlier chunk
+
+#first needs to transpose rows to cols
+#ggInput_T <- t(ggInput)
+
+#function to transpose and add strategy column with the passed value
+#also add on the input columns  
+addStrategyColumn <- function(x, value, inputs){
+  x <- as.data.frame( t(x) )
+  x$strategy <- value
+  
+  #inputs <- as.numeric(inputs)
+  #transpose inputs
+  inputs <- as.data.frame( t(inputs), stringsAsFactors=FALSE )
+  #cbind onto the outputs
+  x <- cbind(inputs,x)
+  x
+}    
+
+resistPointsI1_T <- addStrategyColumn(resistPointsI1,"insecticide 1",ggInput) 
+resistPointsI2_T <- addStrategyColumn(resistPointsI2,"insecticide 2",ggInput)   
+resistPointsSeq_T <- addStrategyColumn(resistPointsSeq,"Sequential",ggInput) 
+resistPointsMix_1_T <- addStrategyColumn(resistPointsMix_1,"Mix either",ggInput) 
+resistPointsMix_A_T <- addStrategyColumn(resistPointsMix_A,"Mix adaptive",ggInput) 
+resistPointsMix_2_T <- addStrategyColumn(resistPointsMix_2,"Mix both",ggInput)     
+
+ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
+                    resistPointsMix_1_T, resistPointsMix_A_T, resistPointsMix_2_T)    
+
+#remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+#>1000 excludes sequential strategy that had a 999 in
+#BEWARE would need to increase 1000 if I increase max generations in the runs
+didntReachThresh <- which(ggInsOuts$gen_cP0.5 == 999 | ggInsOuts$gen_cP0.5 > 500 |
+                            ggInsOuts$gen_cP0.25 == 999 | ggInsOuts$gen_cP0.25 > 500 |
+                            ggInsOuts$gen_cP0.1 == 999 | ggInsOuts$gen_cP0.1 > 500 )
+
+#subset by runs not making threshold
+ggInsOuts <- ggInsOuts[-didntReachThresh,]
+
+
+#prettify output names
+names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.5"] <- "time_to_resistance0.5"
+names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.25"] <- "time_to_resistance0.25"
+names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.1"] <- "time_to_resistance0.1"
+
+#doing; for all inputs
+if (experiment=='extended') {
+  num_inputs <- 13
+} else {
+  num_inputs <- 11  
+}
+
+#format data in a different way to enable PRCC on difference between sequential & mix2
+#resistPointsMix_A_T
+#resistPointsSeq_T
+
+#columns to remove from first
+indices1 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.1","gen_cP0.5","strategy"))
+#columns to add to 2nd  
+indices2 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.25")) 
+#rename column in 2nd
+tmp <- resistPointsSeq_T[indices2]
+names(tmp) <- "gen_cP0.25seq"
+
+dif_mixA_seq <- cbind(resistPointsMix_A_T[-indices1], tmp)
+dif_mix2_seq <- cbind(resistPointsMix_2_T[-indices1], tmp)  
+
+#remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+#>1000 excludes sequential strategy that had a 999 in
+#BEWARE would need to increase 1000 if I increase max generations in the runs
+didntReachThresh <- which( dif_mixA_seq$gen_cP0.25 > 500 | dif_mixA_seq$gen_cP0.25seq > 500 )
+#subset by runs not making threshold
+dif_mixA_seq <- dif_mixA_seq[-didntReachThresh,]  
+
+dif_mixA_seq["mixA_minus_seq0.25"] <- dif_mixA_seq["gen_cP0.25"] - dif_mixA_seq["gen_cP0.25seq"]
+
+#for dif_mix2_seq
+didntReachThresh <- which( dif_mix2_seq$gen_cP0.25 > 500 | dif_mix2_seq$gen_cP0.25seq > 500 )
+#subset by runs not making threshold
+dif_mix2_seq <- dif_mix2_seq[-didntReachThresh,]  
+
+dif_mix2_seq["mix2_minus_seq0.25"] <- dif_mix2_seq["gen_cP0.25"] - dif_mix2_seq["gen_cP0.25seq"]
+
+```
+
+
+```{r,echo=FALSE,results='hide'}
+### 4/2016 NEW part to analyse what happens when a new insecticide is added to an existing one
+### either to replace it or to continue in a mixture
+
+# find the resistance points for I1 & I2 in a mixture 
+#(diff than Mix_1 & 2 which is for 1st & 2nd threshold to be reached)
+resistPointsMixI1 <- findResistancePoints(listOutMix, locus=1)
+resistPointsMixI2 <- findResistancePoints(listOutMix, locus=2)
+
+resistPointsMixI1_T <- addStrategyColumn(resistPointsMixI1,"I1inMix",ggInput) 
+resistPointsMixI2_T <- addStrategyColumn(resistPointsMixI2,"I2inMix",ggInput)     
+
+#and use these from above
+#resistPointsI1_T
+#resistPointsI2_T
+
+#OldPlusNew 
+# find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+# if I1 < I2 use resistPointsMixI1_T
+# if I2 < I1 use resistPointsMixI2_T                                               
+
+#NewOnly
+# if I1 < I2 use resistPointsI1_T
+# if I2 < I1 use resistPointsI2_T     
+
+# find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+# rember the inputs are copied onto the start of all resistPoints objects
+
+indicesI2_lessthan_I1 <- which( resistPointsI1_T$start_freq_allele2 < resistPointsI1_T$start_freq_allele1 )
+#this shows about half, I also checked no equals which is good
+#length(indicesI2_lessthan_I2)
+#[1] 4983
+#check whether this works
+#check <- resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]
+#aha! problem I was having is that I1 & I2 inputs are not swapped around
+#if I wanted to swap the inputs for I1 & I2 around, would need to do other coefficients etc.
+#much potential confusion
+#might be better just to restrict to the runs in which I2 < I1
+resistPointsNewOnly <- resistPointsI2_T[indicesI2_lessthan_I1, ]
+resistPointsOldPlusNew <- resistPointsMixI2_T[indicesI2_lessthan_I1, ]  
+
+# #this bit now replaced by the 2 previous lines
+# #NewOnly first make a copy from existing
+# resistPointsNewOnly <- resistPointsI1_T
+# #replace those values where I2 is the 'new' insecticide with lower resistance
+# resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+#    resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]  
+# 
+# #OldPlusNew first make a copy from existing
+# resistPointsOldPlusNew <- resistPointsMixI1_T
+# #replace those values where I2 is the 'new' insecticide with lower resistance
+# resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+# resistPointsMixI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] 
+
+
+resistPointsNewOnly$strategy <- "new only"
+resistPointsOldPlusNew$strategy <- "old plus new"
+
+#BE CAREFUL
+
+#format data to enable PRCC on difference between the 2 strategies
+#follow previous naming where
+#OldPlusNew="gen_cP0.5", NewOnly="gen_cP0.5seq"
+
+
+#columns to remove from first
+indices1 <- which(names(resistPointsOldPlusNew) %in% c("gen_cP0.1","gen_cP0.25","strategy"))
+#columns to add to 2nd  
+indices2 <- which(names(resistPointsNewOnly) %in% c("gen_cP0.5")) 
+#rename column in 2nd
+tmp <- resistPointsNewOnly[indices2]
+names(tmp) <- "gen_cP0.5seq"
+
+dif_oldnew_newonly <- cbind(resistPointsOldPlusNew[-indices1], tmp)
+
+
+#remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+#>1000 excludes sequential strategy that had a 999 in
+#BEWARE would need to increase 1000 if I increase max generations in the runs
+didntReachThresh <- which( dif_oldnew_newonly$gen_cP0.5 > 500 | dif_oldnew_newonly$gen_cP0.5seq > 500 )
+#subset by runs not making threshold
+dif_oldnew_newonly <- dif_oldnew_newonly[-didntReachThresh,]  
+
+dif_oldnew_newonly["mix_minus_sole0.5"] <- dif_oldnew_newonly["gen_cP0.5"] - dif_oldnew_newonly["gen_cP0.5seq"]
+# %add_div
+dif_oldnew_newonly["mix_divby_sole0.5"] <- dif_oldnew_newonly["gen_cP0.5"] / dif_oldnew_newonly["gen_cP0.5seq"]
+
+#*****************
+# to check
+# are there any cases where startfreqI1 > startfreqI2
+# by my method above i don't think there should be
+# i think min should be 1
+min(dif_oldnew_newonly$resist_start_1_div_2)
+max(dif_oldnew_newonly$resist_start_1_div_2)  
+
+min( dif_oldnew_newonly$start_freq_allele1 - dif_oldnew_newonly$start_freq_allele2)
+max( dif_oldnew_newonly$start_freq_allele1 - dif_oldnew_newonly$start_freq_allele2)
+
+#resistPointsNewOnly
+min(resistPointsNewOnly$resist_start_1_div_2)
+max(resistPointsNewOnly$resist_start_1_div_2) 
+
+# because I now just use runs where startfreq12 < I1
+# resist_start_1_div_2 should be the inverse of resist_start_hi_div_lo
+# or at least directly correlated
+# yes they are all on a single curved line
+# plot( resistPointsNewOnly$resist_start_1_div_2 ~ resistPointsNewOnly$resist_start_lo_div_hi)
+
+
+
+#****************
+#not sure I need to do this because all results already show mixture better
+#now I want to subset just those runs where start freq old is > 10 * new 
+
+
+#proportion of runs in which mix better than sole
+num_mix_better <- length(which(dif_oldnew_newonly["mix_minus_sole0.5"] > 0))
+num_all <- nrow(dif_oldnew_newonly)
+num_mix_better/num_all
+#1
+#?now mix always seems to be better
+#which kind of makes sense, any insecticide better than none
+
+```
+
+\pagebreak
+
+## Fig. xx1 Recreating analysis from Curtis Table 1 (vi)
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4.5} 
+
+runcurtis_f2( P_1 = 0.001,
+P_2 = 0.01,
+# dominances
+h.RS1_A0 =  1,
+h.RS2_0B =  1,
+# exposures
+exposure =  0.9,
+# effectivenesses
+phi.SS1_A0 =  1,
+phi.SS2_0B =  1,
+# selection coefficients
+s.RR1_A0 =  1,
+s.RR2_0B =  1,
+addCombinedStrategy=FALSE,
+addStrategyLabels = FALSE )
+``` 
+ 
+This seems to show that resistance to the new insecticide (red) rises faster when alone (dotted) than when in combination (solid) with an old insecticide at a higher frequency. This is contrary to what Curtis said.
+
+Also note that resistance arises much faster than in our sensitivity runs. I think  this is because the selection coefficients (1) are much higher than the range we use (0.1-0.45).  
+
+\pagebreak
+
+## Fig. xx3 Using a new insecticide on its own or in combination with old
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+
+ggSubset <- dif_oldnew_newonly
+
+names_inputs <- names(ggSubset)[1:num_inputs]
+
+
+for(i in names_inputs)
+{
+  #x11()
+  
+  y <- "mix_minus_sole0.5"    
+  
+  print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
+           geom_point(shape=1, colour="darkblue", alpha=0.2, show.legend=FALSE) + 
+           #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+           geom_smooth(linetype='dashed',size=1, colour="red") +
+           #facet_wrap( ~ strategy) +
+           #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+           labs(title = i) +
+           geom_hline(yintercept = 0, colour="white")
+  )
+}
+
+#mix_divby_sole0.5
+for(i in names_inputs)
+{
+  #x11()
+  
+  y <- "mix_divby_sole0.5"    
+  
+  print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
+           geom_point(shape=1, colour="darkblue", alpha=0.2, show.legend=FALSE) + 
+           #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+           geom_smooth(linetype='dashed',size=1, colour="red") +
+           #facet_wrap( ~ strategy) +
+           #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+           labs(title = i) +
+           geom_hline(yintercept = 0, colour="white")
+  )
+}
+
+
+```
+
+\pagebreak
+
+
+# Fig xxx PRCC difference in time-to-resistance between sole new and mix old+new
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+
+
+library(sensitivity)
+
+x <- dif_oldnew_newonly[,1:num_inputs]
+
+y <- dif_oldnew_newonly["mix_minus_sole0.5"]
+
+pcc_res <- pcc(x, y, rank=TRUE)
+
+to_plot <- pcc_res$PRCC
+#rename column 1 from 'original to PRCC
+names(to_plot)[1] <- 'PRCC'
+to_plot$inputs <- rownames(to_plot)  
+
+print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+         geom_point(shape=1, colour='red') +
+         theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+         geom_hline(yintercept = 0, linetype=3) +
+         ylim(-1,1) +
+         ggtitle(paste("Difference time-to-resistance for mix old+new minus new alone (old=1, new=2)")) +
+         xlab(NULL)
+)
+
+#mix_divby_sole0.5
+y <- dif_oldnew_newonly["mix_divby_sole0.5"]
+
+pcc_res <- pcc(x, y, rank=TRUE)
+
+to_plot <- pcc_res$PRCC
+#rename column 1 from 'original to PRCC
+names(to_plot)[1] <- 'PRCC'
+to_plot$inputs <- rownames(to_plot)  
+
+print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+         geom_point(shape=1, colour='red') +
+         theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+         geom_hline(yintercept = 0, linetype=3) +
+         ylim(-1,1) +
+         ggtitle(paste("Ratio of time-to-resistance for mix old+new over new alone (old=1, new=2)")) +
+         xlab(NULL)
+)
+
+
+
+```

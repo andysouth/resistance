@@ -180,4 +180,7 @@ runcurtis_f2 <- function( max_gen = 500,
                          strategyLabels = strategyLabels
                          )  
   
+  #add returning the results
+  invisible(listOut)
+  
 }
