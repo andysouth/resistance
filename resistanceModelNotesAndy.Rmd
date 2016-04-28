@@ -3723,10 +3723,142 @@ to get allele freqs at gen 2 :
 
 tst$results[[2]][1:8,]
  
+** 18/4/16 **
+
+email from Ian
+Morning Andy,
  
+here is my logic, honed by long walks along the beach
  
+(1)    According to your analysis of a subset of the sensitivity analysis i.e. where the “new” insecticide is present at lower frequency…….it always lasts longer under a mixture (presumably this time is defined as that taken for the resistance allele to reach 50%)
+
+ 
+(2)    But is some of the runs in the sensitivity analysis, sequential use is favoured as it maximises the time for both resistance alleles to reach 50%. Given the result in (1) this can only occur if , in some runs, the “old” insecticide with higher frequency of resistance spreads faster under a mixture.
+
+ 
+Does this make sense? Can you check if it is true?
+ 
+Ian
+
+
+~ in runs where resistance arises slowest for sequential does resistance to the the old (higher freq) insecticide arise faster in the presence of the new insecticide than without it ?
+
+~ look at an example of a run where sequential is 'best'
+
+Hi Ian,
+Good question. I'm somewhat jet-lagged and a little hungover in a seminar room In Seattle so not thinking at my best but I'll try a quick shot which may be wrong.
+
+The example below is the first one I could find where resistance arises slower for sequential. (it happens to be where the starting frequencies are equal).
+
+In this case it seems that sequential is slower because resistance to insecticide2 (blue) only starts increasing when resistance to the first insecticide has been reached. The curve itself is steeper in the absence of the other insecticide (compare blue dashed to solid) but because it starts later it gets to the threshold later.
+
+I'll try to look for another example.
+
+Andy
+
+#sequential best
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.63 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+#relative to curtis fig2
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+
+#sequential best. effectivenesses bothg reduced by 0.2 from curtis fig2
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.53 , phi.SS2_0B = 0.8 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43, addCombinedStrategy=FALSE )
+
+
+~ looking at my killer plot gave me a clue how to set the parameter ranges for when sequential should be better. Low effectiveness and high exposure.
+
+#trying to make sequential better, high exposure, low phi
+
+runcurtis_f2( P_1 = 0.05 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 1 , phi.SS1_A0 = 0.1 , phi.SS2_0B = 0.1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+
+FRom Ian web version gives an error with certain param combinations
+
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 1 , h.RS2_0B = 1 , exposure = 0.9 , phi.SS1_A0 = 1 , phi.SS2_0B = 1 , s.RR1_A0 = 1 , s.RR2_0B = 1, addCombinedStrategy=TRUE )
+Error in xy.coords(x, y) : 'x' and 'y' lengths differ
+
+no error when I set addCombinedStrategy=FALSE, but it doesn't plot a curve for i1 mixture ?? or maybe that i1 mix line is behind i2 mix line. Setting a transparency could solve that.
+
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 1 , h.RS2_0B = 1 , exposure = 0.9 , phi.SS1_A0 = 1 , phi.SS2_0B = 1 , s.RR1_A0 = 1 , s.RR2_0B = 1, addCombinedStrategy=FALSE )
+
+where is the error ?
+
+in plotcurtis_f2_generic.r
+
+lines( gens, comb, col="red", lty=3 )
+
+because comb contains nothing.
+
+
+
+
+
+** 27/4/16 **
+
+email from Ian :
+I agree entirely with your analysis of why sequential sometimes lasts longer than mixtures (see below in case you have forgotten!). I updated the ms to reflect this and tried to get a coherent discussion of the Curtis results. See new text on pages 16 (paragraph starting “We next investigated the statement by Curtis  “) and on page 19 (paragraph starting “The secondary objective was to apply”).
+ 
+As you will see I put my head on the block (page 16 when I said)
+“Finally, for future use, we analysed the other sub-set of the sensitivity data i.e. when the first insecticide to be deployed in the sequence was the one with the higher frequency of resistance and determined whether resistance to that insecticide spread faster when it was deployed on its own or as part of a mixture. Again, in all cases, resistance spread faster when the insecticide was deployed on its own. In summary then, resistance to an insecticide always spreads faster when that insecticide is deployed alone rather than as part of a mixture, irrespective of the relative frequencies of resistance to the two insecticides.“
+
+Can you check if that is true.
+ 
+Secondly, a minor point, but it may become important when determining number of generation for resistance to reach 50%... do you number the initial generation zero so that subsequent generation numbers reflect the elapsed number of generation of selection? e.g. Figure 10  looks like the initial generation is #1. Fig 12 looks like its starts from 0 but the scale is small
+ 
+I had immense problem understanding Table 3 which came from a very early version. I have checked back in my archives but have no previous instnaces of it. It makes no sense to me to and it is not compatible with the dynamics shown on Figure 10 (see note on ms). For example I cannot understand why time to resistance under a mix is not affected by the starting frequency at locus A. If you cannot understand it either, can you re-derive the results and correct it. Thanks.
+ 
+Table 4 looks sensible to me but if you are rechecking table 3, perhaps you could check a couple of values in table 4 just to make sure nothing unexpected has happened.
+ 
+Like I said, happy to Skype if you want to discuss further. Once we get this bit finalised, we can circulate to the Curtis-fans. Like I explain on page 19, I think they may have misinterpreted the comparison he was trying to make.
+
+~~ I checked tables 3 & 4, they were Beths so I sent an email to Ian asking him to ask her 
+
+
+** 28/4/16 **
+
+https://www.bayer.co.za/en/bayer-develops-the-first-two-way-insecticide-mixture-for-indoor-residual-spraying.php
+
+Consistent with its mission of delivering ‘Science For A Better Life’, Bayer has recently submitted a dossier to the World Health Organization Pesticide Evaluation Scheme (WHOPES) for the evaluation of a new two-way insecticide mixture which includes a new mode-of-action for indoor residual spraying (IRS) against disease vectors. Named Fludora™ Fusion, this first IRS based on two active ingredients is intended to provide an effective solution to help African disease control programs address the challenge of insecticide resistance in malaria-transmitting mosquitoes. Field testing of the product has shown excellent results against many different kinds of resistant mosquitoes and strong performance across a wide range of surfaces. Bayer foresees the WHOPES evaluation and testing process to take about 2 years and anticipates market availability of the product by the end of 2017.
+ 
+This has some good stuff about IRM strategies : 
+http://www.slideshare.net/srinivasnaik52643/insecticide-resistance-management-strategy 
+ 
+Curtis et al 1993, potential IRM strategies :
+~ moderation : preserve susceptible genes by limiting selection pressure
+~ saturation : high dose so that heterozugous resistants are killed
+~ multiple attack : independently acting pressures nneither of which is strong enough to lead to resistance
+ 
+Mani GS. Evolution of resistance in the presence of two insecticides. Genetics 1985;109(4):761–83.
+ 
+Abstract
+A two-locus model is used to analyze the effectiveness of a mixture of insecticides in delaying resistance, compared to the use of the insecticides singly. The effects of factors such as recombination, effective dominance, initial value of allele frequencies and initial value of linkage disequilibrium are considered. It is shown that the use of mixtures is always more effective in delaying the onset of resistance, often by many orders of magnitude. It is shown that there exists a threshold value of recombination fraction, above which the evolution of resistance is extremely slow. Resistance evolves very rapidly for values of recombination fraction below the threshold. Finally, the relevance of these results on resistance management is discussed.
+
+~ is mixture always better than sole ?
+Yes see this in paper1_results_figs.Rmd :
+  mix_minus_soleI1 <- resistPointsMixI1_T["gen_cP0.5"] - resistPointsI1_T["gen_cP0.5"]
+  which( mix_minus_soleI1 < 0 ) 
+  #0
+  mix_minus_soleI2 <- resistPointsMixI2_T["gen_cP0.5"] - resistPointsI2_T["gen_cP0.5"]
+  which( mix_minus_soleI2 < 0 ) 
+  
+
+
  
 ### TO DO  
+
+
+~ confirm whether Ians statement is true on all sensi runs : does resistance always spread faster when an insecticide is alone to when it is in a mixture ?
+"resistance to an insecticide always spreads faster when that insecticide is deployed alone rather than as part of a mixture, irrespective of the relative frequencies of resistance to the two insecticides.""
+
+~ do I start figs at gen 0 or 1 ? First generation is 1.
+
+
+~ read through Ians comments on new version of paper
+
+
+
+
+~ create a user interface to represent Killeen graphical models
+
 
 ~ how to recreate Curtis Table 1, (vi)'the use of a mixture when the initial gene frequencies are unequal leads to a more rapid increase in the frequency of the rarer of the genes'.
 
