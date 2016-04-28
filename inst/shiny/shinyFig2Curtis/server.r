@@ -12,7 +12,7 @@ shinyServer(function(input, output) {
     
     #isolate reactivity of other objects
     isolate({
-      runcurtis_f2()
+      runcurtis_f2( addCombinedStrategy = input$addCombinedStrategy )
     }) #end isolate 
   })    
     
@@ -37,7 +37,8 @@ shinyServer(function(input, output) {
                       phi.SS2_0B = input$phi.SS2_0B,
                       s.RR1_A0 = input$s.RR1_A0,
                       s.RR2_0B = input$s.RR2_0B,
-                      correctMixDeployProp = input$correctMixDeployProp)
+                      correctMixDeployProp = input$correctMixDeployProp,
+                      addCombinedStrategy = input$addCombinedStrategy )
         
         #a hack to output the inputs
         cat("runcurtis_f2( P_1 =",input$P_1,",", 
@@ -49,7 +50,9 @@ shinyServer(function(input, output) {
                       "phi.SS2_0B =",input$phi.SS2_0B,",",
                       "s.RR1_A0 =",input$s.RR1_A0,",",
                       "s.RR2_0B =",input$s.RR2_0B,",",
-                      "correctMixDeployProp =",input$correctMixDeployProp,")\n" )
+                      "correctMixDeployProp =",input$correctMixDeployProp,",",
+                      "addCombinedStrategy =",input$addCombinedStrategy,
+                      ")\n" )
         
       }) #end isolate  
     } #end if ( input$aButtonRun > 0 ) 
