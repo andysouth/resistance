@@ -62,8 +62,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   # set generations in vector
   gens <- combmat[,gencol]		
   # add allele frequencies as lines to the plot
-  lines( gens, R1, col="red" )
-  lines( gens, R2, col="blue" )
+  lines( gens, R1, col=adjustcolor("red", alpha.f = 0.5) )
+  lines( gens, R2, col=adjustcolor("blue", alpha.f = 0.5) )
   
   # add line at maximum of critical points
   abline( h=(log10(100*max(criticalPoints)) ) )
@@ -108,8 +108,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   ddt_gens <- c((hch_cutoff):(hch_cutoff+(ddt_cutoff-1)))
   
   # add these as lines
-  lines( hch_gens, hch, col="red", lty=2 )
-  lines( ddt_gens, ddt, col="blue", lty=2 )
+  lines( hch_gens, hch, col=adjustcolor("red", alpha.f = 0.5), lty=2 )
+  lines( ddt_gens, ddt, col=adjustcolor("blue", alpha.f = 0.5), lty=2 )
 
   # BEWARE if the cutoff is not reached for either of these they return Inf
   cutoff_i1_mix <- min(which((combmat[,r1col])>max(criticalPoints)))
@@ -143,17 +143,19 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
       
       #take the values above the cutoff
       comb <- ddt[ddt>startR]
-      #finding which generations
-      gens <- c( cutoff_i1_mix : (cutoff_i1_mix+length(comb)-1 ) )
       
-      lines( gens, comb, col="blue", lty=3 )
+      #don't plot line if no values above the cutoff (previously gave an x,y lengths differ error)
+      if( length(comb) > 0 )
+      {
+        #finding which generations
+        gens <- c( cutoff_i1_mix : (cutoff_i1_mix+length(comb)-1 ) )
+        
+        lines( gens, comb, col=adjustcolor("blue", alpha.f = 0.5), lty=3 )
+      }
       
       #old way of doing which I think was wrong
       #add the individual use line, with the difference between the indiv start and the new start
       #lines( gens, ddt-ddt[1]+startR, col="blue", lty=3 )
-      
-      #
-
       
     } else #if cutoff_i2_mix <= cutoff_i1_mix
     {
@@ -168,13 +170,18 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
       
       #take the values above the cutoff
       comb <- hch[hch>startR]
-      #finding which generations
-      gens <- c( cutoff_i2_mix : (cutoff_i2_mix+length(comb)-1 ) )
       
-      lines( gens, comb, col="red", lty=3 )
+      #don't plot line if no values above the cutoff (previously gave an x,y lengths differ error)
+      if( length(comb) > 0 )
+      {
+        #finding which generations
+        gens <- c( cutoff_i2_mix : (cutoff_i2_mix+length(comb)-1 ) )
+        
+        lines( gens, comb, col=adjustcolor("red", alpha.f = 0.5), lty=3 )        
+      }
+
       
       #old way of doing which I think was wrong
-      
       #add the individual use line, with the difference between the indiv start and the new start     
       #lines( gens, hch-hch[1]+startR, col="red", lty=3 )   
       
