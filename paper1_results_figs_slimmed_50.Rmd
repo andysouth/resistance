@@ -828,3 +828,13 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.49 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 
 
 ```
+
+## Fig. x12 How sequential can be better than mixture. When the time taken for resistance to the first insecticide to be reached is greater than the difference in time taken for the second resistance to be reached in the presence and absence of the first insecticide.
+
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=5.5} 
+
+#sequential best. effectivenesses bothg reduced by 0.2 from curtis fig2
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.53 , phi.SS2_0B = 0.8 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43, addCombinedStrategy=FALSE )
+
+```
