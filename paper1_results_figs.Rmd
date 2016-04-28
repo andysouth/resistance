@@ -375,9 +375,6 @@ Adaptive mixture      [mixture2]
   # yes they are all on a single curved line
   # plot( resistPointsNewOnly$resist_start_1_div_2 ~ resistPointsNewOnly$resist_start_lo_div_hi)
   
-  
-  
-  #****************
   #not sure I need to do this because all results already show mixture better
   #now I want to subset just those runs where start freq old is > 10 * new 
   
@@ -391,7 +388,25 @@ Adaptive mixture      [mixture2]
   #which kind of makes sense, any insecticide better than none
   
   
-
+  #28/4/16 testing Ians statement
+  #does resistance always arise faster in sole use than in a mixture (irrespective of starting frequencies)
+  #resistPointsI1_T #"insecticide 1" 
+  #resistPointsI2_T #"insecticide 2"
+  #resistPointsMixI1_T #"I1inMix" 
+  #resistPointsMixI2_T #"I2inMix"
+  
+  mix_minus_soleI1 <- resistPointsMixI1_T["gen_cP0.5"] - resistPointsI1_T["gen_cP0.5"]
+  which( mix_minus_soleI1 < 0 ) 
+  #0
+  mix_minus_soleI2 <- resistPointsMixI2_T["gen_cP0.5"] - resistPointsI2_T["gen_cP0.5"]
+  which( mix_minus_soleI2 < 0 ) 
+  #0
+  
+  #so yes in our param space adding an extra insecticide always increases resistance time for the first
+  
+  #i could plot it against exposure & effectiveness
+  
+  
 ```
 
 
