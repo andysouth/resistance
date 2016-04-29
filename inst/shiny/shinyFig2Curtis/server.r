@@ -27,7 +27,8 @@ shinyServer(function(input, output) {
         
         #cat("running resistSimple with these inputs:", input$P_1, input$P_2*input$P_1, input$h.RS1_00, input$h.RS2_00,"\n")
         
-        runcurtis_f2( P_1 = input$P_1, 
+        runcurtis_f2( max_gen = 500,
+                      P_1 = input$P_1, 
                       P_2 = input$P_2,
                       #P_2 = input$P_2*input$P_1, #if doing 2 as a proportion of 1, i need to put a limit of 1 on this
                       h.RS1_A0 = input$h.RS1_A0, 
@@ -41,7 +42,8 @@ shinyServer(function(input, output) {
                       addCombinedStrategy = input$addCombinedStrategy )
         
         #a hack to output the inputs
-        cat("runcurtis_f2( P_1 =",input$P_1,",", 
+        cat("runcurtis_f2( max_gen=500", 
+                      "P_1 =",input$P_1,",", 
                       "P_2 =",input$P_2,",", 
                       "h.RS1_A0 =",input$h.RS1_A0,",", 
                       "h.RS2_0B =",input$h.RS2_0B,",",
