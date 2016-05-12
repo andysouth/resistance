@@ -443,8 +443,9 @@ for(i in names_results)
 
 ## Fig. x2 How time-to-resistance is effected by input values for each insecticide use strategy
 
-```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+```{r, eval=FALSE, echo=FALSE, fig.height=3.5} 
   
+  #10/5/2016 seems to crash R, so set to eval=FALSE
 
   names_inputs <- names(ggInsOuts)[1:num_inputs]
   
