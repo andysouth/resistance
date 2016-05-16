@@ -3845,6 +3845,8 @@ Yes see this in paper1_results_figs.Rmd :
  
 ### TO DO  
 
+~ set up a new UI allowing comparison of 2 model runs side by side (like my curtis one but be able to modify params for both plots)
+
 
 ~ confirm whether Ians statement is true on all sensi runs : does resistance always spread faster when an insecticide is alone to when it is in a mixture ?
 "resistance to an insecticide always spreads faster when that insecticide is deployed alone rather than as part of a mixture, irrespective of the relative frequencies of resistance to the two insecticides.""
