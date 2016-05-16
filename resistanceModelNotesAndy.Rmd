@@ -3842,10 +3842,17 @@ Yes see this in paper1_results_figs.Rmd :
   
 
 
+Update Report for Ian :
+
+Tsetse : 15 days remaining : defined things to do for Steve
+Resistance : 55 days (from 85) remaining
+
+
  
 ### TO DO  
 
 ~ set up a new UI allowing comparison of 2 model runs side by side (like my curtis one but be able to modify params for both plots)
+~~ quickest would just be to add extra inputs on bottom
 
 
 ~ confirm whether Ians statement is true on all sensi runs : does resistance always spread faster when an insecticide is alone to when it is in a mixture ?
@@ -4084,6 +4091,18 @@ listOutMix$input[c('P_1','P_2'),] gives selected inputs
 https://andysouth.shinyapps.io/shinyMixSeqCompare1
 https://andysouth.shinyapps.io/shinyFig2Curtis
 
+# time
+To the end of Feb :
+Hours		105:45:00
+Hours rounded		105.00
+Days (/7.5)		14.00
+Days remaining (from 85)		71.00 
+
+march, april :
+Hours 124.5
+Days (/7.5)		16.6
+Days previous 71
+Days remaining (from 85)		71-16.6 = 54.4
 
 
 

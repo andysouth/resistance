@@ -69,6 +69,7 @@ Parameter  | effect on resistance | Mechanism
 *to help explain I could start from a scenario where the attributes of each insecticide are the same*
 *and then explore changing each in turn*
 *I could then work up to the curtis fig2 plot*
+*could in each case incease value of I1 by 0.2 or some other value*
 
 **When all parameters are equal resistance arises slower for sequential than mixture.**
 **Effect of changing parameters on relative performance of mixture versus sequential strategy**
@@ -76,7 +77,7 @@ Parameter  | effect on resistance | Mechanism
 Parameter  | relative performance mix versus seq | Mechanism
 ------------------ | ------- | ---------------------------------------------------
 A. All equal | seq > mix | resistance to the two insecticides in a mixture increases at a similar rate and is reached sooner than if the insecticides are applied individually in sequence
-1. Effectiveness | faster | ...
+1. Effectiveness | mix > seq | resistance to the more effective insecticide increases ...
 2. Exposure | faster | ...
 3. Dominance | faster | ...
 4. Selection Coefficient | ...
