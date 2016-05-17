@@ -10,7 +10,7 @@ shinyUI(fixedPage(
   title = "resistance to insecticide mixtures",
   
   h4("Development of resistance to insecticides used in mixtures and sequentially"),   
-  h4("Plots take a few seconds. Modify inputs and compare 2 strategies."),  
+  h4("Plots take a few seconds. Modify inputs and compare 2 scenarios. by @southmapr"),  
   
   fixedRow(
     #column(1),    
