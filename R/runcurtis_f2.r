@@ -32,6 +32,8 @@
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
 #' @param addStrategyLabels add labels to plot for where strategies cross 0.5 line TRUE gives seq,mix1,mix2,mix3
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")
+#' @param xlab xlab
+#' @param ylab ylab
 #'  
 #' @return list of plot components
 #' @export
@@ -64,7 +66,10 @@ runcurtis_f2 <- function( max_gen = 500,
                           correctMixDeployProp = 1,
                           addCombinedStrategy = TRUE,
                           addStrategyLabels = TRUE,
-                          strategyLabels = c("seq","mix1","adapt","mix2") )
+                          strategyLabels = c("seq","mix1","adapt","mix2"),
+                          ylab = "Resistance frequency",
+                          xlab = "Generation"
+                          )
 {
   
   #fill exposure array I1
@@ -177,7 +182,9 @@ runcurtis_f2 <- function( max_gen = 500,
   plotcurtis_f2_generic( listOut$results[[3]], listOut$results[[2]], listOut$results[[1]], 
                          addCombinedStrategy = addCombinedStrategy,
                          addStrategyLabels = addStrategyLabels,
-                         strategyLabels = strategyLabels
+                         strategyLabels = strategyLabels,
+                         xlab = xlab,
+                         ylab = ylab
                          )  
   
   #add returning the results

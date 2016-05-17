@@ -14,6 +14,8 @@
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
 #' @param addStrategyLabels add labels to plot for where strategies cross 0.5 line TRUE gives seq,mix1,mix2,mix3
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")
+#' @param xlab xlab
+#' @param ylab ylab
 #' 
 #' @examples
 #' listOutMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -30,7 +32,9 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    criticalPoints = c(0.1,0.25,0.5),
                                    addCombinedStrategy = FALSE,
                                    addStrategyLabels = TRUE,
-                                   strategyLabels = c("seq","mix1","adapt","mix2")
+                                   strategyLabels = c("seq","mix1","adapt","mix2"),
+                                   ylab = "Allele frequency",
+                                   xlab = "Generation"
                                    ){
   
   #find generations to reach max resistance points
@@ -53,7 +57,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
         #xlim=c(1,maxGens), ylim=c(0,(max(fl))),
         xlim=c(1,maxGens), ylim=c(min(fl),(max(fl))),
         #xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
-        xlab="Generation", ylab="Allele Frequency", main=main)
+        xlab=xlab, ylab=ylab, main=main)
   
   # plotting combination scenario (in combmat)
   # set frequencies in vectors as log10 percentages from frequencies
