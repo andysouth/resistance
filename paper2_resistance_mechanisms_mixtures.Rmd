@@ -47,7 +47,7 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
 
 ## Methods
 
-*accessible summary of the model 
+*accessible summary of the model* 
 
 
 
@@ -71,17 +71,23 @@ Parameter  | effect on resistance | Mechanism
 *I could then work up to the curtis fig2 plot*
 *could in each case incease value of I1 by 0.2 or some other value*
 
-**When all parameters are equal resistance arises slower for sequential than mixture.**
+**xA. When all parameters are equal resistance arises slower for sequential than mixture.**
+This is because resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+```
+
+
 **Effect of changing parameters on relative performance of mixture versus sequential strategy**
 
 Parameter  | relative performance mix versus seq | Mechanism
 ------------------ | ------- | ---------------------------------------------------
-A. All equal | seq > mix | resistance to the two insecticides in a mixture increases at a similar rate and is reached sooner than if the insecticides are applied individually in sequence
-1. Effectiveness | mix > seq | resistance to the more effective insecticide increases ...
-2. Exposure | faster | ...
-3. Dominance | faster | ...
-4. Selection Coefficient | ...
-5. Frequency  | faster | ...
+xA. All equal | seq > mix | resistance to the two insecticides in a mixture increases at a similar rate and is reached sooner than if the insecticides are applied individually in sequence
+x1. Effectiveness | mix > seq | resistance to the more effective insecticide increases ...
+x2. Exposure | faster | ...
+x3. Dominance | faster | ...
+x4. Selection Coefficient | ...
+x5. Frequency  | faster | ...
 
 
 
