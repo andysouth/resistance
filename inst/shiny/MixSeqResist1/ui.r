@@ -88,7 +88,7 @@ shinyUI(fixedPage(
            sliderInput("effectiveness_A1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
            sliderInput("effectiveness_A2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
            hr(),
-           sliderInput("effectiveness_B1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
+           sliderInput("effectiveness_B1", NULL, val=0.9, min = 0, max = 1, step = 0.1, ticks=FALSE),
            sliderInput("effectiveness_B2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)             
            
     ),
