@@ -3841,24 +3841,94 @@ Yes see this in paper1_results_figs.Rmd :
   which( mix_minus_soleI2 < 0 ) 
   
 
+**17/5/16**
 
 Update Report for Ian :
 
 Tsetse : 15 days remaining : defined things to do for Steve
 Resistance : 55 days (from 85) remaining
 
+done ~ set up a new UI allowing comparison of 2 model runs side by side (like my curtis one but be able to modify params for both plots)
 
+55 + 15 days = 70.
+
+at 5 days a week 70/5 = 14 weeks
+
+4 days per week
+
+ISSF : institutional strengthening fund, Matt Powney.
+Matt based in Rotherham
+
+
+Birget 2015
+
+Methods: population-genetic model of the spread of insecticide resistance in response to insecticides used either
+as adulticides (ITNs) or as larvicides (malaria control or agriculture).
+
+Results: 
+We show that indoor use of insecticides leads to less selection
+pressure than their use as larvicides. 
+
+Reasons for relatively low selection pressure by adulticides
+(i) males are not affected by the ITNs
+(ii) insecticides are also repellents, keeping mosquitoes at bay from contacting the insecticide but also driving
+them to bite either people who do not use the insecticide or alternative hosts.
+
+Barbosa and Hastings [12] use a more complex formulation
+by including the proportion of houses that are covered by the bed nets. However, models
+that make mosquito fitness dependent on its behaviour and life-history provide significant
+advantages over others as they allow integration of knowledge of medical entomologists
+with the population genetics of the model. This approach has been followed by a number
+of authors [14, 15, 16].
+
+For example, Koella et al. [16] combined a population genetic approach with aspects of the
+mosquito’s feeding cycle to calculate ”effective coverage”, the proportion of mosquitoes
+killed by the insecticide during a single gonotrophic cycle. We extended this approach by
+formulating a population genetic model that calculates exposure rates from the mosquito’s
+feeding cycle similarly to the model described by Le Menach et al. [17]. In doing so,
+we propose behaviourally and epidemiologically based fitness functions that help us to
+understand more fully the predictions of the genetic model.
+
+
+Andrew F. Read, Penelope A. Lynch, and Matthew B. Thomas.
+How to make evolution-proof insecticides for malaria control. PLoS
+Biology, 7(4):e58, 2009. doi: 10.1371/journal.pbio.1000058. URL
+http://dx.doi.org/10.1371/journal.pbio.1000058.
+
+Read 2009 : Late-life-acting insecticides could control infective mosquitos while not depressing lifetime reproductive success sufficiently to select for resistance.
+
+
+
+**18/5/16**
+
+talking to Ian :
+Can I get to IVCC for 12.30 ?
+Ian said, be good to get there, maybe could go up sunday eve ?
+
+we will need to talk about IP for the resistance modelling.
+
+ 
+Train options :
+
+Monday 6.51 - 12.08 via Peterborough & Leeds £98
+ 
+
+Sunday :  
+ 
  
 ### TO DO  
 
-~ set up a new UI allowing comparison of 2 model runs side by side (like my curtis one but be able to modify params for both plots)
-~~ quickest would just be to add extra inputs on bottom
+~ email Ellie about Tom Churcher job
+~ send Ian
+
+~ check whether the difference in effectivenesses is a good predictor of  
+
 
 
 ~ confirm whether Ians statement is true on all sensi runs : does resistance always spread faster when an insecticide is alone to when it is in a mixture ?
 "resistance to an insecticide always spreads faster when that insecticide is deployed alone rather than as part of a mixture, irrespective of the relative frequencies of resistance to the two insecticides.""
 
-~ do I start figs at gen 0 or 1 ? First generation is 1.
+
 
 
 ~ read through Ians comments on new version of paper
@@ -4090,6 +4160,7 @@ listOutMix$input[c('P_1','P_2'),] gives selected inputs
 # current best UIs
 https://andysouth.shinyapps.io/shinyMixSeqCompare1
 https://andysouth.shinyapps.io/shinyFig2Curtis
+https://andysouth.shinyapps.io/MixSeqResist1
 
 # time
 To the end of Feb :
