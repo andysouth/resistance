@@ -19,7 +19,7 @@ date: "`r Sys.Date()`"
 
 ## Abstract
 
-This paper explores the mechanisms by which insectide resistance is expected to increase with the use of insecticides in isolation, sequence/rotation and mixtures. It is aimed at a readership with limited experience of population genetics and resistance. It uses a model representing two independent loci coding for resistance to two insecticides. It explores factors that are expected to influence the development of resitance, notably the starting frequency of resistance alleles, their dominance, the exposure of insects to the insecticides, the effectiveness of the insecticides, the selective adavantage of resistance and the dominance of the alleles. There is uncertainty about the values of these parameters in field situations. We demonstrate how the values of these parameters are expected to influence the development of resistance and the relative benefits of alternative insecticide application strategies. We describe an R package and user-interface that allows further exploration of the development of resistance.
+This paper explores the mechanisms by which insectide resistance is expected to increase with the use of insecticides in isolation, sequence/rotation and mixtures. It is aimed at a readership with limited experience of population genetics and resistance. It uses a model representing two independent loci coding for resistance to two insecticides. It explores factors that are expected to influence the development of resitance, notably the starting frequency of resistance alleles, their dominance, the exposure of insects to the insecticides, the effectiveness of the insecticides, the selective adavantage of resistance and the dominance of the alleles. There is uncertainty about the values of these parameters in field situations. We demonstrate how the values of these parameters are expected to influence the development of resistance and the relative benefits of alternative insecticide application strategies. We describe an R package and user-interface that allows further exploration of the development of resistance. The user-interface (https://andysouth.shinyapps.io/MixSeqResist1) allows replication of our results and exploration of what happens when inputs are changed outside of the ranges we have used. 
 
 ## Introduction
 
@@ -41,8 +41,7 @@ Parameter  | Description
 
 
 
-
-We use a 2-locus population genetic model of insecticide resistance (Hastings et al. in press) to illustrate the mechanisms by which these parameters are expected to influence the development of insectide resistance under alternative insecticide use strategies. Hastings et al. (in press) describe the technical details of the model and explore large parameter ranges. In contrast we provide an accessible summary of the model and use selected parameter values to demonstrate the mechanisms by which different parameter values are expected to influence the devlopment of resistance.
+We use a 2-locus population genetic model of insecticide resistance (Hastings et al. in press) to illustrate the mechanisms by which these parameters are expected to influence the development of insectide resistance under alternative insecticide use strategies. Hastings et al. (in press) describe the technical details of the model and explore large parameter ranges. In contrast we provide an accessible summary of the model and use selected parameter values to demonstrate the mechanisms by which different parameter values are expected to influence the development of resistance.
 
 
 ## Methods
@@ -53,17 +52,16 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
 
 ## Results
 
-* explore the influence of the parameters on sole use either here or in the discussion *
 
 
-**xA. When all parameters are equal resistance arises slower for sequential than mixture.**
-This is because resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
+With all control inputs set equal at 0.5 resistance arises slower for sequential than mixture (Fig. 1). Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
+
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 1. All control inputs equal at 0.5")
 ```
 
-**x1. Increasing the effectiveness of insecticides increases time-to-resistance for mixtures**
+**Effectiveness of the insecticides**
 A more effective insecticide prompts increased time-to-resistance when used in a mixture. This contrasts with the earlier result showing that when used in isolation a single insecticide prompts a shorter time-to-resistance.
 
 In a mixture the mechanism is that a more effective insecticide provides greater protection to the other. For example taking the previous scenario and increasing the effectiveness of one insecticide from 0.5 to 0.9 increases the time-to-resistance for the 2nd insecticide from around 45 to 75 generations (Fig. 2). In the plot you can see that resistance to insecticide1 (with the increased effectiveness) rises at a similar speed to Fig.2. In contrast resistance to insecticide2 increases more slowly initially. Once insecticide1 reaches it's resistance threshold (around 40 generations), the curve for insecticide2 becomes steeper. This can be explained by the mechanism that once insecticide1 has become ineffective due to resistance it stops killing indivduals that are resistant to insecticide2 and thus stops 'protecting' it from it's own rise in resistance.   
@@ -82,17 +80,61 @@ cat("Fig. 3. Effectiveness of both insecticides 0.9")
 ```
 
 
+**Dominance of resistance alleles**
 Increasing the dominance of the alleles within a mixture has the same direction of effect as it does for sole use. Increasing the dominance of the allele corresponding to insecticide1 from 0.5 to 0.9 decreases the time-to-resistance to insecticide1 from 40 to 30 generations but leaves the time-to-resistance for the mixture the same (Fig. 4). Setting the dominance for bothe alleles to 0.9 reduces the time-to-resistance for the mixture to 30 generations (Fig. 5). In both of these cases sequential use continues to have a longer time-to-resistance.
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.9 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
-cat("Fig. 4. Dominace of insecticide1 0.9")
+cat("Fig. 4. Dominance of insecticide1 0.9")
 ```
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.9 , h.RS2_0B = 0.9 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
-cat("Fig. 5. Dominace of both insecticides 0.9")
+cat("Fig. 5. Dominance of both insecticides 0.9")
 ```
+
+**Selective advantage of resistance**
+Decreasing the selective advantage of resistance to insecticide1 from 0.5 to 0.1 increases it's time-to-resistance in the mixture from 40 generations to 150, and has a similar effect on it's use in isolation (Fig. 6). However, it has little effect on resistance to insecticide2. Because of this sequential use continues to generate a longer time-to-resistance than the mixture. Decreasing the selective advantage of both alleles to 0.1 results in a longer time-to-resistance of 200 generations for the mixture (Fig. 7), however the relative shape of the resistance curves remains the same as in Fig. 1, with sequential use continuing to generate longer time-to-resistance.  
+
+[Increasing the selective advantage of resistance above 0.5 causes an error about fitness values above 1. How to explain this ?]
+
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.1 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. 6. Selective advantage of insecticide1 0.1")
+```
+
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.1 , s.RR2_0B = 0.1 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. 7. Selective advantage of both insecticides 0.1")
+```
+
+Taking this scenario of lower selective advantage and increasing the effectiveness of both insectides from 0.5 to 0.7 shows again how the change in effectiveness has a greater effect on the mixture than sequential making the mixture preferable (compare Fig. 8 to Fig. 7).
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.1 , s.RR2_0B = 0.1 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. 8. Selective advantage of both insecticides 0.1, effectiveness to 0.7")
+```
+
+**Exposure**
+Increasing exposure to 0.9 reduces time-to-resistance for both mixture and sequential scenarios (Fig. 9). The change in exposure has a greater effect on the mixture relative to the sequential strategy and this results in a greater relative benefit for sequence versus mixture. Setting the effectiveness of both insecicides to 0.7 (while keeping all other inputs at 0.5) results in mixture being slightly favoured (Fig. 10), then making the increase in exposure from 0.5 to 0.9 results in a switch to sequential being the favoured strategy (Fig. 11).
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.9 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. 9. Exposure 0.9")
+```
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.7 , phi.SS2_0B = 0.7 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. 10. Effectiveness 0.7, sequence favoured")
+```
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.9 , phi.SS1_A0 = 0.7 , phi.SS2_0B = 0.7 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. 11. Effectiveness 0.7, Exposure 0.9, mixture favoured")
+```
+
 
 
 
@@ -126,7 +168,7 @@ Parameter to increase  | effect on resistance | Mechanism
 1. Effectiveness | faster | increased deaths of susceptibles
 2. Exposure | faster | increased deaths of susceptibles
 3. Dominance | faster | increased survival of heterozygotes
-4. Selection Coefficient | faster | increased survival of resistants
+4. Selective advantage | faster | increased survival of resistants
 5. Frequency  | faster | less change needed to reach resistance threshold
 
 **mixture**
@@ -134,36 +176,27 @@ Parameter to increase  | effect on resistance | Mechanism
 Parameter to increase  | effect on resistance | Mechanism
 ------------------ | ------- | ---------------------------------------------------
 1. Effectiveness | **slower** | increased deaths of individuals resistant to the other insecticide
-2. Exposure | **slower** | increased deaths of individuals resistant to the other insecticide
-3. Dominance | ?faster | increased survival of resistants
-4. Selection Coefficient | ?faster | increased survival of resistants
+2. Exposure | ??faster | ??increased deaths of individuals resistant to the other insecticide
+3. Dominance | faster | increased survival of resistants
+4. Selective advantage | ?faster | increased survival of resistants
 5. Frequency  | ?faster | less change needed to reach resistance threshold
 
 **difference between mixture and sequential use**
 
-Parameter to increase  | effect on difference | Mechanism
+Parameter to increase  | relative performance mix versus seq | Mechanism
 ------------------ | ------- | ---------------------------------------------------
-1. Effectiveness | improves mixture | faster resistance for single use and slower resistance in mixture
-2. Exposure | improves mixture | faster resistance for single use and slower resistance in mixture
+1. Effectiveness | mixture | faster resistance for single use and slower resistance in mixture
+2. Exposure | sequence | faster resistance for mixture and sequence but has a greater effect on mixture
 3. Dominance | ? | ?
-4. Selection Coefficient | ? | ?
+4. Selective advantage | ? | ?
 5. Frequency  | ? | ?
 
-or like this ?
-
-**Summary of the effect of changing parameters on relative performance of mixture versus sequential strategy**
-
-Parameter  | relative performance mix versus seq | Mechanism
------------------- | ------- | ---------------------------------------------------
-x1. High Effectiveness | mix > seq | A highly effective insecticide in a mixture reduces the increase in resistance of the other. 
-x2. High Exposure | mix > seq | High exposure is needed for one insecticide in the mixture to reduce the increase of the other.
-x3. Dominance | ... | ...
-x4. Selection Coefficient | ...
-x5. Frequency  | faster | ...
 
 
 
 (@) In a mixture each insecticide reduces the rate of increase in resistance to the other by killing individuals that are resistant to the other.
+
+(@) In a mixture the effectiveness of one insecticide has major effects on the resistance of the other. In contrast the dominance and selective advantage of one has less effect on the resistance of the other. In this paper we have kept the exposure to each insecticide the same (to represent a mixture in which the 2 insecticides are applied together), ?? however we predict that if they were applied separately then (similar to effectiveness) a higher exposure to one insecticide would increase the time-to-resistance of the other. 
 
 (@) For a mixture of 2 insecticides with differing effectiveness. Resistance to the insecticide with a greater effectiveness increases faster. The less effective insecticide is 'protected' by the more effective. Resistance to the less effective insecticide increases slowly until resistance to the more effective insecticide reaches a high level.
 
@@ -180,6 +213,7 @@ x5. Frequency  | faster | ...
 
 ## Todo
 
+1. work out what's going on with exposure ... why does increasing exposure have a greater effect on mixture than sequential ? Is it because the exposure to one insecticide also effects the development of resistance in the other ?
 1. create some code to enable plotting 2 scenarios side-by-side
 1. re-read GPIRM
 1. can I develop explanatory diagrams to describe the input parameters ?
