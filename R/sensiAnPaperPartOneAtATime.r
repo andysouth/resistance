@@ -10,10 +10,9 @@
 #' @param nSamples number of samples
 #' 
 #' @examples
-#' inputAndResultsMix <- sensiAnPaperPartOneAtATime( insecticideUsed = 'mixture' )
-#' inputAndResultsI1 <- sensiAnPaperPartOneAtATime( insecticideUsed = 'insecticide1' )
-#' inputAndResultsI2 <- sensiAnPaperPartOneAtATime( insecticideUsed = 'insecticide2' )
-#' #colnames(inputAndResults)
+#' #inputAndResultsMix <- sensiAnPaperPartOneAtATime( insecticideUsed = 'mixture' )
+#' #inputAndResultsI1 <- sensiAnPaperPartOneAtATime( insecticideUsed = 'insecticide1' )
+#' #inputAndResultsI2 <- sensiAnPaperPartOneAtATime( insecticideUsed = 'insecticide2' )
 #' @return a list containing results and inputs
 #' @export
 #' 

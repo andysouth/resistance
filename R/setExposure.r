@@ -12,8 +12,8 @@
 #'    TODO check my understanding of this
 #' 
 #' @examples
-#' a <- setExposure( exposure='0.9', insecticideUsed = 'mixture' )
-#' a <- setExposure( exposure='0.9',  insecticideUsed = 'insecticide1' )
+#' a <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
+#' a <- setExposure( exposure=0.9,  insecticideUsed = 'insecticide1' )
 #' @return array of exposure values for the different insecticides
 #' @export
 #' 

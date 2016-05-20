@@ -12,6 +12,7 @@
 #' @param randomSeed an integer to set seed, NULL for not setting it
 #' @param experiment effects which inputs to change, 
 #'    'extended' for adding reduced male exposure & incorrect deploymnet 
+#' @param old_insecticide if set TRUE then freq of I2 is set to 0.5 to represent an existing insecticide that resistance has already developed
 #' 
 #' @examples
 #' listOutMix <- sensiAnPaperPart( 5, insecticideUsed = 'mixture' )
