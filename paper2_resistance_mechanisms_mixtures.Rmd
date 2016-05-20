@@ -52,6 +52,7 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
 
 ## Results
 
+*Before this add figures for effect of inputs on sole use.*
 
 
 With all control inputs set equal at 0.5 resistance arises slower for sequential than mixture (Fig. 1). Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
@@ -118,7 +119,7 @@ cat("Fig. 8. Selective advantage of both insecticides 0.1, effectiveness to 0.7"
 ```
 
 **Exposure**
-Increasing exposure to 0.9 reduces time-to-resistance for both mixture and sequential scenarios (Fig. 9). The change in exposure has a greater effect on the mixture relative to the sequential strategy and this results in a greater relative benefit for sequence versus mixture. Setting the effectiveness of both insecicides to 0.7 (while keeping all other inputs at 0.5) results in mixture being slightly favoured (Fig. 10), then making the increase in exposure from 0.5 to 0.9 results in a switch to sequential being the favoured strategy (Fig. 11).
+Increasing exposure to 0.9 reduces time-to-resistance for both mixture and sequential scenarios (Fig. 9). The change in exposure has a greater effect on the mixture relative to the sequential strategy and this results in a greater relative benefit for sequence versus mixture. Setting the effectiveness of both insecicides to 0.7 (while keeping all other inputs at 0.5) results in mixture being slightly favoured (Fig. 10), then making the increase in exposure from 0.5 to 0.9 results in a switch to sequential being the favoured strategy (Fig. 11). This demonstrates how higher exposures can favour sequential use.
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.9 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.5 , s.RR2_0B = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
@@ -176,10 +177,10 @@ Parameter to increase  | effect on resistance | Mechanism
 Parameter to increase  | effect on resistance | Mechanism
 ------------------ | ------- | ---------------------------------------------------
 1. Effectiveness | **slower** | increased deaths of individuals resistant to the other insecticide
-2. Exposure | ??faster | ??increased deaths of individuals resistant to the other insecticide
+2. Exposure | faster (but not as fast as for single) | increased deaths of individuals resistant to the other insecticide
 3. Dominance | faster | increased survival of resistants
 4. Selective advantage | ?faster | increased survival of resistants
-5. Frequency  | ?faster | less change needed to reach resistance threshold
+5. Frequency  | faster | less change needed to reach resistance threshold
 
 **difference between mixture and sequential use**
 
@@ -196,9 +197,16 @@ Parameter to increase  | relative performance mix versus seq | Mechanism
 
 (@) In a mixture each insecticide reduces the rate of increase in resistance to the other by killing individuals that are resistant to the other.
 
-(@) In a mixture the effectiveness of one insecticide has major effects on the resistance of the other. In contrast the dominance and selective advantage of one has less effect on the resistance of the other. In this paper we have kept the exposure to each insecticide the same (to represent a mixture in which the 2 insecticides are applied together), ?? however we predict that if they were applied separately then (similar to effectiveness) a higher exposure to one insecticide would increase the time-to-resistance of the other. 
+(@) In a mixture the effectiveness of one insecticide has major effects on the resistance of the other. In contrast the dominance and selective advantage of one insecticide has less effect on the resistance of the other. For exposure we have kept values the same for each insecticide the same (to represent a mixture in which the 2 insecticides are applied together). However we predict that if they were applied separately then (similar to effectiveness) the level of exposure to one insecticide would influence the time-to-resistance of the other. 
 
-(@) For a mixture of 2 insecticides with differing effectiveness. Resistance to the insecticide with a greater effectiveness increases faster. The less effective insecticide is 'protected' by the more effective. Resistance to the less effective insecticide increases slowly until resistance to the more effective insecticide reaches a high level.
+(@) In a mixture higher effectiveness of either insecticide kills more individuals resistant to the other and thus increases time-to-resistance for the other. Thus although increasing effectiveness of an insecticide decreases time-to-resistance when used alone, when used in a mixture time-to-resistance for both insecticides is increased.
+
+(@) For a mixture of 2 insecticides with differing effectiveness. Resistance to the insecticide with a greater effectiveness increases faster. The less effective insecticide is 'protected' by the more effective. Resistance to the less effective insecticide increases slowly until resistance to the more effective insecticide reaches a high level at which point it starts to increase faster.
+
+(@) Increasing exposure gives shorter time-to-resistance for both mixtures and sequences due to increased deaths of susceptibles creating a higher selection pressure. In a mixture the effect of exposure is greater and this means that increasing exposure can make sequences preferable to mixtures. The reason for the greater effect of exposure on mixtures could be that exposure is having both a direct effect on each insecticide and an indirect effect on the other. Thus higher exposures lead to faster resistance in each insecticide (direct), in turn increased resistance to each insecticide reduces the 'protection' that it gives the other, leading to faster resistance in the other (indirect). This could act as a postive feedback loop where faster resistance in one contributes to faster resistance in the other.   
+
+
+
 
 
 
