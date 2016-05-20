@@ -10,7 +10,7 @@ date: "`r Sys.Date()`"
   library(resistance)
 ```
 
-### version 1
+### version 2
  
 # Mechanisms by which insecticide resistance can be influenced by strategies of insectcide use : a simple theoretical exploration. 
   
