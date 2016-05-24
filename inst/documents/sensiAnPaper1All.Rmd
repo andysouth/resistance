@@ -24,23 +24,23 @@ This breaks down into these subsidiary quetsions :
 
   #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same with exception of exposure
   
-  #nScenarios <- 10  
+  nScenarios <- 10  
   #nScenarios <- 100
-  nScenarios <- 500  
+  #nScenarios <- 500  
   #nScenarios <- 10000
   
   #to run 'extended' or not
   experiment <- 'extended' #'curtis'
   
   ## do model runs
-  # listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture', experiment=experiment )
-  # listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment=experiment )
-  # listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment=experiment )
+  listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture', experiment=experiment )
+  listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment=experiment )
+  listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment=experiment )
   
   ## 23/3/16 expt with an 'old' insecticide
-  listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture', experiment=experiment, old_insecticide=TRUE )
-  listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment=experiment, old_insecticide=TRUE )
-  listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment=experiment, old_insecticide=TRUE )  
+  # listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture', experiment=experiment, old_insecticide=TRUE )
+  # listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment=experiment, old_insecticide=TRUE )
+  # listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment=experiment, old_insecticide=TRUE )  
   
   ## save results objects as rda for re-use
   save(listOutMix, file=paste0(outFolder,'listOutMix_unequal.rda'))
