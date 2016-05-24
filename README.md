@@ -40,9 +40,24 @@ Development by Andy South, Beth Levick and Ian Hastings in 2015-6.
     
 ### Main functions to run the model
 
-  #Run model scenarios specified in an input object
+  # Run model scenarios specified in an input object
   runModel2()
   
-  #Recreate figure 2 of Curtis(1985), allows inputs to be tweaked
+  # Recreate figure 2 of Curtis(1985), allows inputs to be tweaked
   runcurtis_f2()
+  
+### Sensitivity analysis for the first paper 
+
+  # inst/documents/sensiAnPaper1All.Rmd
+  # an rmarkdown file that runs all of the sensitivity analysis for paper1
+  # it runs the model itself like in this example :
+  nScenarios <- 3 
+
+  listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture' )
+  listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1' )
+  listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2' )
+  
+  # sensiAnPaperPart() contains hardcoded input ranges
+  # it generates random numbers and repeatedly calls setInputOneScenario()
+  # then it calls runModel2() to run the model using these inputs
   
