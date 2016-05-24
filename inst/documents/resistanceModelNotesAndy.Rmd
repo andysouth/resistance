@@ -3899,31 +3899,29 @@ Read 2009 : Late-life-acting insecticides could control infective mosquitos whil
 
 
 
-**18/5/16**
+**23/5/16** liverpool, meeting Ian & Matt Powney
 
-talking to Ian :
-Can I get to IVCC for 12.30 ?
-Ian said, be good to get there, maybe could go up sunday eve ?
 
-we will need to talk about IP for the resistance modelling.
+
+
 
  
-Train options :
 
-Monday 6.51 - 12.08 via Peterborough & Leeds £98
  
 
-Sunday :  
- 
+
  
 ### TO DO  
 
-~ email Ellie about Tom Churcher job
-~ send Ian
+~ check for R courses for Matt
 
-~ check whether the difference in effectivenesses is a good predictor of  
+~ maybe add entry level descriptions to readme.md to help Matt, e.g. about runModel2
+
+~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ?
 
 
+
+~ we will need to talk about IP for the resistance modelling.
 
 ~ confirm whether Ians statement is true on all sensi runs : does resistance always spread faster when an insecticide is alone to when it is in a mixture ?
 "resistance to an insecticide always spreads faster when that insecticide is deployed alone rather than as part of a mixture, irrespective of the relative frequencies of resistance to the two insecticides.""
