@@ -3899,13 +3899,25 @@ Read 2009 : Late-life-acting insecticides could control infective mosquitos whil
 
 
 
-**23/5/16** liverpool, meeting Ian & Matt Powney
+**23/5/16** liverpool, meeting IVCC Ian & Matt Powney
 
 
+IVCC were very impressed with the results of Ians modelling and my new simple UI presented at the end.
+
+Unprompted Tom Mclean suggested that we could develop a more accessible version of the paper to get out to vector control people. I said that I had started the same 2 weeks ago !
+
+Tom said he liked the sliders on my new UI. They were keen that they might be able to use such a UI to talk through AI formulation options with their suppliers.
 
 
+**24/5/16** 5 hour train back from liverpool
 
- 
+~ looking at plotallele.freq.andy() for plotting responses to single insecticides
+
+probably make a new more flexible version.
+
+I want to be able to plot multiple scenarios but just a single loc & insecticide i think.
+
+
 
  
 
@@ -3913,9 +3925,15 @@ Read 2009 : Late-life-acting insecticides could control infective mosquitos whil
  
 ### TO DO  
 
-~ check for R courses for Matt
+#i should write an access function for getting mf locus 1 & 2 out of the results list
+maybe similar to that in plotallele.freq.andy()
 
-~ maybe add entry level descriptions to readme.md to help Matt, e.g. about runModel2
+~ look at plotallele.freq.andy() for plotting responses to single insecticides
+
+~ check for R courses for Matt
+~ send Matt the game
+~ send Matt some of the useful stuff at the end of this file
+
 
 ~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ?
 
