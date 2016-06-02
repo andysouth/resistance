@@ -3931,14 +3931,48 @@ looking how to get frequency by generation data into a format suitable for ggplo
 good progress on get_resistance()
 
 
+**2/6/16**
+~ stopped runModel2 now showing plots as default
+~ got examples working for get_resistance()
+
+progress on adding single insecticide plots to paper2
+
+Why does putting effectiveness down to 0.3 or even 0.4 give fitness vals > 1
+
+a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+i1 <- setInputOneScenario( max_gen = 500,
+                       h.RS1_A0 = 0.5, 
+                       h.RS2_0B = 0.5,
+                       a = a,
+                       phi.SS1_A0 = 0.3,
+                       phi.SS2_0B = 0.5,
+                       s.RR1_A0 = 0.5,
+                       s.RR2_0B = 0.5 )
+listOut <- runModel2( i1 )
+
+#Warning messages:
+#1: In runModel2(i1) : 1 locus fitness values (Wloci) are >1 : 1.2
+#2: In runModel2(i1) : 7 niche fitness values (Wniche) are >1 
+#3: In runModel2(i1) : 6 individual fitness values (Wloci) are >1
+
+Principally setting selective advantage down to 0.3 seems to solve. Maybe 0.3 should be my default value for all params ?
+
+problem with default of 0.3 for effectiveness is that then get warning for higher selective advantage.
+
+can't quite get the combinations to work.
+
+perhaps have effectiveness range as 0.5, 0.7 & 0.9 (& all others as 0.3, 0.5, 0.7) ?
+& default of 0.5 for all.
+
 
 
  
 ### TO DO  
 
-~ why is runModel2 now showing plots ?
 
-~ get examples working for get_resistance()
+should I plot single insecticide plots on a log scale to ease comparison with double insecticide plots ?
+
 
 
 
