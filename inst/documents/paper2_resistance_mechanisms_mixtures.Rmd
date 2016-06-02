@@ -8,6 +8,7 @@ date: "`r Sys.Date()`"
 
 ```{r,echo=FALSE,results='hide'}
   library(resistance)
+  library(ggplot2)
 ```
 
 ### version 2
@@ -52,12 +53,11 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
 
 ## Results
 
-*Before this add figures for effect of inputs on sole use.*
+* add figures for effect of inputs on sole use.*
 * contrasting pairs, or even 3 values, 0.1,0.5 & 0.9*
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 
-  #create empty object to hold input matrix for return
-  #input <- NULL
+
 
   #??? but how do I set so just one insecticide ?
   #??? have I been doing this right in previous runs for this paper ?
@@ -67,12 +67,12 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
 
   i1 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.2, 
-                      h.RS2_0B = 0.2,
+                      h.RS2_0B = 0.5,
                       a = a,
-                      phi.SS1_A0 = 0.2,
-                      phi.SS2_0B = 0.2,
-                      s.RR1_A0 = 0.2,
-                      s.RR2_0B = 0.2 )
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
 
   i2 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.5, 
@@ -83,15 +83,87 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
                       s.RR1_A0 = 0.5,
                       s.RR2_0B = 0.5 )
 
+  i3 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.8, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+  
   #input <- cbind(input, inputOneScenario)
-  input <- cbind(i1,i2)
+  input <- cbind(i1,i2,i3)
   
   listOut <- runModel2( input )
   
-  plotallele.freq.andy(listOut, locus="1", sex="mf_mean", add_legend=FALSE)
+  #plotallele.freq.andy(listOut, locus="1", sex="mf_mean", add_legend=FALSE)
+  
+  # now doing a better way
+  df_resist <- get_resistance(locus=1, listOut)
 
-  cat("Fig. a1. starting to look at single insecticide effects")
+    
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=h.RS1_A0)) + 
+         #geom_line(aes(colour=h.RS1_A0)) )
+         geom_point() #show.legend=FALSE) +
+         
+       ) # end print
+  
+  cat("Fig. a1. Dominance effect on single insecticide.")
+  
 ```
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+
+
+  a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.2,
+                      phi.SS2_0B = 0.5,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.8,
+                      phi.SS2_0B = 0.5,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+  
+  #input <- cbind(input, inputOneScenario)
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+    
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=h.RS1_A0)) + 
+         #geom_line(aes(colour=h.RS1_A0)) )
+         geom_point() #show.legend=FALSE) +
+         
+       ) # end print
+  
+  cat("Fig. a2. Effectiveness effect on single insecticide.")
+  
+```
+
+
 
 
 With all control inputs set equal at 0.5 resistance arises slower for sequential than mixture (Fig. 1). Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
