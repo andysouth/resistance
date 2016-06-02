@@ -3917,122 +3917,56 @@ probably make a new more flexible version.
 
 I want to be able to plot multiple scenarios but just a single loc & insecticide i think.
 
+added sex & locus selection options to plotallele.freq.andy()
 
 
+**25/5/16**
+tidying these notes
  
+looking how to get frequency by generation data into a format suitable for ggplot to enable colouring, faceting etc.
+
+
+**1/6/16**
+
+good progress on get_resistance()
+
+
 
 
  
 ### TO DO  
 
-#i should write an access function for getting mf locus 1 & 2 out of the results list
-maybe similar to that in plotallele.freq.andy()
+~ why is runModel2 now showing plots ?
 
-~ look at plotallele.freq.andy() for plotting responses to single insecticides
+~ get examples working for get_resistance()
+
+
+
+# best way to allow setting of multiple scenarios varying one param at a time ?
+
+# can I make any smaller components from get_resistance()
+
+~ maybe delete or at least deprecate timeToFifty() & singlealleleFrequency()
+
+
+
 
 ~ check for R courses for Matt
 ~ send Matt the game
 ~ send Matt some of the useful stuff at the end of this file
 
 
-~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ?
+~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ? Ian explained that this was as expected, but I need to confirm my understanding.
 
 
-
-~ we will need to talk about IP for the resistance modelling.
-
-~ confirm whether Ians statement is true on all sensi runs : does resistance always spread faster when an insecticide is alone to when it is in a mixture ?
-"resistance to an insecticide always spreads faster when that insecticide is deployed alone rather than as part of a mixture, irrespective of the relative frequencies of resistance to the two insecticides.""
-
-
-
-
-~ read through Ians comments on new version of paper
-
-
-
-
-~ create a user interface to represent Killeen graphical models
-
-
-~ how to recreate Curtis Table 1, (vi)'the use of a mixture when the initial gene frequencies are unequal leads to a more rapid increase in the frequency of the rarer of the genes'.
-
-
-
-
-
-~ remember this is still for all runs (i.e. not just the ones where start freq of the old is > 10 * the new) 
 
 ~ **check this from above**
 ~ I probably need to get straighter in my head how dominance works.
 Does dominance effect the relative performance of the 2 insecticides where mosquitos are exposed to both. i.e. Does high dominance of the new allele mean that a mosquito is more likely to survive the presence of the old insecticide ?
 
-To understand the mechanisms more I could look at the effects of the inputs on each strategy on its own.
-
-
-
-# quick thought check, sequential is calculated by adding together the times for I1 & I2 in isolation, are we sure that is OK ? e.g. do we expect it to take same time for resistance to 2nd insecticide to reach threshold irrespective of the level of resistance to I1 even when I1 is not present.
-
-
-
-
-1. tidy these notes
-
-
-I've done below for the mix-both plot, repeat it for mix-adaptive.
-Ian suggested adding in the maleProp effect to the x axis to see if that improves the split.
-To get the exposure of both M&F : x=exposure+exposure*maleExposureProp
-
-
-
-
-
-~ would be a good learning tool to have a UI similar to my current curtis fig2 one, but starting with the params equal for each insecticide
-
-Curtis contentious statement p261 :
-"... the use of a mixture where the initial gene frequencies are unequal leads to a more rapid increase in the rarer of the genes."
-Not supported by our results. We need to nail which results to use to show this.
-
-
-
-bumped into colin bannister on the train to london. he said he really ejoyed my talk. he said he would talk to me sometime about keeping the work going in a consultancy, difficult to do. He was on his way to london for a shellfish assessment.
-
-In fig x1 sequential & adaptive mixture look very similar indeed ???
-
-Could I write a very short paper describing the shiny app that allows users to take the curtis figure & modify the code ? Where might it go ? It wouldn't need any of the sensitivity analysis etc. ? It could cite the paper with the snesitivity analysis.
-
-Note that in most functions (e.g. runcurtis_f2) there is a single exposure param for both insecticides. I could relatively easily allow different exposure for each insecticide. It is probably already possible by passing array:a directly.
-
-
-Tables 3 & 4 in the manuscript- can we do these as a figure ?
-These address Curtis statement
-
-Do we want to go with a 50% threshold across all analyses to keep clearer ?
-
-
-
-An influential assertion is that mixtures may be counter-productive (made in the abstract and  repeated on page 261) where Curtis refers to his Example (vi) on his Table 1. Unfortunately, Curtis Figure 1 only shows the spread of resistance using a mixture and does not quantify the extent to which it is inferior to sequential use. However, the calibration used to replicate Curtis Figure 1 allows us to extend the one-generation argument presented in Curtis Table 1(vi) over the numerous generations required to simulate the spread of resistance (see later discussion of our Table 3).
-
-
-reread Curtis to check the below ...
-
-From Ian
-~ I think the Curtis result (the one that said sequential was better) assumed effectiveness of both =1 and that exposure =0.9. I think that fits right at the top RH corner of the figure.
-
-
-~ check with Ian what the best resistance threshold to focus on is. In Curtis Fig2 it is 50%. I have been using the 25% in my figs (but I could change). WHO thresholds are :
 
 Potential for me to look at in a 2nd paper :
 Differential exposure of males & females. (I have shown exposure is important so this could have a big effect).
-
-
-~ I just had a thought. Is the effectiveness effect additive ? i.e. do 2 insecticides of effectiveness 0.7 have the same effect e.g. as one of 1 and the other of 1.4 ? 
-
-~ maybe communicate my concern to Ian that figures I've spent quite a long time on just go into supplementary material where few will see them. Can we think of a way of getting these into a paper themselves ? e.g. if this first paper is targeted at policy people can we get a 2nd paper that is targetted at biologists and explores mechanisms ?
-
-
-
-
 
 
 Long Names (in text where space not an issue)
@@ -4063,13 +3997,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 
 
 ~ check code in findResistancePointsMixResponsive()
-
-
-~ can I get plots to show just a subset of points ?
-
-~ produce a graphich of the 3 diff mixture scenarios & sequential
-~~ may be able to use the seriousGame plot method
-~~ I could even show resistance curves next to it ?
 
 
 # would it be useful for Ian for me to create an interactive shiny app to view the 1000 sim data. E.g. could just have the ggplot code with options to set the x value & colour by different inputs.
