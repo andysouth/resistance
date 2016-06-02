@@ -31,7 +31,7 @@
 
 runModel2 <- function(input,
                      calibration,
-                     produce.plots = TRUE,
+                     produce.plots = FALSE,
                      savePlots=FALSE){
  
   ### Lists to store results ####
