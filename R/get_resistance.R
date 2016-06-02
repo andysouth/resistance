@@ -8,7 +8,10 @@
 #' @param listOut list containing the results matrices generated for each scenario run
 #' @examples 
 #' #mutliple scenarios
-#' listOut <- setInputOneScenario()
+#' i1 <- setInputOneScenario( h.RS1_A0 = 0.5 )
+#' i2 <- setInputOneScenario( h.RS1_A0 = 0.8 )
+#' input <- cbind(i1,i2)
+#' listOut <- runModel2( input )
 #' df_resist <- get_resistance(locus=1, listOut) 
 #' #ggplot(df_resist, aes(x=generation, y=resistance)) + geom_point()
 #' 
