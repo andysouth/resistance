@@ -6,6 +6,7 @@
 
 #' @param locus locus of interest (i.e. 1 or 2)
 #' @param listOut list containing the results matrices generated for each scenario run
+#' @param truncate_at_1 whether to truncate generations once resistance reaches 1
 #' @examples 
 #' #mutliple scenarios
 #' i1 <- setInputOneScenario( h.RS1_A0 = 0.5 )
@@ -19,7 +20,7 @@
 #' @export
 
 
-get_resistance <- function(locus, listOut){
+get_resistance <- function(locus, listOut, truncate_at_1 = TRUE){
   
   
   #this allows a single scenario to be passed
@@ -39,8 +40,6 @@ get_resistance <- function(locus, listOut){
   #for each scenario (model run based on one set of parameters)
   for(scenarioNum in 1:numScenarios)
   {
-
-    dfResist <- data.frame(generation=c(1:numGenerations))
     
     #getting results matrix out of the list
     #this allows a single results matrix to be passed too
@@ -57,10 +56,18 @@ get_resistance <- function(locus, listOut){
       resistances <- rowMeans(cbind(results[,'m.R2'],
                                     results[,'f.R2'] ))
     
+    #truncate resistances once they reach 1 to make auto-plotting easier
+    #had to be careful about float rounding
+    #BEWARE this could hide fluctuating resistances, but that's not expected to happen
+    if (truncate_at_1)
+        resistances <- resistances[ which(resistances < 0.99) ]
+    
+    dfResist <- data.frame(generation=c(1:length(resistances)))
+    
     dfResist$resistance <- resistances
     
     #to add on the inputs 
-    #may want to transpose them because I want each input as a named column repeated for all generations
+    #transposed to get each input as a named column repeated for all generations
     dfIns <- data.frame( t(listOut$input[,scenarioNum]) )
     
     #bind input columns on
