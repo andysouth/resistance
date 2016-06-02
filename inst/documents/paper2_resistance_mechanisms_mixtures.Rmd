@@ -53,24 +53,19 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
 
 ## Results
 
-* add figures for effect of inputs on sole use.*
-* contrasting pairs, or even 3 values, 0.1,0.5 & 0.9*
+For single insecticide use, increasing the values of either effectiveness, exposure, dominance, or selective advantage, all lead to faster resistance (Figs a1-4). (In these four plots the value of the inputs not being varied are set at a constant 0.7 for effectiveness and 0.5 for the other 3).
+
+
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 
-
-
-  #??? but how do I set so just one insecticide ?
-  #??? have I been doing this right in previous runs for this paper ?
-  #??? maybe yes, because setExposure() is called from runcurtis_f2()
-  #this sets exposures according to whether insecticide1,2 or mixture
   a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
 
   i1 <- setInputOneScenario( max_gen = 500,
-                      h.RS1_A0 = 0.2, 
+                      h.RS1_A0 = 0.5, 
                       h.RS2_0B = 0.5,
                       a = a,
                       phi.SS1_A0 = 0.5,
-                      phi.SS2_0B = 0.5,
+                      phi.SS2_0B = 0.7,
                       s.RR1_A0 = 0.5,
                       s.RR2_0B = 0.5 )
 
@@ -78,17 +73,127 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
                       h.RS1_A0 = 0.5, 
                       h.RS2_0B = 0.5,
                       a = a,
-                      phi.SS1_A0 = 0.5,
-                      phi.SS2_0B = 0.5,
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
                       s.RR1_A0 = 0.5,
                       s.RR2_0B = 0.5 )
 
   i3 <- setInputOneScenario( max_gen = 500,
-                      h.RS1_A0 = 0.8, 
+                      h.RS1_A0 = 0.5, 
                       h.RS2_0B = 0.5,
                       a = a,
-                      phi.SS1_A0 = 0.5,
-                      phi.SS2_0B = 0.5,
+                      phi.SS1_A0 = 0.9,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+  
+  #input <- cbind(input, inputOneScenario)
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+    
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=phi.SS1_A0)) + 
+         labs(colour = "effectiveness") +
+         coord_trans(y = "log10") +    
+         geom_point() #show.legend=FALSE) +
+         
+       ) # end print
+  
+  cat("Fig. a1. Effectiveness effect on single insecticide.")
+```
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+
+  exposure <- 0.3
+  a <- setExposure(exposure = exposure, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      exposure = exposure, #used for post-run analysis
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+ 
+  exposure <- 0.5
+  a <- setExposure(exposure = exposure, insecticideUsed='insecticide1')   
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      exposure = exposure, #used for post-run analysis
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+
+  exposure <- 0.7
+  a <- setExposure(exposure = exposure, insecticideUsed='insecticide1')  
+  
+  i3 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      exposure = exposure, #used for post-run analysis
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+  
+  #input <- cbind(input, inputOneScenario)
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+    
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=exposure)) + 
+         labs(colour = "exposure") +
+         coord_trans(y = "log10") +    
+         geom_point() #show.legend=FALSE) +
+         
+       ) # end print
+  
+  cat("Fig. a2. Exposure effect on single insecticide.")
+```
+
+
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+
+  #this sets exposures according to whether insecticide1, 2 or mixture
+  a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.3, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.5,
+                      s.RR2_0B = 0.5 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.7, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
                       s.RR1_A0 = 0.5,
                       s.RR2_0B = 0.5 )
   
@@ -104,14 +209,16 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
 
     
   print( ggplot(df_resist, aes(x=generation, y=resistance, colour=h.RS1_A0)) + 
-         #geom_line(aes(colour=h.RS1_A0)) )
+         labs(colour = "dominance") +
+         coord_trans(y = "log10") + 
          geom_point() #show.legend=FALSE) +
          
        ) # end print
   
-  cat("Fig. a1. Dominance effect on single insecticide.")
+  cat("Fig. a3. Dominance effect on single insecticide.")
   
 ```
+
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
 
@@ -122,17 +229,17 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
                       h.RS1_A0 = 0.5, 
                       h.RS2_0B = 0.5,
                       a = a,
-                      phi.SS1_A0 = 0.2,
-                      phi.SS2_0B = 0.5,
-                      s.RR1_A0 = 0.5,
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.3,
                       s.RR2_0B = 0.5 )
 
   i2 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.5, 
                       h.RS2_0B = 0.5,
                       a = a,
-                      phi.SS1_A0 = 0.5,
-                      phi.SS2_0B = 0.5,
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
                       s.RR1_A0 = 0.5,
                       s.RR2_0B = 0.5 )
 
@@ -140,9 +247,9 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
                       h.RS1_A0 = 0.5, 
                       h.RS2_0B = 0.5,
                       a = a,
-                      phi.SS1_A0 = 0.8,
-                      phi.SS2_0B = 0.5,
-                      s.RR1_A0 = 0.5,
+                      phi.SS1_A0 = 0.7,
+                      phi.SS2_0B = 0.7,
+                      s.RR1_A0 = 0.7,
                       s.RR2_0B = 0.5 )
   
   #input <- cbind(input, inputOneScenario)
@@ -153,17 +260,19 @@ We use a 2-locus population genetic model of insecticide resistance (Hastings et
   df_resist <- get_resistance(locus=1, listOut)
 
     
-  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=h.RS1_A0)) + 
-         #geom_line(aes(colour=h.RS1_A0)) )
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=s.RR1_A0)) + 
+         labs(colour = "selective advantage") +
+         coord_trans(y = "log10") +   
          geom_point() #show.legend=FALSE) +
          
        ) # end print
   
-  cat("Fig. a2. Effectiveness effect on single insecticide.")
+  cat("Fig. a4. Selective advantage effect on single insecticide.")
   
 ```
 
 
+When two insecticides are used the relative performance of a mixture strategy compared to sequential use is determined by the values of these four inputs.
 
 
 With all control inputs set equal at 0.5 resistance arises slower for sequential than mixture (Fig. 1). Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
