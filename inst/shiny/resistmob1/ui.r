@@ -5,8 +5,8 @@
 library(shiny)
 
 
-#shinyUI(fluidPage(
-shinyUI(fixedPage(
+shinyUI(fluidPage(
+#shinyUI(fixedPage(
  
   #can add CSS controls in here
   #http://shiny.rstudio.com/articles/css.html
@@ -26,16 +26,17 @@ shinyUI(fixedPage(
      
   title = "resistance to insecticide mixtures",
   
-  h6("Development of resistance to insecticides used in mixtures and sequence, plots take a few seconds. Modify inputs and compare 2 scenarios. by @southmapr"),  
+  h6("Development of resistance to insecticides used in mixtures and sequence. Modify inputs and compare 2 scenarios. by @southmapr"),  
   
-  fixedRow(
+  #fixedRow(
+  fluidRow(
     #column(1),    
     column(6, plotOutput('plotA')),
     column(6, plotOutput('plotB'))
     #column(1)    
   ), #end fixed row
   
-  fixedRow(
+  fluidRow(
     #column(4, h5("takes a few secounds :")),
     column(2, p()),
     column(2, actionButton('aButtonRunA', 'Run Scenario A')),
@@ -45,15 +46,10 @@ shinyUI(fixedPage(
     column(2, p())
   ), #end fixed row
   
-  # fixedRow(
-  # column(5, p()),  
-  # column(4, h6("(takes a few secounds)")),
-  # column(3, p())
-  # ), #end fixed row  
   
   hr(),
   
-  fixedRow(
+  fluidRow(
     column(2,
            h5("scenario & insecticide "),
            h2("A1"),
