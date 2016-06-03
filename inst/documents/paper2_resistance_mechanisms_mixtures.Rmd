@@ -11,7 +11,7 @@ date: "`r Sys.Date()`"
   library(ggplot2)
 ```
 
-### version 2
+### version 3
  
 # Mechanisms by which insecticide resistance can be influenced by strategies of insectcide use : a simple theoretical exploration. 
   
