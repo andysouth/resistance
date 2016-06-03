@@ -8,7 +8,21 @@ library(shiny)
 #shinyUI(fluidPage(
 shinyUI(fixedPage(
  
- 
+  #can add CSS controls in here
+  #http://shiny.rstudio.com/articles/css.html
+  #this seems to make no difference yet
+  tags$head(
+    tags$style(HTML("
+                    img {
+                    border: 1;
+                    max-width: 100%;
+                    }
+                    element.style {
+                    width: 33.33%;
+                    }
+                    
+                    "))
+    ),  
      
   title = "resistance to insecticide mixtures",
   
