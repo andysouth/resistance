@@ -3965,13 +3965,60 @@ can't quite get the combinations to work.
 perhaps have effectiveness range as 0.5, 0.7 & 0.9 (& all others as 0.3, 0.5, 0.7) ?
 & default of 0.5 for all.
 
+single insecticide plots plotted on a log scale to ease comparison with double insecticide plots.
+
+** 3/6/16 **
+
+can I make my resistance app fit on mobile ?
+currently columns get put underneath each other for both plots & sliders.
+
+https://andysouth.shinyapps.io/MixSeqResist1
+
+http://stackoverflow.com/questions/29179088/flexible-width-and-height-of-pre-rendered-image-using-shiny-and-renderimage
+
+Figured it out myself. As far as I know, there is no way to handle this in R. Instead, use your style sheet (e.g., bootstrap.css) by adding something like this:
+
+   img {
+      border: 1;
+      max-width: 100%;
+    }
+    element.style {
+      width: 33.33%;
+    }
+
+http://shiny.rstudio.com/articles/layout-guide.html
+
+Responsive Layout
+The Bootstrap grid system supports responsive CSS, which enables your application to automatically adapt its layout for viewing on different sized devices. Responsive layout includes the following:
+
+Modifying the width of columns in the grid
+Stack elements instead of float wherever necessary
+Resize headings and text to be more appropriate for devices
+Responsive layout is enabled by default for all Shiny page types. To disable responsive layout you should pass responsive = FALSE to the fluidPage() or fixedPage() function.
+
+Supported Devices
+
+When responsive layout is enabled here is how the Bootstrap grid system adapts to various devices:
+
+ 	                Layout width	  Column width	Gutter width
+Large display	    1200px and up	  70px	        30px
+Default	          980px and up	  60px	        20px
+Portrait tablets  768px and above	42px	        20px
+Phones to tablets	767px and below	Fluid (no fixed widths)	
+Phones	          480px and below	Fluid (no fixed widths)
+
+Note that on smaller screen sizes fluid columns widths are used automatically even if the page uses fixed grid layout.
+
+This suggests that maybe I should write a phone app as fluidPage to help me see on PC what it will look like on phone ? 
+
+
 
 
  
 ### TO DO  
 
 
-should I plot single insecticide plots on a log scale to ease comparison with double insecticide plots ?
+
 
 
 
