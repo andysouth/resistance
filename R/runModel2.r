@@ -236,30 +236,37 @@ runModel2 <- function(input,
     #########################
     ## Single locus fitnesses
     
-    #refactored and structure had to be changed slightly
-    for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
-    {
-      #exposure 0 'no'
-      Wloci[ paste0('RS',locusNum), 'no'] <- 1 - (h[locusNum, 'no'] * z[locusNum])
-      Wloci[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
-      
-      for( exposID in c('lo','hi') )
-      {
-        Wloci[ paste0('SS',locusNum), exposID] <-  1 - phi[locusNum, exposID] 
-        
-        Wloci[ paste0('RS',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
-                                                   (h[locusNum, exposID] * s[locusNum, exposID])
-        
-        Wloci[ paste0('RR',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
-                                                   (s[locusNum, exposID])
-      }
-    }
+    Wloci <- fitnessSingleLocus(Wloci=Wloci,
+                                h = h,
+                                s = s,
+                                phi = phi,
+                                z = z)
     
-    #error check for fitnesses > 1 or < 0
-    if ( any( Wloci > 1  ) ) 
-      warning( sum(Wloci > 1 ), " locus fitness values (Wloci) are >1 : ", Wloci[Wloci>1])
-    if ( any( Wloci < 0 ) ) 
-      warning( sum( Wloci < 0 ), " locus fitness values (Wloci) are <0")   
+    #todo delete commented code once happy function working
+    # #13/6/16 code moved into above function
+    # for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
+    # {
+    #   #exposure 0 'no'
+    #   Wloci[ paste0('RS',locusNum), 'no'] <- 1 - (h[locusNum, 'no'] * z[locusNum])
+    #   Wloci[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
+    #   
+    #   for( exposID in c('lo','hi') )
+    #   {
+    #     Wloci[ paste0('SS',locusNum), exposID] <-  1 - phi[locusNum, exposID] 
+    #     
+    #     Wloci[ paste0('RS',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
+    #                                                (h[locusNum, exposID] * s[locusNum, exposID])
+    #     
+    #     Wloci[ paste0('RR',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
+    #                                                (s[locusNum, exposID])
+    #   }
+    # }
+    # 
+    # #error check for fitnesses > 1 or < 0
+    # if ( any( Wloci > 1  ) ) 
+    #   warning( sum(Wloci > 1 ), " locus fitness values (Wloci) are >1 : ", Wloci[Wloci>1])
+    # if ( any( Wloci < 0 ) ) 
+    #   warning( sum( Wloci < 0 ), " locus fitness values (Wloci) are <0")   
     
     ##################################################
     ### calculate two locus niche fitness in two insecticide Niche
