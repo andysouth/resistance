@@ -243,15 +243,15 @@ runModel2 <- function(input,
       Wloci[ paste0('RS',locusNum), 'no'] <- 1 - (h[locusNum, 'no'] * z[locusNum])
       Wloci[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
       
-      for( exposure in c('lo','hi') )
+      for( exposID in c('lo','hi') )
       {
-        Wloci[ paste0('SS',locusNum), exposure] <-  1 - phi[locusNum, exposure] 
+        Wloci[ paste0('SS',locusNum), exposID] <-  1 - phi[locusNum, exposID] 
         
-        Wloci[ paste0('RS',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
-                                                   (h[locusNum, exposure] * s[locusNum, exposure])
+        Wloci[ paste0('RS',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
+                                                   (h[locusNum, exposID] * s[locusNum, exposID])
         
-        Wloci[ paste0('RR',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
-                                                   (s[locusNum, exposure])
+        Wloci[ paste0('RR',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
+                                                   (s[locusNum, exposID])
       }
     }
     
