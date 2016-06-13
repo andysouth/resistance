@@ -4011,17 +4011,333 @@ Note that on smaller screen sizes fluid columns widths are used automatically ev
 
 This suggests that maybe I should write a phone app as fluidPage to help me see on PC what it will look like on phone ? 
 
+Now I have changed to fluid. What happen is that when columns are forced to be less than a minimum size they stack rather than going side by side. Can I modify this minimum size ?
+
+http://www.w3schools.com/css/css_rwd_mediaqueries.asp
+Column widths are switching to 100% when screen size gets below a certain level. I want to stop that!
+Perhaps I just want to stop it being responsive ? But that option has been deprecated, doh!
+
+This code stops columns being resized to 100%, but the thinner columns are still getting stacked ??
+
+  #can add CSS controls in here
+  #http://shiny.rstudio.com/articles/css.html
+  #http://www.w3schools.com/css/css_rwd_mediaqueries.asp
+  tags$head(
+    tags$style(HTML("
+                    .col-sm-1 {width: 8.33%;}
+                    .col-sm-2 {width: 16.66%;}
+                    .col-sm-3 {width: 25%;}
+                    .col-sm-4 {width: 33.33%;}
+                    .col-sm-5 {width: 41.66%;}
+                    .col-sm-6 {width: 50%;}
+                    .col-sm-7 {width: 58.33%;}
+                    .col-sm-8 {width: 66.66%;}
+                    .col-sm-9 {width: 75%;}
+                    .col-sm-10 {width: 83.33%;}
+                    .col-sm-11 {width: 91.66%;}
+                    .col-sm-12 {width: 100%;}
+                    
+                    "))
+    ),
+
+I think I want to stop the container-fluid from stacking
+
+float: left; for side-by-side
+float: none; That makes your columns to render one below the other. 
+
+aha! just adding float: left; like this seems to fix it
+
+                    .col-sm-1 {width: 8.33%; float: left;}
+                    .col-sm-2 {width: 16.66%; float: left;}
+                    .col-sm-3 {width: 25%; float: left;}
+                    .col-sm-4 {width: 33.33%; float: left;}
+                    .col-sm-5 {width: 41.66%; float: left;}
+                    .col-sm-6 {width: 50%;  float: left;}
+                    .col-sm-7 {width: 58.33%; float: left;}
+                    .col-sm-8 {width: 66.66%; float: left;}
+                    .col-sm-9 {width: 75%; float: left;}
+                    .col-sm-10 {width: 83.33%; float: left;}
+                    .col-sm-11 {width: 91.66%; float: left;}
+                    .col-sm-12 {width: 100%; float: left;}
+
+bits taken out that didn't seem to do anything
+
+                    box-sizing: border-box;
+                    
+                    .row::after {
+                    content: '';
+                      clear: both;
+                      display: block;
+                    }
+
+** 7/6/16 **
+IVCC & Avecnet meetings in Manchester
+
+Showed my phone model to :
+Justin McBeath, Bayer
+Mark Hoppe, Syngenta
+Ellie Sherrard-Smith, Imperial
+see notes in the yellow notebook
 
 
 
+** 10/6/16 **
+~ work out why warnings about fitness being too high or low are generated.
+
+under what inputs does it happen :
+
+a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+i1 <- setInputOneScenario( max_gen = 500,
+                       h.RS1_A0 = 0.5, 
+                       h.RS2_0B = 0.5,
+                       a = a,
+                       phi.SS1_A0 = 0.3,
+                       phi.SS2_0B = 0.5,
+                       s.RR1_A0 = 0.5,
+                       s.RR2_0B = 0.5 )
+                       
+listOut <- runModel2( i1 )
+
+Warning messages:
+1: In runModel2(i1) : 1 locus fitness values (Wloci) are >1 : 1.2
+2: In runModel2(i1) : 7 niche fitness values (Wniche) are >1 
+3: In runModel2(i1) : 6 individual fitness values (Wloci) are >1
+
+This is one effectiveness set to 0.3, all other inputs at 0.5.
+
+effectiveness     locus fitness val (Wloci)
+0.3               1.2
+0.4               1.1
+
+occurs around line 240 in runModel2()
+
+The problem is for RR for the insecticide with lower effectiveness :
+
+Wloci
+     exposure
+loci  no lo   hi
+  SS1  1  1 0.60
+  RS1  1  1 0.85
+  RR1  1  1 1.10
+  SS2  1  1 0.50
+  RS2  1  1 0.75
+  RR2  1  1 1.00
+
+problem is specifically with this bit of code :
+
+      for( exposure in c('lo','hi') )
+      {
+        ...
+        
+        Wloci[ paste0('RR',locusNum), exposure] <- (1 - phi[locusNum, exposure]) + 
+                                                   (s[locusNum, exposure])
+      }
+
+fitness of RR = (1-effectiveness) + selection coefficient
+      
+fitness = (1-0.4) + 0.5 = 1.1
+
+therefore generates warning about being > 1
+
+Is this an issue with something that used to be normalised to 1 ?
+Where was in Beths code : runModel() ?
+
+    # high levels of insecticide A
+    W.SS1_A0 <- 1 - phi.SS1_A0
+    W.RS1_A0 <- W.SS1_A0 + (h.RS1_A0 * s.RR1_A0)
+    W.RR1_A0 <- W.SS1_A0 + s.RR1_A0
+
+This is RR in Table2 of the manuscript.
+
+
+at line 206, doesn't seem that there was normalisation afterwards, maybe we should have ?
+
+What do i think should happen ? 
+
+From the paper :
+The second step is to define the fitness of the different genotypes (Table 2) ; these  are all scaled relative to the fully sensitive (wildtype number of offspring left by the genotype and may be reduced by decreased viability) mosquito unexposed to insecticide (as in a previous single-locus model of resistance evolution [11]) whose fitness is denoted 1.
+ 
+Hi Ian,
+
+Trust you had a good time in Oxford.
+
+The IVCC & AvecNet meetings were really good, I think both Matt & I got a lot out of them. Mixtures came up a lot.
+
+Quick think I've noticed, that I thought I better write down before I forget.
+
+If we do a model run with effectiveness set to 0.4 & selection coefficient set to 0.5, the model generates warnings about fitnesses being greater than 1. This is because the initial locus fitness of RR ends up > 1.
+
+locus fitness of RR = (1-effectiveness) + selection coefficient
+      
+fitness = (1-0.4) + 0.5 = 1.1
+
+This seems to be as specified in the RR row of Table 2 in the manuscript.
+ 
+What should we do about this ?
+a) normalise to stop this happening
+b) stop the user running for such param combinations 
+c) modify the locus fitness calculation
+
+No rush, we can look at next week.
+
+Have a good weekend,
+Andy
+ 
+Reply from Ian :
+Hi Andy
+ 
+Please don’t scare me like this!!
+ 
+I assume the problem came up in your stand-alone models where users can input their own values.
+ 
+If it came up in the sensitivity analysis for the paper we are in deep sh**. If you look at table 4 and at the text on page 12, you will see that we calculate a value phi that would generate a RR fitness of 1.0 and our sensitivity analysis is then 0.2->1 times phi; this is to prevent any RR fitness going above 1. Please, please tell me this was  implemented in the sensitivity analysis!
+ 
+Assuming the problem only arises in user-defined runs I would print them out a warning explaining that fitness of RR will exceed 1, and maybe provide them with the maximum value it can take i.e. calculate phi for them
+ 
+Incidentally I have altered the description of the sensitivity analysis on page 12 and tracked changes so you can see. We described the sensitivity analysis in terms of varying fitness of SS (0 to 0.4) but the Tables described it in terms of varying insecticide effectiveness (0.6 to 1); they are the same thing but I tried to make things consistent.
+ 
+Glad you enjoyed the IVCC and Avecnet  meetings.
+ 
+All the best,
+Ian
+
+
+** 13/6/16 **
+
+Main bit to check from Ians message :
+ 
+If you look at table 4 and at the text on page 12, you will see that we calculate a value phi that would generate a RR fitness of 1.0 and our sensitivity analysis is then 0.2->1 times phi; this is to prevent any RR fitness going above 1. Please, please tell me this was  implemented in the sensitivity analysis! 
+
+The text on p12 says :
+•	v) Selective advantage of the RR genotypes (the six “s” coefficients in Table 2). The SS genotype in the absence of insecticide is assumed to have the maximum possible fitness in the population and is assigned the reference fitness value of 1 (see Table 2). High values of selective advantage could enable the fitness of RR genotypes to exceed 1, so this prevented by setting the maximum value of [selective advantage] to be 1-effectiveness and Table 2 shows that [... some greek].
+
+I find it tricky that we have 3 variable naming schemes, greek, english greek & my easier english. The greek doesn't copy & paste into here.
+
+What actually happens in the code :
+
+    #andy 5/2/16 reducing to avoid fitness error
+    phi.SS1_A0 <- runif(1, min=0.45, max=1)
+    phi.SS2_0B <- runif(1, min=0.45, max=1)
+      
+    
+    ## dominance of resistance
+    h.RS1_A0 <- runif(1, min=0, max=1)
+    h.RS2_0B <- runif(1, min=0, max=1)    
+    #to try to get very different (& some very low, values of dominance)
+    #h.RS1_A0 <- 10^-(runif(1, min=0, max=5))
+    #h.RS2_0B <- 10^-(runif(1, min=0, max=5))     
+    
+    ## selective advantage of resistance
+    #s.RR1_A0 <- runif(1, min=0.2, max=1)
+   # s.RR2_0B <- runif(1, min=0.2, max=1)     
+    # Ian suggested this should be dependent on phi to ensure fitness of RR stays below 1 
+    # 5/2/16 i'm concerned this adds in a correlation between inputs that might fudge our ability to see what's going on
+    # try going back to above
+    #s.RR1_A0 <- runif(1, min=0.2, max=1) * phi.SS1_A0
+    #s.RR2_0B <- runif(1, min=0.2, max=1) * phi.SS2_0B
+    s.RR1_A0 <- runif(1, min=0.1, max=0.45)
+    s.RR2_0B <- runif(1, min=0.1, max=0.45)     
+
+
+So the description in the manuscript is not correct.
+From 5/2/16 it was changed to :
+
+Effectiveness 0.45-1
+Selection coefficient 0.1-0.45
+
+(to avoid relationship between them which was confounding the sensitivity analysis)
+
+I had sent Ian an email about that on 8/2/16
+
+I sent an email to Ian to this effect, he was confused.
+
+In the MS where it says :
+High values of selective advantage could enable the fitness of RR genotypes to exceed 1, so this prevented by setting the maximum value of [selective advantage] to be 1-effectiveness and Table 2 shows that [... some greek].
+
+In the sensitivity analysis the maximum value for selection coefficient was set to be less than the minimum value. 
+
+Skype with Ian.
+He is concerned that we don't cover the full range of potential selection coefficients.
+We do 0.1-0.45 whereas it could go up to 1.
+He will work on describing it in the paper and then we can decide whether we need to rerun the sensitivity analysis.
+
+Suugestion that we may want to do a 'restoration coefficient' which is the value by which we multiply effectiveness.
+
+~ we set fitness cost of resistance to 0 in sensi analysis
+Ian said that was OK and we can't look at everything, a referee may ask us to look at.
+# fitness cost of resistance allele in no insecticide : z 
+I don't think we explicitly say this in the MS, I mentioned to Ian.    
+Described on p7 of MS
+Fitness costs of resistance may arise in mosquitoes which do not make contact with the insecticide.  This reflects the possibility that the metabolic changes that enable IR may have deleterious effects on their normal metabolic function (e.g. [18, 19]). We therefore allow the option of fitness costs i.e. by setting z>0 in column “-“ of Table 1 and these costs may exhibit different levels of dominance quantified by the associated  ‘h’ parameter;  fitness costs can be easily ignored (i.e. z=0) if they  are believed, or assumed, to be absent.  
+& p20
+The approach here has been to construct a flexible model that will remove the need for each new researcher to re-derive and re-programme the model. The flexibility lies in how the niche exposures are defined and how previous analyses may be run as sub-sets of the whole model with different calibrations e.g. previous analyses which may have assumed fitness costs to be negligible, assumed complete dominance, and so on.
+
+
+•	v) A RR_restoration_coefficient  (RRrc) that is varied between 0.2 and 1 and used to generate the sSelective advantage of the RR genotypes (the six “s”   coefficients in Table 2). This approach to generating the selection coefficients is needed because the SS genotype in the absence of insecticide is assumed to have the maximum possible fitness in the population whichand is assigned the reference fitness value of 1 (see Table 2). High values of  selection coefficients   could enable the fitness of RR genotypes to exceed 1, so this is prevented by noting that setting the maximum value of  selection coefficient  that can occur and the RR fitness still be ≤1 is to be   and Table 2 shows that   so the selection coefficients of the RR genotypes are sampled as RRrc* ϕ. This makes intuitive sense. The insecticide effectiveness, ϕ, defines the proportion of SS genotypes killed by the insecticide while the RRrc measures the ability of the RR genotype to overcome this killing and restore insect viability.  We use the RRrc values in the sensitivity analysis rather than selection coefficient as the latter is correlated with insecticide effectiveness . 
+ 
+Ians suggestion of using an RR_restoration_coefficient instead of a selction coefficient.
+Effectively it will be generated randomly (0.2-1) and then multiplied by the effectiveness to get the selection coefficient.
+ 
  
 ### TO DO  
 
+Check once more then,
+Reply to Ian, say it looks do-able, and should just take a few days.
+1. what range do we want for effectiveness ? stick to 0.45-1, or we could go lower e.g. 0.3-1.
+2. more thought son what we can call the new input to fit on figs. e.g. resist_coeff_I1 ?  
+
+Is there potential to rationalise the analysis before re-running ?
+
+RR_restoration_coefficient or resistance_coeff_I1 & resistance_coeff_I2
+What I will need to do : search 14/6/16 to see changes
+#sensiAnPaperPart.r
+done ~ add generation of new inputs & multiplication to give s
+started ~ save new inputs to input file to enable post-run analysis
+#setInputOneScenario.r
+done ~ add new inputs as args
+done ~ add doc for new args
+#runModel2.r
+i think doesn't need to be altered, it will just use the longer input object & output that for post-run analysis
+#? which script to use as a starting point for post run analysis ?
+#paper1_results_figs_slimmed50.Rmd
+or
+#paper1_results_figs.Rmd
+~ change loading of model outputs
+~ replace 's*' with resistance_coeff_I1 in this line
+treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','resistance_coeff_I1','resistance_coeff_I2')
+~ comment out these lines
+  rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
+  rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
+~ modify curtisInputs to include r rather than s  
+  
+
+Beware that although I may pass resistance_coeff_I1 to runModel2() it will not be used, it will just go in the inputs to enable post run analysis. s.RR1_A0 will be used by the model. I could perhaps put in a check that s=newR * effectiveness.
+
+
+Qs for Ian before new analysis
+1. what range do we want for effectiveness ? stick to 0.45-1, or we could go lower e.g. 0.3-1
+2. eventually would we need diff values for high & low exposure
+
+
+Ian is concerned that we don't cover the full range of potential selection coefficients.
+We do 0.1-0.45 whereas it could go up to 1.
+He will work on describing it in the paper and then we can decide whether we need to rerun the sensitivity analysis.
+
+~ perhaps put Single locus fitness code in runModel2 into its own function - would make testing easier.
+~~ but not starightforward because it needs arrays of h, phi, s & z
+~~ I could allow it to work without these arrays if they are not passed
+~~ thus allowing it to be called both from within the prog and outside
 
 
 
+~ add in pre-run warning if selection coeff > effectiveness
 
 
+~ write up why having correctDeploy of 0 equates to mosaics ? Effectively it means that hlf of expsoure is set to one insecticide and half to the other.
+
+~ future : would be cool to have a graphical description of the core model, e.g. effectiveness, exposure, selective advantage, fitness ...
 
 # best way to allow setting of multiple scenarios varying one param at a time ?
 
@@ -4091,12 +4407,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
 
-
-### current state of play 23/3/16
-1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
-1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
-1. runModel2.r          : runs model for the passed scenarios
-1. paper1_results_figs_slimmed50.Rmd : final figures for paper
 
 
 Files :
@@ -4187,17 +4497,16 @@ https://andysouth.shinyapps.io/shinyFig2Curtis
 https://andysouth.shinyapps.io/MixSeqResist1
 
 # time
-To the end of Feb :
-Hours		105:45:00
-Hours rounded		105.00
-Days (/7.5)		14.00
-Days remaining (from 85)		71.00 
+claimed June 10th :
+april, may :
+hours			90:15:00
+Hours rounded			90.00
+Days (/7.5)			12.00
+Prev days remaining			59.75
+Days remaining (from 85)			47.75
 
-march, april :
-Hours 124.5
-Days (/7.5)		16.6
-Days previous 71
-Days remaining (from 85)		71-16.6 = 54.4
-
-
-
+# files to do runs
+1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
+1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
+1. runModel2.r          : runs model for the passed scenarios
+1. paper1_results_figs_slimmed50.Rmd : final figures for paper
