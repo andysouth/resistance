@@ -8,7 +8,7 @@
 # Figures for paper 1 after change to using rr_advantage instead of selection coeff from sensi analysis
 # version 1 - in progress
 
-```{r}
+```{r,echo=FALSE,results='hide'}
   #library(devtools)
   #install_github('AndySouth/resistance')
   library(resistance)
@@ -17,7 +17,7 @@
 ```
 
 <!-- eval=FALSE to stop slow code being executed --> 
-```{r, eval=FALSE}
+```{r, eval=FALSE,echo=FALSE,results='hide'}
 
   #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same
   #the exception is the exposure array a. The single exposure input will be the same, but the array changes
