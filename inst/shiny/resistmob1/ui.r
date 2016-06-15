@@ -1,6 +1,7 @@
 #resistance/shiny/resistmob1/ui.r
 #andy south 3/6/16
-#trying to make a mobile compatible app
+#a mobile compatible app
+#uses OLD system where selection coefficient rather than rr_advantage used as input
 
 library(shiny)
 
