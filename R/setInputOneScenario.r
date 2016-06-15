@@ -226,11 +226,12 @@ setInputOneScenario <- function( calibration = 100,
   # it should already have been used to set s in sensiAnPaperPart
   # s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
   # s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B
+  # this allows old runs with just s set, but gives warning
   if ( !isTRUE( all.equal(s.RR1_A0, rr_advantage_I1 * phi.SS1_A0))){
-    stop("s.RR1_A0 should equal rr_advantage_I1 * phi.SS1_A0 currently: ", s.RR1_A0, " != ", rr_advantage_I1 * phi.SS1_A0 )
+    warning("not using rr_advantage_I1 : s.RR1_A0 should equal rr_advantage_I1 * phi.SS1_A0 currently: ", s.RR1_A0, " != ", rr_advantage_I1 * phi.SS1_A0 )
   }  
   if ( !isTRUE( all.equal(s.RR2_0B, rr_advantage_I2 * phi.SS2_0B))){
-    stop("s.RR2_0B should equal rr_advantage_I2 * phi.SS2_0B currently: ", s.RR2_0B, " != ", rr_advantage_I2 * phi.SS2_0B )
+    warning("not using rr_advantage_I2 : s.RR2_0B should equal rr_advantage_I2 * phi.SS2_0B currently: ", s.RR2_0B, " != ", rr_advantage_I2 * phi.SS2_0B )
   } 
   input[	57	] <-	rr_advantage_I1  
   input[	58	] <-	rr_advantage_I2  
