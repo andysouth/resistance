@@ -63,8 +63,8 @@
 #' @param maleExposureProp male exposure as a propoertion of female, default 1 for same, likely <1  
 #' @param correctMixDeployProp proportion of correct deployment of mixtures, 
 #'    if <1 other portion divided between single insecticides
-#' @param rr_advantage_I1 effect of resistance in overcoming insecticide 1 effectiveness
-#' @param rr_advantage_I2 effect of resistance in overcoming insecticide 2 effectiveness    
+#' @param rr_advantage_I1 effect of resistance in overcoming insecticide 1 effectiveness in RR
+#' @param rr_advantage_I2 effect of resistance in overcoming insecticide 2 effectiveness in RR    
 #' 
 #' @return named vector
 #' @export
@@ -109,9 +109,9 @@ setInputOneScenario <- function( calibration = 100,
                                  h.RS2_0b	=	0	,
                                  h.RS2_0B	=	1	,
                                  s.RR1_a0	=	0	,
-                                 s.RR1_A0	=	1	,
+                                 s.RR1_A0	=	NULL	, #14/6/16 so rr_advantage is used as default
                                  s.RR2_0b	=	0	,
-                                 s.RR2_0B	=	1	,
+                                 s.RR2_0B	=	NULL	, #14/6/16 so rr_advantage is used as default
                                  z.RR1_00	=	0	,
                                  z.RR2_00	=	0	,
                                  niche_00	=	1	,
@@ -197,6 +197,13 @@ setInputOneScenario <- function( calibration = 100,
   input[	35	] <-	h.RS2_00
   input[	36	] <-	h.RS2_0b
   input[	37	] <-	h.RS2_0B
+  
+  #14/6/16 using rr_advantage if s.RR1_A0 or s.RR2_0B have not been set (the new way)
+  #allows model to be run in old way
+  #BEWARE in future will have to do similar for s.RR1_a0 & s.RR2_0b
+  if (is.null(s.RR1_A0))  s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
+  if (is.null(s.RR2_0B))  s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B 
+  
   input[	38	] <-	s.RR1_a0
   input[	39	] <-	s.RR1_A0
   input[	40	] <-	s.RR2_0b
@@ -227,6 +234,7 @@ setInputOneScenario <- function( calibration = 100,
   # s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
   # s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B
   # this allows old runs with just s set, but gives warning
+  # todo this warning can be removed
   if ( !isTRUE( all.equal(s.RR1_A0, rr_advantage_I1 * phi.SS1_A0))){
     warning("not using rr_advantage_I1 : s.RR1_A0 should equal rr_advantage_I1 * phi.SS1_A0 currently: ", s.RR1_A0, " != ", rr_advantage_I1 * phi.SS1_A0 )
   }  

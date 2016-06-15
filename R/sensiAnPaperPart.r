@@ -112,8 +112,9 @@ sensiAnPaperPart <- function( nScenarios = 10,
     # effectiveness and advantage inputs
     rr_advantage_I1 <- runif(1, min=0.2, max=1)
     rr_advantage_I2 <- runif(1, min=0.2, max=1)
-    s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
-    s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B
+    # now have moved s calculation into setInputOneScenario()
+    # s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
+    # s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B
     
     ## put the generated values into an input matrix, using defaults for non specified parameters
     inputOneScenario <- setInputOneScenario( max_gen = max_gen,
@@ -130,8 +131,9 @@ sensiAnPaperPart <- function( nScenarios = 10,
                         h.RS1_A0 = h.RS1_A0,
                         h.RS2_0B = h.RS2_0B,
                         
-                        s.RR1_A0 = s.RR1_A0,
-                        s.RR2_0B = s.RR2_0B,
+                        # 14/6/16 now these calc from rr_ inside the func
+                        # s.RR1_A0 = s.RR1_A0,
+                        # s.RR2_0B = s.RR2_0B,
                         maleExposureProp = maleExposureProp,
                         correctMixDeployProp = correctMixDeployProp,
                         # 14/6/16
