@@ -128,8 +128,8 @@ setInputOneScenario <- function( calibration = 100,
                                  correctMixDeployProp = 1,
                                  exposure = 0.9,
                                  #14/6/16
-                                 rr_advantage_I1 = 0.5,
-                                 rr_advantage_I2 = 0.5
+                                 rr_advantage_I1 = 1,
+                                 rr_advantage_I2 = 1
                                  )
 {
   
@@ -222,7 +222,16 @@ setInputOneScenario <- function( calibration = 100,
   #1/2/16 allowing saving of single exposure param just for use in post-run analyses
   input[	56	] <-	exposure  
   
-  #14/6/16
+  # 14/6/16 new rr_advantage, saved here just for use in post-run analysis
+  # it should already have been used to set s in sensiAnPaperPart
+  # s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
+  # s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B
+  if ( !isTRUE( all.equal(s.RR1_A0, rr_advantage_I1 * phi.SS1_A0))){
+    stop("s.RR1_A0 should equal rr_advantage_I1 * phi.SS1_A0 currently: ", s.RR1_A0, " != ", rr_advantage_I1 * phi.SS1_A0 )
+  }  
+  if ( !isTRUE( all.equal(s.RR2_0B, rr_advantage_I2 * phi.SS2_0B))){
+    stop("s.RR2_0B should equal rr_advantage_I2 * phi.SS2_0B currently: ", s.RR2_0B, " != ", rr_advantage_I2 * phi.SS2_0B )
+  } 
   input[	57	] <-	rr_advantage_I1  
   input[	58	] <-	rr_advantage_I2  
     
