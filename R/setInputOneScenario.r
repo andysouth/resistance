@@ -63,8 +63,8 @@
 #' @param maleExposureProp male exposure as a propoertion of female, default 1 for same, likely <1  
 #' @param correctMixDeployProp proportion of correct deployment of mixtures, 
 #'    if <1 other portion divided between single insecticides
-#' @param resistance_coeff_I1 effect of resistance in overcoming insecticide 1 effectiveness
-#' @param resistance_coeff_I2 effect of resistance in overcoming insecticide 2 effectiveness    
+#' @param rr_advantage_I1 effect of resistance in overcoming insecticide 1 effectiveness
+#' @param rr_advantage_I2 effect of resistance in overcoming insecticide 2 effectiveness    
 #' 
 #' @return named vector
 #' @export
@@ -128,8 +128,8 @@ setInputOneScenario <- function( calibration = 100,
                                  correctMixDeployProp = 1,
                                  exposure = 0.9,
                                  #14/6/16
-                                 resistance_coeff_I1 = 0.5,
-                                 resistance_coeff_I2 = 0.5
+                                 rr_advantage_I1 = 0.5,
+                                 rr_advantage_I2 = 0.5
                                  )
 {
   
@@ -223,8 +223,8 @@ setInputOneScenario <- function( calibration = 100,
   input[	56	] <-	exposure  
   
   #14/6/16
-  input[	57	] <-	resistance_coeff_I1  
-  input[	58	] <-	resistance_coeff_I2  
+  input[	57	] <-	rr_advantage_I1  
+  input[	58	] <-	rr_advantage_I2  
     
   a.m <- sum(a.m_00, a.m_a0, a.m_A0, a.m_0b, a.m_0B, a.m_ab, a.m_AB, a.m_Ab, a.m_aB)
   #if ( a.m != 1 ){

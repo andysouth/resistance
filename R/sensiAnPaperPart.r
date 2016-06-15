@@ -109,14 +109,14 @@ sensiAnPaperPart <- function( nScenarios = 10,
     s.RR1_A0 <- runif(1, min=0.1, max=0.45)
     s.RR2_0B <- runif(1, min=0.1, max=0.45)     
     
-    # 14/6/16 to add resistance_coeff_I1 & I2
+    # 14/6/16 to add rr_advantage_I1 & I2
     # as an alternative to varying s directly from sensi analysis
     # to allow a wider range (higher values) while avoiding correlation between 
     # effectiveness and advantage inputs
-    # resistance_coeff_I1 <- runif(1, min=0.2, max=1)
-    # resistance_coeff_I2 <- runif(1, min=0.2, max=1) 
-    # s.RR1_A0 <- resistance_coeff_I1 * phi.SS1_A0
-    # s.RR2_0B <- resistance_coeff_I2 * phi.SS2_0B    
+    # rr_advantage_I1 <- runif(1, min=0.2, max=1)
+    # rr_advantage_I2 <- runif(1, min=0.2, max=1) 
+    # s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
+    # s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B    
     
     ## put the generated values into an input matrix, using defaults for non specified parameters
     inputOneScenario <- setInputOneScenario( max_gen = max_gen,
@@ -138,8 +138,8 @@ sensiAnPaperPart <- function( nScenarios = 10,
                         maleExposureProp = maleExposureProp,
                         correctMixDeployProp = correctMixDeployProp
                         # 14/6/16
-                        #,resistance_coeff_I1 = resistance_coeff_I1,
-                        #resistance_coeff_I2 = resistance_coeff_I2
+                        #,rr_advantage_I1 = rr_advantage_I1,
+                        #rr_advantage_I2 = rr_advantage_I2
                         )   
     
     

@@ -4278,16 +4278,42 @@ The approach here has been to construct a flexible model that will remove the ne
  
 Ians suggestion of using an RR_restoration_coefficient instead of a selction coefficient.
 Effectively it will be generated randomly (0.2-1) and then multiplied by the effectiveness to get the selection coefficient.
+
+** 14/6/16 **
+emails from Ian
+
+Yes, I think we need to re-run it. Assuming we go for something like PLOS Computational Biology then I think its important the model be internally consistent and that we allow high selection coefficients.
+ 
+Happy to extent the parameter range of effectiveness given its importance.
+ 
+I’ll leave it to you to name the new input parameter. I call it RRrc in the text (page 12) but happy to change this for something snappier.
+ 
+In the original description of the policies we defined a Useful Operational Lifespan (UOL) for the policies (invariable the time until resistance allele frequency reached 50% at both loci) and  when I went through the discussion again it seemed much more succinct to use the term i.e. UOL. It also made a clear distinction, and avoided potential  confusion,  between time to resistance for one locus and time for resistance at both loci. Consequently, I have suggested some of the labels embedded in the figures need to be updated to read UOL. I noted this in their captions so it would be a good time to incorporate/discuss/reject these suggestions.
+ 
+If you have time, it would also be beneficial if you spend a day working on the ms, checking for errors, suggesting ways of clarifying the text, checking for consistent terminology and so on. I have read and edited it so many times recently that I lack the mental will power to do it again in the near future and it would benefit from a fresh look. Once we have incorporated the new figures we can then send it to Beth for a (final?) check.
+
+I said I didn't like UOL
+
+No strong feelings on “UOL” or “time to resistance”, so long as it the text is clear an unambiguous. If we no longer use UOL we need to remove its definition from the text.
+ 
+I hate quibbling about nomenclature but I think “resist_advantage_I1” can be misinterpreted. Even if its value is 1 then the (fitness) advantage may be much less because it is multiplied by its effectiveness. Also it is not clear whether resist_advantage is for the RS or RR genotype. It could also be confused with selective advantage.
+ 
+I suggest we make the textual explanation (page 12) as clear as possible and design labels around that. I deliberately chose the work “restoration” as it make it obviously, at least to me , that the parameter quantifies  the extent to which the RR genotype restores the mosquitoes’ viability that is lost by the SS genotype after insecticide contact.
+ 
+Happy to hear suggestions for words other that “restoration”.
+
+** 15/6/16 **
+
+modifying rr_advantage
+ 
  
  
 ### TO DO  
 
-Check once more then,
-Reply to Ian, say it looks do-able, and should just take a few days.
-1. what range do we want for effectiveness ? stick to 0.45-1, or we could go lower e.g. 0.3-1.
-2. more thought son what we can call the new input to fit on figs. e.g. resist_coeff_I1 ?  
+rr_advantage
+go with that as the variable name for now we can always change later by find/replace
 
-Is there potential to rationalise the analysis before re-running ?
+Is there potential to rationalise the analysis at all before re-running ? or just get on with it.
 
 RR_restoration_coefficient or resistance_coeff_I1 & resistance_coeff_I2
 What I will need to do : search 14/6/16 to see changes
