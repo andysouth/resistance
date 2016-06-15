@@ -99,24 +99,22 @@ sensiAnPaperPart <- function( nScenarios = 10,
     #h.RS2_0B <- 10^-(runif(1, min=0, max=5))     
     
     ## selective advantage of resistance
-    #s.RR1_A0 <- runif(1, min=0.2, max=1)
-   # s.RR2_0B <- runif(1, min=0.2, max=1)     
     # Ian suggested this should be dependent on phi to ensure fitness of RR stays below 1 
     # 5/2/16 i'm concerned this adds in a correlation between inputs that might fudge our ability to see what's going on
-    # try going back to above
     #s.RR1_A0 <- runif(1, min=0.2, max=1) * phi.SS1_A0
     #s.RR2_0B <- runif(1, min=0.2, max=1) * phi.SS2_0B
-    s.RR1_A0 <- runif(1, min=0.1, max=0.45)
-    s.RR2_0B <- runif(1, min=0.1, max=0.45)     
+    # 14/6/16 now replaced with below
+    # s.RR1_A0 <- runif(1, min=0.1, max=0.45)
+    # s.RR2_0B <- runif(1, min=0.1, max=0.45)     
     
     # 14/6/16 to add rr_advantage_I1 & I2
     # as an alternative to varying s directly from sensi analysis
     # to allow a wider range (higher values) while avoiding correlation between 
     # effectiveness and advantage inputs
-    # rr_advantage_I1 <- runif(1, min=0.2, max=1)
-    # rr_advantage_I2 <- runif(1, min=0.2, max=1) 
-    # s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
-    # s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B    
+    rr_advantage_I1 <- runif(1, min=0.2, max=1)
+    rr_advantage_I2 <- runif(1, min=0.2, max=1)
+    s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
+    s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B
     
     ## put the generated values into an input matrix, using defaults for non specified parameters
     inputOneScenario <- setInputOneScenario( max_gen = max_gen,
@@ -136,10 +134,10 @@ sensiAnPaperPart <- function( nScenarios = 10,
                         s.RR1_A0 = s.RR1_A0,
                         s.RR2_0B = s.RR2_0B,
                         maleExposureProp = maleExposureProp,
-                        correctMixDeployProp = correctMixDeployProp
+                        correctMixDeployProp = correctMixDeployProp,
                         # 14/6/16
-                        #,rr_advantage_I1 = rr_advantage_I1,
-                        #rr_advantage_I2 = rr_advantage_I2
+                        rr_advantage_I1 = rr_advantage_I1,
+                        rr_advantage_I2 = rr_advantage_I2
                         )   
     
     
