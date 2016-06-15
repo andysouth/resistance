@@ -84,12 +84,11 @@ sensiAnPaperPart <- function( nScenarios = 10,
   
     
     ## effectiveness of insecticides, selection against SS in presence of that insecticide
-#     phi.SS1_A0 <- runif(1, min=0.4, max=1)
-#     phi.SS2_0B <- runif(1, min=0.4, max=1) 
-    #andy 5/2/13 reducing to avoid fitness error
-    phi.SS1_A0 <- runif(1, min=0.45, max=1)
-    phi.SS2_0B <- runif(1, min=0.45, max=1)
-      
+    # phi.SS1_A0 <- runif(1, min=0.45, max=1)
+    # phi.SS2_0B <- runif(1, min=0.45, max=1)
+    # 14/6/16 increased range now that we are using rr_advantage to avoid fitness > 1
+    phi.SS1_A0 <- runif(1, min=0.3, max=1)
+    phi.SS2_0B <- runif(1, min=0.3, max=1)      
     
     ## dominance of resistance
     h.RS1_A0 <- runif(1, min=0, max=1)
