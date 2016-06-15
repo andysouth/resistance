@@ -5,33 +5,44 @@
   date: "`r Sys.Date()`"
 ---
 
-# Figures for paper 1 
-# version 5 - in progress
+# Figures for paper 1 after change to using rr_advantage instead of selection coeff from sensi analysis
+# version 1 - in progress
 
-## Based on 10000 runs with all inputs varying at once which explains the variability at particular input values.
+```{r}
+  #library(devtools)
+  #install_github('AndySouth/resistance')
+  library(resistance)
 
-Comparing these insecticide use strategies:
+  outFolder <- "C:\\Dropbox\\resistanceResults\\"
+```
 
-1. Single use
-1. Mixture (either AI) : threshold reached for either insecticide
-1. Adaptive mixture : threshold reached for either insecticide, switch to sole use of other until it too reaches threshold
-1. Mixture (both AIs) : threshold reached for both insecticides in mixture
-1. Sequential : sole use of one insecticide, switch to other when threshold reached until it too reaches threshold
+<!-- eval=FALSE to stop slow code being executed --> 
+```{r, eval=FALSE}
 
-Renamed from previous naming system :
-Mixture (either AI)   [mixture1]
-Mixture (both AIs)    [mixture3]
-Adaptive mixture      [mixture2]
-
-
-## Notable results
-
-1. Time-to-resistance is lowest for single use and for the first insecticide in a mixture. Time-to-resistance is highest for the 2nd insecticide in a mixture.
-1. In between these extremes, there is less difference between the alternative strategies of a) sequential and b) adaptive mixture switching to sole use. The latter takes slightly longer to reach the threshold.
-1. Exposure and effectiveness seem to be the most important inputs.
-1. Exposure has the greatest effect on time-to-resistance.
-1. Effectiveness of the insecticides is the one input that has a notably different effect on the strategies of a) sequential and b) adaptive mixture switching to sole use. Below an effectiveness of ~0.55 to 0.6 sequential takes longer, and above this 'mixture switching to sole use' takes longer. 
-
+  #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same
+  #the exception is the exposure array a. The single exposure input will be the same, but the array changes
+  #according to setExposure(  )
+  
+  #nScenarios <- 10  
+  #nScenarios <- 100
+  #nScenarios <- 500 
+  nScenarios <- 1000
+  #nScenarios <- 10000
+  
+  #to run 'extended' or not
+  experiment <- 'extended' #'curtis'
+  
+  ## do model runs
+  listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture', experiment=experiment )
+  listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment=experiment )
+  listOutI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment=experiment )
+  
+  
+  ## save results objects as rda for re-use
+  save(listOutMix, file=paste0(outFolder,'listOutMix_rr_1000.rda'))
+  save(listOutI1, file=paste0(outFolder,'listOutI1_rr_1000.rda'))
+  save(listOutI2, file=paste0(outFolder,'listOutI2_rr_1000.rda'))  
+```  
 
 
 
@@ -42,31 +53,20 @@ Adaptive mixture      [mixture2]
 
   outFolder <- "C:\\Dropbox\\resistanceResults\\"
   
-  ## to load previously saved runs
-#   load(file=paste0(outFolder,'listOutMix_1000.rda'))
-#   load(file=paste0(outFolder,'listOutI1_1000.rda'))
-#   load(file=paste0(outFolder,'listOutI2_1000.rda'))
-  
-  ## trying with the extended experiment _ex100
+  ## trying with the extended experiment 
   experiment <- 'extended'
-  
-  load(file=paste0(outFolder,'listOutMix_ex2_10000.rda'))
-  load(file=paste0(outFolder,'listOutI1_ex2_10000.rda'))
-  load(file=paste0(outFolder,'listOutI2_ex2_10000.rda'))
- 
-  # load(file=paste0(outFolder,'listOutMix_ex2_1000.rda'))
-  # load(file=paste0(outFolder,'listOutI1_ex2_1000.rda'))
-  # load(file=paste0(outFolder,'listOutI2_ex2_1000.rda'))
+
+  ## to load previously saved runs  
+  load(file=paste0(outFolder,'listOutMix_rr_1000.rda'))
+  load(file=paste0(outFolder,'listOutI1_rr_1000.rda'))
+  load(file=paste0(outFolder,'listOutI2_rr_1000.rda'))
   
 # very quick test data
   # load(file=paste0(outFolder,'listOutMix_ex2_3.rda'))
   # load(file=paste0(outFolder,'listOutI1_ex2_3.rda'))
   # load(file=paste0(outFolder,'listOutI2_ex2_3.rda'))
   
-  
 ```
-
-
 
 
 
@@ -124,8 +124,11 @@ Adaptive mixture      [mixture2]
   
   
   #hardcode which variables to include in analysis to keep it simple and transparent
-  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-
+  #treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  #14/6/16 change to rr_advantage
+  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','rr_advantage_I1','rr_advantage_I2')
+  
+  
   #add these for extended analysis
   if (experiment=='extended')
     treePredictors <- c(treePredictors,'maleExposureProp','correctMixDeployProp')
@@ -150,8 +153,9 @@ Adaptive mixture      [mixture2]
   rownames(treeInput)[rownames(treeInput)=="h.RS1_A0"] <- "dominance_allele1"
   rownames(treeInput)[rownames(treeInput)=="h.RS2_0B"] <- "dominance_allele2"
   
-  rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
-  rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
+  #14/6/16 rr_advantage these not to be used anymore
+  #rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
+  #rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
   
   
   #get the inputs here to use in ggplot investigation of model responses to inputs
@@ -166,8 +170,11 @@ Adaptive mixture      [mixture2]
                              "start_freq_allele2"=0.01,
                              "dominance_allele1"=0.17,
                              "dominance_allele2"=0.0016,
-                             "selection_coef_allele1"=0.23,
-                             "selection_coef_allele2"=0.43,
+                             # 14/6/16 rr_advantage = s / effectiveness
+                             #"selection_coef_allele1"=0.23,
+                             #"selection_coef_allele2"=0.43,
+                             "rr_advantage_I1"=0.23/0.73,
+                             "rr_advantage_I2"=0.43/1,                             
                              "maleExposureProp"=1,
                              "correctMixDeployProp"=1,
                              "resist_start_lo_div_hi"=1,
@@ -875,27 +882,6 @@ for(i in names_results)
            )  
     
 ```
-
-
-
-
-# Some examples showing how changing effectiveness can alter the ranking of insecticide strategies
-### Curtis' Fig 2. inputs : mix2 > adaptive > mix1 > seq
-```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
-```
-
-### decrease effectiveness of I2 from 1 to 0.85 : mix2 > adaptive > seq > mix1
-```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
-```
-
-### also decrease effectiveness of I1 from 0.73 to 0.63 : seq > mix2 > adaptive > mix1
-```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.63 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
-```
-
-
 
 
 # PRCC difference in time-to-resistance between sequential and mixture adaptive
