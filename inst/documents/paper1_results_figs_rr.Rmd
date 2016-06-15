@@ -246,12 +246,12 @@
   #resistPointsSeq_T
   
   #columns to remove from first
-  indices1 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.1","gen_cP0.5","strategy"))
+  indices1 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.1","gen_cP0.25","strategy"))
   #columns to add to 2nd  
-  indices2 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.25")) 
+  indices2 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.5")) 
   #rename column in 2nd
   tmp <- resistPointsSeq_T[indices2]
-  names(tmp) <- "gen_cP0.25seq"
+  names(tmp) <- "gen_cP0.5seq"
   
   dif_mixA_seq <- cbind(resistPointsMix_A_T[-indices1], tmp)
   dif_mix2_seq <- cbind(resistPointsMix_2_T[-indices1], tmp)  
@@ -259,18 +259,18 @@
   #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
   #>1000 excludes sequential strategy that had a 999 in
   #BEWARE would need to increase 1000 if I increase max generations in the runs
-  didntReachThresh <- which( dif_mixA_seq$gen_cP0.25 > 500 | dif_mixA_seq$gen_cP0.25seq > 500 )
+  didntReachThresh <- which( dif_mixA_seq$gen_cP0.5 > 500 | dif_mixA_seq$gen_cP0.5seq > 500 )
   #subset by runs not making threshold
   dif_mixA_seq <- dif_mixA_seq[-didntReachThresh,]  
   
-  dif_mixA_seq["mixA_minus_seq0.25"] <- dif_mixA_seq["gen_cP0.25"] - dif_mixA_seq["gen_cP0.25seq"]
+  dif_mixA_seq["mixA_minus_seq0.5"] <- dif_mixA_seq["gen_cP0.5"] - dif_mixA_seq["gen_cP0.5seq"]
   
   #for dif_mix2_seq
-  didntReachThresh <- which( dif_mix2_seq$gen_cP0.25 > 500 | dif_mix2_seq$gen_cP0.25seq > 500 )
+  didntReachThresh <- which( dif_mix2_seq$gen_cP0.5 > 500 | dif_mix2_seq$gen_cP0.5seq > 500 )
   #subset by runs not making threshold
   dif_mix2_seq <- dif_mix2_seq[-didntReachThresh,]  
   
-  dif_mix2_seq["mix2_minus_seq0.25"] <- dif_mix2_seq["gen_cP0.25"] - dif_mix2_seq["gen_cP0.25seq"]
+  dif_mix2_seq["mix2_minus_seq0.5"] <- dif_mix2_seq["gen_cP0.5"] - dif_mix2_seq["gen_cP0.5seq"]
     
 ```
 
@@ -428,7 +428,7 @@
   library(ggplot2)
 
 #names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
-names_results <- c("time_to_resistance0.25")
+names_results <- c("time_to_resistance0.5")
   
 ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 2"), ]  
   
@@ -462,7 +462,7 @@ for(i in names_results)
   {
     #x11()
 
-    y <- 'time_to_resistance0.25'    
+    y <- 'time_to_resistance0.5'    
     
     #print( ggplot(ggInsOuts, aes_string(x=i, y=y, colour="strategy")) + 
     print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
@@ -497,7 +497,7 @@ for(i in names_results)
   {
     #x11()
 
-    y <- "mixA_minus_seq0.25"    
+    y <- "mixA_minus_seq0.5"    
     
     print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
             #points not wanted if 10000
@@ -581,7 +581,7 @@ for(i in names_results)
   #but do I just want to use 1 effectiveness, or maybe add both effectivenesses together ?
   #bin colour : proportion of runs in which sequential better & could have diverging scale about 0.5
   #I probably still need to tweak data first
-  #currently I have differences in times to resistance : mixA_minus_seq0.25
+  #currently I have differences in times to resistance : mixA_minus_seq0.5
   #what I think I want is the proportion of runs in which mix is better
   #I can get that by setting to 0 & 1 and calc average
   # tst_runs <- c(1,0,0,0)
@@ -594,9 +594,9 @@ for(i in names_results)
   #ggSubset <- dif_mix2_seq
 
   #if mix-seq >1 resistance took longer for mix so mix is better
-  ggSubset$mixA_better_seq0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 > 0, 1, 0 )
-  ggSubset$seq_better_mixA0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 < 0, 1, 0 )
-  ggSubset$abs_mixA_minus_seq0.25 <- abs(ggSubset$mixA_minus_seq0.25)
+  ggSubset$mixA_better_seq0.5 <- ifelse( ggSubset$mixA_minus_seq0.5 > 0, 1, 0 )
+  ggSubset$seq_better_mixA0.5 <- ifelse( ggSubset$mixA_minus_seq0.5 < 0, 1, 0 )
+  ggSubset$abs_mixA_minus_seq0.5 <- abs(ggSubset$mixA_minus_seq0.5)
 
   
   #tricky
@@ -604,31 +604,31 @@ for(i in names_results)
   #I use these better vars to facet the plots
   #may want the zeroes in both facets
   #to get that I can rbind the zeros from one onto the other BEWARE this may screw up existing plots
-  df_same <- ggSubset[which(ggSubset$mixA_minus_seq0.25==0),]
+  df_same <- ggSubset[which(ggSubset$mixA_minus_seq0.5==0),]
   #set these to 1 (they were 0)
-  df_same$mixA_better_seq0.25 <- 1
-  df_same$seq_better_mixA0.25 <- 1
+  df_same$mixA_better_seq0.5 <- 1
+  df_same$seq_better_mixA0.5 <- 1
   #rbind them back onto other dataset, probably not needed ??
   ggSubset <- rbind( ggSubset, df_same)
 
   #add an option for 20% better, put the not in to get facets in correct order in ggplot later
-  ggSubset$mixA_not20pc_better_seq0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 / ggSubset$gen_cP0.25seq <= 0.2, 1, 0 )   
+  ggSubset$mixA_not20pc_better_seq0.5 <- ifelse( ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq <= 0.2, 1, 0 )   
   
 
     #failed hex plot just gave me counts
-    # print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.25'))+
+    # print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.5'))+
     #          geom_hex()
     #        )
     
     #interesting plot showing where sequence is better is restricted to higher values of exposure and effectiveness 
-    print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.25'))+
+    print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.5'))+
              #geom_hex()
              geom_point(alpha=0.2)  
            ) 
 
     #can I multiply the two effectivenesses together ?
     #aha! yes that's even better
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_better_seq0.25))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_better_seq0.5))+
              #geom_hex()
              geom_point(alpha=0.2)  
            )  
@@ -636,15 +636,15 @@ for(i in names_results)
     #i think adding the effectivenesses may give an even better plot
     #and makes it easier for the reader to interpret
     #aha! yes that's even better
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mixA_better_seq0.25))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mixA_better_seq0.5))+
 
              geom_point(alpha=0.2)  
            )  
     
     #facetted 0/1, labelled mix better, seq better
     #if I get this sorted I could try to have +ve & -ve on the same scale
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mixA0.25))+
-             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mixA0.5))+
+             facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
 
              theme(legend.position="none") +
              geom_point(alpha=1)  
@@ -654,7 +654,7 @@ for(i in names_results)
     #what if I do the difference rather than just 0/1
     #aha! this is close to being the killer plot, just need to get the colour scale right 
     #but the previous one may be clearer
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_minus_seq0.25))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_minus_seq0.5))+
              #geom_hex()
              geom_point(alpha=1) +
              #no adding grey outlines obscures the pattern
@@ -677,10 +677,10 @@ for(i in names_results)
     #facet showing generation differences, labelled mix better, seq better
     #+ve & -ve on the same colour scale
     #failed attempt at getting Curtis point in legend
-    #print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.25, size="Curtis"))+
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.25))+
+    #print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.5, size="Curtis"))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.5))+
              
-             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+             facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
 
              #YlGnBu looks really good except that the yellow points are very faint
              #scale_colour_distiller(palette='YlGnBu', direction=1) +
@@ -714,9 +714,9 @@ for(i in names_results)
     #might even be good to overplot the zero values after
     #or even remove the zero values ?
     
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.25))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.5))+
              
-             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+             facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
 
              scale_color_viridis(begin=1, end=0, option="viridis", 
                                  guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
@@ -727,16 +727,16 @@ for(i in names_results)
              xlab('exposure to both insecticides') + 
              #main points for the plot
              geom_point(alpha=1, size=0.5) + 
-             #!!!NOW can I add a lm fitted to the 0 points mixA_minus_seq0.25
-             geom_smooth(data=ggSubset[which(ggSubset$mixA_minus_seq0.25==0),], method = "lm", se = FALSE) +
+             #!!!NOW can I add a lm fitted to the 0 points mixA_minus_seq0.5
+             geom_smooth(data=ggSubset[which(ggSubset$mixA_minus_seq0.5==0),], method = "lm", se = FALSE) +
              #can I subtley highlight the zero points which are repeated in each plot ?
-             geom_point(data=ggSubset[which(ggSubset$mixA_minus_seq0.25==0),], size=0.8, colour='lightgrey', shape=2, fill='white') +            
+             geom_point(data=ggSubset[which(ggSubset$mixA_minus_seq0.5==0),], size=0.8, colour='lightgrey', shape=2, fill='white') +            
              #add text for Curtis point
              geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
            )      
    
   # doing the lm outside of ggplot    
-  df_same = ggSubset[which(ggSubset$mixA_minus_seq0.25==0),]
+  df_same = ggSubset[which(ggSubset$mixA_minus_seq0.5==0),]
   x1=df_same$exposure 
   y1=df_same$effectiveness_insecticide1 + df_same$effectiveness_insecticide2
   
@@ -752,9 +752,9 @@ for(i in names_results)
 
   
   #modify the killer plot to show where mixtures are 20% better ?
-  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.25))+
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.5))+
              
-             facet_grid( ~ mixA_not20pc_better_seq0.25, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
+             facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
 
              theme_bw() +
              #add point for Curtis inputs
@@ -781,9 +781,9 @@ for(i in names_results)
   ggSubset <- dif_mix2_seq
 
   #if mix-seq >1 resistance took longer for mix so mix is better
-  ggSubset$mix2_better_seq0.25 <- ifelse( ggSubset$mix2_minus_seq0.25 > 0, 1, 0 )
-  ggSubset$seq_better_mix20.25 <- ifelse( ggSubset$mix2_minus_seq0.25 < 0, 1, 0 )
-  ggSubset$abs_mix2_minus_seq0.25 <- abs(ggSubset$mix2_minus_seq0.25)
+  ggSubset$mix2_better_seq0.5 <- ifelse( ggSubset$mix2_minus_seq0.5 > 0, 1, 0 )
+  ggSubset$seq_better_mix20.5 <- ifelse( ggSubset$mix2_minus_seq0.5 < 0, 1, 0 )
+  ggSubset$abs_mix2_minus_seq0.5 <- abs(ggSubset$mix2_minus_seq0.5)
 
   
   #tricky
@@ -791,28 +791,28 @@ for(i in names_results)
   #I use these better vars to facet the plots
   #may want the zeroes in both facets
   #to get that I can rbind the zeros from one onto the other BEWARE this may screw up existing plots
-  df_same <- ggSubset[which(ggSubset$mix2_minus_seq0.25==0),]
+  df_same <- ggSubset[which(ggSubset$mix2_minus_seq0.5==0),]
   #set these to 1 (they were 0)
-  df_same$mix2_better_seq0.25 <- 1
-  df_same$seq_better_mix20.25 <- 1
+  df_same$mix2_better_seq0.5 <- 1
+  df_same$seq_better_mix20.5 <- 1
   #rbind them back onto other dataset, probably not needed ??
   ggSubset <- rbind( ggSubset, df_same)
 
   #add an option for 20% better, put the not in to get facets in correct order in ggplot later
-  ggSubset$mix2_not20pc_better_seq0.25 <- ifelse( ggSubset$mix2_minus_seq0.25 / ggSubset$gen_cP0.25seq <= 0.2, 1, 0 )   
+  ggSubset$mix2_not20pc_better_seq0.5 <- ifelse( ggSubset$mix2_minus_seq0.5 / ggSubset$gen_cP0.5seq <= 0.2, 1, 0 )   
     
     #i think adding the effectivenesses may give an even better plot
     #and makes it easier for the reader to interpret
     #aha! yes that's even better
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mix2_better_seq0.25))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mix2_better_seq0.5))+
 
              geom_point(alpha=0.2)  
            )  
     
     #facetted 0/1, labelled mix better, seq better
     #if I get this sorted I could try to have +ve & -ve on the same scale
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mix20.25))+
-             facet_grid( ~ seq_better_mix20.25, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mix20.5))+
+             facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
 
              theme(legend.position="none") +
              geom_point(alpha=1)  
@@ -821,9 +821,9 @@ for(i in names_results)
 
     #killer plot mix2 vs seq
     library(viridis)
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.25))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.5))+
              
-             facet_grid( ~ seq_better_mix20.25, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
+             facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
 
              #YlGnBu looks really good except that the yellow points are very faint
              #scale_colour_distiller(palette='YlGnBu', direction=1) +
@@ -849,9 +849,9 @@ for(i in names_results)
     
     #modify killer plot mix2 vs seq to add in male exposure prop on x axis
     library(viridis)
-    print( ggplot(ggSubset, aes(x=exposure+exposure*maleExposureProp, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.25))+
+    print( ggplot(ggSubset, aes(x=exposure+exposure*maleExposureProp, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.5))+
              
-             facet_grid( ~ seq_better_mix20.25, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
+             facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
              scale_color_viridis(begin=1, end=0, option="viridis", 
                                  guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
              theme_bw() +
@@ -866,9 +866,9 @@ for(i in names_results)
            )       
     
   #modify the killer plot to show where mixtures are 20% better ?
-  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.25))+
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.5))+
              
-             facet_grid( ~ mix2_not20pc_better_seq0.25, labeller=as_labeller( c('0'='mix\nresistance >20% slower','1'='mix\nresistance <20% slower'))) +
+             facet_grid( ~ mix2_not20pc_better_seq0.5, labeller=as_labeller( c('0'='mix\nresistance >20% slower','1'='mix\nresistance <20% slower'))) +
 
              theme_bw() +
              #add point for Curtis inputs
@@ -891,7 +891,7 @@ for(i in names_results)
   library(sensitivity)
     
     x <- dif_mixA_seq[,1:num_inputs]
-    y <- dif_mixA_seq["mixA_minus_seq0.25"]
+    y <- dif_mixA_seq["mixA_minus_seq0.5"]
       
     pcc_res <- pcc(x, y, rank=TRUE)
     
@@ -944,7 +944,7 @@ for(i in names_results)
     by_strategy <- ggInsOuts[ggInsOuts$strategy==strategy,]
     
     x <- by_strategy[,1:num_inputs]
-    y <- by_strategy['time_to_resistance0.25']
+    y <- by_strategy['time_to_resistance0.5']
       
     pcc_res <- pcc(x, y, rank=TRUE)
     
@@ -966,7 +966,7 @@ for(i in names_results)
              geom_hline(yintercept = 0, linetype=3) +
              ylim(-1,1) +
              #ggtitle(paste(strategy,"PRCC")) +
-             ggtitle(paste(strategy,"time-to-resistance 0.25")) +
+             ggtitle(paste(strategy,"time-to-resistance 0.5")) +
              xlab(NULL)
           )
   }
@@ -989,7 +989,7 @@ for(i in names_results)
   {
     #x11()
 
-    y <- 'time_to_resistance0.25'    
+    y <- 'time_to_resistance0.5'    
     #y <- 'time_to_resistance0.5'
     color <- 'strategy'
     #coloring by exposure shows its effect even when other params are varying
