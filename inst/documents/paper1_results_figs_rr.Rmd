@@ -1,0 +1,1026 @@
+---
+  title: "paper1_results_figs_rr"
+  output: pdf_document
+  author: "Andy South"
+  date: "`r Sys.Date()`"
+---
+
+# Figures for paper 1 
+# version 5 - in progress
+
+## Based on 10000 runs with all inputs varying at once which explains the variability at particular input values.
+
+Comparing these insecticide use strategies:
+
+1. Single use
+1. Mixture (either AI) : threshold reached for either insecticide
+1. Adaptive mixture : threshold reached for either insecticide, switch to sole use of other until it too reaches threshold
+1. Mixture (both AIs) : threshold reached for both insecticides in mixture
+1. Sequential : sole use of one insecticide, switch to other when threshold reached until it too reaches threshold
+
+Renamed from previous naming system :
+Mixture (either AI)   [mixture1]
+Mixture (both AIs)    [mixture3]
+Adaptive mixture      [mixture2]
+
+
+## Notable results
+
+1. Time-to-resistance is lowest for single use and for the first insecticide in a mixture. Time-to-resistance is highest for the 2nd insecticide in a mixture.
+1. In between these extremes, there is less difference between the alternative strategies of a) sequential and b) adaptive mixture switching to sole use. The latter takes slightly longer to reach the threshold.
+1. Exposure and effectiveness seem to be the most important inputs.
+1. Exposure has the greatest effect on time-to-resistance.
+1. Effectiveness of the insecticides is the one input that has a notably different effect on the strategies of a) sequential and b) adaptive mixture switching to sole use. Below an effectiveness of ~0.55 to 0.6 sequential takes longer, and above this 'mixture switching to sole use' takes longer. 
+
+
+
+
+
+```{r,echo=FALSE,results='hide'}
+
+  library(resistance)
+
+  outFolder <- "C:\\Dropbox\\resistanceResults\\"
+  
+  ## to load previously saved runs
+#   load(file=paste0(outFolder,'listOutMix_1000.rda'))
+#   load(file=paste0(outFolder,'listOutI1_1000.rda'))
+#   load(file=paste0(outFolder,'listOutI2_1000.rda'))
+  
+  ## trying with the extended experiment _ex100
+  experiment <- 'extended'
+  
+  load(file=paste0(outFolder,'listOutMix_ex2_10000.rda'))
+  load(file=paste0(outFolder,'listOutI1_ex2_10000.rda'))
+  load(file=paste0(outFolder,'listOutI2_ex2_10000.rda'))
+ 
+  # load(file=paste0(outFolder,'listOutMix_ex2_1000.rda'))
+  # load(file=paste0(outFolder,'listOutI1_ex2_1000.rda'))
+  # load(file=paste0(outFolder,'listOutI2_ex2_1000.rda'))
+  
+# very quick test data
+  # load(file=paste0(outFolder,'listOutMix_ex2_3.rda'))
+  # load(file=paste0(outFolder,'listOutI1_ex2_3.rda'))
+  # load(file=paste0(outFolder,'listOutI2_ex2_3.rda'))
+  
+  
+```
+
+
+
+
+
+```{r,echo=FALSE,results='hide'}
+### calculate times to reach critical points and add them on to the input file 
+### for different insecticide strategies, sequential, mix1 and mix2  
+  
+  
+  #1) sequential : time to resistance for each insecticide in isolation
+  #inputs : inAndOutI1, inAndOutI2
+  #find time to criticalPoint for insecticide1
+  #find time to criticalPoint for insecticide2
+  #add together
+  resistPointsI1 <- findResistancePoints(listOutI1, locus=1)
+  resistPointsI2 <- findResistancePoints(listOutI2, locus=2)  
+  resistPointsSeq <- resistPointsI1 + resistPointsI2
+  
+  
+  #2) mixture1 : time to resistance for either insecticide when used in a mixture
+  #inputs : inAndOutMix
+  #find time to criticalPoint for EITHER insecticide in mixture  
+  resistPointsMix_1 <- findResistancePoints(listOutMix, locus='either')  
+  #todo - to be comparable I think this should be for when resistance to BOTH insecticides is reached
+  
+  #3) mixture2 : when resistance to one insecticide in the mixture reached, switch to sole use of the 
+  #   other until that too reaches the critical point. Record total time.
+  # what I actually need to do is start with mixture find the first critical point
+  # (need to know which of the insecticides it is)
+  # then I need to go to the single run for the other insecticide & starting at 
+  # it's current resistance point find out how many more generations to go
+  #inputs : inAndOutI1, inAndOutI2, inAndOutMix
+  resistPointsMix_A <- findResistancePointsMixResponsive(listOutMix, listOutI1, listOutI2)
+  
+  #4) mixture3 : time to resistance for both insecticides when used in a mixture
+  #inputs : inAndOutMix
+  #find time to criticalPoint for BOTH insecticide in mixture  
+  resistPointsMix_2 <- findResistancePoints(listOutMix, locus='both')
+  
+```
+
+
+
+```{r,echo=FALSE,results='hide'}
+### chunk copied from part of one in sensiAnPaper1All
+### bind results onto input file
+    
+  treeInput <- listOutMix$input
+  
+  #input files in listOutMix, listOutIn1 & listOutI2 are the same if the runs are done with default randomSeed 
+  #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
+  #I could just rename one to exposure
+  #BEWARE risk if future changes
+  #1/2/16 don't need this now because I've saved exposure from the single original random value
+  #rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+  
+  
+  #hardcode which variables to include in analysis to keep it simple and transparent
+  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+
+  #add these for extended analysis
+  if (experiment=='extended')
+    treePredictors <- c(treePredictors,'maleExposureProp','correctMixDeployProp')
+  
+  treeInput <- treeInput[ treePredictors, ]
+  
+  #add an extra predictor, the lower starting freq of resistance divided by the larger
+  resist_start_lo_div_hi <- ifelse( treeInput['P_1',] < treeInput['P_2',], treeInput['P_1',]/treeInput['P_2',], treeInput['P_2',]/treeInput['P_1',])
+  treeInput <- rbind(treeInput,resist_start_lo_div_hi)    
+  
+  #20160122 add test for Ian of resistance1/resistance2
+  resist_start_1_div_2 <- treeInput['P_1',]/treeInput['P_2',]
+  treeInput <- rbind(treeInput,resist_start_1_div_2)   
+  
+  #renaming other rownames to make nicer plots
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+
+  rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
+  rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
+    
+  rownames(treeInput)[rownames(treeInput)=="h.RS1_A0"] <- "dominance_allele1"
+  rownames(treeInput)[rownames(treeInput)=="h.RS2_0B"] <- "dominance_allele2"
+  
+  rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
+  rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
+  
+  
+  #get the inputs here to use in ggplot investigation of model responses to inputs
+  #used in a later chunk
+  ggInput <- treeInput
+  
+  #create a curtisInputs dataframe for use later
+  curtisInputs <- data.frame("exposure"=0.9,
+                             "effectiveness_insecticide1"=0.73,
+                             "effectiveness_insecticide2"=1,
+                             "start_freq_allele1"=0.01,
+                             "start_freq_allele2"=0.01,
+                             "dominance_allele1"=0.17,
+                             "dominance_allele2"=0.0016,
+                             "selection_coef_allele1"=0.23,
+                             "selection_coef_allele2"=0.43,
+                             "maleExposureProp"=1,
+                             "correctMixDeployProp"=1,
+                             "resist_start_lo_div_hi"=1,
+                             "resist_start_1_div_2"=1)
+  
+    
+```  
+  
+
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
+# getting data into format for ggplot
+  
+  
+  #uses ggInput calculated in earlier chunk
+  
+  #first needs to transpose rows to cols
+  #ggInput_T <- t(ggInput)
+    
+  #function to transpose and add strategy column with the passed value
+  #also add on the input columns  
+  addStrategyColumn <- function(x, value, inputs){
+    x <- as.data.frame( t(x) )
+    x$strategy <- value
+    
+    #inputs <- as.numeric(inputs)
+    #transpose inputs
+    inputs <- as.data.frame( t(inputs), stringsAsFactors=FALSE )
+    #cbind onto the outputs
+    x <- cbind(inputs,x)
+    x
+  }    
+    
+  resistPointsI1_T <- addStrategyColumn(resistPointsI1,"insecticide 1",ggInput) 
+  resistPointsI2_T <- addStrategyColumn(resistPointsI2,"insecticide 2",ggInput)   
+  resistPointsSeq_T <- addStrategyColumn(resistPointsSeq,"Sequential",ggInput) 
+  resistPointsMix_1_T <- addStrategyColumn(resistPointsMix_1,"Mix either",ggInput) 
+  resistPointsMix_A_T <- addStrategyColumn(resistPointsMix_A,"Mix adaptive",ggInput) 
+  resistPointsMix_2_T <- addStrategyColumn(resistPointsMix_2,"Mix both",ggInput)     
+
+  ggInsOuts <- rbind( resistPointsI1_T, resistPointsI2_T, resistPointsSeq_T, 
+                      resistPointsMix_1_T, resistPointsMix_A_T, resistPointsMix_2_T)    
+  
+  #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+  #>1000 excludes sequential strategy that had a 999 in
+  #BEWARE would need to increase 1000 if I increase max generations in the runs
+  didntReachThresh <- which(ggInsOuts$gen_cP0.5 == 999 | ggInsOuts$gen_cP0.5 > 500 |
+                            ggInsOuts$gen_cP0.25 == 999 | ggInsOuts$gen_cP0.25 > 500 |
+                            ggInsOuts$gen_cP0.1 == 999 | ggInsOuts$gen_cP0.1 > 500 )
+  
+  #subset by runs not making threshold
+  ggInsOuts <- ggInsOuts[-didntReachThresh,]
+  
+  
+  #prettify output names
+  names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.5"] <- "time_to_resistance0.5"
+  names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.25"] <- "time_to_resistance0.25"
+  names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.1"] <- "time_to_resistance0.1"
+  
+  #doing; for all inputs
+  if (experiment=='extended') {
+    num_inputs <- 13
+    } else {
+    num_inputs <- 11  
+    }
+  
+  #format data in a different way to enable PRCC on difference between sequential & mix2
+  #resistPointsMix_A_T
+  #resistPointsSeq_T
+  
+  #columns to remove from first
+  indices1 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.1","gen_cP0.5","strategy"))
+  #columns to add to 2nd  
+  indices2 <- which(names(resistPointsMix_A_T) %in% c("gen_cP0.25")) 
+  #rename column in 2nd
+  tmp <- resistPointsSeq_T[indices2]
+  names(tmp) <- "gen_cP0.25seq"
+  
+  dif_mixA_seq <- cbind(resistPointsMix_A_T[-indices1], tmp)
+  dif_mix2_seq <- cbind(resistPointsMix_2_T[-indices1], tmp)  
+  
+  #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+  #>1000 excludes sequential strategy that had a 999 in
+  #BEWARE would need to increase 1000 if I increase max generations in the runs
+  didntReachThresh <- which( dif_mixA_seq$gen_cP0.25 > 500 | dif_mixA_seq$gen_cP0.25seq > 500 )
+  #subset by runs not making threshold
+  dif_mixA_seq <- dif_mixA_seq[-didntReachThresh,]  
+  
+  dif_mixA_seq["mixA_minus_seq0.25"] <- dif_mixA_seq["gen_cP0.25"] - dif_mixA_seq["gen_cP0.25seq"]
+  
+  #for dif_mix2_seq
+  didntReachThresh <- which( dif_mix2_seq$gen_cP0.25 > 500 | dif_mix2_seq$gen_cP0.25seq > 500 )
+  #subset by runs not making threshold
+  dif_mix2_seq <- dif_mix2_seq[-didntReachThresh,]  
+  
+  dif_mix2_seq["mix2_minus_seq0.25"] <- dif_mix2_seq["gen_cP0.25"] - dif_mix2_seq["gen_cP0.25seq"]
+    
+```
+
+
+```{r,echo=FALSE,results='hide'}
+### 4/2016 NEW part to analyse what happens when a new insecticide is added to an existing one
+### either to replace it or to continue in a mixture
+
+  # find the resistance points for I1 & I2 in a mixture 
+  #(diff than Mix_1 & 2 which is for 1st & 2nd threshold to be reached)
+  resistPointsMixI1 <- findResistancePoints(listOutMix, locus=1)
+  resistPointsMixI2 <- findResistancePoints(listOutMix, locus=2)
+
+  resistPointsMixI1_T <- addStrategyColumn(resistPointsMixI1,"I1inMix",ggInput) 
+  resistPointsMixI2_T <- addStrategyColumn(resistPointsMixI2,"I2inMix",ggInput)     
+  
+  #and use these from above
+  #resistPointsI1_T
+  #resistPointsI2_T
+  
+  #OldPlusNew 
+  # find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+  # if I1 < I2 use resistPointsMixI1_T
+  # if I2 < I1 use resistPointsMixI2_T                                               
+
+  #NewOnly
+  # if I1 < I2 use resistPointsI1_T
+  # if I2 < I1 use resistPointsI2_T     
+  
+  # find whether I1 or I2 has lower starting freq this is the 'new' insecticide
+  # rember the inputs are copied onto the start of all resistPoints objects
+  
+  indicesI2_lessthan_I1 <- which( resistPointsI1_T$start_freq_allele2 < resistPointsI1_T$start_freq_allele1 )
+  #this shows about half, I also checked no equals which is good
+  #length(indicesI2_lessthan_I2)
+  #[1] 4983
+  #check whether this works
+  #check <- resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]
+  #aha! problem I was having is that I1 & I2 inputs are not swapped around
+  #if I wanted to swap the inputs for I1 & I2 around, would need to do other coefficients etc.
+  #much potential confusion
+  #might be better just to restrict to the runs in which I2 < I1
+  resistPointsNewOnly <- resistPointsI2_T[indicesI2_lessthan_I1, ]
+  resistPointsOldPlusNew <- resistPointsMixI2_T[indicesI2_lessthan_I1, ]  
+  
+  # #this bit now replaced by the 2 previous lines
+  # #NewOnly first make a copy from existing
+  # resistPointsNewOnly <- resistPointsI1_T
+  # #replace those values where I2 is the 'new' insecticide with lower resistance
+  # resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+  #    resistPointsI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')]  
+  # 
+  # #OldPlusNew first make a copy from existing
+  # resistPointsOldPlusNew <- resistPointsMixI1_T
+  # #replace those values where I2 is the 'new' insecticide with lower resistance
+  # resistPointsNewOnly[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] <-
+  # resistPointsMixI2_T[indicesI2_lessthan_I1, c('gen_cP0.1','gen_cP0.25','gen_cP0.5')] 
+    
+  
+  resistPointsNewOnly$strategy <- "new only"
+  resistPointsOldPlusNew$strategy <- "old plus new"
+  
+  #BE CAREFUL
+  
+  #format data to enable PRCC on difference between the 2 strategies
+  #follow previous naming where
+  #OldPlusNew="gen_cP0.5", NewOnly="gen_cP0.5seq"
+  
+  
+  #columns to remove from first
+  indices1 <- which(names(resistPointsOldPlusNew) %in% c("gen_cP0.1","gen_cP0.25","strategy"))
+  #columns to add to 2nd  
+  indices2 <- which(names(resistPointsNewOnly) %in% c("gen_cP0.5")) 
+  #rename column in 2nd
+  tmp <- resistPointsNewOnly[indices2]
+  names(tmp) <- "gen_cP0.5seq"
+  
+  dif_oldnew_newonly <- cbind(resistPointsOldPlusNew[-indices1], tmp)
+  
+  
+  #remove runs that didn't reach a resistance threshold (999), even if just for one strategy
+  #>1000 excludes sequential strategy that had a 999 in
+  #BEWARE would need to increase 1000 if I increase max generations in the runs
+  didntReachThresh <- which( dif_oldnew_newonly$gen_cP0.5 > 500 | dif_oldnew_newonly$gen_cP0.5seq > 500 )
+  #subset by runs not making threshold
+  dif_oldnew_newonly <- dif_oldnew_newonly[-didntReachThresh,]  
+  
+  dif_oldnew_newonly["mix_minus_sole0.5"] <- dif_oldnew_newonly["gen_cP0.5"] - dif_oldnew_newonly["gen_cP0.5seq"]
+  
+  
+  #*****************
+  # to check
+  # are there any cases where startfreqI1 > startfreqI2
+  # by my method above i don't think there should be
+  # i think min should be 1
+  min(dif_oldnew_newonly$resist_start_1_div_2)
+  max(dif_oldnew_newonly$resist_start_1_div_2)  
+  
+  min( dif_oldnew_newonly$start_freq_allele1 - dif_oldnew_newonly$start_freq_allele2)
+  max( dif_oldnew_newonly$start_freq_allele1 - dif_oldnew_newonly$start_freq_allele2)
+  
+  #resistPointsNewOnly
+  min(resistPointsNewOnly$resist_start_1_div_2)
+  max(resistPointsNewOnly$resist_start_1_div_2) 
+
+  # because I now just use runs where startfreq12 < I1
+  # resist_start_1_div_2 should be the inverse of resist_start_hi_div_lo
+  # or at least directly correlated
+  # yes they are all on a single curved line
+  # plot( resistPointsNewOnly$resist_start_1_div_2 ~ resistPointsNewOnly$resist_start_lo_div_hi)
+  
+  #not sure I need to do this because all results already show mixture better
+  #now I want to subset just those runs where start freq old is > 10 * new 
+  
+  
+  #proportion of runs in which mix better than sole
+  num_mix_better <- length(which(dif_oldnew_newonly["mix_minus_sole0.5"] > 0))
+  num_all <- nrow(dif_oldnew_newonly)
+  num_mix_better/num_all
+  #1
+  #?now mix always seems to be better
+  #which kind of makes sense, any insecticide better than none
+  
+  
+  #28/4/16 testing Ians statement
+  #does resistance always arise faster in sole use than in a mixture (irrespective of starting frequencies)
+  #resistPointsI1_T #"insecticide 1" 
+  #resistPointsI2_T #"insecticide 2"
+  #resistPointsMixI1_T #"I1inMix" 
+  #resistPointsMixI2_T #"I2inMix"
+  
+  mix_minus_soleI1 <- resistPointsMixI1_T["gen_cP0.5"] - resistPointsI1_T["gen_cP0.5"]
+  which( mix_minus_soleI1 < 0 ) 
+  #0
+  mix_minus_soleI2 <- resistPointsMixI2_T["gen_cP0.5"] - resistPointsI2_T["gen_cP0.5"]
+  which( mix_minus_soleI2 < 0 ) 
+  #0
+  
+  #so yes in our param space adding an extra insecticide always increases resistance time for the first
+  
+  #i could plot it against exposure & effectiveness
+  
+  
+```
+
+
+
+---
+
+# Fig. x1 Time-to-resistance across all input values
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
+
+
+  library(ggplot2)
+
+#names_results <- c("time_to_resistance0.5","time_to_resistance0.25","time_to_resistance0.1")
+names_results <- c("time_to_resistance0.25")
+  
+ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 2"), ]  
+  
+for(i in names_results)
+{
+  #x11()
+  
+  print( ggplot(ggSubset, aes_string(x='strategy',y=i, color='strategy')) + 
+      #ylim(0,450) +
+      coord_cartesian( ylim=c(0, 350)) +
+      geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) +
+      #scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Sole use", "Mix either"="1st in mix","Sequential"="2nd in sequence", "Mix adaptive"="2nd in mix\nswitch to sole", "Mix both"="2nd in mix" ) )
+      scale_x_discrete("Resistance to which insecticide", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Sole use", "Mix either"="1st in mix","Sequential"="2nd in sequence", "Mix adaptive"="adaptive mix", "Mix both"="2nd in mix" ) )
+      
+  ) #end print
+}  
+  
+```
+
+## Fig. x2 How time-to-resistance is effected by input values for each insecticide use strategy
+
+```{r, eval=FALSE, echo=FALSE, fig.height=3.5} 
+  
+  #10/5/2016 seems to crash R, so set to eval=FALSE
+
+  names_inputs <- names(ggInsOuts)[1:num_inputs]
+  
+  ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- 'time_to_resistance0.25'    
+    
+    #print( ggplot(ggInsOuts, aes_string(x=i, y=y, colour="strategy")) + 
+    print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
+            #points not wanted if 10000
+             #geom_point(shape=3, show.legend=FALSE) + 
+             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             geom_smooth(linetype='dashed',size=1) +
+             #facet_wrap( ~ strategy) +
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             labs(title = i) +
+             #add line for Curtis inputs
+             geom_vline(data = curtisInputs, aes_string(xintercept = i), linetype='dotted', colour='red') +
+             #tryting to get the vline into the legend fails
+             #geom_vline(data = curtisInputs, aes_string(xintercept = i, colour='"Curtis Fig.2"' ), linetype='dotted', show.legend=TRUE) +
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = i, y=210, label='"Curtis Fig.2"'), size=3, colour='red')
+             
+           )
+  }
+  
+```
+
+## Fig. x3 How difference in time-to-resistance between sequential and adaptive mixture is effected by input values
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+  ggSubset <- dif_mixA_seq
+  
+  names_inputs <- names(ggSubset)[1:num_inputs]
+  
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- "mixA_minus_seq0.25"    
+    
+    print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
+            #points not wanted if 10000
+             geom_point(shape=1, colour="darkblue", alpha=0.2, show.legend=FALSE) + 
+             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             geom_smooth(linetype='dashed',size=1, colour="red") +
+             #facet_wrap( ~ strategy) +
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             labs(title = i) +
+             geom_hline(yintercept = 0, colour="white")
+           )
+  }
+  
+```
+
+## Fig. xx3 Using a new insecticide on its own or in combination with old
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+  ggSubset <- dif_oldnew_newonly
+  
+  names_inputs <- names(ggSubset)[1:num_inputs]
+  
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- "mix_minus_sole0.5"    
+    
+    print( ggplot(ggSubset, aes_string(x=i, y=y)) + #, colour="strategy")) + 
+             geom_point(shape=1, colour="darkblue", alpha=0.2, show.legend=FALSE) + 
+             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             geom_smooth(linetype='dashed',size=1, colour="red") +
+             #facet_wrap( ~ strategy) +
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             labs(title = i) +
+             geom_hline(yintercept = 0, colour="white")
+           )
+  }
+  
+```
+
+# Fig xxx PRCC difference in time-to-resistance between sole new and mix old+new
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+
+  
+  library(sensitivity)
+    
+    x <- dif_oldnew_newonly[,1:num_inputs]
+    y <- dif_oldnew_newonly["mix_minus_sole0.5"]
+      
+    pcc_res <- pcc(x, y, rank=TRUE)
+    
+    #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
+    #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
+    #plot(pcc_res)
+    
+    #results are here I can probably rbind them together into a df that I can ggplot
+    #pcc_res$PRCC
+    
+    to_plot <- pcc_res$PRCC
+    #rename column 1 from 'original to PRCC
+    names(to_plot)[1] <- 'PRCC'
+    to_plot$inputs <- rownames(to_plot)  
+    
+    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+             geom_point(shape=1, colour='red') +
+             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             geom_hline(yintercept = 0, linetype=3) +
+             ylim(-1,1) +
+             ggtitle(paste("PRCC benefit of mix old+new over sole new (old=1, new=2)")) +
+             xlab(NULL)
+          )
+```
+
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+  #can I do a 2D hexbin plot with x=exposure, y=effectiveness
+  #but do I just want to use 1 effectiveness, or maybe add both effectivenesses together ?
+  #bin colour : proportion of runs in which sequential better & could have diverging scale about 0.5
+  #I probably still need to tweak data first
+  #currently I have differences in times to resistance : mixA_minus_seq0.25
+  #what I think I want is the proportion of runs in which mix is better
+  #I can get that by setting to 0 & 1 and calc average
+  # tst_runs <- c(1,0,0,0)
+  # tst_runs <- c(1,1,1,0)
+  # mean(tst_runs)
+
+
+  ##BEWARE toogle this to look at plots for mixboth vs seq
+  ggSubset <- dif_mixA_seq
+  #ggSubset <- dif_mix2_seq
+
+  #if mix-seq >1 resistance took longer for mix so mix is better
+  ggSubset$mixA_better_seq0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 > 0, 1, 0 )
+  ggSubset$seq_better_mixA0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 < 0, 1, 0 )
+  ggSubset$abs_mixA_minus_seq0.25 <- abs(ggSubset$mixA_minus_seq0.25)
+
+  
+  #tricky
+  #be a bit careful what to do with zeros where results are same for both strategies
+  #I use these better vars to facet the plots
+  #may want the zeroes in both facets
+  #to get that I can rbind the zeros from one onto the other BEWARE this may screw up existing plots
+  df_same <- ggSubset[which(ggSubset$mixA_minus_seq0.25==0),]
+  #set these to 1 (they were 0)
+  df_same$mixA_better_seq0.25 <- 1
+  df_same$seq_better_mixA0.25 <- 1
+  #rbind them back onto other dataset, probably not needed ??
+  ggSubset <- rbind( ggSubset, df_same)
+
+  #add an option for 20% better, put the not in to get facets in correct order in ggplot later
+  ggSubset$mixA_not20pc_better_seq0.25 <- ifelse( ggSubset$mixA_minus_seq0.25 / ggSubset$gen_cP0.25seq <= 0.2, 1, 0 )   
+  
+
+    #failed hex plot just gave me counts
+    # print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.25'))+
+    #          geom_hex()
+    #        )
+    
+    #interesting plot showing where sequence is better is restricted to higher values of exposure and effectiveness 
+    print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.25'))+
+             #geom_hex()
+             geom_point(alpha=0.2)  
+           ) 
+
+    #can I multiply the two effectivenesses together ?
+    #aha! yes that's even better
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_better_seq0.25))+
+             #geom_hex()
+             geom_point(alpha=0.2)  
+           )  
+    
+    #i think adding the effectivenesses may give an even better plot
+    #and makes it easier for the reader to interpret
+    #aha! yes that's even better
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mixA_better_seq0.25))+
+
+             geom_point(alpha=0.2)  
+           )  
+    
+    #facetted 0/1, labelled mix better, seq better
+    #if I get this sorted I could try to have +ve & -ve on the same scale
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mixA0.25))+
+             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+
+             theme(legend.position="none") +
+             geom_point(alpha=1)  
+           )     
+    
+    
+    #what if I do the difference rather than just 0/1
+    #aha! this is close to being the killer plot, just need to get the colour scale right 
+    #but the previous one may be clearer
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_minus_seq0.25))+
+             #geom_hex()
+             geom_point(alpha=1) +
+             #no adding grey outlines obscures the pattern
+             #geom_point(shape=21, colour='grey') +
+             #this one does look good but slight potential to see negatives above even though they aren't there
+             #could I modify the shapes to be different
+             #would a repeated, faceted plot solve that ?
+             #scale looks good but colours could do with being denser
+             #and I'm not sure that making the points that are close to zero white is a good idea ?
+             #although it does mean points that are only a few generations different do not obscure the pattern
+             #maybe I could explicitly do Ians 20% thing & colour those white
+             scale_colour_gradient2()
+
+             #didn't manage to get the colorBrewer scale to diverge from 0
+             #scale_colour_distiller("RdYlGn",type='div')
+            )     
+
+    #COOLIO !! I really like this figure.
+    library(viridis)
+    #facet showing generation differences, labelled mix better, seq better
+    #+ve & -ve on the same colour scale
+    #failed attempt at getting Curtis point in legend
+    #print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.25, size="Curtis"))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.25))+
+             
+             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+
+             #YlGnBu looks really good except that the yellow points are very faint
+             #scale_colour_distiller(palette='YlGnBu', direction=1) +
+             #option="plasma" looks good too
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
+             theme_bw() +
+             #theme_minimal() +
+             #add point for Curtis inputs
+             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             #failing to add legend for curtis point
+             #scale_fill_manual(name = "Curtis Fig.2", values = 'red', labels = 'test') +
+             #scale_size_manual(name = "Curtis Fig.2", values="test") +
+             #scale_shape_manual(name = "Curtis Fig.2", values="test") +             
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) + 
+             #add text for Curtis point
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+           )       
+
+    #NOW what if I subset the 0 values & fit a linear model to it
+    #could that be used to decide between the 2 strategies ?
+    #I might even be able to do the lm plot within ggplot
+    
+    #trickiness I have is that I have previously put 0 values in the adptive mix better plot 
+    #which is maybe a little misleading anyway
+    #and also means that I only get the lm line in the one plot
+    #maybe what I can do is add the zeros into both plots then  will get lines in both
+    #might even be good to overplot the zero values after
+    #or even remove the zero values ?
+    
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.25))+
+             
+             facet_grid( ~ seq_better_mixA0.25, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
+
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
+             theme_bw() +
+             #add point for Curtis inputs
+             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) + 
+             #!!!NOW can I add a lm fitted to the 0 points mixA_minus_seq0.25
+             geom_smooth(data=ggSubset[which(ggSubset$mixA_minus_seq0.25==0),], method = "lm", se = FALSE) +
+             #can I subtley highlight the zero points which are repeated in each plot ?
+             geom_point(data=ggSubset[which(ggSubset$mixA_minus_seq0.25==0),], size=0.8, colour='lightgrey', shape=2, fill='white') +            
+             #add text for Curtis point
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+           )      
+   
+  # doing the lm outside of ggplot    
+  df_same = ggSubset[which(ggSubset$mixA_minus_seq0.25==0),]
+  x1=df_same$exposure 
+  y1=df_same$effectiveness_insecticide1 + df_same$effectiveness_insecticide2
+  
+  l_mod <- lm(y1 ~ x1)
+  l_mod$coefficients
+  #(Intercept)           x 
+  #  0.9790948   0.6095132 
+  
+  x2 <- seq(0,1,0.1)
+  #approximation
+  y2 <- 0.6*x2+0.98
+  #plot(x2,y2) 
+
+  
+  #modify the killer plot to show where mixtures are 20% better ?
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.25))+
+             
+             facet_grid( ~ mixA_not20pc_better_seq0.25, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
+
+             theme_bw() +
+             #add point for Curtis inputs
+             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) +
+             #add a lm fitted to the 0 points
+             geom_smooth(data=df_same, method = "lm", se = FALSE) 
+           )  
+    
+```
+
+
+# repeating killer plot for mixtures both versus sequential
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+  #try repeating the killer plot for mixtures both versus sequential
+
+
+  ##BEWARE toogle this to look at plots for mixboth vs seq
+  #ggSubset <- dif_mixA_seq
+  ggSubset <- dif_mix2_seq
+
+  #if mix-seq >1 resistance took longer for mix so mix is better
+  ggSubset$mix2_better_seq0.25 <- ifelse( ggSubset$mix2_minus_seq0.25 > 0, 1, 0 )
+  ggSubset$seq_better_mix20.25 <- ifelse( ggSubset$mix2_minus_seq0.25 < 0, 1, 0 )
+  ggSubset$abs_mix2_minus_seq0.25 <- abs(ggSubset$mix2_minus_seq0.25)
+
+  
+  #tricky
+  #be a bit careful what to do with zeros where results are same for both strategies
+  #I use these better vars to facet the plots
+  #may want the zeroes in both facets
+  #to get that I can rbind the zeros from one onto the other BEWARE this may screw up existing plots
+  df_same <- ggSubset[which(ggSubset$mix2_minus_seq0.25==0),]
+  #set these to 1 (they were 0)
+  df_same$mix2_better_seq0.25 <- 1
+  df_same$seq_better_mix20.25 <- 1
+  #rbind them back onto other dataset, probably not needed ??
+  ggSubset <- rbind( ggSubset, df_same)
+
+  #add an option for 20% better, put the not in to get facets in correct order in ggplot later
+  ggSubset$mix2_not20pc_better_seq0.25 <- ifelse( ggSubset$mix2_minus_seq0.25 / ggSubset$gen_cP0.25seq <= 0.2, 1, 0 )   
+    
+    #i think adding the effectivenesses may give an even better plot
+    #and makes it easier for the reader to interpret
+    #aha! yes that's even better
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mix2_better_seq0.25))+
+
+             geom_point(alpha=0.2)  
+           )  
+    
+    #facetted 0/1, labelled mix better, seq better
+    #if I get this sorted I could try to have +ve & -ve on the same scale
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mix20.25))+
+             facet_grid( ~ seq_better_mix20.25, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
+
+             theme(legend.position="none") +
+             geom_point(alpha=1)  
+           )     
+    
+
+    #killer plot mix2 vs seq
+    library(viridis)
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.25))+
+             
+             facet_grid( ~ seq_better_mix20.25, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
+
+             #YlGnBu looks really good except that the yellow points are very faint
+             #scale_colour_distiller(palette='YlGnBu', direction=1) +
+             #option="plasma" looks good too
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
+             theme_bw() +
+             #theme_minimal() +
+             #add point for Curtis inputs
+             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             #failing to add legend for curtis point
+             #scale_fill_manual(name = "Curtis Fig.2", values = 'red', labels = 'test') +
+             #scale_size_manual(name = "Curtis Fig.2", values="test") +
+             #scale_shape_manual(name = "Curtis Fig.2", values="test") +             
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) + 
+             #add text for Curtis point
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+           )       
+
+    
+    #modify killer plot mix2 vs seq to add in male exposure prop on x axis
+    library(viridis)
+    print( ggplot(ggSubset, aes(x=exposure+exposure*maleExposureProp, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.25))+
+             
+             facet_grid( ~ seq_better_mix20.25, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
+             theme_bw() +
+             #add point for Curtis inputs
+             geom_point(data = curtisInputs, aes(x=exposure+exposure*maleExposureProp, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides for both sexes') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) + 
+             #add text for Curtis point
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+           )       
+    
+  #modify the killer plot to show where mixtures are 20% better ?
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.25))+
+             
+             facet_grid( ~ mix2_not20pc_better_seq0.25, labeller=as_labeller( c('0'='mix\nresistance >20% slower','1'='mix\nresistance <20% slower'))) +
+
+             theme_bw() +
+             #add point for Curtis inputs
+             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) +
+             #add a lm fitted to the 0 points
+             geom_smooth(data=df_same, method = "lm", se = FALSE) 
+           )  
+    
+```
+
+
+
+
+# Some examples showing how changing effectiveness can alter the ranking of insecticide strategies
+### Curtis' Fig 2. inputs : mix2 > adaptive > mix1 > seq
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+```
+
+### decrease effectiveness of I2 from 1 to 0.85 : mix2 > adaptive > seq > mix1
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+```
+
+### also decrease effectiveness of I1 from 0.73 to 0.63 : seq > mix2 > adaptive > mix1
+```{r, eval=TRUE, echo=FALSE, fig.height=4}
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.63 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
+```
+
+
+
+
+# PRCC difference in time-to-resistance between sequential and mixture adaptive
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+
+  
+  library(sensitivity)
+    
+    x <- dif_mixA_seq[,1:num_inputs]
+    y <- dif_mixA_seq["mixA_minus_seq0.25"]
+      
+    pcc_res <- pcc(x, y, rank=TRUE)
+    
+    #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
+    #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
+    #plot(pcc_res)
+    
+    #results are here I can probably rbind them together into a df that I can ggplot
+    #pcc_res$PRCC
+    
+    to_plot <- pcc_res$PRCC
+    #rename column 1 from 'original to PRCC
+    names(to_plot)[1] <- 'PRCC'
+    to_plot$inputs <- rownames(to_plot)  
+    
+    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+             geom_point(shape=1, colour='red') +
+             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             geom_hline(yintercept = 0, linetype=3) +
+             ylim(-1,1) +
+             ggtitle(paste("PRCC difference between sequential and mixture adaptive")) +
+             xlab(NULL)
+          )
+```
+
+
+
+
+# PRCC analysis for time-to-resistance subsetted by each insecticide use strategy
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+
+  
+  library(sensitivity)
+  
+# pcc(X, y, rank = FALSE, nboot = 0, conf = 0.95)
+# 
+# Arguments
+# X a data frame containing model input variables
+# y a vector containing the responses 
+# rank logical. If TRUE, the analysis is done on the ranks.
+# nboot the number of bootstrap replicates.
+# conf the confidence level of the bootstrap confidence intervals.
+
+  strategies <- unique(ggInsOuts$strategy)
+  
+  for(strategy in strategies)
+  {  
+
+
+    by_strategy <- ggInsOuts[ggInsOuts$strategy==strategy,]
+    
+    x <- by_strategy[,1:num_inputs]
+    y <- by_strategy['time_to_resistance0.25']
+      
+    pcc_res <- pcc(x, y, rank=TRUE)
+    
+    #if you add bootstrap, error bars are added to the default plot & extra columns to the PRCC object
+    #pcc_res <- pcc(x, y, rank=TRUE, nboot=100)
+    #plot(pcc_res)
+    
+    #results are here I can probably rbind them together into a df that I can ggplot
+    #pcc_res$PRCC
+    
+    to_plot <- pcc_res$PRCC
+    #rename column 1 from 'original to PRCC
+    names(to_plot)[1] <- 'PRCC'
+    to_plot$inputs <- rownames(to_plot)  
+    
+    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+             geom_point(shape=1, colour='red') +
+             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             geom_hline(yintercept = 0, linetype=3) +
+             ylim(-1,1) +
+             #ggtitle(paste(strategy,"PRCC")) +
+             ggtitle(paste(strategy,"time-to-resistance 0.25")) +
+             xlab(NULL)
+          )
+  }
+    
+```  
+
+
+
+
+## response of resistance thresholds to individual inputs faceted by strategy
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+  
+
+  names_inputs <- names(ggInsOuts)[1:num_inputs]
+  
+  #todo find out to take sample this doesn't work
+  #ggSample <- sample(ggInsOuts,500)
+  
+  for(i in names_inputs)
+  {
+    #x11()
+
+    y <- 'time_to_resistance0.25'    
+    #y <- 'time_to_resistance0.5'
+    color <- 'strategy'
+    #coloring by exposure shows its effect even when other params are varying
+    #color <- 'exposure'    
+    
+    print( ggplot(ggInsOuts, aes_string(x=i, y=y, color=color)) + 
+             #points not wanted if 10000
+             #geom_point(shape=3, show.legend=FALSE) + 
+             geom_smooth(colour='red', linetype='dashed',size=0.5, show.legend=FALSE) +
+             facet_wrap( ~ strategy) + #, show_guide = FALSE) + 
+             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
+             labs(title = i))
+  }
+  
+```
+
+
+
+
+
