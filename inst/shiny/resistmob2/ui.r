@@ -1,7 +1,7 @@
-#resistance/shiny/resistmob1/ui.r
-#andy south 3/6/16
+#resistance/shiny/resistmob2/ui.r
+#andy south 15/6/16
 #a mobile compatible app
-#uses OLD system where selection coefficient rather than rr_advantage used as input
+#uses NEW system where rr_advantage used as input instead of selection coefficient
 
 library(shiny)
 
@@ -125,7 +125,7 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
     ),
     column(2, offset = 0,
            #h5("Advantage of resistance"),
-           h5("Advantage"),
+           h5("Advantage RR"),
            #numericInput("s.RR1_A0", "locus1: 0.23", 0.23, min = 0, max = 1, step = 0.05),
            #numericInput("s.RR2_0B", "locus2: 0.43", 0.43, min = 0, max = 1, step = 0.05),
            

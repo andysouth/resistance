@@ -39,8 +39,12 @@ shinyServer(function(input, output) {
                       exposure = input$exposure_A,
                       phi.SS1_A0 = input$effectiveness_A1,
                       phi.SS2_0B = input$effectiveness_A2,
-                      s.RR1_A0 = input$advantage_A1,
-                      s.RR2_0B = input$advantage_A2,
+                      # 14/6/16
+                      #s.RR1_A0 = input$advantage_A1,
+                      #s.RR2_0B = input$advantage_A2,
+                      rr_advantage_I1 = input$advantage_A1,
+                      rr_advantage_I2 = input$advantage_A2,
+                      
                       addCombinedStrategy = FALSE,
                       strategyLabels = c('seq','','adapt','mix2') )
                       #correctMixDeployProp = input$correctMixDeployProp,
@@ -56,8 +60,8 @@ shinyServer(function(input, output) {
                       "exposure =",input$exposure_A,",",
                       "phi.SS1_A0 =",input$effectiveness_A1,",",
                       "phi.SS2_0B =",input$effectiveness_A2,",",
-                      "s.RR1_A0 =",input$advantage_A1,",",
-                      "s.RR2_0B =",input$advantage_A2,",",
+                      "rr_advantage_I1 =",input$advantage_A1,",",
+                      "rr_advantage_I2 =",input$advantage_A2,",",
                       "addCombinedStrategy = FALSE,", 
                       "strategyLabels = c('seq','','adapt','mix2')",
                       ")\n" )
@@ -85,15 +89,19 @@ shinyServer(function(input, output) {
                       exposure = input$exposure_B,
                       phi.SS1_A0 = input$effectiveness_B1,
                       phi.SS2_0B = input$effectiveness_B2,
-                      s.RR1_A0 = input$advantage_B1,
-                      s.RR2_0B = input$advantage_B2,
+                      # 14/6/16
+                      #s.RR1_A0 = input$advantage_B1,
+                      #s.RR2_0B = input$advantage_B2,
+                      rr_advantage_I1 = input$advantage_B1,
+                      rr_advantage_I2 = input$advantage_B2,
+                      
                       addCombinedStrategy = FALSE,
                       strategyLabels = c('seq','','adapt','mix2') )
         #correctMixDeployProp = input$correctMixDeployProp,
         #addCombinedStrategy = input$addCombinedStrategy )
         
         #a hack to output the inputs
-        cat("A:\n")
+        cat("B:\n")
         cat("runcurtis_f2( max_gen=500, ", 
             "P_1 =",input$frequency_B1,",", 
             "P_2 =",input$frequency_B2,",", 
@@ -102,8 +110,8 @@ shinyServer(function(input, output) {
             "exposure =",input$exposure_B,",",
             "phi.SS1_A0 =",input$effectiveness_B1,",",
             "phi.SS2_0B =",input$effectiveness_B2,",",
-            "s.RR1_A0 =",input$advantage_B1,",",
-            "s.RR2_0B =",input$advantage_B2,",",
+            "rr_advantage_I1 =",input$advantage_B1,",",
+            "rr_advantage_I2 =",input$advantage_B2,",",
             "addCombinedStrategy = FALSE,", 
             "strategyLabels = c('seq','','adapt','mix2')",
             ")\n" )

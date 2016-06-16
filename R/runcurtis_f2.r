@@ -23,6 +23,8 @@
 #' @param s.RR1_A0 Selection coefficient locus1 in A
 #' @param s.RR2_0b Selection coefficient locus2 in b
 #' @param s.RR2_0B Selection coefficient locus2 in B
+#' @param rr_advantage_I1 effect of resistance in overcoming insecticide 1 effectiveness in RR
+#' @param rr_advantage_I2 effect of resistance in overcoming insecticide 2 effectiveness in RR  
 #' @param z.RR1_00 fitness cost of resistance allele 1 in insecticide free environment
 #' @param z.RR2_00 fitness cost of resistance allele 2 in insecticide free environment
 #' @param sexLinked whether resistance is sex linked, default=0(FALSE)
@@ -56,9 +58,13 @@ runcurtis_f2 <- function( max_gen = 500,
                           h.RS2_0b	=	0	,
                           h.RS2_0B	=	0.0016	,
                           s.RR1_a0	=	0	,
-                          s.RR1_A0	=	0.23	,
+                          s.RR1_A0	=	NULL	,
                           s.RR2_0b	=	0	,
-                          s.RR2_0B	=	0.43	,
+                          s.RR2_0B	=	NULL	,
+                          # 14/6/16 rr_advantage = s / effectiveness
+                          rr_advantage_I1 = 0.23/0.73,
+                          rr_advantage_I2 = 0.43/1,    
+
                           z.RR1_00	=	0	,
                           z.RR2_00	=	0	,
                           sexLinked = 0 ,
@@ -98,6 +104,10 @@ runcurtis_f2 <- function( max_gen = 500,
                                  s.RR1_A0	=	s.RR1_A0	,
                                  s.RR2_0b	=	s.RR2_0b	,
                                  s.RR2_0B	=	s.RR2_0B	,
+                                 # 14/6/16
+                                 rr_advantage_I1 = rr_advantage_I1,
+                                 rr_advantage_I2 = rr_advantage_I2,    
+                                 
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
@@ -130,6 +140,10 @@ runcurtis_f2 <- function( max_gen = 500,
                                  s.RR1_A0	=	s.RR1_A0	,
                                  s.RR2_0b	=	s.RR2_0b	,
                                  s.RR2_0B	=	s.RR2_0B	,
+                                 # 14/6/16
+                                 rr_advantage_I1 = rr_advantage_I1,
+                                 rr_advantage_I2 = rr_advantage_I2, 
+                                 
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
@@ -162,6 +176,10 @@ runcurtis_f2 <- function( max_gen = 500,
                                  s.RR1_A0	=	s.RR1_A0	,
                                  s.RR2_0b	=	s.RR2_0b	,
                                  s.RR2_0B	=	s.RR2_0B	,
+                                 # 14/6/16
+                                 rr_advantage_I1 = rr_advantage_I1,
+                                 rr_advantage_I2 = rr_advantage_I2, 
+                                 
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
