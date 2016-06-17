@@ -4302,49 +4302,106 @@ I suggest we make the textual explanation (page 12) as clear as possible and des
  
 Happy to hear suggestions for words other that “restoration”.
 
-** 15/6/16 **
+Here are the rr_advantage changes that I made :
 
-modifying rr_advantage
- 
- 
- 
-### TO DO  
+RR_restoration_coefficient or rr_advantage_I1 & rr_advantage_I2
 
-rr_advantage
-go with that as the variable name for now we can always change later by find/replace
-
-Is there potential to rationalise the analysis at all before re-running ? or just get on with it.
-
-RR_restoration_coefficient or resistance_coeff_I1 & resistance_coeff_I2
-What I will need to do : search 14/6/16 to see changes
+What I changed : search 14/6/16 to see changes
 #sensiAnPaperPart.r
 done ~ add generation of new inputs & multiplication to give s
-started ~ save new inputs to input file to enable post-run analysis
+done ~ save new inputs to input file to enable post-run analysis
 #setInputOneScenario.r
 done ~ add new inputs as args
 done ~ add doc for new args
+done ~ add check that s & rr inputs are consistent
 #runModel2.r
 i think doesn't need to be altered, it will just use the longer input object & output that for post-run analysis
-#? which script to use as a starting point for post run analysis ?
-#paper1_results_figs_slimmed50.Rmd
-or
-#paper1_results_figs.Rmd
-~ change loading of model outputs
-~ replace 's*' with resistance_coeff_I1 in this line
+#sensiAnPaper1All.Rmd
+~ copied needed bits into paper1_results_figs_rr.Rmd so not needed anymore
+
+#paper1_results_figs_rr.Rmd copied from paper1_results_figs.Rmd
+done ~ change loading of model outputs
+done ~ replace 's*' with rr_advantage_I1 in this line
 treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','resistance_coeff_I1','resistance_coeff_I2')
-~ comment out these lines
+treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','rr_advantage_I1','rr_advantage_I2')
+done ~ comment out these lines
   rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
   rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
-~ modify curtisInputs to include r rather than s  
+done ~ modify curtisInputs to include r rather than s  
+ # 14/6/16 rr_advantage = s / effectiveness
+ #"selection_coef_allele1"=0.23,
+ #"selection_coef_allele2"=0.43,
+ "rr_advantage_I1"=0.23/0.73,
+ "rr_advantage_I2"=0.43/1, 
   
+#paper1_results_figs_slimmed50_rr.Rmd
+done ~ modified same as previous to create new rr polished figs
 
-Beware that although I may pass resistance_coeff_I1 to runModel2() it will not be used, it will just go in the inputs to enable post run analysis. s.RR1_A0 will be used by the model. I could perhaps put in a check that s=newR * effectiveness.
+Beware that although I may pass rr_advantage_I1 to runModel2() it will not be used, it will just go in the inputs to enable post run analysis. s.RR1_A0 will be used by the model. I put a check into setInputOneScenario.r that s=newR * effectiveness.
 
 
-Qs for Ian before new analysis
-1. what range do we want for effectiveness ? stick to 0.45-1, or we could go lower e.g. 0.3-1
-2. eventually would we need diff values for high & low exposure
+** 15/6/16 **
+modifying to rr_advantage
+go with that as the variable name for now we can always change later by find/replace 
+ 
+  #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same
+  #the exception is the exposure array a. The single exposure input will be the same, but the array changes
+  #according to setExposure(  )
+  
+  
+** 16/6/16 **
+
+done ~ modify runcurtis_f2.r to accept rr_advantage inputs
+done ~ get a new UI with RR inputs working
+
+#coolio have it working in resistmob2 and it's good being able to explore full range of selective advantage, even setting it to 0 does what I would expect. Reducing selective advantage reduces the rise of resistance in one insecticide, which leads to it being protected by the other in a mixture.
+
+#cool contrast between these scenarios modifying effectiveness and rr_advantage
+in which all defaults set to 0.5 except
+
+#AA effectiveness I1 to 0.8 causes mixture to be slower, although I1 is faster it protects I2 in mixture, making mixture slower
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+
+#BB rr advantage I1 to 0.8 sequential remains slower, although I1 is faster as in previous it provides less protection to I2 in the mixture
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.8 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+
+#CC rr advantage I2 to 0.2 sequential remains slower (just), I2 slower than I1 in mixture similar to AA but receives less protection in mixture
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.2 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+
+done ~ fix rr_ warnings from setInputOne Scenario in paper2
+done ~ finish trying to explain above scenarios #AA #BB #CC to myself, maybe put into my paper2 doc
+done ~ shinyapps submit
+done ~ send to ian
+
+~ ran the 10000 simulations by code from paper1_results_figs_rr
+
+
+** 17/6/2016 **
+
+~ modified and ran slimmed paper figs doc
+
+Figures are much the same with effectiveness & exposure being key.
+
+Fig x3b which shows how time-to-resistance changes for diff strategies for effectiveness.
+
+The pattern that effectiveness causes which is best to change is still there, but is tricky to see.
+
+Maybe I could remove the uncertainty bounds ?
+or remove mix either ?
+  
+  
+ 
+### TO DO  
+
+
+
+
+
+
+
+
+
+
 
 
 Ian is concerned that we don't cover the full range of potential selection coefficients.
