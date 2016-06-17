@@ -26,8 +26,8 @@
   #nScenarios <- 10  
   #nScenarios <- 100
   #nScenarios <- 500 
-  nScenarios <- 1000
-  #nScenarios <- 10000
+  #nScenarios <- 1000
+  nScenarios <- 10000
   
   #to run 'extended' or not
   experiment <- 'extended' #'curtis'
@@ -39,9 +39,9 @@
   
   
   ## save results objects as rda for re-use
-  save(listOutMix, file=paste0(outFolder,'listOutMix_rr_1000.rda'))
-  save(listOutI1, file=paste0(outFolder,'listOutI1_rr_1000.rda'))
-  save(listOutI2, file=paste0(outFolder,'listOutI2_rr_1000.rda'))  
+  save(listOutMix, file=paste0(outFolder,'listOutMix_rr_10000.rda'))
+  save(listOutI1, file=paste0(outFolder,'listOutI1_rr_10000.rda'))
+  save(listOutI2, file=paste0(outFolder,'listOutI2_rr_10000.rda'))  
 ```  
 
 
@@ -57,9 +57,9 @@
   experiment <- 'extended'
 
   ## to load previously saved runs  
-  load(file=paste0(outFolder,'listOutMix_rr_1000.rda'))
-  load(file=paste0(outFolder,'listOutI1_rr_1000.rda'))
-  load(file=paste0(outFolder,'listOutI2_rr_1000.rda'))
+  load(file=paste0(outFolder,'listOutMix_rr_10000.rda'))
+  load(file=paste0(outFolder,'listOutI1_rr_10000.rda'))
+  load(file=paste0(outFolder,'listOutI2_rr_10000.rda'))
   
 # very quick test data
   # load(file=paste0(outFolder,'listOutMix_ex2_3.rda'))
