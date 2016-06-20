@@ -371,15 +371,18 @@ for(i in names_results)
              geom_point(shape=1, colour='red') +
              theme(axis.text.x = axis_text_x) +
              geom_hline(yintercept = 0, linetype=3) +
-             #theme_bw() +
              #theme(panel.grid.major.y = element_line(color = "grey", size = 1)) +
              ylim(-1,1) +
              ggtitle(paste(strat_name[strategy_num])) +
              xlab(NULL) 
   }
 
+  #to put back in some ref gridlines that are removed by cowplot
+  #theme_set(theme_gray())
+  theme_set(theme_bw())
+  
   #plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],plotlist[[4]],ncol=1, rel_heights=c(1,1,1,1.8))  
-  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],ncol=1, rel_heights=c(1,1,1.8))    
+  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],ncol=1, rel_heights=c(1,1,1.6))    
       
 ```
 
@@ -394,7 +397,10 @@ for(i in names_results)
   #names_inputs <- names(ggInsOuts)[1:num_inputs]
   
   #remove insecticide1 & 2 strategies
-  ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
+  #ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
+  #20/6/16 try also removing "Mix either" 
+  ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2","Mix either"), ]
+
   #subset which output plots to show in the main paper
   # in_cols <- c("start_freq_allele1", "exposure","effectiveness_insecticide1",
   #             "dominance_allele1","selection_coef_allele1","maleExposureProp")
@@ -407,7 +413,9 @@ for(i in names_results)
   #names_inputs <- in_cols
   
   #to rearrange order of legend entries
-  ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential", "Mix either")) #, labels=c("MBB", "MAA", "MCC"))
+  #ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential", "Mix either")) 
+  #20/6/16 try removing "Mix either" 
+  ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential"))   
   
   #TODO could I facet the plots below rather than using the loop
   #probably need to put all inputs into a single column and then facet by that
@@ -424,7 +432,7 @@ for(i in names_results)
             #points not wanted if 10000
              #geom_point(shape=3, show.legend=FALSE) + 
              #geom_smooth(colour='red', linetype='dashed',size=0.5) +
-             geom_smooth(linetype='dashed',size=1) +
+             geom_smooth(linetype='dashed',size=0.5) +
              #facet_wrap( ~ strategy) +
              #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
              #labs(title = i) +
@@ -464,7 +472,9 @@ for(i in names_results)
     #rename column 1 from 'original to PRCC
     names(to_plot)[1] <- 'PRCC'
     to_plot$inputs <- rownames(to_plot)  
+
     
+        
     print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
              geom_point(shape=1, colour='red') +
              theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
@@ -503,9 +513,7 @@ for(i in names_results)
 \pagebreak
 
 ## Fig. x5 Effectiveness and exposure together determine most of whether resistance arises slower under adaptive mixture or sequential strategies
-
 1. Exposure and effectiveness can be used to predict most of whether resistance will arise slower under the sequential or adaptive mixture strategy, either by a simple plot or using classification trees.
-
 ```{r, eval=TRUE, echo=FALSE, fig.height=6} 
   
 
@@ -527,8 +535,6 @@ for(i in names_results)
   #rbind them back onto other dataset
   ggSubset <- rbind( ggSubset, df_same)
 
-  #add an option for 20% better, put the not in to get facets in correct order in ggplot later
-  ggSubset$mixA_not20pc_better_seq0.5 <- ifelse( ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq <= 0.2, 1, 0 )   
   
     #COOLIO !! I really like this figure.
     library(viridis)
@@ -574,7 +580,40 @@ for(i in names_results)
   l_mod <- lm(y1 ~ x1)
   l_mod$coefficients
   #(Intercept)          x1 
-  #1.019330    0.560508
+  ## 1.0746184 0.5590287
+  
+  #20/6/16 calculated T/F positives & negatives, according to the linear model calculation
+  #this is a very heath-robinson way of doing, must be a better way
+  #so I want to find whether a point is above or below the line (and probably ignore zeros where mix & sequence the same)
+  #the eq is approx y=0.56*x+1.07
+  #so I could create a new column that has the expected lm val of added effectivenesses
+  #where +ve is mix better
+  #true+ve : effectiveness1+2 > lm & mixA_minus_seq0.5>0
+  #true-ve : effectiveness1+2 < lm & mixA_minus_seq0.5<0
+  #false+ve : effectiveness1+2 > lm & mixA_minus_seq0.5<0
+  #false-ve : effectiveness1+2 < lm & mixA_minus_seq0.5>0  
+  ggSubset$l_mod_eff <- l_mod$coefficients[2] * ggSubset$exposure + l_mod$coefficients[1]
+  
+  #BEWARE that this sets 0s (where mix & sequence are equal) to NA
+  ggSubset$l_mod_confusion <- 
+    ifelse ( (ggSubset$effectiveness_insecticide1+ggSubset$effectiveness_insecticide2) > ggSubset$l_mod_eff,
+               ifelse(ggSubset$mixA_minus_seq0.5>0,"TP",ifelse(ggSubset$mixA_minus_seq0.5<0,"FP",NA))
+             
+            ,ifelse(ggSubset$mixA_minus_seq0.5<0,"TN",ifelse(ggSubset$mixA_minus_seq0.5>0,"FN",NA))
+            )
+  
+  table(ggSubset$l_mod_confusion)
+  
+  #  FN   FP   TN   TP 
+  #602  219 3834 2787 
+  
+  #sensitivity or true positive rate TPR=TP/(TP+FN)
+  TPR = length(which(ggSubset$l_mod_confusion=="TP")) / (length(which(ggSubset$l_mod_confusion=="TP"))+length(which(ggSubset$l_mod_confusion=="FN")))
+  #specificity (SPC) or true negative rate SPC=TN/(TN+FP)
+  SPC = length(which(ggSubset$l_mod_confusion=="TN")) / (length(which(ggSubset$l_mod_confusion=="TN"))+length(which(ggSubset$l_mod_confusion=="FP")))
+  
+  cat("sensitivity(TPR) : ",TPR)#,"\n")
+  cat("specificity(SPC) : ",SPC)#,"\n")
   
   #approximation
   #x2 <- seq(0,1,0.1)
@@ -582,19 +621,19 @@ for(i in names_results)
   #plot(x2,y2)    
     
 ```
-
 Red triangles are those runs in which resistance reached the threshold at the same time in the two strategies (and are repeated in both panels). The red line is a linear model through these same points. 
-
 \pagebreak
 
     
 
 
-## Fig. x6 Modifying the previous plot to show where resistance arises over 20% slower in an adaptive mixture strategy versus sequential.
+## Fig. x6 Modifying previous plot to show where resistance arises over 20% slower for adaptive mixture versus sequential.
 
 1. The line fitted to runs where resistance is reached at the same time for mixture and sequential is retained. Less of the parameter space favours the adaptive mixture under these constraints.
-
 ```{r, eval=TRUE, echo=FALSE, fig.height=6} 
+
+  #add an option for 20% better, put the not in to get facets in correct order in ggplot later
+  ggSubset$mixA_not20pc_better_seq0.5 <- ifelse( ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq <= 0.2, 1, 0 )   
 
 
   df_20pc <- ggSubset[which(ggSubset$mixA_minus_seq0.5 / ggSubset$gen_cP0.5seq > 0.19 & 
@@ -638,6 +677,40 @@ Red triangles are those runs in which resistance reached the threshold at the sa
 # (Intercept)          x1 
 #   1.3914547   0.2904911 
   
+#20/6/16 calculated T/F positives & negatives, according to the linear model calculation
+  #this is a very heath-robinson way of doing, must be a better way
+  #so I want to find whether a point is above or below the line (and probably ignore zeros where mix & sequence the same)
+  #the eq is approx y=0.56*x+1.07
+  #so I could create a new column that has the expected lm val of added effectivenesses
+  #where +ve is mix better
+  #true+ve : effectiveness1+2 > lm & mixA_minus_seq0.5>0
+  #true-ve : effectiveness1+2 < lm & mixA_minus_seq0.5<0
+  #false+ve : effectiveness1+2 > lm & mixA_minus_seq0.5<0
+  #false-ve : effectiveness1+2 < lm & mixA_minus_seq0.5>0  
+  ggSubset$l_mod_eff <- l_mod$coefficients[2] * ggSubset$exposure + l_mod$coefficients[1]
+  
+  #BEWARE that this sets 0s (where mix & sequence are equal) to NA
+  ggSubset$l_mod_confusion <- 
+    ifelse ( (ggSubset$effectiveness_insecticide1+ggSubset$effectiveness_insecticide2) > ggSubset$l_mod_eff,
+               ifelse(ggSubset$mixA_not20pc_better_seq0.5==0,"TP",ifelse(ggSubset$mixA_not20pc_better_seq0.5==1,"FP",NA))
+             
+            ,ifelse(ggSubset$mixA_not20pc_better_seq0.5==1,"TN",ifelse(ggSubset$mixA_not20pc_better_seq0.5==0,"FN",NA))
+            )
+  
+  table(ggSubset$l_mod_confusion)
+  
+  #  FN   FP   TN   TP 
+  ## 251 468 6178 915
+  
+  #sensitivity or true positive rate TPR=TP/(TP+FN)
+  TPR = length(which(ggSubset$l_mod_confusion=="TP")) / (length(which(ggSubset$l_mod_confusion=="TP"))+length(which(ggSubset$l_mod_confusion=="FN")))
+  #specificity (SPC) or true negative rate SPC=TN/(TN+FP)
+  SPC = length(which(ggSubset$l_mod_confusion=="TN")) / (length(which(ggSubset$l_mod_confusion=="TN"))+length(which(ggSubset$l_mod_confusion=="FP")))
+  
+  cat("sensitivity(TPR) : ",TPR)#,"\n")
+  cat("specificity(SPC) : ",SPC)#,"\n")  
+  
+  
 ```
 
 \pagebreak
@@ -673,12 +746,12 @@ fewer runs where sequential gives slower resistance
   
     #find unequal runs
     unequal <- ggSubset[ggSubset$resist_start_lo_div_hi < 0.01,]
-    nrow(ggSubset)
-    nrow(unequal)
+    #nrow(ggSubset)
+    #nrow(unequal)
     #2721 out of the 6189 remaining runs
     
     #in how many runs was seq better than mix
-    sum(unequal$seq_better_mix20.5)
+    #sum(unequal$seq_better_mix20.5)
     #311
   
     library(viridis)
@@ -823,10 +896,12 @@ fewer runs where sequential gives slower resistance
 
 ```
 
+
+
+```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5} 
+#eval=FALSE so this one not displayed
+
 ## Fig. x8 Introducing a new insecticide when there is already resistance to an existing one. This takes Curtis Fig 2 and sets the starting frequency for each allele in turn to a higher level to represent an 'old' insecticide to which there is resistance. In both cases resistance to the new insecticide develops slower when the 'old' insecticide continues to be used (mixture) than when it doesn't (sequence).
-
-
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5} 
 
 #curtis_f2 with P_1 changed from 0.01 to 0.45 : mix slower than seq
 runcurtis_f2( P_1 = 0.49 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , rr_advantage_I1=0.23/0.73, rr_advantage_I2 = 0.43/1, addCombinedStrategy=FALSE )
