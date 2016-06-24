@@ -156,10 +156,12 @@ date: "`r Sys.Date()`"
   curtisInputs <- data.frame("exposure"=0.9,
                              "effectiveness_insecticide1"=0.73,
                              "effectiveness_insecticide2"=1,
+                             "effectiveness_added"=1.73,                             
                              "start_freq_allele1"=0.01,
                              "start_freq_allele2"=0.01,
                              "dominance_allele1"=0.17,
                              "dominance_allele2"=0.0016,
+                             "dominance_added"=0.1716,  
                              # 14/6/16 rr_advantage = s / effectiveness
                              #"selection_coef_allele1"=0.23,
                              #"selection_coef_allele2"=0.43,
@@ -215,6 +217,14 @@ date: "`r Sys.Date()`"
                             ggInsOuts$gen_cP0.25 == 999 | ggInsOuts$gen_cP0.25 > 500 |
                             ggInsOuts$gen_cP0.1 == 999 | ggInsOuts$gen_cP0.1 > 500 )
   
+  
+  #22/6/2016 to check % of runs excluded 
+  #its complicated given that there are runs for I1,I2 & mix 
+  #this is an approximation
+  #TODO, are any others excluded later ?
+  percentExcluded <- 100*length(didntReachThresh)/nrow(ggInsOuts)
+  #16.5
+  
   #subset by runs not making threshold
   ggInsOuts <- ggInsOuts[-didntReachThresh,]
   
@@ -250,20 +260,65 @@ date: "`r Sys.Date()`"
   #>1000 excludes sequential strategy that had a 999 in
   #BEWARE would need to increase 1000 if I increase max generations in the runs
   didntReachThresh <- which( dif_mixA_seq$gen_cP0.5 > 500 | dif_mixA_seq$gen_cP0.5seq > 500 )
+  
+  #TODO 22/6/16 RECHECK that nothing dodgy going on here, seems that more runs being excluded
+  #but this is because its going back to the raw files
+  percentExcluded2 <- 100*length(didntReachThresh)/nrow(dif_mixA_seq)
+  #24%
+  
   #subset by runs not making threshold
   dif_mixA_seq <- dif_mixA_seq[-didntReachThresh,]  
   
   dif_mixA_seq["mixA_minus_seq0.5"] <- dif_mixA_seq["gen_cP0.5"] - dif_mixA_seq["gen_cP0.5seq"]
   
+  
   #for dif_mix2_seq
   didntReachThresh <- which( dif_mix2_seq$gen_cP0.5 > 500 | dif_mix2_seq$gen_cP0.5seq > 500 )
+
+  percentExcluded3 <- 100*length(didntReachThresh)/nrow(dif_mix2_seq)
+  #30%  
+  
+  ####################
+  #23/6/2016 experimenting to see if can reduce the % excluded by tweaking input ranges
+  #20%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$start_freq_allele1 > 0.005, ]
+  #16%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$start_freq_allele1 > 0.005 & dif_mix2_seq$start_freq_allele2 > 0.005, ]
+  #18%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$exposure > 0.25, ]
+  #16%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$exposure > 0.3, ]
+  #7%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$start_freq_allele1 > 0.005 & dif_mix2_seq$start_freq_allele2 > 0.005 & dif_mix2_seq$exposure > 0.25, ]   
+  #5%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$start_freq_allele1 > 0.005 & dif_mix2_seq$start_freq_allele2 > 0.005 & dif_mix2_seq$exposure > 0.3, ] 
+  #26%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$effectiveness_insecticide1 > 0.4 & dif_mix2_seq$effectiveness_insecticide2 > 0.4, ]
+  #13%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$effectiveness_insecticide1 > 0.4 & dif_mix2_seq$effectiveness_insecticide2 > 0.4 & dif_mix2_seq$exposure > 0.3, ]
+  #10%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$start_freq_allele1 > 0.001 & dif_mix2_seq$start_freq_allele2 > 0.001 & dif_mix2_seq$exposure > 0.3, ] 
+  #8%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$effectiveness_insecticide1 > 0.4 & dif_mix2_seq$effectiveness_insecticide2 > 0.4 & dif_mix2_seq$start_freq_allele1 > 0.001 & dif_mix2_seq$start_freq_allele2 > 0.001 & dif_mix2_seq$exposure > 0.3, ] 
+  #22%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$dominance_allele1 > 0.1 & dif_mix2_seq$dominance_allele2 > 0.1, ] 
+  #5%
+  #dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$start_freq_allele1 > 0.001 & dif_mix2_seq$start_freq_allele2 > 0.001 & dif_mix2_seq$exposure > 0.3 & dif_mix2_seq$dominance_allele1 > 0.1 & dif_mix2_seq$dominance_allele2 > 0.1, ] 
+        
+  # didntReachThresh <- which( dif_mix2_seq2$gen_cP0.5 > 500 | dif_mix2_seq2$gen_cP0.5seq > 500 )
+  # 
+  # percentExcluded4 <- 100*length(didntReachThresh)/nrow(dif_mix2_seq2)
+  # 
+  # percentExcluded4  
+    
+  #### end of expt 23/6/2016  
+  
   #subset by runs not making threshold
   dif_mix2_seq <- dif_mix2_seq[-didntReachThresh,]  
   
   dif_mix2_seq["mix2_minus_seq0.5"] <- dif_mix2_seq["gen_cP0.5"] - dif_mix2_seq["gen_cP0.5seq"]
     
 
-  
 
     
 ```
@@ -295,7 +350,7 @@ for(i in names_results)
       coord_cartesian( ylim=c(0, 350)) +
       geom_violin(draw_quantiles = c(0.25, 0.75), show.legend=FALSE, adjust = .5 ) +
       ylab('Time to resistance (gens)') +
-      scale_x_discrete("", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Seq 1st", "Mix either"="Mix 1st","Sequential"="Seq both", "Mix adaptive"="Adaptive", "Mix both"="Mix both" ) )
+      scale_x_discrete("", limits=c("insecticide 1","Mix either","Sequential","Mix adaptive","Mix both"), labels = c("insecticide 1"="Seq 1st", "Mix either"="Mix 1st","Sequential"="Seq both", "Mix adaptive"="Adaptive both", "Mix both"="Mix both" ) )
       
   ) #end print
 }  
@@ -326,7 +381,7 @@ for(i in names_results)
   
   #in main paper I want to just display sequential and mixture strategies
   strategies <- c("Sequential", "Mix adaptive", "Mix both")
-  strat_name <- c("Seq both","Adaptive both","Mix both")
+  strat_name <- c("Sequential both","Adaptive both","Mix both")
   
   plotlist <- list(length(strategies))
   
@@ -394,51 +449,45 @@ for(i in names_results)
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=2.5} 
 
-  #names_inputs <- names(ggInsOuts)[1:num_inputs]
   
-  #remove insecticide1 & 2 strategies
-  #ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
-  #20/6/16 try also removing "Mix either" 
+  #remove some strategies for plots
   ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2","Mix either"), ]
+
+  # create added columns for effectiveness and dominance
+  ggSubset$effectiveness_added <- ggSubset$effectiveness_insecticide1 + ggSubset$effectiveness_insecticide2
+  ggSubset$dominance_added <- ggSubset$dominance_allele1 + ggSubset$dominance_allele2
 
   #subset which output plots to show in the main paper
   # in_cols <- c("start_freq_allele1", "exposure","effectiveness_insecticide1",
   #             "dominance_allele1","selection_coef_allele1","maleExposureProp")
-  in_cols <- c("exposure","effectiveness_insecticide1","dominance_allele1")  
-  
+  #in_cols <- c("exposure","effectiveness_insecticide1","dominance_allele1")  
+  in_cols <- c("exposure","effectiveness_added","dominance_added")  
+    
   out_cols <- c("time_to_resistance0.5","strategy")
   ggSubset <- ggSubset[, c(in_cols,out_cols) ]
   
-  #num_inputs <- length(in_cols)
-  #names_inputs <- in_cols
-  
   #to rearrange order of legend entries
-  #ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential", "Mix either")) 
+  ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential", "Mix either")) 
   #20/6/16 try removing "Mix either" 
-  ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential"))   
-  
-  #TODO could I facet the plots below rather than using the loop
-  #probably need to put all inputs into a single column and then facet by that
+  #ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential"))   
   
   #for(i in names_inputs)
   for(i in in_cols)
     {
-    #x11()
 
     y <- 'time_to_resistance0.5'    
     
     #print( ggplot(ggInsOuts, aes_string(x=i, y=y, colour="strategy")) + 
     print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
-            #points not wanted if 10000
-             #geom_point(shape=3, show.legend=FALSE) + 
-             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             
+             #ideally would include points but they obscure means
+             #geom_point(shape=1, size=1, alpha=0.2, show.legend=FALSE) + 
              geom_smooth(linetype='dashed',size=0.5) +
              #facet_wrap( ~ strategy) +
-             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
              #labs(title = i) +
              #add line for Curtis inputs
              geom_vline(data = curtisInputs, aes_string(xintercept = i), linetype='dotted', colour='red') +
-             #tryting to get the vline into the legend fails
+             #trying to get the vline into the legend fails
              #geom_vline(data = curtisInputs, aes_string(xintercept = i, colour='"Curtis Fig.2"' ), linetype='dotted', show.legend=TRUE) +
              geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = i, y=210, label='"Curtis Fig.2"'), size=3, colour='red')
              
@@ -451,7 +500,7 @@ for(i in names_results)
 
 ## Fig. x4 PRCC difference in time-to-resistance 0.5 between sequential and adaptive mixture strategies
 
-1. Exposure and effectiveness come out as the most important effect on the difference between the sequential and adpative mixture strategies.
+1. Exposure and effectiveness come out as the most important effect on the difference between A) sequential and mixture, and B) difference between sequential and adaptive mixture strategies.
 
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
 
@@ -465,15 +514,13 @@ for(i in names_results)
       
     pcc_res <- pcc(x, y, rank=TRUE)
     
-    #results are here I can probably rbind them together into a df that I can ggplot
-    #pcc_res$PRCC
     
     to_plot <- pcc_res$PRCC
     #rename column 1 from 'original to PRCC
     names(to_plot)[1] <- 'PRCC'
     to_plot$inputs <- rownames(to_plot)  
 
-    
+    cat("A)")
         
     print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
              geom_point(shape=1, colour='red') +
@@ -497,6 +544,8 @@ for(i in names_results)
     #rename column 1 from 'original to PRCC
     names(to_plot)[1] <- 'PRCC'
     to_plot$inputs <- rownames(to_plot)  
+    
+    cat("B)")
     
     print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
              geom_point(shape=1, colour='red') +

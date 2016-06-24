@@ -4378,47 +4378,200 @@ done ~ send to ian
 
 ** 17/6/2016 **
 
+~ skyped with Matt, he has run the mosaics simulations and is initially seeing much lower correlations in PRCC and that the trees aren't working.
+
+~ put the run datafiles onto github so Matt can get at, maybe in a separate repo, to avoid making resistance itself too big ?
+Matt has just set up dropbox. What are the new user limits ? 2GB so should be OK. particularly if I just share the 1000 runs.
+
+~ should I do that directly from Git rather than from RStudio ?
+https://help.github.com/articles/create-a-repo/
+
+GitHub will warn you when pushing files larger than 50 MB. You will not be allowed to push files larger than 100 MB.
+
+How big are the 10,000 run results rdas ? ~ 500MB
+1000 runs ~ 50 MB
+
+
 ~ modified and ran slimmed paper figs doc
 
 Figures are much the same with effectiveness & exposure being key.
 
+
+email from Ian :  
+One other thing for your “to do” list. It concerns the arbitrary line you drew through the points to decide whether or not mixtures are better i.e. Figure 8 and 9. The standard way of assessing the quality of this “diagnostic”  is through “sensitivity” and “specificity” (I assume you are familiar with these, if not the internet will provide a better explanation than anything I could do) e.g.
+ 
+https://en.wikipedia.org/wiki/Sensitivity_and_specificity
+ 
+Can you therefore make a 2x2 table with rows the “true” result  i.e. mixture better, sequential better. Columns are ~predicted” result i.e. mixture better, sequential better. I can then calculate the sensitivity and sensitivity. Actually they are such a widely used metrics that R probably has a command to draw the table and calculate the results. Given that Plos Computational Biology is a likely destination, the more calculations we can pack in, the better and it’s a small task that may significantly improve our chances of acceptance.  
+
+** 20/6/2016 **
+
+~ added sensitivity/specificity calculation for Ian
+~ removed 'mix either' from one of figs in paper1_results_figs_slimmed_50_rr
 Fig x3b which shows how time-to-resistance changes for diff strategies for effectiveness.
-
 The pattern that effectiveness causes which is best to change is still there, but is tricky to see.
+~ added gridlines back into PRCC plots
+  
+** 21/6/2016 **
 
-Maybe I could remove the uncertainty bounds ?
-or remove mix either ?
+~ sent this link to Matt : http://kbroman.org/github_tutorial/
+this from there is good : http://kbroman.org/github_tutorial/pages/fork.html
+
+reading & editing the current MS
+
+~ something weird going on. In the new figs. PRCC Fig x2. effectiveness now has a -ve correlation with time-to-resistance for mix & adaptive, where in the previous analysis it was +ve. Could this be because I have extended the range of effectivenesses we are looking at ? Fig. x3B shows this. Previously we looked at effectiveness from 0.45 to 1, in this param range effectiveness had a +ve effect on time-to-resistance in mixtures. Whereas over the larger range it has an overall -ve effect.
+
   
+### THIS IS KEY : see my figx3B (to replce MS fig5).
+1   For sequential :
+1.1   increasing effectiveness decreases time to resistance
+2   For mixtures (including adaptive) 
+2.1   at effectiveness below 0.7, increasing effectiveness also decreases time-to-resistance
+2.2   at effectiveness above 0.7, increasing effectiveness increases time-to-resistance
+
+The PRCC doesn't pick 2.2 up because over the whole range of effectiveness (0.3 to 1) effectiveness has a negative correlation with time-to-resistance. 
+
+Thus we may want to 
+~ tweak the bits of the results section that refer to the PRCC fig to refer to the trend figs instead to make the story clearer
+~ put the fig5 (trends) before fig4 (PRCC) in the MS.
+
+There is still a nice story. The PRCC of each strategy shows (fig x2, 4) that effectiveness has less of a -ve effect on mixtures than sequential. The PRCC of mix-seq (fig x4, ) shows a very high positive correlation of effectiveness. So increasing effectiveness favours mixtures over sequences across the whole effectiveness range. This would be even more marked if looking just at effectiveness above 0.7). 
+
+
+** 22/6/2016 **
+
+done ~ should we use strategy or policy for sequential versus mixture ? I prefer strategy.
+done ~ in MS change numbers in linear models
+done ~ in violoin plot change adaptive to adaptive both
+
+this is the paper we should cite for benefits of open-source :
+best practices for scientific computing
+http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1001745
+
+~ check through email for our discussion about which journal to submit to.
+From March 11th, I wrote :
+I had a quick look at PLOS Comp Biol, they do offer software papers but have a word limit of 3,500 (and other constraints). The manuscript is currently 9,300.
+My thought was that the Malaria Journal might get this to more of our target audience ?
+
+Other options on wheer to submit :
+Barbosa 2012 : Malaria journal
+Birget & Koella 2015 : Evolution, Medicine, and Public Health
+
+Looking at % exclusion, see percentExcluded in figs slimmed rr
+Seems it can go up to ~30%. eeek
+
+
+** 23/6/2016 **
+
+checking on runs where resistance threshold not reached.
+
+added plots.
+
+seems that removing start freqs < 0.01 would remove most of the problem ... but would we lose part of our story then ?
+
+also low exposure is a large contributor to failed runs
+
+setting exposure to run from 0.25 or 0.3 rather than 0.1 would remove > half of failed runs, and I don't think it would change results markedly.
+
+remember that 
+dif_mix2_seq : used for PRCC & the effectiveness/exposure plot (30% excluded)
+ggInsOuts : used for indiv input plots (17% excluded, across I1,I2,mix,seq etc)
+
+Can I get the 30% down for dif_mix2_seq by subsetting input ranges ??
+
+  #23/6/2016 experimenting to see if can reduce the % excluded by tweaking input ranges
+  dif_mix2_seq2 <- dif_mix2_seq[ dif_mix2_seq$start_freq_allele1 > 0.005, ]
   
+down to 20% exclusion  
+ 
+Good chat with Ian :
+~ what to do with runs that don't reach resistance threshold within 500 generations Ian: make it clear that 30% of runs don't reach resistance threshold within 500 generations therefore not relevant operationally. Can say that by changing the input ranges this would be fewer.
+~ text replacement for UOL Ian: yes fine to go with time to resistance
+~ can I edit down 2 decision tree paragraphs to 1 ? Ian :yes
+~ where to submit, A PLOS comp biol research paper is OK. Ian is aiming for impact & generality for the REF. Malaria journal is good but has low generality. Ian will canvas Hillary & David.
+~ is there a reason why he isn't 1st author Ian: he didn't imagine it would take this much work. I said I would vote for him being first author if I could.
+
+~ I expressed my concern about trickiness in the code and how this could trip us up in future (as it has already). I think to be safe and efficient we need to spend some time rationalising it. With time & resources tight this is tricky. Could IVCC help to fund (e.g. could we pitch it to them as the step to 3 insecticides & macro-mosaics).
+
+Ian said he understood. He said once we have the paper out we can go to IVCC to ask for more money particularly to do 3 insecticides. 
+ 
+I said I would get edited paper to him tomorrow. 
+ 
+~ quick look at low effectiveness runs. Can they make it to thresholds ? yes 
+ 
+effectiveness2 :
+These produce identical results as you would expect (effectiveness1 & 2 set to 0.9 in each respectively)
+A:
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.9 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+B:
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.9 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+ 
+~ effectiveness2
+~~ seems that effectiveness2 doesn't quite have the humped appearance for mixtures that effectiveness1 does. Why could that be ? Effectiveness I2 does not lead to an increase in time-to-resistance above 0.7, why is that the case ? I could check in UI version
+~~ in ui version effectiveness1&2 seem to have same effect
+~~ therefore could it be to do with the excluded runs ? the below in paper1_results_figs_rr seems to suggest the diff remains even when most excluded runs are subsetted out
+## Fig. xx2 Quick check whether difference between effectiveness 1 & 2 dissapears when minimising excluded runs
+~~ seems it could be due to a few points at 999 that are still in the fig and are dragging the average up ? 
+~~ no apparently not.
+~~ it could just be due to chance, doesn't look like there are a huge number of points, and it wouldn't take many to make a difference
+~~ this suggests that my line plots can be potentially misleading, maybe I should put the points back in for the paper
+~~ perhaps the line plots are encouraging me to look for patterns that aren't really there ?
+~~ for the paper I could do a plot of effectiveness1+2 ? yes
+~~ interestingly adding the effectivenesses shows that are very high effectivenesses of both insecticides resistance arises slower for mix either than sequential !!  
+ 
+ 
+ 
+** 24/6/2016 **
+
+editing the MS
+
+
+ 
  
 ### TO DO  
 
+~ do some find & replace changes to text labels (& maybe to variable names)
+
+don't use I1 I2, because it looks like L1,2 in some fonts
+
+correctMixDeployProp        to correct_mix_deploy
+maleExposureProp            to male_exposure
+effectiveness_insecticide1  to effectiveness_ins1
+effectiveness_insecticide2  to effectiveness_ins2
+
+rr_advantage_ins1
+rr_advantage_ins2
+
+
+~ edit text on decision trees
+~ edit results text
+~ edit out UOL and replace with tim to resistance
+
+
+~ whats the best terminology for time-to-resistance ? 
+What do other authors use ?
+Birget & Koella 2015 (A genetic model of the effects of ITN on the evolution of insecticide resistance)
+  time to evolve resistance
+  generations to reach 50% resistance (in fig4 legend)
+Barbosa 2012
+  spread of resistance
+  rate of change of resistance
+
+
+~ remove input x axis labels in fig x4, and probably add back in titles about mix-seq
+~ check the SI
 
 
 
 
 
+~ next week send Matt brief summary of how to sync his fork with my repo. 
+Stage 3 from here : (its a little tricky)
+https://help.github.com/articles/fork-a-repo/
+http://kbroman.org/github_tutorial/pages/fork.html
 
 
-
-
-
-
-Ian is concerned that we don't cover the full range of potential selection coefficients.
-We do 0.1-0.45 whereas it could go up to 1.
-He will work on describing it in the paper and then we can decide whether we need to rerun the sensitivity analysis.
-
-~ perhaps put Single locus fitness code in runModel2 into its own function - would make testing easier.
-~~ but not starightforward because it needs arrays of h, phi, s & z
-~~ I could allow it to work without these arrays if they are not passed
-~~ thus allowing it to be called both from within the prog and outside
-
-
-
-~ add in pre-run warning if selection coeff > effectiveness
-
-
-~ write up why having correctDeploy of 0 equates to mosaics ? Effectively it means that hlf of expsoure is set to one insecticide and half to the other.
+~ write up why having correctDeploy of 0 equates to mosaics ? Effectively it means that half of expsoure is set to one insecticide and half to the other.
 
 ~ future : would be cool to have a graphical description of the core model, e.g. effectiveness, exposure, selective advantage, fitness ...
 
@@ -4592,4 +4745,4 @@ Days remaining (from 85)			47.75
 1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
 1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
 1. runModel2.r          : runs model for the passed scenarios
-1. paper1_results_figs_slimmed50.Rmd : final figures for paper
+1. paper1_results_figs_slimmed_50_rr.Rmd : final figures for paper

@@ -32,6 +32,7 @@
   #to run 'extended' or not
   experiment <- 'extended' #'curtis'
   
+  
   ## do model runs
   listOutMix <- sensiAnPaperPart( nScenarios, insecticideUsed = 'mixture', experiment=experiment )
   listOutI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment=experiment )
@@ -56,6 +57,13 @@
   ## trying with the extended experiment 
   experiment <- 'extended'
 
+  #doing; for all inputs
+  if (experiment=='extended') {
+    num_inputs <- 13
+    } else {
+    num_inputs <- 11  
+    }
+  
   ## to load previously saved runs  
   load(file=paste0(outFolder,'listOutMix_rr_10000.rda'))
   load(file=paste0(outFolder,'listOutI1_rr_10000.rda'))
@@ -166,10 +174,12 @@
   curtisInputs <- data.frame("exposure"=0.9,
                              "effectiveness_insecticide1"=0.73,
                              "effectiveness_insecticide2"=1,
+                             "effectiveness_added"=1.73,                             
                              "start_freq_allele1"=0.01,
                              "start_freq_allele2"=0.01,
                              "dominance_allele1"=0.17,
                              "dominance_allele2"=0.0016,
+                             "dominance_added"=0.1716,                             
                              # 14/6/16 rr_advantage = s / effectiveness
                              #"selection_coef_allele1"=0.23,
                              #"selection_coef_allele2"=0.43,
@@ -187,7 +197,7 @@
 
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE} 
 # getting data into format for ggplot
-  
+  library(ggplot2)
   
   #uses ggInput calculated in earlier chunk
   
@@ -225,21 +235,61 @@
                             ggInsOuts$gen_cP0.25 == 999 | ggInsOuts$gen_cP0.25 > 500 |
                             ggInsOuts$gen_cP0.1 == 999 | ggInsOuts$gen_cP0.1 > 500 )
   
-  #subset by runs not making threshold
-  ggInsOuts <- ggInsOuts[-didntReachThresh,]
-  
-  
   #prettify output names
   names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.5"] <- "time_to_resistance0.5"
   names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.25"] <- "time_to_resistance0.25"
   names(ggInsOuts)[names(ggInsOuts)=="gen_cP0.1"] <- "time_to_resistance0.1"
   
-  #doing; for all inputs
-  if (experiment=='extended') {
-    num_inputs <- 13
-    } else {
-    num_inputs <- 11  
-    }
+  
+  # #23/6/2016 add a check for which runs are being excluded (note that some are excluded in a different place too) 
+  # #just those runs that didn't make threshold
+  ggSubset <- ggInsOuts[didntReachThresh,]
+  names_inputs <- names(ggInsOuts)[1:num_inputs]
+  # 
+  # ggSubset <- ggSubset[ !ggSubset$strategy %in% c("insecticide 1","insecticide 2"), ]
+  # 
+  # for(i in names_inputs)
+  # {
+  #   y <- 'time_to_resistance0.5'    
+  #   
+  #   print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
+  #            
+  #            geom_point(shape=3) #, show.legend=FALSE) + 
+  #            #geom_smooth(linetype='dashed',size=1)
+  #          )
+  # }  
+  
+  # #seems that most failed runs are at low start freqs
+  # hist(ggSubset$start_freq_allele1)
+  # #compare to all runs
+  # hist(ggInsOuts$start_freq_allele1)  
+  # #and for start freqs combined
+  # hist(ggSubset$start_freq_allele1+ggSubset$start_freq_allele2)
+  # #compare to all runs
+  # hist(ggInsOuts$start_freq_allele1+ggInsOuts$start_freq_allele2)
+  # #also low exposure is a large contributor to failed runs
+  # hist(ggSubset$exposure)  
+  # #compared to all runs
+  # hist(ggInsOuts$exposure) 
+  
+  #quick look at low start freq runs. Can they make it to thresholds ? Yes
+  # for(i in names_inputs)
+  # {
+  #   y <- 'time_to_resistance0.5'    
+  #   
+  #   print( ggplot(ggInsOuts[ggInsOuts$start_freq_allele1 < 0.001 & ggInsOuts$start_freq_allele2 < 0.001,], aes_string(x=i, y=y, colour="strategy")) + 
+  #            
+  #            geom_point(shape=3) + #, show.legend=FALSE) + 
+  #            geom_smooth(linetype='dashed',size=1)
+  #          )
+  # }   
+  
+  
+  ####### end of new check
+  
+  #subset by runs not making threshold
+  ggInsOuts <- ggInsOuts[-didntReachThresh,]
+  
   
   #format data in a different way to enable PRCC on difference between sequential & mix2
   #resistPointsMix_A_T
@@ -450,39 +500,69 @@ for(i in names_results)
 
 ## Fig. x2 How time-to-resistance is effected by input values for each insecticide use strategy
 
-```{r, eval=FALSE, echo=FALSE, fig.height=3.5} 
-  
-  #10/5/2016 seems to crash R, so set to eval=FALSE
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
 
   names_inputs <- names(ggInsOuts)[1:num_inputs]
   
   ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
   
+  ggSubset$effectiveness_added <- ggSubset$effectiveness_insecticide1 + ggSubset$effectiveness_insecticide2
+  ggSubset$dominance_added <- ggSubset$dominance_allele1 + ggSubset$dominance_allele2
+  names_inputs <- c(names_inputs, "effectiveness_added", "dominance_added")  
+  
   for(i in names_inputs)
   {
-    #x11()
-
     y <- 'time_to_resistance0.5'    
     
-    #print( ggplot(ggInsOuts, aes_string(x=i, y=y, colour="strategy")) + 
     print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
-            #points not wanted if 10000
-             #geom_point(shape=3, show.legend=FALSE) + 
-             #geom_smooth(colour='red', linetype='dashed',size=0.5) +
+             
+             geom_point(shape=3, size=0.2, alpha=0.2, show.legend=FALSE) + 
              geom_smooth(linetype='dashed',size=1) +
-             #facet_wrap( ~ strategy) +
-             #geom_smooth(aes_string(x=i, y=y, color=NULL)) )
-             labs(title = i) +
+             
+             #labs(title = i) +
              #add line for Curtis inputs
              geom_vline(data = curtisInputs, aes_string(xintercept = i), linetype='dotted', colour='red') +
-             #tryting to get the vline into the legend fails
-             #geom_vline(data = curtisInputs, aes_string(xintercept = i, colour='"Curtis Fig.2"' ), linetype='dotted', show.legend=TRUE) +
              geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = i, y=210, label='"Curtis Fig.2"'), size=3, colour='red')
-             
            )
   }
   
 ```
+
+## Fig. xx2 Quick check whether difference between effectiveness 1 & 2 dissapears when minimising excluded runs
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
+
+  #names_inputs <- names(ggInsOuts)[1:num_inputs]
+  names_inputs <- c("effectiveness_insecticide1", "effectiveness_insecticide2", "effectiveness_added")  
+
+  ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2","Mix either","Sequential"), ]
+  
+  ggSubset$effectiveness_added <- ggSubset$effectiveness_insecticide1 + ggSubset$effectiveness_insecticide2
+  
+  # ggSubset <- ggSubset[ ggSubset$start_freq_allele1 > 0.005 & 
+  #                       ggSubset$start_freq_allele2 > 0.005 &
+  #                       ggSubset$dominance_allele1 > 0.1 &
+  #                       ggSubset$dominance_allele2 > 0.1 &
+  #                       ggSubset$exposure > 0.3  , ]
+  
+  for(i in names_inputs)
+  {
+    y <- 'time_to_resistance0.5'    
+    
+    print( ggplot(ggSubset, aes_string(x=i, y=y, colour="strategy")) + 
+             
+             geom_point(shape=1, size=1, alpha=0.2, show.legend=FALSE) + 
+             geom_smooth(linetype='dashed',size=1)
+             
+             #labs(title = i) +
+             #add line for Curtis inputs
+             #geom_vline(data = curtisInputs, aes_string(xintercept = i), linetype='dotted', colour='red') +
+             #geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = i, y=210, label='"Curtis Fig.2"'), size=3, colour='red')
+           )
+  }
+  
+```
+
 
 ## Fig. x3 How difference in time-to-resistance between sequential and adaptive mixture is effected by input values
 
