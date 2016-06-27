@@ -86,7 +86,7 @@ sensiAnPaperPart <- function( nScenarios = 10,
     ## effectiveness of insecticides, selection against SS in presence of that insecticide
     # phi.SS1_A0 <- runif(1, min=0.45, max=1)
     # phi.SS2_0B <- runif(1, min=0.45, max=1)
-    # 14/6/16 increased range now that we are using rr_advantage to avoid fitness > 1
+    # 14/6/16 increased range now that we are using rr_restoration to avoid fitness > 1
     phi.SS1_A0 <- runif(1, min=0.3, max=1)
     phi.SS2_0B <- runif(1, min=0.3, max=1)      
     
@@ -106,15 +106,15 @@ sensiAnPaperPart <- function( nScenarios = 10,
     # s.RR1_A0 <- runif(1, min=0.1, max=0.45)
     # s.RR2_0B <- runif(1, min=0.1, max=0.45)     
     
-    # 14/6/16 to add rr_advantage_I1 & I2
+    # 14/6/16 to add rr_restoration_ins1 & I2
     # as an alternative to varying s directly from sensi analysis
     # to allow a wider range (higher values) while avoiding correlation between 
     # effectiveness and advantage inputs
-    rr_advantage_I1 <- runif(1, min=0.2, max=1)
-    rr_advantage_I2 <- runif(1, min=0.2, max=1)
+    rr_restoration_ins1 <- runif(1, min=0.2, max=1)
+    rr_restoration_ins2 <- runif(1, min=0.2, max=1)
     # now have moved s calculation into setInputOneScenario()
-    # s.RR1_A0 <- rr_advantage_I1 * phi.SS1_A0
-    # s.RR2_0B <- rr_advantage_I2 * phi.SS2_0B
+    # s.RR1_A0 <- rr_restoration_ins1 * phi.SS1_A0
+    # s.RR2_0B <- rr_restoration_ins2 * phi.SS2_0B
     
     ## put the generated values into an input matrix, using defaults for non specified parameters
     inputOneScenario <- setInputOneScenario( max_gen = max_gen,
@@ -137,8 +137,8 @@ sensiAnPaperPart <- function( nScenarios = 10,
                         male_exposure_prop = male_exposure_prop,
                         correct_mix_deploy = correct_mix_deploy,
                         # 14/6/16
-                        rr_advantage_I1 = rr_advantage_I1,
-                        rr_advantage_I2 = rr_advantage_I2
+                        rr_restoration_ins1 = rr_restoration_ins1,
+                        rr_restoration_ins2 = rr_restoration_ins2
                         )   
     
     

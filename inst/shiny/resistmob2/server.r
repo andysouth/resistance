@@ -42,8 +42,8 @@ shinyServer(function(input, output) {
                       # 14/6/16
                       #s.RR1_A0 = input$advantage_A1,
                       #s.RR2_0B = input$advantage_A2,
-                      rr_advantage_I1 = input$advantage_A1,
-                      rr_advantage_I2 = input$advantage_A2,
+                      rr_restoration_ins1 = input$advantage_A1,
+                      rr_restoration_ins2 = input$advantage_A2,
                       
                       addCombinedStrategy = FALSE,
                       strategyLabels = c('seq','','adapt','mix2') )
@@ -60,8 +60,8 @@ shinyServer(function(input, output) {
                       "exposure =",input$exposure_A,",",
                       "phi.SS1_A0 =",input$effectiveness_A1,",",
                       "phi.SS2_0B =",input$effectiveness_A2,",",
-                      "rr_advantage_I1 =",input$advantage_A1,",",
-                      "rr_advantage_I2 =",input$advantage_A2,",",
+                      "rr_restoration_ins1 =",input$advantage_A1,",",
+                      "rr_restoration_ins2 =",input$advantage_A2,",",
                       "addCombinedStrategy = FALSE,", 
                       "strategyLabels = c('seq','','adapt','mix2')",
                       ")\n" )
@@ -92,8 +92,8 @@ shinyServer(function(input, output) {
                       # 14/6/16
                       #s.RR1_A0 = input$advantage_B1,
                       #s.RR2_0B = input$advantage_B2,
-                      rr_advantage_I1 = input$advantage_B1,
-                      rr_advantage_I2 = input$advantage_B2,
+                      rr_restoration_ins1 = input$advantage_B1,
+                      rr_restoration_ins2 = input$advantage_B2,
                       
                       addCombinedStrategy = FALSE,
                       strategyLabels = c('seq','','adapt','mix2') )
@@ -110,8 +110,8 @@ shinyServer(function(input, output) {
             "exposure =",input$exposure_B,",",
             "phi.SS1_A0 =",input$effectiveness_B1,",",
             "phi.SS2_0B =",input$effectiveness_B2,",",
-            "rr_advantage_I1 =",input$advantage_B1,",",
-            "rr_advantage_I2 =",input$advantage_B2,",",
+            "rr_restoration_ins1 =",input$advantage_B1,",",
+            "rr_restoration_ins2 =",input$advantage_B2,",",
             "addCombinedStrategy = FALSE,", 
             "strategyLabels = c('seq','','adapt','mix2')",
             ")\n" )

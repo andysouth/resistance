@@ -1,7 +1,7 @@
 #resistance/shiny/resistmob2/ui.r
 #andy south 15/6/16
 #a mobile compatible app
-#uses NEW system where rr_advantage used as input instead of selection coefficient
+#uses NEW system where rr_restoration used as input instead of selection coefficient
 
 library(shiny)
 

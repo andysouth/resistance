@@ -4302,9 +4302,9 @@ I suggest we make the textual explanation (page 12) as clear as possible and des
  
 Happy to hear suggestions for words other that “restoration”.
 
-Here are the rr_advantage changes that I made :
+Here are the rr_restoration changes that I made :
 
-RR_restoration_coefficient or rr_advantage_I1 & rr_advantage_I2
+RR_restoration_coefficient or rr_restoration_ins1 & rr_restoration_ins2
 
 What I changed : search 14/6/16 to see changes
 #sensiAnPaperPart.r
@@ -4321,27 +4321,27 @@ i think doesn't need to be altered, it will just use the longer input object & o
 
 #paper1_results_figs_rr.Rmd copied from paper1_results_figs.Rmd
 done ~ change loading of model outputs
-done ~ replace 's*' with rr_advantage_I1 in this line
+done ~ replace 's*' with rr_restoration_ins1 in this line
 treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','rr_advantage_I1','rr_advantage_I2')
+treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','rr_restoration_ins1','rr_restoration_ins2')
 done ~ comment out these lines
   rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
   rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
 done ~ modify curtisInputs to include r rather than s  
- # 14/6/16 rr_advantage = s / effectiveness
+ # 14/6/16 rr_restoration = s / effectiveness
  #"selection_coef_allele1"=0.23,
  #"selection_coef_allele2"=0.43,
- "rr_advantage_I1"=0.23/0.73,
- "rr_advantage_I2"=0.43/1, 
+ "rr_restoration_ins1"=0.23/0.73,
+ "rr_restoration_ins2"=0.43/1, 
   
 #paper1_results_figs_slimmed50_rr.Rmd
 done ~ modified same as previous to create new rr polished figs
 
-Beware that although I may pass rr_advantage_I1 to runModel2() it will not be used, it will just go in the inputs to enable post run analysis. s.RR1_A0 will be used by the model. I put a check into setInputOneScenario.r that s=newR * effectiveness.
+Beware that although I may pass rr_restoration_ins1 to runModel2() it will not be used, it will just go in the inputs to enable post run analysis. s.RR1_A0 will be used by the model. I put a check into setInputOneScenario.r that s=newR * effectiveness.
 
 
 ** 15/6/16 **
-modifying to rr_advantage
+modifying to rr_restoration
 go with that as the variable name for now we can always change later by find/replace 
  
   #default setting of the random seed in sensiAnPaperPart() should make the input files mostly the same
@@ -4351,22 +4351,22 @@ go with that as the variable name for now we can always change later by find/rep
   
 ** 16/6/16 **
 
-done ~ modify runcurtis_f2.r to accept rr_advantage inputs
+done ~ modify runcurtis_f2.r to accept rr_restoration inputs
 done ~ get a new UI with RR inputs working
 
 #coolio have it working in resistmob2 and it's good being able to explore full range of selective advantage, even setting it to 0 does what I would expect. Reducing selective advantage reduces the rise of resistance in one insecticide, which leads to it being protected by the other in a mixture.
 
-#cool contrast between these scenarios modifying effectiveness and rr_advantage
+#cool contrast between these scenarios modifying effectiveness and rr_restoration
 in which all defaults set to 0.5 except
 
 #AA effectiveness I1 to 0.8 causes mixture to be slower, although I1 is faster it protects I2 in mixture, making mixture slower
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 
 #BB rr advantage I1 to 0.8 sequential remains slower, although I1 is faster as in previous it provides less protection to I2 in the mixture
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.8 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 
 #CC rr advantage I2 to 0.2 sequential remains slower (just), I2 slower than I1 in mixture similar to AA but receives less protection in mixture
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.2 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.2 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 
 done ~ fix rr_ warnings from setInputOne Scenario in paper2
 done ~ finish trying to explain above scenarios #AA #BB #CC to myself, maybe put into my paper2 doc
@@ -4502,9 +4502,9 @@ I said I would get edited paper to him tomorrow.
 effectiveness2 :
 These produce identical results as you would expect (effectiveness1 & 2 set to 0.9 in each respectively)
 A:
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.9 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.9 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 B:
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.9 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.9 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
  
 ~ effectiveness2
 ~~ seems that effectiveness2 doesn't quite have the humped appearance for mixtures that effectiveness1 does. Why could that be ? Effectiveness I2 does not lead to an increase in time-to-resistance above 0.7, why is that the case ? I could check in UI version
@@ -4547,8 +4547,8 @@ maleExposureProp            to male_exposure_prop
 effectiveness_insecticide1  to effectiveness_ins1
 effectiveness_insecticide2  to effectiveness_ins2
 
-rr_advantage_ins1
-rr_advantage_ins2
+rr_restoration_ins1
+rr_restoration_ins2
 
 
 

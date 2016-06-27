@@ -23,8 +23,8 @@
 #' @param s.RR1_A0 Selection coefficient locus1 in A
 #' @param s.RR2_0b Selection coefficient locus2 in b
 #' @param s.RR2_0B Selection coefficient locus2 in B
-#' @param rr_advantage_I1 effect of resistance in overcoming insecticide 1 effectiveness in RR
-#' @param rr_advantage_I2 effect of resistance in overcoming insecticide 2 effectiveness in RR  
+#' @param rr_restoration_ins1 effect of resistance in overcoming insecticide 1 effectiveness in RR
+#' @param rr_restoration_ins2 effect of resistance in overcoming insecticide 2 effectiveness in RR  
 #' @param z.RR1_00 fitness cost of resistance allele 1 in insecticide free environment
 #' @param z.RR2_00 fitness cost of resistance allele 2 in insecticide free environment
 #' @param sexLinked whether resistance is sex linked, default=0(FALSE)
@@ -61,9 +61,9 @@ runcurtis_f2 <- function( max_gen = 500,
                           s.RR1_A0	=	NULL	,
                           s.RR2_0b	=	0	,
                           s.RR2_0B	=	NULL	,
-                          # 14/6/16 rr_advantage = s / effectiveness
-                          rr_advantage_I1 = 0.23/0.73,
-                          rr_advantage_I2 = 0.43/1,    
+                          # 14/6/16 rr_restoration = s / effectiveness
+                          rr_restoration_ins1 = 0.23/0.73,
+                          rr_restoration_ins2 = 0.43/1,    
 
                           z.RR1_00	=	0	,
                           z.RR2_00	=	0	,
@@ -105,8 +105,8 @@ runcurtis_f2 <- function( max_gen = 500,
                                  s.RR2_0b	=	s.RR2_0b	,
                                  s.RR2_0B	=	s.RR2_0B	,
                                  # 14/6/16
-                                 rr_advantage_I1 = rr_advantage_I1,
-                                 rr_advantage_I2 = rr_advantage_I2,    
+                                 rr_restoration_ins1 = rr_restoration_ins1,
+                                 rr_restoration_ins2 = rr_restoration_ins2,    
                                  
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
@@ -141,8 +141,8 @@ runcurtis_f2 <- function( max_gen = 500,
                                  s.RR2_0b	=	s.RR2_0b	,
                                  s.RR2_0B	=	s.RR2_0B	,
                                  # 14/6/16
-                                 rr_advantage_I1 = rr_advantage_I1,
-                                 rr_advantage_I2 = rr_advantage_I2, 
+                                 rr_restoration_ins1 = rr_restoration_ins1,
+                                 rr_restoration_ins2 = rr_restoration_ins2, 
                                  
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
@@ -177,8 +177,8 @@ runcurtis_f2 <- function( max_gen = 500,
                                  s.RR2_0b	=	s.RR2_0b	,
                                  s.RR2_0B	=	s.RR2_0B	,
                                  # 14/6/16
-                                 rr_advantage_I1 = rr_advantage_I1,
-                                 rr_advantage_I2 = rr_advantage_I2, 
+                                 rr_restoration_ins1 = rr_restoration_ins1,
+                                 rr_restoration_ins2 = rr_restoration_ins2, 
                                  
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,

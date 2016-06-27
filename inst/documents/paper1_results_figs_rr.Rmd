@@ -5,7 +5,7 @@
   date: "`r Sys.Date()`"
 ---
 
-# Figures for paper 1 after change to using rr_advantage instead of selection coeff from sensi analysis
+# Figures for paper 1 after change to using rr_restoration instead of selection coeff from sensi analysis
 # version 1 - in progress
 
 ```{r,echo=FALSE,results='hide'}
@@ -133,8 +133,8 @@
   
   #hardcode which variables to include in analysis to keep it simple and transparent
   #treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
-  #14/6/16 change to rr_advantage
-  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','rr_advantage_I1','rr_advantage_I2')
+  #14/6/16 change to rr_restoration
+  treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','rr_restoration_ins1','rr_restoration_ins2')
   
   
   #add these for extended analysis
@@ -161,7 +161,7 @@
   rownames(treeInput)[rownames(treeInput)=="h.RS1_A0"] <- "dominance_allele1"
   rownames(treeInput)[rownames(treeInput)=="h.RS2_0B"] <- "dominance_allele2"
   
-  #14/6/16 rr_advantage these not to be used anymore
+  #14/6/16 rr_restoration these not to be used anymore
   #rownames(treeInput)[rownames(treeInput)=="s.RR1_A0"] <- "selection_coef_allele1"
   #rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
   
@@ -180,11 +180,11 @@
                              "dominance_allele1"=0.17,
                              "dominance_allele2"=0.0016,
                              "dominance_added"=0.1716,                             
-                             # 14/6/16 rr_advantage = s / effectiveness
+                             # 14/6/16 rr_restoration = s / effectiveness
                              #"selection_coef_allele1"=0.23,
                              #"selection_coef_allele2"=0.43,
-                             "rr_advantage_I1"=0.23/0.73,
-                             "rr_advantage_I2"=0.43/1,                             
+                             "rr_restoration_ins1"=0.23/0.73,
+                             "rr_restoration_ins2"=0.43/1,                             
                              "male_exposure_prop"=1,
                              "correct_mix_deploy"=1,
                              "resist_start_lo_div_hi"=1,

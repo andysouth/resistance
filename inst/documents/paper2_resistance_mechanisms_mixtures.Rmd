@@ -66,8 +66,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.2,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
 
   i2 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.5, 
@@ -75,8 +75,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
 
   i3 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.5, 
@@ -84,8 +84,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.8,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
   
   #input <- cbind(input, inputOneScenario)
   input <- cbind(i1,i2,i3)
@@ -117,8 +117,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       exposure = exposure, #used for post-run analysis
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
  
   exposure <- 0.5
   a <- setExposure(exposure = exposure, insecticideUsed='insecticide1')   
@@ -130,8 +130,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       exposure = exposure, #used for post-run analysis
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
 
   exposure <- 0.8
   a <- setExposure(exposure = exposure, insecticideUsed='insecticide1')  
@@ -143,8 +143,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       exposure = exposure, #used for post-run analysis
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
   
   #input <- cbind(input, inputOneScenario)
   input <- cbind(i1,i2,i3)
@@ -176,8 +176,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
 
   i2 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.5, 
@@ -185,8 +185,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
 
   i3 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.8, 
@@ -194,8 +194,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
   
   #input <- cbind(input, inputOneScenario)
   input <- cbind(i1,i2,i3)
@@ -231,8 +231,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.2,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.2,
+                      rr_restoration_ins2 = 0.5 )
 
   i2 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.5, 
@@ -240,8 +240,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.5,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5 )
 
   i3 <- setInputOneScenario( max_gen = 500,
                       h.RS1_A0 = 0.5, 
@@ -249,8 +249,8 @@ For single insecticide use, increasing the values of either effectiveness, expos
                       a = a,
                       phi.SS1_A0 = 0.5,
                       phi.SS2_0B = 0.5,
-                      rr_advantage_I1 = 0.8,
-                      rr_advantage_I2 = 0.5 )
+                      rr_restoration_ins1 = 0.8,
+                      rr_restoration_ins2 = 0.5 )
   
   #input <- cbind(input, inputOneScenario)
   input <- cbind(i1,i2,i3)
@@ -260,7 +260,7 @@ For single insecticide use, increasing the values of either effectiveness, expos
   df_resist <- get_resistance(locus=1, listOut)
 
     
-  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=rr_advantage_I1)) + 
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=rr_restoration_ins1)) + 
          labs(colour = "selective advantage") +
          coord_trans(y = "log10") +   
          geom_point() #show.legend=FALSE) +
@@ -278,7 +278,7 @@ When two insecticides are used the relative performance of a mixture strategy co
 With all control inputs set equal at 0.5 resistance arises slower for sequential than mixture (Fig. 1). Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 1. All control inputs equal at 0.5")
 ```
 
@@ -288,7 +288,7 @@ A more effective insecticide prompts increased time-to-resistance when used in a
 In a mixture the mechanism is that a more effective insecticide provides greater protection to the other. For example taking the previous scenario and increasing the effectiveness of one insecticide from 0.5 to 0.9 increases the time-to-resistance for the 2nd insecticide from around 45 to 75 generations (Fig. 2). In the plot you can see that resistance to insecticide1 (with the increased effectiveness) rises at a similar speed to Fig.2. In contrast resistance to insecticide2 increases more slowly initially. Once insecticide1 reaches it's resistance threshold (around 40 generations), the curve for insecticide2 becomes steeper. This can be explained by the mechanism that once insecticide1 has become ineffective due to resistance it stops killing indivduals that are resistant to insecticide2 and thus stops 'protecting' it from it's own rise in resistance.   
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.9 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.9 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 2. Effectiveness of insecticide1 increased from 0.5 to 0.9")
 ```
 
@@ -296,7 +296,7 @@ When the effectiveness of both insecticides are increased to 0.9 the time-to-res
 
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.9 , phi.SS2_0B = 0.9 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.9 , phi.SS2_0B = 0.9 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 3. Effectiveness of both insecticides 0.9")
 ```
 
@@ -305,12 +305,12 @@ cat("Fig. 3. Effectiveness of both insecticides 0.9")
 Increasing the dominance of the alleles within a mixture has the same direction of effect as it does for sole use. Increasing the dominance of the allele corresponding to insecticide1 from 0.5 to 0.9 decreases the time-to-resistance to insecticide1 from 40 to 30 generations but leaves the time-to-resistance for the mixture the same (Fig. 4). Setting the dominance for bothe alleles to 0.9 reduces the time-to-resistance for the mixture to 30 generations (Fig. 5). In both of these cases sequential use continues to have a longer time-to-resistance.
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.9 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.9 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 4. Dominance of insecticide1 0.9")
 ```
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.9 , h.RS2_0B = 0.9 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.9 , h.RS2_0B = 0.9 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 5. Dominance of both insecticides 0.9")
 ```
 
@@ -320,42 +320,42 @@ Decreasing the selective advantage of resistance to insecticide1 from 0.5 to 0.1
 
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.1 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.1 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 6. Selective advantage of insecticide1 0.1")
 ```
 
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.1 , rr_advantage_I2 = 0.1 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.1 , rr_restoration_ins2 = 0.1 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 7. Selective advantage of both insecticides 0.1")
 ```
 
 Taking this scenario of lower selective advantage and increasing the effectiveness of both insectides from 0.5 to 0.7 shows again how the change in effectiveness has a greater effect on the mixture than sequential making the mixture preferable (compare Fig. 8 to Fig. 7).
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.1 , rr_advantage_I2 = 0.1 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.1 , rr_restoration_ins2 = 0.1 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 8. Selective advantage of both insecticides 0.1, effectiveness to 0.7")
 ```
 
-#cool contrast between these scenarios modifying effectiveness and rr_advantage in which all defaults set to 0.5 except
+#cool contrast between these scenarios modifying effectiveness and rr_restoration in which all defaults set to 0.5 except
 TODO incorporate this into text above
 
 #AA effectiveness I1 to 0.8 causes mixture to be slower, although I1 is faster it protects I2 in mixture, making mixture slower
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. AA. effectiveness to 0.8")
 ```
 
 #BB rr advantage I1 to 0.8 sequential remains slower, although I1 is faster as in previous it provides less protection to I2 in the mixture
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.8 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
-cat("Fig. BB rr_advantage I1 0.8")
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. BB rr_restoration I1 0.8")
 ```
 
 #CC rr advantage I2 to 0.2 sequential remains slower (just), I2 slower than I1 in mixture similar to AA but receives less protection in mixture
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.2 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
-cat("Fig. CC. rr_advantage I2 0.2")
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.2 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+cat("Fig. CC. rr_restoration I2 0.2")
 ```
 
 
@@ -364,17 +364,17 @@ cat("Fig. CC. rr_advantage I2 0.2")
 Increasing exposure to 0.9 reduces time-to-resistance for both mixture and sequential scenarios (Fig. 9). The change in exposure has a greater effect on the mixture relative to the sequential strategy and this results in a greater relative benefit for sequence versus mixture. Setting the effectiveness of both insecicides to 0.7 (while keeping all other inputs at 0.5) results in mixture being slightly favoured (Fig. 10), then making the increase in exposure from 0.5 to 0.9 results in a switch to sequential being the favoured strategy (Fig. 11). This demonstrates how higher exposures can favour sequential use.
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.9 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.9 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 9. Exposure 0.9")
 ```
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.7 , phi.SS2_0B = 0.7 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.7 , phi.SS2_0B = 0.7 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 10. Effectiveness 0.7, sequence favoured")
 ```
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=4}
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.9 , phi.SS1_A0 = 0.7 , phi.SS2_0B = 0.7 , rr_advantage_I1 = 0.5 , rr_advantage_I2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.9 , phi.SS1_A0 = 0.7 , phi.SS2_0B = 0.7 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 cat("Fig. 11. Effectiveness 0.7, Exposure 0.9, mixture favoured")
 ```
 
