@@ -32,21 +32,14 @@ library(ggplot2)
 
 outFolder <- "C:\\Dropbox\\resistanceResults\\"
 
-## to load previously saved runs
-#   load(file=paste0(outFolder,'listOutMix_1000.rda'))
-#   load(file=paste0(outFolder,'listOutI1_1000.rda'))
-#   load(file=paste0(outFolder,'listOutI2_1000.rda'))
 
 ## trying with the extended experiment _ex100
 experiment <- 'extended'
 
-load(file=paste0(outFolder,'listOutMix_ex2_10000.rda'))
-load(file=paste0(outFolder,'listOutI1_ex2_10000.rda'))
-load(file=paste0(outFolder,'listOutI2_ex2_10000.rda'))
-
-# load(file=paste0(outFolder,'listOutMix_ex2_1000.rda'))
-# load(file=paste0(outFolder,'listOutI1_ex2_1000.rda'))
-# load(file=paste0(outFolder,'listOutI2_ex2_1000.rda'))
+  ## to load previously saved runs  
+  load(file=paste0(outFolder,'listOutMix_rr_10000.rda'))
+  load(file=paste0(outFolder,'listOutI1_rr_10000.rda'))
+  load(file=paste0(outFolder,'listOutI2_rr_10000.rda'))
 
 # very quick test data
 # load(file=paste0(outFolder,'listOutMix_ex2_3.rda'))
@@ -111,6 +104,12 @@ treeInput <- listOutMix$input
 #BEWARE risk if future changes
 #1/2/16 don't need this now because I've saved exposure from the single original random value
 #rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
+
+  #27/6/16 to convert any varnames in old output files
+  rownames(treeInput)[ "maleExposureProp" == rownames(treeInput) ] <- "male_exposure_prop"
+  rownames(treeInput)[ "correctMixDeployProp" == rownames(treeInput) ] <- "correct_mix_deploy"
+  rownames(treeInput)[ "rr_advantage_I1" == rownames(treeInput) ] <- "rr_restoration_ins1"
+  rownames(treeInput)[ "rr_advantage_I2" == rownames(treeInput) ] <- "rr_restoration_ins2" 
 
 
 #hardcode which variables to include in analysis to keep it simple and transparent
