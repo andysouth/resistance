@@ -131,8 +131,8 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
   treeInput <- rbind(treeInput,resist_start_1_div_2)   
   
   #renaming other rownames to make nicer plots
-  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
-  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_ins1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_ins2"
 
   rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
   rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
@@ -251,12 +251,12 @@ for(i in names_results)
 #   )#end print  
  
   
-#now try the same faceting by effectiveness_insecticide1
+#now try the same faceting by effectiveness_ins1
 #doesn't really show much ...
 #so why does effectiveness come out so important in the trees ??  
-  #hist(ggInsOuts$effectiveness_insecticide1)  
+  #hist(ggInsOuts$effectiveness_ins1)  
   #create effect1 bins
-  ggInsOuts$effect1_cat <- cut(ggInsOuts$effectiveness_insecticide1,breaks=c(0.4,0.6,0.8,1), labels=c("effect1 0.4-0.6","effect1 0.6-0.8","effect1 0.8-1"))    
+  ggInsOuts$effect1_cat <- cut(ggInsOuts$effectiveness_ins1,breaks=c(0.4,0.6,0.8,1), labels=c("effect1 0.4-0.6","effect1 0.6-0.8","effect1 0.8-1"))    
     
   print( ggplot(ggInsOuts, aes_string(x='strategy',y=i, color='strategy')) + 
       #ylim(0,450) +

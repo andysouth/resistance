@@ -268,8 +268,8 @@ The main question is under which scenarios are mixtures better than sequential ?
   treeInput <- rbind(treeInput,resist_start_1_div_2)  
     
   #renaming other rownames to make nicer plots
-  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
-  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_ins1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_ins2"
 
   rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
   rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
@@ -281,7 +281,7 @@ The main question is under which scenarios are mixtures better than sequential ?
   rownames(treeInput)[rownames(treeInput)=="s.RR2_0B"] <- "selection_coef_allele2"
   
   #subsetting now done above before names prettified
-  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_insecticide1','effectiveness_insecticide2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
+  #treePredictors <- c('P_1','P_2','startResistanceRatio','exposure','effectiveness_ins1','effectiveness_ins2','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
   #treeInput <- treeInput[ treePredictors, ]
   
   #get the inputs here to use in ggplot investigation of model responses to inputs

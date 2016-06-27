@@ -131,8 +131,8 @@ resist_start_1_div_2 <- treeInput['P_1',]/treeInput['P_2',]
 treeInput <- rbind(treeInput,resist_start_1_div_2)   
 
 #renaming other rownames to make nicer plots
-rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
-rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_ins1"
+rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_ins2"
 
 rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
 rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
@@ -150,8 +150,8 @@ ggInput <- treeInput
 
 #create a curtisInputs dataframe for use later
 curtisInputs <- data.frame("exposure"=0.9,
-                           "effectiveness_insecticide1"=0.73,
-                           "effectiveness_insecticide2"=1,
+                           "effectiveness_ins1"=0.73,
+                           "effectiveness_ins2"=1,
                            "start_freq_allele1"=0.01,
                            "start_freq_allele2"=0.01,
                            "dominance_allele1"=0.17,

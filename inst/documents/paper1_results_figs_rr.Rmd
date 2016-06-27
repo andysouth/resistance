@@ -152,8 +152,8 @@
   treeInput <- rbind(treeInput,resist_start_1_div_2)   
   
   #renaming other rownames to make nicer plots
-  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_insecticide1"
-  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_insecticide2"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS1_A0"] <- "effectiveness_ins1"
+  rownames(treeInput)[rownames(treeInput)=="phi.SS2_0B"] <- "effectiveness_ins2"
 
   rownames(treeInput)[rownames(treeInput)=="P_1"] <- "start_freq_allele1"
   rownames(treeInput)[rownames(treeInput)=="P_2"] <- "start_freq_allele2"
@@ -172,8 +172,8 @@
   
   #create a curtisInputs dataframe for use later
   curtisInputs <- data.frame("exposure"=0.9,
-                             "effectiveness_insecticide1"=0.73,
-                             "effectiveness_insecticide2"=1,
+                             "effectiveness_ins1"=0.73,
+                             "effectiveness_ins2"=1,
                              "effectiveness_added"=1.73,                             
                              "start_freq_allele1"=0.01,
                              "start_freq_allele2"=0.01,
@@ -506,7 +506,7 @@ for(i in names_results)
   
   ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
   
-  ggSubset$effectiveness_added <- ggSubset$effectiveness_insecticide1 + ggSubset$effectiveness_insecticide2
+  ggSubset$effectiveness_added <- ggSubset$effectiveness_ins1 + ggSubset$effectiveness_ins2
   ggSubset$dominance_added <- ggSubset$dominance_allele1 + ggSubset$dominance_allele2
   names_inputs <- c(names_inputs, "effectiveness_added", "dominance_added")  
   
@@ -533,11 +533,11 @@ for(i in names_results)
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.5} 
 
   #names_inputs <- names(ggInsOuts)[1:num_inputs]
-  names_inputs <- c("effectiveness_insecticide1", "effectiveness_insecticide2", "effectiveness_added")  
+  names_inputs <- c("effectiveness_ins1", "effectiveness_ins2", "effectiveness_added")  
 
   ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2","Mix either","Sequential"), ]
   
-  ggSubset$effectiveness_added <- ggSubset$effectiveness_insecticide1 + ggSubset$effectiveness_insecticide2
+  ggSubset$effectiveness_added <- ggSubset$effectiveness_ins1 + ggSubset$effectiveness_ins2
   
   # ggSubset <- ggSubset[ ggSubset$start_freq_allele1 > 0.005 & 
   #                       ggSubset$start_freq_allele2 > 0.005 &
@@ -696,19 +696,19 @@ for(i in names_results)
   
 
     #failed hex plot just gave me counts
-    # print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.5'))+
+    # print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_ins1', colour='mixA_better_seq0.5'))+
     #          geom_hex()
     #        )
     
     #interesting plot showing where sequence is better is restricted to higher values of exposure and effectiveness 
-    print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_insecticide1', colour='mixA_better_seq0.5'))+
+    print( ggplot(ggSubset, aes_string(x='exposure', y='effectiveness_ins1', colour='mixA_better_seq0.5'))+
              #geom_hex()
              geom_point(alpha=0.2)  
            ) 
 
     #can I multiply the two effectivenesses together ?
     #aha! yes that's even better
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_better_seq0.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 * effectiveness_ins2, colour=mixA_better_seq0.5))+
              #geom_hex()
              geom_point(alpha=0.2)  
            )  
@@ -716,14 +716,14 @@ for(i in names_results)
     #i think adding the effectivenesses may give an even better plot
     #and makes it easier for the reader to interpret
     #aha! yes that's even better
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mixA_better_seq0.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=mixA_better_seq0.5))+
 
              geom_point(alpha=0.2)  
            )  
     
     #facetted 0/1, labelled mix better, seq better
     #if I get this sorted I could try to have +ve & -ve on the same scale
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mixA0.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=seq_better_mixA0.5))+
              facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
 
              theme(legend.position="none") +
@@ -734,7 +734,7 @@ for(i in names_results)
     #what if I do the difference rather than just 0/1
     #aha! this is close to being the killer plot, just need to get the colour scale right 
     #but the previous one may be clearer
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 * effectiveness_insecticide2, colour=mixA_minus_seq0.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 * effectiveness_ins2, colour=mixA_minus_seq0.5))+
              #geom_hex()
              geom_point(alpha=1) +
              #no adding grey outlines obscures the pattern
@@ -757,8 +757,8 @@ for(i in names_results)
     #facet showing generation differences, labelled mix better, seq better
     #+ve & -ve on the same colour scale
     #failed attempt at getting Curtis point in legend
-    #print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.5, size="Curtis"))+
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.5))+
+    #print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=abs_mixA_minus_seq0.5, size="Curtis"))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=abs_mixA_minus_seq0.5))+
              
              facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
 
@@ -770,7 +770,7 @@ for(i in names_results)
              theme_bw() +
              #theme_minimal() +
              #add point for Curtis inputs
-             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2), colour='red', shape=3) +
              #failing to add legend for curtis point
              #scale_fill_manual(name = "Curtis Fig.2", values = 'red', labels = 'test') +
              #scale_size_manual(name = "Curtis Fig.2", values="test") +
@@ -780,7 +780,7 @@ for(i in names_results)
              #main points for the plot
              geom_point(alpha=1, size=0.5) + 
              #add text for Curtis point
-             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_ins1 + effectiveness_ins2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
            )       
 
     #NOW what if I subset the 0 values & fit a linear model to it
@@ -794,7 +794,7 @@ for(i in names_results)
     #might even be good to overplot the zero values after
     #or even remove the zero values ?
     
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mixA_minus_seq0.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=abs_mixA_minus_seq0.5))+
              
              facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix better','1'='sequential better'))) +
 
@@ -802,7 +802,7 @@ for(i in names_results)
                                  guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
              theme_bw() +
              #add point for Curtis inputs
-             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2), colour='red', shape=3) +
              ylab('effectiveness of insecticides added') +
              xlab('exposure to both insecticides') + 
              #main points for the plot
@@ -812,13 +812,13 @@ for(i in names_results)
              #can I subtley highlight the zero points which are repeated in each plot ?
              geom_point(data=ggSubset[which(ggSubset$mixA_minus_seq0.5==0),], size=0.8, colour='lightgrey', shape=2, fill='white') +            
              #add text for Curtis point
-             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_ins1 + effectiveness_ins2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
            )      
    
   # doing the lm outside of ggplot    
   df_same = ggSubset[which(ggSubset$mixA_minus_seq0.5==0),]
   x1=df_same$exposure 
-  y1=df_same$effectiveness_insecticide1 + df_same$effectiveness_insecticide2
+  y1=df_same$effectiveness_ins1 + df_same$effectiveness_ins2
   
   l_mod <- lm(y1 ~ x1)
   l_mod$coefficients
@@ -832,13 +832,13 @@ for(i in names_results)
 
   
   #modify the killer plot to show where mixtures are 20% better ?
-  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.5))+
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2))+ #, colour=abs_mixA_minus_seq0.5))+
              
              facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
 
              theme_bw() +
              #add point for Curtis inputs
-             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2), colour='red', shape=3) +
              ylab('effectiveness of insecticides added') +
              xlab('exposure to both insecticides') + 
              #main points for the plot
@@ -884,14 +884,14 @@ for(i in names_results)
     #i think adding the effectivenesses may give an even better plot
     #and makes it easier for the reader to interpret
     #aha! yes that's even better
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=mix2_better_seq0.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=mix2_better_seq0.5))+
 
              geom_point(alpha=0.2)  
            )  
     
     #facetted 0/1, labelled mix better, seq better
     #if I get this sorted I could try to have +ve & -ve on the same scale
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=seq_better_mix20.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=seq_better_mix20.5))+
              facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
 
              theme(legend.position="none") +
@@ -901,7 +901,7 @@ for(i in names_results)
 
     #killer plot mix2 vs seq
     library(viridis)
-    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.5))+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=abs_mix2_minus_seq0.5))+
              
              facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
 
@@ -913,7 +913,7 @@ for(i in names_results)
              theme_bw() +
              #theme_minimal() +
              #add point for Curtis inputs
-             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2), colour='red', shape=3) +
              #failing to add legend for curtis point
              #scale_fill_manual(name = "Curtis Fig.2", values = 'red', labels = 'test') +
              #scale_size_manual(name = "Curtis Fig.2", values="test") +
@@ -923,36 +923,36 @@ for(i in names_results)
              #main points for the plot
              geom_point(alpha=1, size=0.5) + 
              #add text for Curtis point
-             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_ins1 + effectiveness_ins2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
            )       
 
     
     #modify killer plot mix2 vs seq to add in male exposure prop on x axis
     library(viridis)
-    print( ggplot(ggSubset, aes(x=exposure+exposure*male_exposure_prop, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_mix2_minus_seq0.5))+
+    print( ggplot(ggSubset, aes(x=exposure+exposure*male_exposure_prop, y=effectiveness_ins1 + effectiveness_ins2, colour=abs_mix2_minus_seq0.5))+
              
              facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mix better','1'='sequential better'))) +
              scale_color_viridis(begin=1, end=0, option="viridis", 
                                  guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold")) + 
              theme_bw() +
              #add point for Curtis inputs
-             geom_point(data = curtisInputs, aes(x=exposure+exposure*male_exposure_prop, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             geom_point(data = curtisInputs, aes(x=exposure+exposure*male_exposure_prop, y=effectiveness_ins1 + effectiveness_ins2), colour='red', shape=3) +
              ylab('effectiveness of insecticides added') +
              xlab('exposure to both insecticides for both sexes') + 
              #main points for the plot
              geom_point(alpha=1, size=0.5) + 
              #add text for Curtis point
-             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_insecticide1 + effectiveness_insecticide2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
+             geom_text(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_ins1 + effectiveness_ins2', label='"Curtis Fig.2"'), nudge_x=-0.05, size=3, colour='red')
            )       
     
   #modify the killer plot to show where mixtures are 20% better ?
-  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2))+ #, colour=abs_mixA_minus_seq0.5))+
+  print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2))+ #, colour=abs_mixA_minus_seq0.5))+
              
              facet_grid( ~ mix2_not20pc_better_seq0.5, labeller=as_labeller( c('0'='mix\nresistance >20% slower','1'='mix\nresistance <20% slower'))) +
 
              theme_bw() +
              #add point for Curtis inputs
-             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2), colour='red', shape=3) +
+             #geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2), colour='red', shape=3) +
              ylab('effectiveness of insecticides added') +
              xlab('exposure to both insecticides') + 
              #main points for the plot
