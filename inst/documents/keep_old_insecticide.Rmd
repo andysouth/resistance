@@ -118,7 +118,7 @@ treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0',
 
 #add these for extended analysis
 if (experiment=='extended')
-  treePredictors <- c(treePredictors,'maleExposureProp','correctMixDeployProp')
+  treePredictors <- c(treePredictors,'male_exposure_prop','correct_mix_deploy')
 
 treeInput <- treeInput[ treePredictors, ]
 
@@ -158,8 +158,8 @@ curtisInputs <- data.frame("exposure"=0.9,
                            "dominance_allele2"=0.0016,
                            "selection_coef_allele1"=0.23,
                            "selection_coef_allele2"=0.43,
-                           "maleExposureProp"=1,
-                           "correctMixDeployProp"=1,
+                           "male_exposure_prop"=1,
+                           "correct_mix_deploy"=1,
                            "resist_start_lo_div_hi"=1,
                            "resist_start_1_div_2"=1)
 

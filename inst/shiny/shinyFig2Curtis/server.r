@@ -38,7 +38,7 @@ shinyServer(function(input, output) {
                       phi.SS2_0B = input$phi.SS2_0B,
                       s.RR1_A0 = input$s.RR1_A0,
                       s.RR2_0B = input$s.RR2_0B,
-                      correctMixDeployProp = input$correctMixDeployProp,
+                      correct_mix_deploy = input$correct_mix_deploy,
                       addCombinedStrategy = input$addCombinedStrategy )
         
         #a hack to output the inputs
@@ -52,7 +52,7 @@ shinyServer(function(input, output) {
                       "phi.SS2_0B =",input$phi.SS2_0B,",",
                       "s.RR1_A0 =",input$s.RR1_A0,",",
                       "s.RR2_0B =",input$s.RR2_0B,",",
-                      "correctMixDeployProp =",input$correctMixDeployProp,",",
+                      "correct_mix_deploy =",input$correct_mix_deploy,",",
                       "addCombinedStrategy =",input$addCombinedStrategy,
                       ")\n" )
         

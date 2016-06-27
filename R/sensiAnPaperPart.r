@@ -69,18 +69,18 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     if (experiment=='extended')
     {
-      maleExposureProp <- runif(1, min=0, max=1)
-      correctMixDeployProp <- runif(1, min=0.5, max=1)          
+      male_exposure_prop <- runif(1, min=0, max=1)
+      correct_mix_deploy <- runif(1, min=0.5, max=1)          
     } else
     {
-      maleExposureProp <- 1
-      correctMixDeployProp <- 1     
+      male_exposure_prop <- 1
+      correct_mix_deploy <- 1     
     }
     
     
     #this sets exposures according to whether insecticide1,2 or mixture
     a <- setExposure(exposure=exposure, insecticideUsed=insecticideUsed,
-                     maleExposureProp=maleExposureProp, correctMixDeployProp=correctMixDeployProp) 
+                     male_exposure_prop=male_exposure_prop, correct_mix_deploy=correct_mix_deploy) 
   
     
     ## effectiveness of insecticides, selection against SS in presence of that insecticide
@@ -134,8 +134,8 @@ sensiAnPaperPart <- function( nScenarios = 10,
                         # 14/6/16 now these calc from rr_ inside the func
                         # s.RR1_A0 = s.RR1_A0,
                         # s.RR2_0B = s.RR2_0B,
-                        maleExposureProp = maleExposureProp,
-                        correctMixDeployProp = correctMixDeployProp,
+                        male_exposure_prop = male_exposure_prop,
+                        correct_mix_deploy = correct_mix_deploy,
                         # 14/6/16
                         rr_advantage_I1 = rr_advantage_I1,
                         rr_advantage_I2 = rr_advantage_I2

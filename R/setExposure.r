@@ -6,8 +6,8 @@
 #' 
 #' @param exposure exposure to the insecticide(s)
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
-#' @param maleExposureProp proportion tht males are exposed relative to f, default 1, likely to be <1
-#' @param correctMixDeployProp proportion of times that mixture is deployed correctly, 
+#' @param male_exposure_prop proportion tht males are exposed relative to f, default 1, likely to be <1
+#' @param correct_mix_deploy proportion of times that mixture is deployed correctly, 
 #'    assumes that when not deployed correctly the single insecticides are used instead
 #'    TODO check my understanding of this
 #' 
@@ -19,8 +19,8 @@
 #' 
 setExposure <- function( exposure = 0.9,
                          insecticideUsed = 'mixture',
-                         maleExposureProp = 1,
-                         correctMixDeployProp = 1 )
+                         male_exposure_prop = 1,
+                         correct_mix_deploy = 1 )
 {
 
   #exposure to insecticide
@@ -33,7 +33,7 @@ setExposure <- function( exposure = 0.9,
     #f
     a['f','A','0'] <- exposure
     #m
-    a['m','A','0'] <- exposure * maleExposureProp    
+    a['m','A','0'] <- exposure * male_exposure_prop    
     #for both m&f
     a[,'0','0'] <- 1 - a[,'A','0']  
     
@@ -42,22 +42,22 @@ setExposure <- function( exposure = 0.9,
     #f
     a['f','0','B'] <- exposure
     #m
-    a['m','0','B'] <- exposure * maleExposureProp     
+    a['m','0','B'] <- exposure * male_exposure_prop     
     #for both m&f
     a[,'0','0'] <- 1 - a[,'0','B']  
     
   } else if (insecticideUsed == "mixture")
   {
     #f
-    a['f','A','B'] <- exposure * correctMixDeployProp
+    a['f','A','B'] <- exposure * correct_mix_deploy
     #m
-    a['m','A','B'] <- a['f','A','B'] * maleExposureProp
+    a['m','A','B'] <- a['f','A','B'] * male_exposure_prop
     
-    if ( correctMixDeployProp < 1 )
+    if ( correct_mix_deploy < 1 )
     {
-      a['f','A','0'] <- (1 - correctMixDeployProp)/2 * exposure
+      a['f','A','0'] <- (1 - correct_mix_deploy)/2 * exposure
       
-      a['m','A','0'] <- a['f','A','0'] * maleExposureProp
+      a['m','A','0'] <- a['f','A','0'] * male_exposure_prop
       
       #m&f together
       a[,'0','B'] <- a[,'A','0']    
@@ -71,11 +71,11 @@ setExposure <- function( exposure = 0.9,
       a[,'0','0'] <- 1 - a[,'A','B']
     }
 
-# old version without correctMixDeployProp
+# old version without correct_mix_deploy
 #     #f
 #     a['f','A','B'] <- exposure
 #     #m
-#     a['m','A','B'] <- exposure * maleExposureProp
+#     a['m','A','B'] <- exposure * male_exposure_prop
 #     #for both m&f
 #     a[,'0','0'] <- 1 - a[,'A','B']         
   } else

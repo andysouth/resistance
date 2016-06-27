@@ -15,8 +15,8 @@ shinyServer(function(input, output) {
     #isolate({
       a <- setExposure(exposure = input$exposure,
                        insecticideUsed = input$insecticideUsed,
-                       maleExposureProp = input$maleExposureProp, 
-                       correctMixDeployProp = input$correctMixDeployProp)
+                       male_exposure_prop = input$male_exposure_prop, 
+                       correct_mix_deploy = input$correct_mix_deploy)
       
       #to replace 0s with NAs to look better in table
       a[which(a[,,]==0)] <- NA
@@ -29,8 +29,8 @@ shinyServer(function(input, output) {
     
     a <- setExposure(exposure = input$exposure,
                      insecticideUsed = input$insecticideUsed,
-                     maleExposureProp = input$maleExposureProp, 
-                     correctMixDeployProp = input$correctMixDeployProp)
+                     male_exposure_prop = input$male_exposure_prop, 
+                     correct_mix_deploy = input$correct_mix_deploy)
     
     #to replace 0s with NAs to look better in table
     a[which(a[,,]==0)] <- NA

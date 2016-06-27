@@ -4522,20 +4522,28 @@ runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B 
  
  
 ** 24/6/2016 **
-
 editing the MS
+done ~ edit text on decision trees
+done ~ edit out UOL and replace with tim to resistance
 
+** 27/6/2016 **
 
+ 
  
  
 ### TO DO  
+
+
+~ edit text about runs not reaching resistance
+~ edit results text
+~ add few sentences to abstract
 
 ~ do some find & replace changes to text labels (& maybe to variable names)
 
 don't use I1 I2, because it looks like L1,2 in some fonts
 
 correctMixDeployProp        to correct_mix_deploy
-maleExposureProp            to male_exposure
+maleExposureProp            to male_exposure_prop
 effectiveness_insecticide1  to effectiveness_ins1
 effectiveness_insecticide2  to effectiveness_ins2
 
@@ -4543,9 +4551,7 @@ rr_advantage_ins1
 rr_advantage_ins2
 
 
-~ edit text on decision trees
-~ edit results text
-~ edit out UOL and replace with tim to resistance
+
 
 
 ~ whats the best terminology for time-to-resistance ? 

@@ -28,10 +28,10 @@ shinyUI(fluidPage(
            #numericInput("a.m_B", "insecticide2:", 0.5, min = 0.1, max = 0.9, step = 0.1)
     ),
     column(2, offset = 0,
-           numericInput("correctMixDeployProp", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1)
+           numericInput("correct_mix_deploy", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1)
     ),
     column(2, offset = 0,
-           numericInput("maleExposureProp", "Male exposure proportion", 0.9, min = 0, max = 1, step = 0.1)
+           numericInput("male_exposure_prop", "Male exposure proportion", 0.9, min = 0, max = 1, step = 0.1)
     )
   ), #end fluid row
 

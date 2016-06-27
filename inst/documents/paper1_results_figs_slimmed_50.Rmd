@@ -117,7 +117,7 @@ date: "`r Sys.Date()`"
 
   #add these for extended analysis
   if (experiment=='extended')
-    treePredictors <- c(treePredictors,'maleExposureProp','correctMixDeployProp')
+    treePredictors <- c(treePredictors,'male_exposure_prop','correct_mix_deploy')
   
   treeInput <- treeInput[ treePredictors, ]
   
@@ -157,8 +157,8 @@ date: "`r Sys.Date()`"
                              "dominance_allele2"=0.0016,
                              "selection_coef_allele1"=0.23,
                              "selection_coef_allele2"=0.43,
-                             "maleExposureProp"=1,
-                             "correctMixDeployProp"=1,
+                             "male_exposure_prop"=1,
+                             "correct_mix_deploy"=1,
                              "resist_start_lo_div_hi"=1,
                              "resist_start_1_div_2"=1)
   
@@ -389,7 +389,7 @@ for(i in names_results)
   ggSubset <- ggInsOuts[ !ggInsOuts$strategy %in% c("insecticide 1","insecticide 2"), ]
   #subset which output plots to show in the main paper
   # in_cols <- c("start_freq_allele1", "exposure","effectiveness_insecticide1",
-  #             "dominance_allele1","selection_coef_allele1","maleExposureProp")
+  #             "dominance_allele1","selection_coef_allele1","male_exposure_prop")
   in_cols <- c("exposure","effectiveness_insecticide1","dominance_allele1")  
   
   out_cols <- c("time_to_resistance0.5","strategy")

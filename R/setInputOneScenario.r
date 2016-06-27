@@ -60,8 +60,8 @@
 #' @param niche_Ab insecticide niche toggle hi1 lo2 0=off 1=on
 #' @param niche_aB insecticide niche toggle lo1 hi2 0=off 1=on
 #' @param sexLinked whether resistance is sex linked, default=0(FALSE)
-#' @param maleExposureProp male exposure as a propoertion of female, default 1 for same, likely <1  
-#' @param correctMixDeployProp proportion of correct deployment of mixtures, 
+#' @param male_exposure_prop male exposure as a propoertion of female, default 1 for same, likely <1  
+#' @param correct_mix_deploy proportion of correct deployment of mixtures, 
 #'    if <1 other portion divided between single insecticides
 #' @param rr_advantage_I1 effect of resistance in overcoming insecticide 1 effectiveness in RR
 #' @param rr_advantage_I2 effect of resistance in overcoming insecticide 2 effectiveness in RR    
@@ -124,8 +124,8 @@ setInputOneScenario <- function( calibration = 100,
                                  niche_Ab	=	1	,
                                  niche_aB	=	1 ,
                                  sexLinked = 0,
-                                 maleExposureProp = 1,
-                                 correctMixDeployProp = 1,
+                                 male_exposure_prop = 1,
+                                 correct_mix_deploy = 1,
                                  exposure = 0.9,
                                  #14/6/16
                                  rr_advantage_I1 = 1,
@@ -224,8 +224,8 @@ setInputOneScenario <- function( calibration = 100,
   
   #22/1/16 new variables for extended experiment
   #they aren't used in runModel2() but are needed for post run analyses
-  input[	54	] <-	maleExposureProp
-  input[	55	] <-	correctMixDeployProp
+  input[	54	] <-	male_exposure_prop
+  input[	55	] <-	correct_mix_deploy
   #1/2/16 allowing saving of single exposure param just for use in post-run analyses
   input[	56	] <-	exposure  
   

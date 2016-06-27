@@ -47,7 +47,7 @@ shinyServer(function(input, output) {
                       
                       addCombinedStrategy = FALSE,
                       strategyLabels = c('seq','','adapt','mix2') )
-                      #correctMixDeployProp = input$correctMixDeployProp,
+                      #correct_mix_deploy = input$correct_mix_deploy,
                       #addCombinedStrategy = input$addCombinedStrategy )
         
         #a hack to output the inputs
@@ -66,7 +66,7 @@ shinyServer(function(input, output) {
                       "strategyLabels = c('seq','','adapt','mix2')",
                       ")\n" )
         
-        #"correctMixDeployProp =",input$correctMixDeployProp,",",
+        #"correct_mix_deploy =",input$correct_mix_deploy,",",
         #"addCombinedStrategy =",input$addCombinedStrategy, 
                
       }) #end isolate  
@@ -97,7 +97,7 @@ shinyServer(function(input, output) {
                       
                       addCombinedStrategy = FALSE,
                       strategyLabels = c('seq','','adapt','mix2') )
-        #correctMixDeployProp = input$correctMixDeployProp,
+        #correct_mix_deploy = input$correct_mix_deploy,
         #addCombinedStrategy = input$addCombinedStrategy )
         
         #a hack to output the inputs

@@ -118,7 +118,7 @@ Previous plots showed a set of points at 1000 generations. The model is run for 
 
   #add these for extended analysis
   if (experiment=='extended')
-    treePredictors <- c(treePredictors,'maleExposureProp','correctMixDeployProp')
+    treePredictors <- c(treePredictors,'male_exposure_prop','correct_mix_deploy')
   
   treeInput <- treeInput[ treePredictors, ]
   

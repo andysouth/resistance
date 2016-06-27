@@ -28,8 +28,8 @@
 #' @param z.RR1_00 fitness cost of resistance allele 1 in insecticide free environment
 #' @param z.RR2_00 fitness cost of resistance allele 2 in insecticide free environment
 #' @param sexLinked whether resistance is sex linked, default=0(FALSE)
-#' @param maleExposureProp male exposure as a propoertion of female, default 1 for same, likely <1  
-#' @param correctMixDeployProp proportion of correct deployment of mixtures, 
+#' @param male_exposure_prop male exposure as a propoertion of female, default 1 for same, likely <1  
+#' @param  proportion of correct deployment of mixtures, 
 #'    if <1 other portion divided between single insecticides
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
 #' @param addStrategyLabels add labels to plot for where strategies cross 0.5 line TRUE gives seq,mix1,mix2,mix3
@@ -68,8 +68,8 @@ runcurtis_f2 <- function( max_gen = 500,
                           z.RR1_00	=	0	,
                           z.RR2_00	=	0	,
                           sexLinked = 0 ,
-                          maleExposureProp = 1,
-                          correctMixDeployProp = 1,
+                          male_exposure_prop = 1,
+                           = 1,
                           addCombinedStrategy = TRUE,
                           addStrategyLabels = TRUE,
                           strategyLabels = c("seq","mix1","adapt","mix2"),
@@ -80,8 +80,8 @@ runcurtis_f2 <- function( max_gen = 500,
   
   #fill exposure array I1
   a <- setExposure(exposure=exposure, insecticideUsed = "insecticide1",
-                   maleExposureProp = maleExposureProp,
-                   correctMixDeployProp = correctMixDeployProp )
+                   male_exposure_prop = male_exposure_prop,
+                    =  )
   
   inputI1 <- setInputOneScenario(a=a,
                                  max_gen = max_gen,
@@ -111,13 +111,13 @@ runcurtis_f2 <- function( max_gen = 500,
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
-                                 maleExposureProp = maleExposureProp,
-                                 correctMixDeployProp = correctMixDeployProp )
+                                 male_exposure_prop = male_exposure_prop,
+                                  =  )
   
   #fill exposure array I2
   a <- setExposure(exposure=exposure, insecticideUsed = "insecticide2",
-                   maleExposureProp = maleExposureProp,
-                   correctMixDeployProp = correctMixDeployProp)
+                   male_exposure_prop = male_exposure_prop,
+                    = )
   
   inputI2 <- setInputOneScenario(a=a,
                                  max_gen = max_gen,
@@ -147,13 +147,13 @@ runcurtis_f2 <- function( max_gen = 500,
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
-                                 maleExposureProp = maleExposureProp,
-                                 correctMixDeployProp = correctMixDeployProp )
+                                 male_exposure_prop = male_exposure_prop,
+                                  =  )
   
   #fill exposure array mix
   a <- setExposure(exposure=exposure, insecticideUsed = "mixture",
-                   maleExposureProp = maleExposureProp,
-                   correctMixDeployProp = correctMixDeployProp )
+                   male_exposure_prop = male_exposure_prop,
+                    =  )
   
   inputmix <- setInputOneScenario(a=a,
                                  max_gen = max_gen,
@@ -183,8 +183,8 @@ runcurtis_f2 <- function( max_gen = 500,
                                  z.RR1_00	=	z.RR1_00	,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
-                                 maleExposureProp = maleExposureProp,
-                                 correctMixDeployProp = correctMixDeployProp) 
+                                 male_exposure_prop = male_exposure_prop,
+                                  = ) 
   
   #bind inputs together
   input <- cbind(inputI1, inputI2, inputmix)

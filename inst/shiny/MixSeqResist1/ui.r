@@ -108,7 +108,7 @@ shinyUI(fixedPage(
     )
     # column(2, offset = 0,
     #        h5("Extra params not included in Curtis"),
-    #        numericInput("correctMixDeployProp", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1),
+    #        numericInput("correct_mix_deploy", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1),
     #        checkboxInput("addCombinedStrategy", "plot adaptive strategy",FALSE)
     # )
   ) #end fixed row
