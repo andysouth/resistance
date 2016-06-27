@@ -593,8 +593,10 @@ for(i in names_results)
     #print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_diff, size="Curtis"))+
     print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_diff))+
              
-             facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix\nresistance slower','1'='sequential\nresistance slower'))) +
+             #facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix\nresistance slower','1'='sequential\nresistance slower'))) +
 
+             facet_grid( ~ seq_better_mixA0.5, labeller=as_labeller( c('0'='adaptive mix\ntime to resistance\n longer','1'='sequential\ntime to resistance\n longer'))) +
+             
              #YlGnBu looks really good except that the yellow points are very faint
              #scale_colour_distiller(palette='YlGnBu', direction=1) +
              #option="plasma" looks good too
@@ -696,7 +698,7 @@ Red triangles are those runs in which resistance reached the threshold at the sa
   #modify the killer plot to show where mixtures are 20% better ?
   print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_diff))+
              
-             facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\nresistance >20% slower','1'='adaptive mix\nresistance <20% slower'))) +
+             facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\ntime to resistance\n >20% longer','1'='adaptive mix\ntime to resistance\n >20% longer'))) +
 
              theme_bw() +
              theme(legend.position = "bottom") +
@@ -807,7 +809,7 @@ fewer runs where sequential gives slower resistance
 
     print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_insecticide1 + effectiveness_insecticide2, colour=abs_diff))+
              
-             facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mixture\nresistance slower','1'='sequential\nresistance slower'))) +
+             facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mixture\ntime to resistance\nlonger','1'='sequential\ntime to resistance\nlonger'))) +
 
              #YlGnBu looks really good except that the yellow points are very faint
              #scale_colour_distiller(palette='YlGnBu', direction=1) +
