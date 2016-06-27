@@ -69,7 +69,7 @@ runcurtis_f2 <- function( max_gen = 500,
                           z.RR2_00	=	0	,
                           sexLinked = 0 ,
                           male_exposure_prop = 1,
-                           = 1,
+                          correct_mix_deploy = 1,
                           addCombinedStrategy = TRUE,
                           addStrategyLabels = TRUE,
                           strategyLabels = c("seq","mix1","adapt","mix2"),
@@ -81,7 +81,7 @@ runcurtis_f2 <- function( max_gen = 500,
   #fill exposure array I1
   a <- setExposure(exposure=exposure, insecticideUsed = "insecticide1",
                    male_exposure_prop = male_exposure_prop,
-                    =  )
+                   correct_mix_deploy = correct_mix_deploy )
   
   inputI1 <- setInputOneScenario(a=a,
                                  max_gen = max_gen,
@@ -112,12 +112,12 @@ runcurtis_f2 <- function( max_gen = 500,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
                                  male_exposure_prop = male_exposure_prop,
-                                  =  )
+                                 correct_mix_deploy = correct_mix_deploy )
   
   #fill exposure array I2
   a <- setExposure(exposure=exposure, insecticideUsed = "insecticide2",
                    male_exposure_prop = male_exposure_prop,
-                    = )
+                   correct_mix_deploy = correct_mix_deploy )
   
   inputI2 <- setInputOneScenario(a=a,
                                  max_gen = max_gen,
@@ -148,12 +148,12 @@ runcurtis_f2 <- function( max_gen = 500,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
                                  male_exposure_prop = male_exposure_prop,
-                                  =  )
+                                 correct_mix_deploy = correct_mix_deploy )
   
   #fill exposure array mix
   a <- setExposure(exposure=exposure, insecticideUsed = "mixture",
                    male_exposure_prop = male_exposure_prop,
-                    =  )
+                   correct_mix_deploy = correct_mix_deploy  )
   
   inputmix <- setInputOneScenario(a=a,
                                  max_gen = max_gen,
@@ -184,7 +184,7 @@ runcurtis_f2 <- function( max_gen = 500,
                                  z.RR2_00	=	z.RR2_00	,
                                  sexLinked = sexLinked ,
                                  male_exposure_prop = male_exposure_prop,
-                                  = ) 
+                                 correct_mix_deploy = correct_mix_deploy ) 
   
   #bind inputs together
   input <- cbind(inputI1, inputI2, inputmix)
