@@ -108,11 +108,14 @@ date: "`r Sys.Date()`"
   
   #input files in listOutMix, listOutIn1 & listOutI2 are the same if the runs are done with default randomSeed 
   #except that exposure will be in a.f_AB, a.f_A0 and a.f_B0 respectively (& a.m* too)
-  #I could just rename one to exposure
-  #BEWARE risk if future changes
   #1/2/16 don't need this now because I've saved exposure from the single original random value
   #rownames(treeInput)[rownames(treeInput)=="a.f_AB"] <- "exposure"
   
+  #27/6/16 to convert any varnames in old output files
+  rownames(treeInput)[ "maleExposureProp" == rownames(treeInput) ] <- "male_exposure_prop"
+  rownames(treeInput)[ "correctMixDeployProp" == rownames(treeInput) ] <- "correct_mix_deploy"
+  rownames(treeInput)[ "rr_advantage_I1" == rownames(treeInput) ] <- "rr_restoration_ins1"
+  rownames(treeInput)[ "rr_advantage_I2" == rownames(treeInput) ] <- "rr_restoration_ins2"  
   
   #hardcode which variables to include in analysis to keep it simple and transparent
   #treePredictors <- c('P_1','P_2','exposure','phi.SS1_A0','phi.SS2_0B','h.RS1_A0','h.RS2_0B','s.RR1_A0','s.RR2_0B')
