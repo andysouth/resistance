@@ -505,11 +505,13 @@ for(i in names_results)
 
 1. Exposure and effectiveness come out as the most important effect on the difference between A) sequential and mixture, and B) difference between sequential and adaptive mixture strategies.
 
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=3.5} 
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=4.5} 
 
   
   library(sensitivity)
 
+  #list to put plots in for cowplot
+  plotlist <- list(2)
     
     #mixture2
     x <- dif_mix2_seq[,1:num_inputs]
@@ -523,16 +525,15 @@ for(i in names_results)
     names(to_plot)[1] <- 'PRCC'
     to_plot$inputs <- rownames(to_plot)  
 
-    cat("A)")
+    #cat("A)")
         
-    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+    plotlist[[1]] <- ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
              geom_point(shape=1, colour='red') +
-             theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
+             theme(axis.text.x = element_blank()) +
              geom_hline(yintercept = 0, linetype=3) +
-             #theme_bw() +
+             ggtitle(paste("A) Mixture minus sequential")) +
              ylim(-1,1) +
              xlab(NULL)
-          )
 
     ## repeat code for adaptive
     x <- dif_mixA_seq[,1:num_inputs]
@@ -548,17 +549,25 @@ for(i in names_results)
     names(to_plot)[1] <- 'PRCC'
     to_plot$inputs <- rownames(to_plot)  
     
-    cat("B)")
+    #cat("B)")
     
-    print( ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
+    plotlist[[2]] <- ggplot( to_plot, aes_string(x='inputs',y='PRCC') ) + 
              geom_point(shape=1, colour='red') +
              theme(axis.text.x = element_text(angle = 45,hjust = 1, vjust = 1)) +
              geom_hline(yintercept = 0, linetype=3) +
-             #theme_bw() +
+             ggtitle(paste("B) Adaptive minus sequential")) +
              ylim(-1,1) +
              xlab(NULL)
-          )    
+   
         
+    
+  #to put back in some ref gridlines that are removed by cowplot
+  #theme_set(theme_gray())
+  theme_set(theme_bw())
+  
+  plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(1,1.6)) 
+    
+    
 ```
 
 
