@@ -37,6 +37,7 @@
 #' @param xlab xlab
 #' @param ylab ylab
 #' @param addLegend whether to add a legend inside plot
+#' @param main title for the plot
 #'  
 #' @return list of plot components
 #' @export
@@ -76,7 +77,8 @@ runcurtis_f2 <- function( max_gen = 500,
                           strategyLabels = c("seq","mix1","adapt","mix2"),
                           ylab = "Resistance frequency",
                           xlab = "Generation",
-                          addLegend = TRUE
+                          addLegend = TRUE,
+                          main = ""
                           )
 {
   
@@ -205,7 +207,8 @@ runcurtis_f2 <- function( max_gen = 500,
                          strategyLabels = strategyLabels,
                          xlab = xlab,
                          ylab = ylab,
-                         addLegend = addLegend
+                         addLegend = addLegend,
+                         main = main
                          )  
   
   #add returning the results
