@@ -16,6 +16,7 @@
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")
 #' @param xlab xlab
 #' @param ylab ylab
+#' @param addLegend whether to add a legend inside plot
 #' 
 #' @examples
 #' listOutMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -34,7 +35,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    addStrategyLabels = TRUE,
                                    strategyLabels = c("seq","mix1","adapt","mix2"),
                                    ylab = "Allele frequency",
-                                   xlab = "Generation"
+                                   xlab = "Generation",
+                                   addLegend = TRUE
                                    ){
   
   #find generations to reach max resistance points
@@ -50,8 +52,11 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   f <- c((100*minf):100)				## for y axis
   #f <- c(1:100)				## for y axis 
-  fl <- log10(f)				
-  par(pty="s") 
+  fl <- log10(f)
+  
+  #28/6/16 disabled this, then put it back
+  par(pty="s") #to create a square plot region
+  
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         #xlim=c(1,maxGens), ylim=c(0,(max(fl))),
@@ -203,19 +208,20 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   #when switch made from I1 to I2
   abline( v = max(maxGensI1), col="grey", lty=2 )  
   
-#   yval <- log10( 2 )
-#   legend( 105, yval, legend=c("Sequential", "Combination","R at Locus 1 (DDT)", "R at Locus 2(HCH)"), 
-#           col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.7 )
-  if( addCombinedStrategy )
+  if (addLegend)
   {
-    #added a dotted line for combined
-    legend( 'bottomright', legend=c("sequential", "mixture", "adaptive", "insecticide 1", "insecticide 2"), 
-            col=c("black","black","black","red", "blue"), lty=c(2,1,3,1,1), bty="n", cex=0.7 )     
-  } else
-  {
-    legend( 'bottomright', legend=c("sequential", "mixture", "insecticide 1", "insecticide 2"), 
-            col=c("black","black","red", "blue"), lty=c(2,1,1,1), bty="n", cex=0.7 )    
+    if( addCombinedStrategy )
+    {
+      #added a dotted line for combined
+      legend( 'bottomright', legend=c("sequential", "mixture", "adaptive", "insecticide 1", "insecticide 2"), 
+              col=c("black","black","black","red", "blue"), lty=c(2,1,3,1,1), bty="n", cex=0.7 )     
+    } else
+    {
+      legend( 'bottomright', legend=c("sequential", "mixture", "insecticide 1", "insecticide 2"), 
+              col=c("black","black","red", "blue"), lty=c(2,1,1,1), bty="n", cex=0.7 )    
+    }    
   }
+
  
 
  #andy added
