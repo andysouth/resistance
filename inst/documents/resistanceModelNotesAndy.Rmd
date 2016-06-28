@@ -4568,13 +4568,14 @@ done ~ copy & paste in new fig versions
 
 Yes see : "C:\Dropbox\R docs\git notes andy.txt"
 
-
+putting figs side by side in paper2
  
  
 ### TO DO  
 
 check on paper2 and finish off the final mechanisms I haven't sorted yet.
-
+**Selective advantage of resistance**
+#TODO replace Figs 6,7,8 with AA,BB,CC below and modify this text
 
 
 ~ send Matt brief summary of how to sync his fork with my repo. 
