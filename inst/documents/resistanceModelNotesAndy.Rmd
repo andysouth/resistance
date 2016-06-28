@@ -4519,7 +4519,14 @@ runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B 
 ~~ for the paper I could do a plot of effectiveness1+2 ? yes
 ~~ interestingly adding the effectivenesses shows that are very high effectivenesses of both insecticides resistance arises slower for mix either than sequential !!  
  
- 
+~ whats the best terminology for time-to-resistance ? 
+What do other authors use ?
+Birget & Koella 2015 (A genetic model of the effects of ITN on the evolution of insecticide resistance)
+  time to evolve resistance
+  generations to reach 50% resistance (in fig4 legend)
+Barbosa 2012
+  spread of resistance
+  rate of change of resistance 
  
 ** 24/6/2016 **
 editing the MS
@@ -4527,16 +4534,6 @@ done ~ edit text on decision trees
 done ~ edit out UOL and replace with tim to resistance
 
 ** 27/6/2016 **
-
- 
- 
- 
-### TO DO  
-
-
-~ edit text about runs not reaching resistance
-~ edit results text
-~ add few sentences to abstract
 
 ~ do some find & replace changes to text labels (& maybe to variable names)
 
@@ -4547,31 +4544,40 @@ maleExposureProp            to male_exposure_prop
 effectiveness_insecticide1  to effectiveness_ins1
 effectiveness_insecticide2  to effectiveness_ins2
 
-rr_restoration_ins1
-rr_restoration_ins2
+rr_restoration to rr_restoration
+
+eeek I had to add these in to correct a problem that inputs from the previous runs had different names 
+ 
+  rownames(treeInput)[ "maleExposureProp" == rownames(treeInput) ] <- "male_exposure_prop"
+  rownames(treeInput)[ "correctMixDeployProp" == rownames(treeInput) ] <- "correct_mix_deploy"
+  rownames(treeInput)[ "rr_advantage_I1" == rownames(treeInput) ] <- "rr_restoration_ins1"
+  rownames(treeInput)[ "rr_advantage_I2" == rownames(treeInput) ] <- "rr_restoration_ins2"   
+ 
+done ~ edit PRCC figs to remove repeated x axis labels
+done ~ edit text about runs not reaching resistance
+done ~ edit results text
+done ~ edit text on rr_restoration
+done ~ add few sentences to abstract
+done ~ check the SI
+done ~ copy & paste in new fig versions
+ 
+ archived my changes to : 2016_06_27 IR model manuscript plus SI.docx
+ 
+** 28/6/16 **
+~ work out github advice for Matt, maybe test it first.
+
+Yes see : "C:\Dropbox\R docs\git notes andy.txt"
+
+
+ 
+ 
+### TO DO  
+
+check on paper2 and finish off the final mechanisms I haven't sorted yet.
 
 
 
-
-
-~ whats the best terminology for time-to-resistance ? 
-What do other authors use ?
-Birget & Koella 2015 (A genetic model of the effects of ITN on the evolution of insecticide resistance)
-  time to evolve resistance
-  generations to reach 50% resistance (in fig4 legend)
-Barbosa 2012
-  spread of resistance
-  rate of change of resistance
-
-
-~ remove input x axis labels in fig x4, and probably add back in titles about mix-seq
-~ check the SI
-
-
-
-
-
-~ next week send Matt brief summary of how to sync his fork with my repo. 
+~ send Matt brief summary of how to sync his fork with my repo. 
 Stage 3 from here : (its a little tricky)
 https://help.github.com/articles/fork-a-repo/
 http://kbroman.org/github_tutorial/pages/fork.html
@@ -4590,11 +4596,6 @@ http://kbroman.org/github_tutorial/pages/fork.html
 
 
 
-~ check for R courses for Matt
-~ send Matt the game
-~ send Matt some of the useful stuff at the end of this file
-
-
 ~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ? Ian explained that this was as expected, but I need to confirm my understanding.
 
 
@@ -4604,7 +4605,7 @@ http://kbroman.org/github_tutorial/pages/fork.html
 Does dominance effect the relative performance of the 2 insecticides where mosquitos are exposed to both. i.e. Does high dominance of the new allele mean that a mosquito is more likely to survive the presence of the old insecticide ?
 
 
-Potential for me to look at in a 2nd paper :
+Potential for me to look at in a later paper :
 Differential exposure of males & females. (I have shown exposure is important so this could have a big effect).
 
 
@@ -4638,17 +4639,12 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 ~ check code in findResistancePointsMixResponsive()
 
 
-# would it be useful for Ian for me to create an interactive shiny app to view the 1000 sim data. E.g. could just have the ggplot code with options to set the x value & colour by different inputs.
-# maybe try faceting by parameter ranges ?
-
-
 1. create a vignette that shows how best to run current model
 1. fix the testthat tests to avoid new input addition
 1. create functions fitnessLocus(), fitnessNiche(), fitnessIndiv()
 
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
-
 
 
 Files :
