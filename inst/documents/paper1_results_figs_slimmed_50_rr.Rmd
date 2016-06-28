@@ -505,7 +505,7 @@ for(i in names_results)
 
 1. Exposure and effectiveness come out as the most important effect on the difference between A) sequential and mixture, and B) difference between sequential and adaptive mixture strategies.
 
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=4.5} 
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, fig.height=5.5} 
 
   
   library(sensitivity)
