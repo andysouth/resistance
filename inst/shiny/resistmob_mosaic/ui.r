@@ -1,7 +1,8 @@
-#resistance/shiny/resistmob2/ui.r
-#andy south 15/6/16
+#resistance/shiny/resistmob_mosaic/ui.r
+#andy south 29/6/16
+#add correct_mix input to allow looking at mosaics
 #a mobile compatible app
-#uses NEW system where rr_restoration used as input instead of selection coefficient
+
 
 library(shiny)
 
@@ -69,7 +70,7 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
   hr(),
   
   fluidRow(
-    column(2,
+    column(1,
            h5("scenario & insecticide "),
            h2("A1"),
            h2("A2"),
@@ -119,7 +120,7 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
            sliderInput("effectiveness_A1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
            sliderInput("effectiveness_A2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
            hr(),
-           sliderInput("effectiveness_B1", NULL, val=0.9, min = 0, max = 1, step = 0.1, ticks=FALSE),
+           sliderInput("effectiveness_B1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
            sliderInput("effectiveness_B2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)             
            
     ),
@@ -136,12 +137,18 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
            sliderInput("advantage_B2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)             
            
            
+    ),
+    column(1, offset = 0,
+           h5("correct mix"),
+           hr(),
+           sliderInput("correct_mix_A", NULL, val=1, min = 0, max = 1, step = 0.1, ticks=FALSE),
+           hr(),hr(),hr(),
+           sliderInput("correct_mix_B", NULL, val=0, min = 0, max = 1, step = 0.1, ticks=FALSE),
+           hr()
+           
+           # numericInput("correct_mix_deploy", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1),
+           # checkboxInput("addCombinedStrategy", "plot adaptive strategy",FALSE)
     )
-    # column(2, offset = 0,
-    #        h5("Extra params not included in Curtis"),
-    #        numericInput("correct_mix_deploy", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1),
-    #        checkboxInput("addCombinedStrategy", "plot adaptive strategy",FALSE)
-    # )
   ) #end fixed row
 
 ))
