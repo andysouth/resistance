@@ -1,0 +1,29 @@
+---
+title: "This is my minimal example"
+output:
+  pdf_document:
+    fig_caption: yes
+  graphics: yes
+  keep_tex: yes  
+  header-includes:
+    -\usepackage{subfig} 
+
+#includes:
+#  in_header: styles.tex
+---
+
+  
+My working plot.
+
+```{r, results = 'asis', echo=FALSE, fig.width=3, fig.height=3, fig.cap="Figure 1: A smiley face because I work."}
+plot(-5:5, (-5:5)^2)
+```
+
+My failing plot.
+
+```{r, results = 'asis', echo=FALSE, fig.show='hold', fig.width=3, fig.height=3, fig.cap="Figure 2: I do not work :(", fig.subcap = c("Neither do I", "or me!")}
+plot(1:10)
+plot(rnorm(10))
+```
+
+
