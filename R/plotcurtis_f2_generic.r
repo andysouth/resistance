@@ -17,6 +17,7 @@
 #' @param xlab xlab
 #' @param ylab ylab
 #' @param addLegend whether to add a legend inside plot
+#' @param vlines colour of vertical lines to add to plot, NULL for none
 #' 
 #' @examples
 #' listOutMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -36,7 +37,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    strategyLabels = c("seq","mix1","adapt","mix2"),
                                    ylab = "Allele frequency",
                                    xlab = "Generation",
-                                   addLegend = TRUE
+                                   addLegend = TRUE,
+                                   vlines = 'grey95'
                                    ){
   
   #find generations to reach max resistance points
@@ -80,7 +82,9 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   # add axis labels
   #axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
   #default x axis
-  axis( side=1 )
+  xticks <- axis( side=1 )
+  #to add vertical lines
+  if (!is.null(vlines)) abline(v=xticks, col=vlines)
   
   #can I divide by 12 to show years ? but breaks would be ugly
   #instead could allow xlab to be changed from Generation to Month ?

@@ -38,6 +38,7 @@
 #' @param ylab ylab
 #' @param addLegend whether to add a legend inside plot
 #' @param main title for the plot
+#' @param vlines colour of vertical lines to add to plot, NULL for none
 #'  
 #' @return list of plot components
 #' @export
@@ -78,7 +79,8 @@ runcurtis_f2 <- function( max_gen = 500,
                           ylab = "Resistance frequency",
                           xlab = "Generation",
                           addLegend = TRUE,
-                          main = ""
+                          main = "",
+                          vlines = 'grey95'
                           )
 {
   
@@ -208,7 +210,8 @@ runcurtis_f2 <- function( max_gen = 500,
                          xlab = xlab,
                          ylab = ylab,
                          addLegend = addLegend,
-                         main = main
+                         main = main,
+                         vlines = vlines
                          )  
   
   #add returning the results
