@@ -1,4 +1,4 @@
-#resistance/shiny/resistmob1/server.r
+#resistance/shiny/resistmob2/server.r
 #andy south 3/6/16
 #unmodified from MixSeqResist1, only changes in UI
 
