@@ -149,6 +149,11 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 1. Curtis 
 1. Mani GS. Evolution of resistance in the presence of two insecticides. Genetics 1985;109(4):761–83.
 1. Birget 2015
+1. Curtis et al 1993, potential IRM strategies :
+~ moderation : preserve susceptible genes by limiting selection pressure
+~ saturation : high dose so that heterozygous resistants are killed
+~ multiple attack : independently acting pressures neither of which is strong enough to lead to resistance
+
 
 
 
