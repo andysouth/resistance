@@ -4566,22 +4566,108 @@ done ~ copy & paste in new fig versions
 ** 28/6/16 **
 ~ work out github advice for Matt, maybe test it first.
 
-Yes see : "C:\Dropbox\R docs\git notes andy.txt"
+Yes sent see : "C:\Dropbox\R docs\git notes andy.txt"
+
+based on these
+Stage 3 from here : (its a little tricky)
+https://help.github.com/articles/fork-a-repo/
+http://kbroman.org/github_tutorial/pages/fork.html
+
+Instructions for creating a fork of the resistance repository, being able to add your own updates, and to receive updates from me.
+
+https://github.com/AndySouth/resistance
+
+1) click fork
+will create : https://github.com/Mapowney/resistance
+
+2) click clone to get the URL to use in git clone
+#from new local folder 
+git clone https://github.com/Mapowney/resistance.git
+
+3) set up syncing
+cd resistance
+git remote add upstream https://github.com/AndySouth/resistance.git
+
+#to view remote repos
+git remote -v
+
+4) SYNC FORK from upstream, to get updates from me
+git fetch upstream
+git checkout master
+git merge upstream/master
+
+5) COMMIT & PUSH local changes to the fork, to put your own updates on github
+git commit -a -m "message" 
+git push
+#I suggest you initially put all your code in a master folder called e.g. matt/
+
 
 putting figs side by side in paper2
+ 
+** 29/6/16 **
+briefly looking at mosaics versus mixtures
+
+interestingly in this example where all inputs set to 0.5, reducing correct mix to 0 (i.e. a mosaic) does better than where correct mix is 1.
+A:
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 1 , strategyLabels = c('seq','','adapt','mix2') )
+B:
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 0 , strategyLabels = c('seq','','adapt','mix2') )
+
+In this one mixture does better than mosaic :
+A:
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 1 , strategyLabels = c('seq','','adapt','mix2') )
+B:
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 0 , strategyLabels = c('seq','','adapt','mix2') )
+
+
+My potential simple(ish) explanantion of what is going on with mosaics.
+A mosaic is more like a sequence than a mixture.
+If inputs are set so that a sequence is better, then a mosaic will be better too.
+
+
+Resistance tends to increase more slowly in a mosaic than a mixture because there is less selection for resistance. However is there a chance that the reduced application of one insecticide will reduce it's protection of the other ? and thus lead to potentially faster resistance ?
+
+but don't want to get too caught up in this right now.
+
+
+** 30/6/16 **
+
+checking on mechanisms in paper2
+
+increasing exposure favours sequences
+e.g. 
+effect1 0.8, expose 0.5 -> mix better
+effect1 0.8, expose 0.8 >- seq better
+effect1 0.5, expose 0.5 -> seq better
+effect1 0.5, expose 0.8 -> seq more better
+ 
+thats good I have that clearer in my head now.
+
+
+Here is one particular example where increasing the difference in starting frequencies leads to a switching from sequential being preferred to a mixture being preferred. I may not put this into paper2. Increasing exposure reduces the difference.
+
+A:
+runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.001 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.6 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+B:
+runcurtis_f2( max_gen=500,  P_1 = 0.1 , P_2 = 0.001 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.6 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+
+Maybe remove mention of starting frequencies from paper2 ?
+
+
+
  
  
 ### TO DO  
 
 check on paper2 and finish off the final mechanisms I haven't sorted yet.
-**Selective advantage of resistance**
-#TODO replace Figs 6,7,8 with AA,BB,CC below and modify this text
 
+~ i could try to create a graphical model of how effectiveness, exposure, resistance restoration and dominance effect the development of resistance.
 
-~ send Matt brief summary of how to sync his fork with my repo. 
-Stage 3 from here : (its a little tricky)
-https://help.github.com/articles/fork-a-repo/
-http://kbroman.org/github_tutorial/pages/fork.html
+~ we could eventually create a game of it ...
+effectiveness of the insecticide (image of bottle)
+exposure (depends on spray coverage and mosquito behaviour)
+resistance restoration (property of the gene)
+dominance (property of the gene)
 
 
 ~ write up why having correctDeploy of 0 equates to mosaics ? Effectively it means that half of expsoure is set to one insecticide and half to the other.
