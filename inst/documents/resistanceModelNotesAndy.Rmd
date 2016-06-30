@@ -3824,8 +3824,8 @@ http://www.slideshare.net/srinivasnaik52643/insecticide-resistance-management-st
  
 Curtis et al 1993, potential IRM strategies :
 ~ moderation : preserve susceptible genes by limiting selection pressure
-~ saturation : high dose so that heterozugous resistants are killed
-~ multiple attack : independently acting pressures nneither of which is strong enough to lead to resistance
+~ saturation : high dose so that heterozygous resistants are killed
+~ multiple attack : independently acting pressures neither of which is strong enough to lead to resistance
  
 Mani GS. Evolution of resistance in the presence of two insecticides. Genetics 1985;109(4):761–83.
  
@@ -4651,15 +4651,16 @@ runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.001 , h.RS1_A0 = 0.5 , h.RS2_0
 B:
 runcurtis_f2( max_gen=500,  P_1 = 0.1 , P_2 = 0.001 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.6 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
 
-Maybe remove mention of starting frequencies from paper2 ?
+added starting frequencies to paper2
 
-
+added vlines to resistance plots
+updated UIS and published : resistmob_mosaic
 
  
  
 ### TO DO  
 
-check on paper2 and finish off the final mechanisms I haven't sorted yet.
+
 
 ~ i could try to create a graphical model of how effectiveness, exposure, resistance restoration and dominance effect the development of resistance.
 
