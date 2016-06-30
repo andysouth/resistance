@@ -66,6 +66,18 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
         #xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
         xlab=xlab, ylab=ylab, main=main)
   
+  
+  # add axis labels
+  #axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
+  #default x axis
+  xticks <- axis( side=1 )
+  #to add vertical lines
+  if (!is.null(vlines)) abline(v=xticks, col=vlines)
+
+  #can I divide by 12 to show years ? but breaks would be ugly
+  #instead could allow xlab to be changed from Generation to Month ?    
+  
+  
   # plotting combination scenario (in combmat)
   # set frequencies in vectors as log10 percentages from frequencies
   R1 <- log10( 100 * combmat[,r1col] )
@@ -78,16 +90,6 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   # add line at maximum of critical points
   abline( h=(log10(100*max(criticalPoints)) ) )
-  
-  # add axis labels
-  #axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
-  #default x axis
-  xticks <- axis( side=1 )
-  #to add vertical lines
-  if (!is.null(vlines)) abline(v=xticks, col=vlines)
-  
-  #can I divide by 12 to show years ? but breaks would be ugly
-  #instead could allow xlab to be changed from Generation to Month ?
   
   
   
