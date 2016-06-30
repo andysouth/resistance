@@ -13,3 +13,6 @@ resistanceModelNotesAndy.html
 man/*
 # pdfs
 *.pdf
+# shinyapps dcf files
+*.dcf
+*/rsconnect/*
