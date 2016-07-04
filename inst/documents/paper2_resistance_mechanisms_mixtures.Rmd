@@ -159,7 +159,6 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 
 ## Todo
 
-1. what plots might I want to show for starting frequency ?
 1. work out what's going on with exposure ... why does increasing exposure have a greater effect on mixture than sequential ? Is it because the exposure to one insecticide also effects the development of resistance in the other ?
 1. In discussion and maybe elewhere address potential concern that the relationships shown here may not hold for all of paramter space.
 1. re-read GPIRM
