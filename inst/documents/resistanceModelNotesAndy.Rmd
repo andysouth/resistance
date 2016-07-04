@@ -4543,8 +4543,7 @@ correctMixDeployProp        to correct_mix_deploy
 maleExposureProp            to male_exposure_prop
 effectiveness_insecticide1  to effectiveness_ins1
 effectiveness_insecticide2  to effectiveness_ins2
-
-rr_restoration to rr_restoration
+rr_advantage                to rr_restoration
 
 eeek I had to add these in to correct a problem that inputs from the previous runs had different names 
  
@@ -4656,9 +4655,65 @@ added starting frequencies to paper2
 added vlines to resistance plots
 updated UIS and published : resistmob_mosaic
 
+Justin Mcbeath (Bayer) emailed me.
+Video of a talk of his.
+https://vimeo.com/132308643
+ 
+** 1/7/16 ** 
+ 
+skype Matt about github etc.
+
+Talking about mosaics he sad that it makes intuitive sense that effectiveness is not so important for mosaics because the 2 insecticides are not present in the same place, thus the effectiveness of one will not influence its protection of the other. But my thought was that would a micro-mosaic be expected to be much different from a mixture ? E.g. would a mosquito that has been exposed to one insecticide in one hut then be expected to be exposed to the other in another hut ? (in which case i would expect effectiveness to continue to be important). Or even that the offspring of a mosquito exposed to one insecticide could be exposed to the other one.
+
+** 4/7/16 **
+ 
+query from Ian
+I am worried about the new classification tree i.e. Figure 7a.
+
+Firstly, effectiveness of insecticide 1 and 2 have the same parameterisation so I'm not sure why one should be favoured over the other as a decision criterion. It may just be luck that #2 was chosen but if the tree is that unstable  then we would expect a warning.
+
+Second, I don't understand the logic. In the last version, mixtures were favoured if either effectiveness was >~70%. The current tree suggest mixtures are un-favoured if effectiveness of #2 is less than 0.67 even if effectiveness of insecticide 1 is 100%. Also 7(B) is as before i.e. mixtures are only favoured if both effectiveness are relatively high.
+
+
+first check whether we get any warnings set warning=TRUE for Fig x7 in slimmed. Didn't give any warnings. 
+then maybe look at the unpruned tree.
+
+
+
+What percentage of runs had no IR after 500 generations?  (I remain a bit worried about runs where one strategy lasted e.g. 450 gens and the other >500; we are not specific and fudge this at the moment)
+
+Among those where IR did spread in <500 gens, what proportion favoured mixtures and what proportion favoured sequential?
+
+I figured I could extract the latter from the decision trees which give the number favour each strategy. They add up to 10,000. Does that mean we discounted runs where IR did not spread in <500gens and kept going until we got to 10,000???
+
+eek does that mean I haven't excluded the non-resistance runs from the classification trees ?
+
+the classification trees use this data to start in figs_slimmed :
+
+  resistBetterMix_ASeqBoolean <- resistPointsMix_A > resistPointsSeq
+  
+I need to check which of these are >= 500 & exclude
+
+ resistPointsMix_A$gencp0.5
+ resistPointsSeq$gen_cP0.5).5
+ 
+Is the exclusion process the same as for the ggplot data
+
+eek2 seems like I'm presenting the trees for 25%
+  #just doing for a few strategies, sensiAnPpaer1All.Rmd does for a bunch
+  treeResponses <- c( rownames(resistBetterMix_ASeq)[2], #2 is 25%
+                      rownames(resistBetterMix_ASeq20)[2]
+                    )
+                    
+                    
  
  
 ### TO DO  
+
+~ check why the classification trees add up to 10K. Does that mean I haven't excluded runs not reaching 50% resistance by 500 generations from them ?
+
+check out the github thing I saw on twitter about keeping uptodate with an upstream repository.
+
 
 
 
