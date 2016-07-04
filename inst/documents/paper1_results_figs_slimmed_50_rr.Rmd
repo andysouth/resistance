@@ -6,7 +6,7 @@ author: "Andy South"
 date: "`r Sys.Date()`"
 ---
 
-## Figures for paper 1 : version 7
+## Figures for paper 1 : version 8
 
 ## using rr_restoration instead of selection coefficient  
   
@@ -874,12 +874,30 @@ fewer runs where sequential gives slower resistance
 
 ## Fig. x7 Classification Trees for whether resistance arises slower with an adaptive mixture or sequential strategy. The upper plot shows when mixture is slower than sequential, the lower plot is for when the mixture is more than 20% slower.
 
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5} 
+```{r, eval=TRUE, echo=FALSE, warning=TRUE, message=FALSE, fig.height=3.5} 
 
   #code copied from sensiAnPaper1All
 
   require('plyr')
 
+  #4/7/16 need to remove runs where gens >= 500
+  length(which(resistPointsSeq['gen_cP0.5',] >= 500 | resistPointsMix_A['gen_cP0.5',] >= 500))
+  #2376
+  length(which(resistPointsSeq['gen_cP0.5',] >= 500 ))
+  #2151
+  length(which(resistPointsMix_A['gen_cP0.5',] >= 500))
+  #2306
+
+  #BEWARE1 of subtracting if diff num in each ...
+  #this removes runs that fail either
+  
+  failed_run_indices <- (resistPointsSeq['gen_cP0.5',] >= 500 | resistPointsMix_A['gen_cP0.5',] >= 500)
+  
+  resistPointsMix_A <- resistPointsMix_A[,!failed_run_indices]
+  resistPointsSeq <- resistPointsSeq[,!failed_run_indices]
+  #BEWARE2 I need to remove these indices from the predictors too
+  treeInput <- treeInput[,!failed_run_indices]
+  
   ## is mix adaptive better than sequential ?
   #T/F
   resistBetterMix_ASeqBoolean <- resistPointsMix_A > resistPointsSeq
@@ -927,9 +945,11 @@ fewer runs where sequential gives slower resistance
   treePredictorString <- paste(colnames(treeInput)[input_columns], collapse="+") 
   
   #just doing for a few strategies, sensiAnPpaer1All.Rmd does for a bunch
-  treeResponses <- c( rownames(resistBetterMix_ASeq)[2], #2 is 25%
-                      rownames(resistBetterMix_ASeq20)[2]
-                    )
+  # treeResponses <- c( rownames(resistBetterMix_ASeq)[2], #2 is 25%
+  #                     rownames(resistBetterMix_ASeq20)[2]
+  #                   )
+  #4/7/16 eek above before was a bug showing 25% rather than 50%
+  treeResponses <- c( "betterMix_ASeq_cP0.5","betterMix_ASeq20_cP0.5")
   
   
   #to do trees & plots for all response variables
@@ -940,7 +960,6 @@ fewer runs where sequential gives slower resistance
     #A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror.
     
     cpOptimal <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"CP"][1]
-    
     treePruned <- prune(tree, cp=cpOptimal)
     
     #to set box colours
@@ -955,9 +974,29 @@ fewer runs where sequential gives slower resistance
     #prp(treePruned, extra=1, varlen = 10, main=treeResponse, col=cols, border.col=cols)
     #prp(treePruned, extra=1, varlen = 0, main=treeResponse, box.col=cols, under=TRUE)
     prp(treePruned, extra=1, varlen = 0, main=main, box.col=cols, under=TRUE)
-    }
+  }
+  
+  
+  #4/7/2016 testing the unpruned trees, repeats previous loop with pruning removed
+  for( treeResponse in treeResponses )
+  {
+    tree <- rpart::rpart(as.formula(paste(treeResponse,"~",treePredictorString)), data = treeInput, method = 'class')
+
+    #to set box colours
+    cols <- ifelse(tree$frame$yval == 1, "red", "green3")
+
+    #add fig label
+    if (treeResponse == treeResponses[1]) main <- "A)"
+    else  main <- "B)"
+
+    #adds in no. scenarios correctly and incorrectly classified
+    prp(tree, extra=1, varlen = 0, main=main, box.col=cols, under=TRUE)
+  }
+  
 
 ```
+
+
 
 
 
