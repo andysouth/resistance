@@ -2,6 +2,11 @@
 #' 
 #' @param mat results matrix
 #' 
+#' @examples 
+#' #single scenario
+#' listOut <- resistSimple()
+#' plotlinkage(listOut$results[[1]])
+
 #' @return list of plot components
 #' @export
 
