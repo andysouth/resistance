@@ -959,8 +959,14 @@ fewer runs where sequential gives slower resistance
     #http://stackoverflow.com/questions/29197213/what-is-the-difference-between-rel-error-and-x-error-in-a-rpart-decision-tree
     #A rule of thumb is to choose the lowest level where the rel_error + xstd < xerror.
     
+    
     cpOptimal <- tree$cptable[ tree$cptable[,"rel error"] + tree$cptable[,"xstd"]  < tree$cptable[,"xerror"],"CP"][1]
     treePruned <- prune(tree, cp=cpOptimal)
+    
+    #test tree pruning, seemed to suggest we are pruning more than needed
+    # plotcp(tree)  
+    # 
+    # cat("optimal cp used in pruning=",cpOptimal,"\n")
     
     #to set box colours
     cols <- ifelse(treePruned$frame$yval == 1, "red", "green3")
