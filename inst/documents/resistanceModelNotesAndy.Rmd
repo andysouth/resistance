@@ -4596,6 +4596,7 @@ git checkout master
 git merge upstream/master
 
 5) COMMIT & PUSH local changes to the fork, to put your own updates on github
+(this step can be done from RStudio UI)
 git commit -a -m "message" 
 git push
 #I suggest you initially put all your code in a master folder called e.g. matt/
@@ -4699,23 +4700,154 @@ I need to check which of these are >= 500 & exclude
  
 Is the exclusion process the same as for the ggplot data
 
-eek2 seems like I'm presenting the trees for 25%
-  #just doing for a few strategies, sensiAnPpaer1All.Rmd does for a bunch
+eek2 seems like I was presenting the trees for 25%, now corrected to 50%
+
   treeResponses <- c( rownames(resistBetterMix_ASeq)[2], #2 is 25%
                       rownames(resistBetterMix_ASeq20)[2]
                     )
                     
+I sent Ian new results where runs were corrected.
                     
+From Ian : 4 Jul
  
+I am still bemused as to why Figure 7a decision tree should have only one parameter. Any thoughts?
+ 
+I have used the data on the decision tree to infer that 24% of the runs did not reach IR >50% in <500 generations. Among those that did, 44% favoured mixtures and 56% favoured sequential.                    
+ 
+I asked Matt to look at the pruning in the decision trees. 
+ 
+ 
+** 11/7/2016 **
+
+Matt will do the new linkage calc
+I can have 
+
+Ian said :
+Gould (1986) uses mean fitness as an indicator of mosquito abundance, we could look at producing an output like that.
+
+Ian talked about macro-mosaics, where gene-flow (<1) happens every generation. Current micro-mosaics are a special case of this where gene-flow=1. 
+
+Models need to run along in parallel
+
+6 subpops. Ian think this should be straightforward. (more so than the 3 inscecticide mixtures which require re-doing th genetic tables.)
+
+Ian said, he will spend some time next week or after to submit paper
+If it goes to 3 reviewers it might take 6 weeks to come back
+ 
+Ian doesn't think IVCC ready to pull out checkbook again yet.
+ 
+Scoping out
+1) 6 subpop macro-mosaics 
+
+~ this is how the outputs are created
+~ to do multiple interconnected ones I could create a list of multiple instances of this existing list of lists
+~ listOut <- list( results=list(), fitness=list(), genotype=list(), input=input ) 
+
+** 12/7/16 **
+
+~ updated plotlinkage
+~ accepted pull request from Matt with updated dprime calc
+
+starting to look at fitness, remember it is stored here :
+
+listOut <- list( results=list(), fitness=list(), genotype=list(), input=input )
+ 
+ 
+listOut <- resistSimple(male_exposure_prop=0.1, sexLinked=1)
+> plotlinkage(listOut$results[[1]]) 
+
+PLOS comp biol instructions
+http://journals.plos.org/ploscompbiol/s/submission-guidelines
+
+~ Double spaced
+~ Add line numbers (page numbers already in)
+~ References in Vancouver style (http://journals.plos.org/ploscompbiol/s/submission-guidelines#loc-references)
+
+~ Upload a cover letter as a separate file in the online system, address the following questions:
+Why is this manuscript suitable for publication in PLOS Computational Biology?
+Why will your study inspire the other members of your field, and how will it drive research forward? 
+~ Title page
+The title, authors, and affiliations should all be included on a title page as the first page of the manuscript file.
+~ Methods section can go before the Results. Please clarify the reasons for including Methods before the Results in your cover letter.
+~ Abstract must not exceed 300 words.
+
+~ Author Summary : a 150–200 word non-technical summary of the work. This text is subject to editorial change, should be written in the first-person voice, and should be distinct from the scientific abstract. 
+
+ 
+#to get fitness results for one run 
+listOut <- resistSimple()
+listOut$fitness[[1]] 
+ 
+BUT it is not by generation :
+listOut$fitness[[1]]
+       -,- a,- A,- -,b -,B a,b A,B A,b a,B
+SS1SS2   1   1   0   1   0   1   0   0   0
+SS1RS2   1   1   0   1   1   1   0   0   1
+SS1RR2   1   1   0   1   1   1   0   0   1
+RS1SS2   1   1   1   1   0   1   0   1   0
+RS1RS2   1   1   1   1   1   1   1   1   1
+RS1RR2   1   1   1   1   1   1   1   1   1
+RR1SS2   1   1   1   1   0   1   0   1   0
+RR1RS2   1   1   1   1   1   1   1   1   1
+RR1RR2   1   1   1   1   1   1   1   1   1
+
+so to get mean fitness over time I would nead to multiply these by the genotype frequencies & would need to sort cis trans business + would need to have the frequencies of the different exposures (i think just a case of multiplying by the input exposure array (a))
+
+listOut$genotype[[1]]
+       gen       SS1SS2       SS1RS2       SS1RR2       RS1SS2   RS1RS2_cis RS1RS2_trans       RS1RR2       RR1SS2
+  [1,]   1 9.960060e-01 1.994006e-03 9.980010e-07 1.994006e-03 1.996002e-06 1.996002e-06 1.998000e-09 9.980010e-07
+  [2,]   2 9.842249e-01 1.976290e-03 9.920810e-07 1.371651e-02 1.960623e-05 1.377115e-05 1.968432e-08 4.778956e-05
+  [3,]   3 9.105204e-01 1.890433e-03 9.812346e-07 8.534421e-02 1.484353e-04 8.859631e-05 1.540916e-07 1.999855e-03
+  
+  
+ 
+ 
+
+
  
 ### TO DO  
 
-~ check why the classification trees add up to 10K. Does that mean I haven't excluded runs not reaching 50% resistance by 500 generations from them ?
+show IVCC runUI5() to look at mosaics
+at low effectiveness when seq is btter than mixture, a mosaic is also better than mixture.
+increasing effectiveness (I1&2to 0.8) favours mixtures over sequences & mosaics.
+
+
+try creating a function to plot mean fitness over time
+
+Scope out
+1) 6 subpop macro-mosaics
+2) fitness outputs & constraints to when mixtures stopped, (be careful that the rr param determines what the maximum fitness can be ... need to think about that a bit). First step, output mean fitness over time.
+3) 3 locus (we suggested Ian & I would need to work on together)
+not yet
+4) rotations
+
+I suggested that best to get the basic code streamlined before trying to add the other stuff on top of it.
+
+
+
+at liverpool meeting :
+done ~ get Matt's github fork up-to-date and create a folder for his work in it
+~ look at linkage disequilibrium calc with Matt (maybe I could adapt one of my UIs to show it side by side with the freq plot)
+~ ask Ian to go through my paper2
+~ ask Ian about a strategy for approaching IVCC for further funding to make the model more useable, when can we do it, what can I do to help ? 
+~ ask Ian to clarify the spatial scale issue in the mosaic runs
+~ talk to Bayer guy
+~ how will we start the open malaria runs
+
+linkage diseq:
+~ where should I get Matt to save the new linkage diseq. outputs ?
+~~ 
+~ plotlinkage()
+~ ld calc is in runModel2() ~line 390
+~ i should add separate lines for M&F to linkage plot
 
 check out the github thing I saw on twitter about keeping uptodate with an upstream repository.
 
 
+ASTMH : American Society for Tropical Medicine and Hygiene
+Annual meeting 13-17 November 2016, Atlanta.
 
+~ invoice LSTM for June (see time below) + train + check whether I claimed Manchester hotel.
 
 ~ i could try to create a graphical model of how effectiveness, exposure, resistance restoration and dominance effect the development of resistance.
 
@@ -4877,7 +5009,26 @@ https://andysouth.shinyapps.io/shinyMixSeqCompare1
 https://andysouth.shinyapps.io/shinyFig2Curtis
 https://andysouth.shinyapps.io/MixSeqResist1
 
+# Matt needs to do this each time to sync his fork to get updates from me
+git fetch upstream
+git checkout master
+git merge upstream/master
+
+# EduRoam-LSTM
+left click wifi icon, Network settings
+Manage wifi settings
+scroll down to manage known networks and forget
+
 # time
+june :
+Hours			127:45:00
+Hours rounded			127.50
+Days (/7.5)			17.00
+Pay (217 per day)			3689
+Prev days remaining			47.75
+Days remaining (from 85)			30.75
+
+
 claimed June 10th :
 april, may :
 hours			90:15:00
