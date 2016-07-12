@@ -190,9 +190,9 @@ runModel2 <- function(input,
     
     # Set up matrices to output results to
     # matrix:results - for overall freq of R and S allele per locus per sex, LD and overall allele freq (i.e. 1)
-    results <- matrix ( nrow = max_gen, ncol = 11 )
+    results <- matrix ( nrow = max_gen, ncol = 12 )
     colnames( results ) <- c( "Gen", "m.R1", "m.R2", "m.LD", 
-                              "f.R1", "f.R2", "f.LD", "M", "F", "dprime", "r2" )
+                              "f.R1", "f.R2", "f.LD", "M", "F", "dprime.m", "r2", "dprime.f" )
     
     # matrix:fitness - fitness scores for each niche for each genotype
     fitness <- matrix ( nrow = 10, ncol = 9, c(rep(0,90)))
@@ -399,24 +399,12 @@ runModel2 <- function(input,
       R1 <- x.R1.S2 + x.R1.R2		# frequency of R allele at locus 1
       R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2
       m.D <- x.R1.R2 - (R1 * R2)
-      
-      # Female
-      # Frequency of allele patterns
-      x.R1.S2 <- G['f','R1','S2']/2
-      x.S1.R2 <- G['f','R1','S2']/2
-      x.R1.R2 <- G['f','R1','R2']
 
-      # Frequency of alleles at each locus
-      R1 <- x.R1.S2 + x.R1.R2		# frequency of R allele at locus 1
-      R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2
-      f.D <- x.R1.R2 - (R1 * R2)
       
-      # save linkage disequilibrium results
-      results[k,4] <- m.D
-      results[k,7] <- f.D
+      #Matt: Code reordered and edited to calculate D' for males and females separately. 
       
-      # Finding D'
-      D <- m.D		# D is given as male LD
+      # Finding D' for males
+      D <- m.D	
       
       S1 <- 1 - R1	# frequency of S at each allele = 1 - frequency of R
       S2 <- 1 - R2
@@ -441,12 +429,63 @@ runModel2 <- function(input,
       }
       
       if( D>0 ){				# if D is greater than 0
-        Dprime <- D/dmax		# D' = D/dmax 
+        dprime.m <- D/dmax		# D' = D/dmax 
       }else{					# if D is less than 0
-        Dprime <- D/dmin		# D' = D/dmin
+        dprime.m <- D/dmin		# D' = D/dmin
       }
       
-      results[k,10] <- Dprime	# prints to column ten of results matrix
+      results[k,10] <- dprime.m	# prints to column ten of results matrix
+
+      
+      # Female
+      # Frequency of allele patterns
+      x.R1.S2 <- G['f','R1','S2']/2
+      x.S1.R2 <- G['f','R1','S2']/2
+      x.R1.R2 <- G['f','R1','R2']
+
+      # Frequency of alleles at each locus
+      R1 <- x.R1.S2 + x.R1.R2		# frequency of R allele at locus 1
+      R2 <- x.R1.R2 + x.S1.R2		# frequency of R allele at locus 2
+      f.D <- x.R1.R2 - (R1 * R2)
+      
+      # save linkage disequilibrium results
+      results[k,4] <- m.D
+      results[k,7] <- f.D
+
+      
+      # Matt: Finding D' for females
+      D <- f.D		# D is given as male LD
+      
+      S1 <- 1 - R1	# frequency of S at each allele = 1 - frequency of R
+      S2 <- 1 - R2
+      
+      p1q2 <- R1 * S2	# Find P1Q2 and P2Q1 (given P = loc 1 and 1 = R allele)
+      p2q1 <- S1 * R2
+      
+      #dmax is the lower of these two
+      if( p1q2 < p2q1 ){		
+        dmax <- p1q2
+      }else{
+        dmax <- p2q1
+      }
+      
+      negp1q1 <- -( R1 * R2 )	#Find -p1q1 and -p2q2, given conditions above
+      negp2q2 <- -( S1 * S2 )
+      
+      if( negp1q1  > negp2q2 ){	#dmin is the highest of these
+        dmin <- negp1q1
+      }else{
+        dmin <- negp2q2
+      }
+      
+      if( D>0 ){				# if D is greater than 0
+        dprime.f <- D/dmax		# D' = D/dmax 
+      }else{					# if D is less than 0
+        dprime.f <- D/dmin		# D' = D/dmin
+      }
+      
+      results[k,12] <- dprime.f	# prints to column twelve of results matrix
+      
       
       ## R2
       denom <- sqrt(R1 * S1 * R2 * S2)	# finds R2 using the allale frequencies calculated above
