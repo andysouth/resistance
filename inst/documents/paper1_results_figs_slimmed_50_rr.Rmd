@@ -474,6 +474,9 @@ for(i in names_results)
   #20/6/16 try removing "Mix either" 
   #ggSubset$strategy <- factor(ggSubset$strategy, levels=c("Mix both", "Mix adaptive", "Sequential"))   
   
+  #renaming levels just for fig labels
+  levels(ggSubset$strategy) <- c("Mix both","Adaptive both","Sequential both","Mix either")
+  
   #for(i in names_inputs)
   for(i in in_cols)
     {
