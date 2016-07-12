@@ -31,7 +31,7 @@ plotlinkage <- function ( mat,
   ld_male <- mat[,4]	 # 4 = male
   ld_female <- mat[,7]   # 7 = female
   ld_prime_m <- mat[,10]  #10 = male prime
-  #ld_prime_f <- mat[,12]  #10 = female prime
+  ld_prime_f <- mat[,12]  #10 = female prime
   
   ld_concat <- NULL
   
@@ -53,13 +53,13 @@ plotlinkage <- function ( mat,
 
   if (plot_dprime)
   {  
-    #lines( gens, ld_prime_f, col=adjustcolor("red", alpha.f = 0.5), lty=15 )
+    lines( gens, ld_prime_f, col=adjustcolor("red", alpha.f = 0.5), lty=15 )
     lines( gens, ld_prime_m, col=adjustcolor("blue", alpha.f = 0.5), lty=16 )
   }
   
   if (plot_d & plot_dprime){
-    legend( legpos, legend=c("female","male","prime_m"), 
-            col=c("red", "blue", "blue"), lty=c(13,14,16), bty="n", cex=0.7 )
+    legend( legpos, legend=c("female","male","prime_f","prime_m"), 
+            col=c("red", "blue", "red", "blue"), lty=c(13,14,15,16), bty="n", cex=0.7 )
     
   } else if (plot_d)
   {
@@ -67,8 +67,8 @@ plotlinkage <- function ( mat,
             col=c("red", "blue"), lty=c(13,14), bty="n", cex=0.7 )    
   } else if (plot_dprime)
   {
-    legend( legpos, legend=c("prime_m"), 
-            col=c("blue"), lty=c(16), bty="n", cex=0.7 )   
+    legend( legpos, legend=c("prime_f","prime_m"), 
+            col=c("red","blue"), lty=c(15,16), bty="n", cex=0.7 )   
   }
   
 }	
