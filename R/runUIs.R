@@ -44,6 +44,17 @@ runUI3 <- function() {
 
 runUI4 <- function() {
   
-  shiny::runApp(system.file('shiny/MixSeqResist1', package='resistance'))
+  shiny::runApp(system.file('shiny/resistmob2', package='resistance'))
 }
 
+#' run a shiny User Interface to display 2 scenarios allow user to modify both
+#' 
+#' displays a user interface in the browser, allowing users to modify inputs and see how the frequency of resistance alleles responds
+
+#' @return nothing
+#' @export
+
+runUI5 <- function() {
+  
+  shiny::runApp(system.file('shiny/resistmob_mosaic', package='resistance'))
+}
