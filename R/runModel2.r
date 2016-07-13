@@ -419,13 +419,13 @@ runModel2 <- function(input,
         dmax <- p2q1
       }
       
-      negp1q1 <- -( R1 * R2 )	#Find -p1q1 and -p2q2, given conditions above
-      negp2q2 <- -( S1 * S2 )
+      p1q1 <- ( R1 * R2 )	#Find p1q1 and p2q2, given conditions above
+      p2q2 <- ( S1 * S2 )
       
-      if( negp1q1  > negp2q2 ){	#dmin is the highest of these
-        dmin <- negp1q1
+      if( p1q1  > p2q2 ){	#dmin is the lowest of these
+        dmin <- p2q2
       }else{
-        dmin <- negp2q2
+        dmin <- p1q1
       }
       
       if( D>0 ){				# if D is greater than 0
@@ -469,13 +469,13 @@ runModel2 <- function(input,
         dmax <- p2q1
       }
       
-      negp1q1 <- -( R1 * R2 )	#Find -p1q1 and -p2q2, given conditions above
-      negp2q2 <- -( S1 * S2 )
+      p1q1 <- ( R1 * R2 )	#Find p1q1 and p2q2, given conditions above
+      p2q2 <- ( S1 * S2 )
       
-      if( negp1q1  > negp2q2 ){	#dmin is the highest of these
-        dmin <- negp1q1
+      if( p1q1  > p2q2 ){	#dmin is the lowest of these
+        dmin <- p2q2
       }else{
-        dmin <- negp2q2
+        dmin <- p1q1
       }
       
       if( D>0 ){				# if D is greater than 0
