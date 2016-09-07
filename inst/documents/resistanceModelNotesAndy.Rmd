@@ -4734,7 +4734,7 @@ Models need to run along in parallel
 Ian said, he will spend some time next week or after to submit paper
 If it goes to 3 reviewers it might take 6 weeks to come back
  
-Ian doesn't think IVCC ready to pull out checkbook again yet.
+Ian doesn't think IVCC ready to pull out checkbook again yet, they probably get tired of people asking them for cash.
  
 Scoping out
 1) 6 subpop macro-mosaics 
@@ -4745,13 +4745,14 @@ Scoping out
 
 ** 12/7/16 **
 
+Ian said concentrate on insecticide resistance in my remaining 30 days, not enough time to do drug resistance and Gates has been saying they will fund when they need.
+
 ~ updated plotlinkage
 ~ accepted pull request from Matt with updated dprime calc
 
 starting to look at fitness, remember it is stored here :
 
 listOut <- list( results=list(), fitness=list(), genotype=list(), input=input )
- 
  
 listOut <- resistSimple(male_exposure_prop=0.1, sexLinked=1)
 > plotlinkage(listOut$results[[1]]) 
@@ -4773,7 +4774,6 @@ The title, authors, and affiliations should all be included on a title page as t
 
 ~ Author Summary : a 150–200 word non-technical summary of the work. This text is subject to editorial change, should be written in the first-person voice, and should be distinct from the scientific abstract. 
 
- 
 #to get fitness results for one run 
 listOut <- resistSimple()
 listOut$fitness[[1]] 
@@ -4791,7 +4791,24 @@ RR1SS2   1   1   1   1   0   1   0   1   0
 RR1RS2   1   1   1   1   1   1   1   1   1
 RR1RR2   1   1   1   1   1   1   1   1   1
 
-so to get mean fitness over time I would nead to multiply these by the genotype frequencies & would need to sort cis trans business + would need to have the frequencies of the different exposures (i think just a case of multiplying by the input exposure array (a))
+so to get mean fitness over time I would nead to multiply these by the genotype frequencies & would need to sort cis trans business + would need to have the frequencies of the different exposures (i think just a case of multiplying by the input exposure array (a) which can get by setExposure() )
+, , niche2 = 0
+   niche1
+sex   0 a A
+  m 0.1 0 0
+  f 0.1 0 0
+
+, , niche2 = b
+   niche1
+sex 0 a A
+  m 0 0 0
+  f 0 0 0
+
+, , niche2 = B
+   niche1
+sex 0 a   A
+  m 0 0 0.9
+  f 0 0 0.9
 
 listOut$genotype[[1]]
        gen       SS1SS2       SS1RS2       SS1RR2       RS1SS2   RS1RS2_cis RS1RS2_trans       RS1RR2       RR1SS2
@@ -4799,18 +4816,242 @@ listOut$genotype[[1]]
   [2,]   2 9.842249e-01 1.976290e-03 9.920810e-07 1.371651e-02 1.960623e-05 1.377115e-05 1.968432e-08 4.778956e-05
   [3,]   3 9.105204e-01 1.890433e-03 9.812346e-07 8.534421e-02 1.484353e-04 8.859631e-05 1.540916e-07 1.999855e-03
   
-  
- 
+Ian confirmed & then said that we probably need to calculate fitness across the whole population AND across just the exposed portion.  
  
 
+Dave: 
+ 
+Dave said that they are interested in rotations. Possibly annual for IRS. With maybe 2 AIs with 
 
+bednets last for 3 years
+
+So many potential scenarios
+
+Bednets
+Do we create a 2 mixture bednet
+
+If mosaics are nearly as good as mixtures then would be much simpler
+
+e.g. to distribute nets with different chemicals on.
+
+When you have net & IRS is that a mixture or a mosaic (its a mixture if one fly gets exposed to )
+
+
+GPIRM recomends rotations for IRS, but only reason not done yet is that no new AIs available. Once new AIs 
+
+Bayer have developed an IRS with permethrin and a new AI, they are now concerned that 
+
+Dave said they are running this side meeting at ASTMH and they would want u to be there, and they can support us to go there.
+
+(but if Bayer offer to pay then take it from them)
+
+3 AIs. IVCC developing 3 AIS. No-one has modelled. IVCC looking for support for their 3AI approach. 
+
+Bti used as a larvicide for mosquitoes. 5 toxins, 1 seems to be critical. Never been any field resistance to it, though it has been used loads (good paper on). Supporting arg for IVCC.
+
+Declining doses, bednets over time the effectiveness declines. Once it has declined to a certain level it will promote resistance.
+
+Net people say that the dose stays high. IRS may decline faster.
+
+Ian has a BBSRC grant in to see how the effectiveness of insecticides changes over time.
+
+Dave wants to know when mixtures are worse, how much worse are they.
+
+Sumitomo. likely to want to say : mixtures are bad
+Bayer. likely to want to say : mixtures are good
+
+Dave said ask Bayer to fund us.
+
+Justin is based in Lyon.
+
+IVCC happy to give letters of support for funding applications.
+
+Justin Mcbeath
+new mixture through whopes
+neonic + pyrethroid
+potential for the pyrtehroid to increase rate of resistance to the new AI
+grenoble, jp davide & theresa, neonics in Ag
+
+best chance of neonic remaining viable into the future (pyrethroid is their only option in term of cost & safety)
+
+potential future role of mixtures in vector control, focusing on IRS. To discuss with PMI, NMCPS
+
+Justin happy to support us going to ASTMH.
+
+Justin, feeling that this topic of mixtures likely to become more important. Particularly until 2023 when the new IVCC AIs are due.
+
+How best should mixtures fit into a resistance management program.
+
+experimental hut trials & simple hut trials
+~ 9+ countries
+6-9 month trials
+performance against resistant & susceptible strains
+
+next question to run 
+
+open with data being generated from trials (within constraints)
+online platform that will drip-feed data from trials (recognise that some people have concern contributing to something that has a commercial entity behind it, )
+
+molly robertson from Path involved
+
+justin will have a discussion with Dave about the meeting.
+
+is there something that we can share with their biologists, Ian mentioned the manuscript.
+
+Ian suggested we could ask them if they had anything
+
+We asked them for ~10k. Justin said that given how important this is to them they will give this serious consideration. and then later I think he said something even more positive than that.
+
+workshop < 20 people, 1.5 to 2 hours.
+
+I said if we could have a model to use in a workshop to prompt discussion that would be good. Justin agreed.
+
+
+** 18/7/16 **
+
+Question from Matt :
+
+I was just working on rotations and wanted your opinion on something. Off the top of my head I can’t see why rotations would be done in any other way than post simulation processing (much like the sequences). Do you agree that this may be the best way forwards? Or does something need to be written into the model for the simulations itself?
+
+Hi Matt,
+
+I was pleased with last week and the work we got done.
+
+Good question about rotations. I agree that post-processing is probably the best way to go for rotations in the first instance. Although if I/we get a bit more time I think it would be safer and more effiicent to have the model running strategies directly (i.e. to have something like runModel2() accepting rules about when to change insecticides).
+
+So for the first approach I'd suggest creating a new function starting a bit like this.
+
+findResistancePointsRotation <- function( rotation_generations = 10,
+                                               listOutI1,
+                                               listOutI2,
+                                               criticalPoints = c(0.1,0.25,0.5)
+                                               )
+                                               
+We'll need to be careful in how we deal with runs where the resistrance thresholds aren't reached.
+
+We'll probably want to create a plotting function based on plotcurtis_f2_generic() so we can plot whats going on.
+
+If you want to start on the first function I'm happy to look at whenever you want. (and I'm also open to other suggestions of how to do, I've only thought about quite briefly).
+
+cheers,
+Andy
+
+25/7/16
+email from Ian about final submission of MS
+
+Andy and Beth. Can you check your addresses on the cover page. Beth, I guessed you are in IIB. Andy, does your consultancy have a name??
+
+Andy. Can you help with the figures. 2D and 8A both seem low resolution and/or small font on this scale. Can we improve this? I think the RH caption of Fig 10 is incorrect. Shouldn't it be  "Sequential time to resistance >80% longer". In retrospect it may be clearer to label both figures 9 and 10 the same with the LH caption being "Adaptive mixtures last longer" and the RH "Sequential use lasts longer"
+
+Fig 2D is part of a picture so I can't edit.
+
+I could increase res. for Fig 3.
+
+Fig 10 captions : changed to :
+adaptive mix time to resistance >= 20% longer
+adaptive mix time to resistance <= 20% longer
+
+improved res of fig 8 (trees) & others by increasing zoom on pdf to 150% & snapshotting into the word doc.
+
+31/8/2016
+
+making claim
+
+Matts results on mosaics
+see Initial Micro-Mosaic Findings.pdf
+
+~ mosaics are nearly always better than sequences (93%), and when a sequence is better it is very small.
+~ when sequences are better than mixtures, mosaics are better than sequences
+~ when mixtures are better than sequences, 
+
+~ high exposure and dominance makle mosaics more preferable.
+
+I could try to make those results clearer ...
+
+chatting to Ian :
+
+He has been thinking about a way of representing LD across all the genotypes might not work.
+
+new Barbosa paper too.
+
+Ian is going to prompt IVCC for more money after sending them stuff, do they want to funs research beyond the end of the year.
+
+Matt's money goes to end of year.
+
+Ian has a BBSRC grant will hear in October with a 3 year postdoc, including monitoring and maintaining vector colonies so would have to be local. Matt & I are welcome to apply. But its not guaranteed to come off.  
+
+Ian wants to keep looking at mosaics, looking at simulations in parallel with gene flow.
+
+Gates money is for insecticide resistance, rather than looking at policy advice, but if the policy questions for Bayer, Ian would be prepared to lend a couple of days money from the Gates grant.
+
+Have a look at questions that Bayer sent.
+
+I should keep some of the Gates time in reserve to be able to address referees comments on the 1st paper.
+
+Ian asked me how I thought it was best to spend my time. I said that I wasn't sure yet, and I'll look into further.
+ 
+ 
+** 5/9/2016 **
+
+resistance papers :
+http://blogs.biomedcentral.com/bugbitten/2016/09/02/sub-lethal-effects-of-insecticide-resistance/
+
+
+Interactive cost of Plasmodium infection and insecticide resistance in the malaria vector Anopheles gambiae.
+Alout H1, Dabiré RK2, Djogbénou LS3, Abate L1, Corbel V1,4, Chandre F1, Cohuet A1.
+Author information
+Abstract
+Insecticide resistance raises concerns for the control of vector-borne diseases. However, its impact on parasite transmission could be diverse when considering the ecological interactions between vector and parasite. Thus we investigated the fitness cost associated with insecticide resistance and Plasmodium falciparum infection as well as their interactive cost on Anopheles gambiae survival and fecundity. In absence of infection, we observed a cost on fecundity associated with insecticide resistance. However, survival was higher for mosquito bearing the kdr mutation and equal for those with the ace-1(R) mutation compared to their insecticide susceptible counterparts. Interestingly, Plasmodium infection reduced survival only in the insecticide resistant strains but not in the susceptible one and infection was associated with an increase in fecundity independently of the strain considered. This study provides evidence for a survival cost associated with infection by Plasmodium parasite only in mosquito selected for insecticide resistance. This suggests that the selection of insecticide resistance mutation may have disturbed the interaction between parasites and vectors, resulting in increased cost of infection. Considering the fitness cost as well as other ecological aspects of this natural mosquito-parasite combination is important to predict the epidemiological impact of insecticide resistance.
+
+
+** 6/9/2016 **
+
+looking at the selection calculation to understand what it does.
+
+mostly it comes down to this :
+
+fs[sex,paste0(locus1,locus2)] <- (f[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2]) / W.bar[sex]           
+genotype frequency after selection = (frequency * fitness) / ( sum of freq * fitness for this sex ) 
+
+I could probably make that more concise using properties of the arrays.
+
+
+oooo here there is a very nice shiny app demonstarting single locus selection :
+http://rosetta.ahmedmoustafa.io/selection/
+
+
+ 
  
 ### TO DO  
+
+~ work out order and how fitness translates to gamete frequencies
+
+~ develop a graphic of the model
+
+~ write the methods section model description for paper 2. It will help me get back in.
+
+
+Produce some ideas for Ian about how best to spend my time.
+
+~ check on travel claim for last visit to liverpool
+~ add few hours for 25/7 fig production to my claim
+
+https://www.software.ac.uk/software-evaluation-guide
+
+~ look at colin gillespies efficient R prog book on github
+
+
+write protocol for Matt, include that pull request from his fork.
+
+~ look at visualising exposure, effectiveness and dominance fitness patterns as in Ians ppt to IVCC (slide 14).
+~ I could start with 1 insecticide ...
+~ base it on my killeen coverage app ...
+~ from coverage/plot_feeding
+
 
 show IVCC runUI5() to look at mosaics
 at low effectiveness when seq is btter than mixture, a mosaic is also better than mixture.
 increasing effectiveness (I1&2to 0.8) favours mixtures over sequences & mosaics.
-
 
 try creating a function to plot mean fitness over time
 
@@ -4822,24 +5063,14 @@ not yet
 4) rotations
 
 I suggested that best to get the basic code streamlined before trying to add the other stuff on top of it.
-
+~ split up runModel2() e.g. have functions to fill arrays from the input matrix
 
 
 at liverpool meeting :
-done ~ get Matt's github fork up-to-date and create a folder for his work in it
-~ look at linkage disequilibrium calc with Matt (maybe I could adapt one of my UIs to show it side by side with the freq plot)
 ~ ask Ian to go through my paper2
 ~ ask Ian about a strategy for approaching IVCC for further funding to make the model more useable, when can we do it, what can I do to help ? 
 ~ ask Ian to clarify the spatial scale issue in the mosaic runs
-~ talk to Bayer guy
-~ how will we start the open malaria runs
 
-linkage diseq:
-~ where should I get Matt to save the new linkage diseq. outputs ?
-~~ 
-~ plotlinkage()
-~ ld calc is in runModel2() ~line 390
-~ i should add separate lines for M&F to linkage plot
 
 check out the github thing I saw on twitter about keeping uptodate with an upstream repository.
 
@@ -4847,7 +5078,6 @@ check out the github thing I saw on twitter about keeping uptodate with an upstr
 ASTMH : American Society for Tropical Medicine and Hygiene
 Annual meeting 13-17 November 2016, Atlanta.
 
-~ invoice LSTM for June (see time below) + train + check whether I claimed Manchester hotel.
 
 ~ i could try to create a graphical model of how effectiveness, exposure, resistance restoration and dominance effect the development of resistance.
 
@@ -4856,7 +5086,6 @@ effectiveness of the insecticide (image of bottle)
 exposure (depends on spray coverage and mosquito behaviour)
 resistance restoration (property of the gene)
 dominance (property of the gene)
-
 
 ~ write up why having correctDeploy of 0 equates to mosaics ? Effectively it means that half of expsoure is set to one insecticide and half to the other.
 
@@ -4868,11 +5097,7 @@ dominance (property of the gene)
 
 ~ maybe delete or at least deprecate timeToFifty() & singlealleleFrequency()
 
-
-
-
 ~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ? Ian explained that this was as expected, but I need to confirm my understanding.
-
 
 
 ~ **check this from above**
@@ -4901,7 +5126,6 @@ mix1
 mix2
 adapt
 seq
-
 
 
 effectI2 from 1 to 0.85, & resistance arises faster for mix1 than seq
@@ -4939,7 +5163,6 @@ tst <- runModel(input)
 
 1. submit stackoverflow question about createArray2(), including about n=3 in eval.parent
 1. what to call createArray2() ? maybe namedArray, or arrayNamed() ? could even put back in the option to pass the fill value ? submit to stackoverflow 
-1. maybe add option in setInputSensiScenarios to save input object as a csv or rda.
 1. add some defensive checks, e.g. for sensible input variables
 
 
@@ -5028,14 +5251,19 @@ Pay (217 per day)			3689
 Prev days remaining			47.75
 Days remaining (from 85)			30.75
 
-
 claimed June 10th :
 april, may :
-hours			90:15:00
-Hours rounded			90.00
 Days (/7.5)			12.00
 Prev days remaining			59.75
 Days remaining (from 85)			47.75
+
+claim Aug 31
+Days (/7.5)			22.00
+Pay (217 per day)			4774
+Prev days remaining			47.75
+Days remaining (from 85)			25.75
+
+
 
 # files to do runs
 1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
