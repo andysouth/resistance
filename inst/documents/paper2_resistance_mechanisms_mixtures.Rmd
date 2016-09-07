@@ -38,56 +38,75 @@ The changing frequency of insecticide resistance is a population genetic process
 
 Parameter  | Description
 ------------------- | -------------------------------------------------------
-1. Effectiveness | proportion of exposed insects with the susceptible allele that are killed by the insecticide
+1. Effectiveness | proportion of exposed insects with both susceptible alleles that are killed by the insecticide
 2. Exposure | proportion of the insect population that are exposed to the insecticide
 3. Dominance | dominance of the resistance allele relative to the susceptible allele
 4. Resistance restoration  | ability of resistance to restore fitness in the presence of the insecticide
 5. Frequency  | frequency of resistance alleles within the population
 
 
-We use a 2-locus population genetic model of insecticide resistance (Hastings et al. in press) to illustrate the mechanisms by which these parameters are expected to influence the development of insectide resistance under alternative insecticide use strategies. Hastings et al. (in press) describe the technical details of the model and explore large parameter ranges. In contrast we provide an accessible summary of the model and use selected parameter values to demonstrate mechanisms that can influence the development of resistance. 
+We use a 2-locus population genetic model of insecticide resistance (Levick et al. in press) to illustrate the mechanisms by which these parameters are expected to influence the development of insectide resistance under alternative insecticide use strategies. Levick et al. (in press) describe the technical details of the model and explore large parameter ranges. In contrast we provide an accessible summary of the model and use selected parameter values to demonstrate mechanisms that can influence the development of resistance. 
 
 
 ## Methods
 
-*accessible summary of the model* 
+*start with the framework, then after describe specifics about how many loci etc*
+*try hard to start simple, explain all terms and make few assumptions*
 
+
+The simulation represents a population of randomly mixing individuals using standard population genetic approaches so that it does not need to follow every individual. One locus is represented for each insecticide. There are two potential alleles per locus. Each allele confers either resistance or susceptibility to the insecticide. The fitness of an individual depends on it's alleles, exposure to the insecticide and other inputs that can be set in the model. These inputs include the effectiveness of the insecticide, the dominance of the resistance allele and the ability of resistance to restore fitness in the presence of the insecticide (see Table 1).  
+
+The simulation proceeds through generations. In each generation selection is represented by multiplying genotype frequencies in the population by their relative fitness. This acts to make the fitter alleles more common over time. Sexual reproduction is represented first by creating gametes by splitting the adult genomes in two, and secound by forming offspring genotypes by adding gametes with recombination.
+
+So far this description has just considered a single insecticide and associated resistance allele (Fig 1A). In the simulation a secound insecticide and resistance allele are included and fitness is calculated by multiplying these with those for the first insecticide described above (Fig 1C). 
+
+In addition the model structure allows for 3 different levels of exposure to be set for each insecticide (Fig 2). So in the two insecticide case that gives the potential for nine (3*3) different exposure niches. In the runs shown here we have just used two levels of exposure for each insecticide (effectively no or yes with the value for yes set from the exposure input in Table 1). The model structure allows males and females to experience different exposures.
 
 
 ## Results
 
-For single insecticide use, faster resistance resulted from higher values of any of the inputs outlined in Table 1, namely effectiveness, exposure, dominance, the resistance restoration coefficient, and starting frequencies of resistance (Figs 1-3). In these plots each input was varied in isolation with the others set at a constant 0.5, or 0.01 for starting frequency of resistance.
+For single insecticide use, faster resistance resulted from higher values of any of the inputs outlined in Table 1, namely effectiveness, exposure, dominance, the resistance restoration coefficient, and starting frequencies of resistance (Figs 3-5). In the plots each input was varied in isolation with the remaining set at a constant 0.5 (except for starting frequency of resistance which was set to 0.01).
 
 
-When two insecticides are used the relative performance of a mixture strategy compared to sequential use is determined by the values of these inputs. To help us understand the mechanisms influencing this relative performance we started with a single base scenario and investigated changing inputs indivividually. For our base scenario we set the values for the first four inputs in Table 1 to 0.5 and the starting frequencies of resistance to 0.1. For this base scenario resistance arises slower for sequential than mixture (Fig 4A). This plot, and those that follow, compares mixture and sequence for a single input scenario (where the previous plots showed 3 input scenarios). Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve (dashed) for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
+When two insecticides are used the relative performance of a mixture strategy compared to sequential use is determined by the values of these inputs. To help us understand the mechanisms influencing this relative performance we started with a single base scenario and investigated changing inputs indivividually. For our base scenario we set the values for the first four inputs in Table 1 to 0.5 and the starting frequencies of resistance to 0.1. For this base scenario resistance arises slower for sequential than mixture (Fig 6A). This plot, and those that follow, compares mixture and sequence for a single input scenario (where the previous plots showed 3 input scenarios). Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time. When used in sequence the curve (dashed) for each insecticide individually is steeper but, because they happen one after the other, it takes longer to reach the resistance threshold for both.
 
 
 ### Insecticide effectiveness
 A more effective insecticide prompts increased time-to-resistance when used in a mixture. This contrasts with the earlier result showing that when used in isolation a single insecticide prompts a shorter time-to-resistance.
 
-For example taking the base scenario and increasing the effectiveness of one insecticide from 0.5 to 0.8 increases the time-to-resistance for the mixture and decreases that for the sequence (Fig 4B). In the mixture resistance to insecticide1 (with the increased effectiveness) rises at a similar speed to the base scenario (Fig 4A). 
+For example taking the base scenario and increasing the effectiveness of one insecticide from 0.5 to 0.8 increases the time-to-resistance for the mixture and decreases that for the sequence (Fig 6B). In the mixture resistance to insecticide1 (with the increased effectiveness) rises at a similar speed to the base scenario (Fig 6A). 
 
-When the effectiveness of both insecticides are increased to 0.8 the time-to-resistance is increased still further to around 125 generations (Fig 5). In this case the curves for the rise in resistance to each insecticide are identical. The curves are shallower than previous plots because individuals that are resistant to each insecticide are being killed by the other thus reducing the increase in resistance alleles. As the resistance frequencies go above 10% around generation 100 both insecticides provide less protection to the other and the slope of the resistance curve increases.  
+When the effectiveness of both insecticides are increased to 0.8 the time-to-resistance is increased still further to around 125 generations (Fig 7). In this case the curves for the rise in resistance to each insecticide are identical. The curves are shallower than previous plots because individuals that are resistant to each insecticide are being killed by the other thus reducing the increase in resistance alleles. As the resistance frequencies go above 10% around generation 100 both insecticides provide less protection to the other and the slope of the resistance curve increases.  
 
 
 ### Exposure
-Increasing exposure to 0.8 reduces time-to-resistance for both mixture and sequential scenarios (Fig 6A relative to 4A). The change in exposure has a greater effect on the mixture relative to the sequential strategy and this results in a greater relative benefit for sequence versus mixture. Remembering that earlier increasing one effectiveness to 0.8 resulted in mixtures being favoured over sequence (Fig 4B). Increasing exposure from 0.5 to 0.8 switches back to sequential being the favoured strategy (Fig 6B). This demonstrates how higher exposures can favour sequential use.
+Increasing exposure to 0.8 reduces time-to-resistance for both mixture and sequential scenarios (Fig 8A relative to 4A). The change in exposure has a greater effect on the mixture relative to the sequential strategy and this results in a greater relative benefit for sequence versus mixture. Remembering that earlier increasing one effectiveness to 0.8 resulted in mixtures being favoured over sequence (Fig 6B). Increasing exposure from 0.5 to 0.8 switches back to sequential being the favoured strategy (Fig 8B). This demonstrates how higher exposures can favour sequential use.
 
 
 ### Dominance of resistance alleles
-Increasing the dominance of the alleles within a mixture has the same direction of effect as it does for sole use. Increasing the dominance of the allele corresponding to insecticide1 from 0.5 to 0.8 decreases the time-to-resistance to insecticide1 within the mixture but leaves the time-to-resistance for the second insecticide in the mixture the same (Fig 7A). Setting the dominance for both alleles to 0.8 reduces the time-to-resistance for both the mixture and the sequence by 20 generations from the base scenario (compare Fig 7B to 4A). In both of these cases sequential use continues to have a longer time-to-resistance under the higher dominance.
+Increasing the dominance of the alleles within a mixture has the same direction of effect as it does for sole use. Increasing the dominance of the allele corresponding to insecticide1 from 0.5 to 0.8 decreases the time-to-resistance to insecticide1 within the mixture but leaves the time-to-resistance for the second insecticide in the mixture the same (Fig 9A). Setting the dominance for both alleles to 0.8 reduces the time-to-resistance for both the mixture and the sequence by 20 generations from the base scenario (compare Fig 9B to 6A). In both of these cases sequential use continues to have a longer time-to-resistance under the higher dominance.
 
 
 ### Resistance restoration coefficient
-Increasing the resistance restoration coefficient to insecticide1 from 0.5 to 0.8 decreases the time-to-resistance for insecticide1 in the mixture, and has a similar effect on it's use in the sequence (Fig 8A). However, it has little effect on resistance to insecticide2. Because of this sequential use continues to generate a longer time-to-resistance than the mixture. Increasing the resistance restoration coefficient of both alleles to 0.8 results in a shorter time-to-resistance  for the mixture (Fig 8B), however the relative shape of the resistance curves remains similar to the base scenario  (Fig 4A), with sequential use continuing to generate longer time-to-resistance.  
+Increasing the resistance restoration coefficient to insecticide1 from 0.5 to 0.8 decreases the time-to-resistance for insecticide1 in the mixture, and has a similar effect on it's use in the sequence (Fig 10A). However, it has little effect on resistance to insecticide2. Because of this sequential use continues to generate a longer time-to-resistance than the mixture. Increasing the resistance restoration coefficient of both alleles to 0.8 results in a shorter time-to-resistance  for the mixture (Fig 10B), however the relative shape of the resistance curves remains similar to the base scenario  (Fig 6A), with sequential use continuing to generate longer time-to-resistance.  
 
 ### Starting frequencies of resistance
-Changing the starting frequency of resistance had a similar effect on time to resistance for both sequences and mixtures and thus had little effect on their relative performance. For example taking the base scenario and reducing the starting frequency of one resistance allele did not change from sequence being favoured (compare Fig 9A to Fig 4A). Similarly taking the base scenario with effectiveness of the first insecticide increased to 0.8 (Fig 4B) and decreasing starting frequency of that resistance allele did not result in the mixture being favoured (Fig 9B). 
+Changing the starting frequency of resistance had a similar effect on time to resistance for both sequences and mixtures and thus had little effect on their relative performance. For example taking the base scenario and reducing the starting frequency of one resistance allele did not change from sequence being favoured (compare Fig 11A to Fig 6A). Similarly taking the base scenario with effectiveness of the first insecticide increased to 0.8 (Fig 6B) and decreasing starting frequency of that resistance allele did not result in the mixture being favoured (Fig 11B). 
 
 
 ## Discussion
 
-Higher values of all of the inputs lead to faster resistance when the insecticide was used singly. This can be explained by different mechanisms (see Table 2 for summary). [write more about this here]
+The response of resistance to insecticide use in the model can be explained by a number of mechanisms that can help us develop a more robust understanding of how we would expect resistance to respond in the field.
+
+When single insecticide use was represented (Figs 3-5) higher values of all of the inputs led to faster resistance. 
+[write more about single insecticide responses here]
+
+The response of resistance to changing exposure to, and effectiveness of, the insecticide was identical (compare Fig 3A to 3B). This makes sense given, for example, that exposing half of a vector population to an insecticide which kills a quarter of the exposed would be expected to kill the same number as exposing quarter of the population to an insecticide that kills a half of the exposed. This observation points to the mechanism by which increasing both exposure and effectiveness lead to a faster increase in resistance. In both cases the increased deaths of susceptible vectors cause a higher selection pressure that can explain the faster increase.
+
+
+These mechanisms explaining the response of resistance to single insecticide use are summarised in Table 2.  
+
+In comparison with the use of a single insecticide, using two insecticides either in sequence or in mixtures differs in some ways and where it differs that can again help us to understand the mechanisms.
 
 
 [explain the effectivenes result, referring to Fig 4B versus 4A]
@@ -156,7 +175,6 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 
 
 
-
 ## Todo
 
 1. work out what's going on with exposure ... why does increasing exposure have a greater effect on mixture than sequential ? Is it because the exposure to one insecticide also effects the development of resistance in the other ?
@@ -166,6 +184,14 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 1. mention generation time of 1 month
 1. mention other potential effects e.g. differential exposure of M&F, sex linkage, ...
 
+\pagebreak
+
+## Figures
+
+![Building up the model structure.](mod_graphic_a_to_c.png)
+
+
+![Exposure to insecticides in the model.](mod_graphic_d.png)
 
 
 ```{r, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Effect of inputs on single insecticide use. A. Effectiveness, B. Exposure"}
