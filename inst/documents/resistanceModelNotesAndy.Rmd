@@ -5015,20 +5015,50 @@ genotype frequency after selection = (frequency * fitness) / ( sum of freq * fit
 
 I could probably make that more concise using properties of the arrays.
 
-
-oooo here there is a very nice shiny app demonstarting single locus selection :
+oooo here there is a very nice shiny app demonstrating single locus selection :
 http://rosetta.ahmedmoustafa.io/selection/
+
+i sent a twitter direct message, haven't heard back yet.
+
+done ~ work out order and how fitness translates to gamete frequencies
+done ~ develop a graphic of the model
+done ~ write the methods section model description for paper 2. It will help me get back in.
+
+
+** 12/9/2016 **
+
+msg from Ian :
+
+Dear Matt and Andy
+
+How is the gene-flow/swapping progressing for the "macro" mosaics? I think the micro-mosaic work is publishable but Reviewers are bound to ask about geographically-distinct macro-mosaics.
+
+I am still trying to think of an explanation of why mosaics are better despite generating positive LD between the resistance alleles. After several walks along beaches over the last few weeks, the best I can come up with is the following.  I think it may be that this positive LD reduces the variance in fitness (increased frequencies of double heterozygotes). It's a classical result in population genetics that speed of response depends on variance in fitness so it may be worth testing this idea.
+
+https://en.wikipedia.org/wiki/Fisher%27s_fundamental_theorem_of_natural_selection
+
+Compared to mosaics, it may be that positive LD in mixtures is counterproductive because the fitness values tend to be so skewed towards favouring the double homozygote so positive LD increases variance in fitness in this case. If the dynamics do depend on LD and fitness variance then it may be a short cut to predicting when mixtures are favoured over sequential/mosaics.
+
+Matt, assuming you cannot think of an alternative explanation, can you compute variance in fitness over the time course of selection, using the default values we identified previously.
+
+I'm not best placed to suggest how you do this, but the following strategy sprang to mind (they were long beaches!). The algorithm (and I assume the code) calculates the frequency of gametes each generation, then uses these to calculate the frequencies of the diploid genotypes. You can presumably write a fairly simple function to obtain variance in finesses from these diploid frequencies. [Store these 'correct' diploid frequencies for future use]. Now generate gamete frequencies assuming LD=0  (i.e. as the product of their constituent allele frequencies). Then, as above, use the existing code to generate the frequencies of diploid genotypes and obtain the variance in fitness using the new function. Then restore the correct diploid genotype frequencies and proceed as normal.....
+
+We need to come up with some sort of rational explanation of why mosaics tend to be better. Even if we can't come up with a convincing one, we still need to show we have tried.....
+
+Hi Ian, Matt,
+
+Thanks, the Fisher (speed of change being dependent on variance in fitness) is interesting, I'll have a think about it.
+
+I've been working on fully explaining the mechanisms behind the mixtures vs sequence results and their responses to the different inputs. If I get you something by tomorrow will you be able to read before Thursday ? I could try to think about relevance to the micro-mosaics too, or we can talk about when we meet.
+
+I haven't done anything on the macro-mosaics, my recollection was that we agreed and said to IVCC we couldn't do anything on that without more funding. I have only ~ 4 weeks left which may need to include revisions and figures for the first paper. Also I feel the code needs improving before we try to stretch it to the next task. If there isn't more funding for me then I'm only really going to be able to tie up loose ends. I'm hoping Bayer can help with this but I haven't heard anything yet and time is short.
+
 
 
  
  
 ### TO DO  
 
-~ work out order and how fitness translates to gamete frequencies
-
-~ develop a graphic of the model
-
-~ write the methods section model description for paper 2. It will help me get back in.
 
 
 Produce some ideas for Ian about how best to spend my time.
