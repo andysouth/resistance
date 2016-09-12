@@ -713,7 +713,7 @@ Red triangles are those runs in which resistance reached the threshold at the sa
   #modify the killer plot to show where mixtures are 20% better ?
   print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=abs_diff))+
              
-             facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\ntime to resistance\n >20% longer','1'='adaptive mix\ntime to resistance\n >20% longer'))) +
+             facet_grid( ~ mixA_not20pc_better_seq0.5, labeller=as_labeller( c('0'='adaptive mix\ntime to resistance\n >=20% longer','1'='adaptive mix\ntime to resistance\n <=20% longer'))) +
 
              theme_bw() +
              theme(legend.position = "bottom") +
