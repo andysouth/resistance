@@ -242,35 +242,15 @@ runModel2 <- function(input,
     
     
     ##################################################
-    ### calculate two locus niche fitness in two insecticide Niche
+    ## Two locus niche fitness in two insecticide Niche
     Wniche <- fitnessNiche( Wloci = Wloci,
                             niche = niche,
                             Wniche = Wniche )
     
     
-    
     #####################################################################
-    ## calculate individual fitness based on exposure to niche & 2 locus fitness
-    #weighted average of fitness depending on exposure
-    
-    for( sex in dimnames(Windiv)$sex)
-    {
-      for( locus1 in dimnames(Windiv)$locus1)
-      {
-        for( locus2 in dimnames(Windiv)$locus2)
-        {
-          # multiplies exposure by fitness for all niches & then sums
-          # creates a weighted average of exposure in each niche
-          Windiv[sex,locus1,locus2] <- sum( a[sex,,] * Wniche[locus1,locus2,,])
-        }
-      }
-    }
-
-    #error check for fitnesses > 1 or < 0
-    if ( any(Windiv > 1 ) ) 
-      warning( sum(Windiv > 1  ), " individual fitness values (Wloci) are >1")
-    if ( any( Windiv < 0 ) ) 
-      warning( sum( Windiv < 0 ), " individual fitness values (Wloci) are <0")
+    ## Individual fitness based on exposure to niche & 2 locus fitness
+    Windiv <- fitnessIndiv( Wniche = Wniche, a = a, Windiv = Windiv )
  
     
        
