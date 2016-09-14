@@ -16,6 +16,9 @@
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")
 #' @param xlab xlab
 #' @param ylab ylab
+#' @param ylabs whether to add tick labels
+#' @param yticks tick positions
+#' @param cex.axis scaling for x&y tick labs 
 #' @param addLegend whether to add a legend inside plot
 #' @param vlines colour of vertical lines to add to plot, NULL for none
 #' 
@@ -35,10 +38,14 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    addCombinedStrategy = FALSE,
                                    addStrategyLabels = TRUE,
                                    strategyLabels = c("seq","mix1","adapt","mix2"),
-                                   ylab = "Allele frequency",
+                                   ylab = "Allele frequency %",
+                                   ylabs = TRUE,
+                                   yticks = c(0.1,1,5,10,50,100),
                                    xlab = "Generation",
+                                   cex.axis = 0.8,
                                    addLegend = TRUE,
                                    vlines = 'grey95'
+                                   
                                    ){
   
   #find generations to reach max resistance points
@@ -68,9 +75,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   
   # add axis labels
-  #axis( side=1, at=c(0,20,40,60,80,100,120,140,160), tick=T )
-  #default x axis
-  xticks <- axis( side=1 )
+  # default x axis
+  xticks <- axis( side=1, cex.axis=cex.axis )
   #to add vertical lines
   if (!is.null(vlines)) abline(v=xticks, col=vlines)
 
@@ -93,12 +99,10 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
   
   
-#   ylabs <- c(1,5,10,50)
-#   ylabsnames <- c("1%", "5%", "10%", "50%")
-  ylabs <- c(0.1,1,5,10,50)
-  ylabsnames <- c("0.1%", "1%", "5%", "10%", "50%")
-  logylabs <- log10( ylabs )
-  axis( side=2, at=logylabs, labels=ylabsnames, tick=T )
+  #allows ylabs to be set to FALSE for no labels
+  logylabs <- log10( yticks )
+  if (ylabs)  ylabs <- yticks
+  axis( side=2, at=logylabs, labels=ylabs, tick=T, cex.axis = cex.axis, las = 1 ) #las=1 for horiz labs  
   
   ## Single insecticide scenarios
   #andy remember that in this from Beth hch is insecticide1 & ddt is insecticide2

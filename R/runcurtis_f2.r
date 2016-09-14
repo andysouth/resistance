@@ -36,6 +36,9 @@
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")
 #' @param xlab xlab
 #' @param ylab ylab
+#' @param ylabs whether to add tick labels
+#' @param yticks tick positions
+#' @param cex.axis scaling for x&y tick labs 
 #' @param addLegend whether to add a legend inside plot
 #' @param main title for the plot
 #' @param vlines colour of vertical lines to add to plot, NULL for none
@@ -76,8 +79,11 @@ runcurtis_f2 <- function( max_gen = 500,
                           addCombinedStrategy = TRUE,
                           addStrategyLabels = TRUE,
                           strategyLabels = c("seq","mix1","adapt","mix2"),
-                          ylab = "Resistance frequency",
+                          ylab = "Resistance frequency %",
+                          ylabs = TRUE,
+                          yticks = c(0.1,1,5,10,50,100),
                           xlab = "Generation",
+                          cex.axis = 0.8,
                           addLegend = TRUE,
                           main = "",
                           vlines = 'grey95'
@@ -209,6 +215,9 @@ runcurtis_f2 <- function( max_gen = 500,
                          strategyLabels = strategyLabels,
                          xlab = xlab,
                          ylab = ylab,
+                         ylabs = ylabs,
+                         yticks = yticks,
+                         cex.axis = cex.axis,
                          addLegend = addLegend,
                          main = main,
                          vlines = vlines
