@@ -8,13 +8,18 @@
 #' 
 #' @examples 
 #' fitnessNiche()
+#' 
+#' Wloci <- fitnessSingleLocus( effectiveness = 0.8 )
+#' Wniche <- fitnessNiche( Wloci = Wloci )
+#' a <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
+#' Windiv <- fitnessIndiv( Wniche = Wniche, a = a )
 
 #' @return fitness values in an array
 #' @export
 
 fitnessNiche <- function ( Wloci = NULL,
-                              niche = NULL,
-                              Wniche = NULL )
+                           niche = NULL,
+                           Wniche = NULL )
 {
   
   # to allow this function to be called with no args
@@ -27,7 +32,7 @@ fitnessNiche <- function ( Wloci = NULL,
   {
     # insecticide niche toggle
     niche   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
-    # beware - for default option set just 00 & AB for now
+    # BEWARE - for default option set just 00 & AB for now
     niche['0','0'] <- 1
     niche['A','B'] <- 1
   }

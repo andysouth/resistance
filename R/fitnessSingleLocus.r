@@ -16,6 +16,7 @@
 #' @param Wloci array of single locus fitnesses to fill
 #' @examples 
 #' fitnessSingleLocus()
+#' fitnessSingleLocus(effectiveness = 0.8)
 
 #' @return fitness values
 #' @export

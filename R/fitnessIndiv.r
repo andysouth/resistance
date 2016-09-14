@@ -8,6 +8,11 @@
 #' 
 #' @examples 
 #' fitnessIndiv()
+#' 
+#' Wloci <- fitnessSingleLocus( effectiveness = 0.8 )
+#' Wniche <- fitnessNiche( Wloci = Wloci )
+#' a <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
+#' Windiv <- fitnessIndiv( Wniche = Wniche, a = a )
 
 #' @return fitness values in an array
 #' @export
