@@ -5053,12 +5053,407 @@ I've been working on fully explaining the mechanisms behind the mixtures vs sequ
 
 I haven't done anything on the macro-mosaics, my recollection was that we agreed and said to IVCC we couldn't do anything on that without more funding. I have only ~ 4 weeks left which may need to include revisions and figures for the first paper. Also I feel the code needs improving before we try to stretch it to the next task. If there isn't more funding for me then I'm only really going to be able to tie up loose ends. I'm hoping Bayer can help with this but I haven't heard anything yet and time is short.
 
+Trying to understand why exposure & effectiveness have different effects on mixtures. Doesn't make sense to me now.
+
+lef <- runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 1 , strategyLabels = c('seq','','adapt','mix2') )
+
+lex <- runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 1 , strategyLabels = c('seq','','adapt','mix2') )
 
 
- 
+lef$fitness[1] 
+lex$fitness[1] 
+
+Hi Ian,
+Just in case you are on your summer work timetable and are still around and can answer this very easily. 
+No worries if not.
+
+I've been scratching my head to explain why exposure & effectiveness have different effects on mixtures, but the same effect on sequences and single insecticides.
+
+These are the fitnesses for when all inputs set to 0.5 except for :
+
+effectiveness 1 & 2 set to 0.8.
+
+       -,- a,- A,- -,b -,B a,b  A,B A,b a,B
+SS1SS2   1   1 0.2   1 0.2   1 0.04 0.2 0.2
+SS1RS2   1   1 0.2   1 0.4   1 0.08 0.2 0.4
+SS1RR2   1   1 0.2   1 0.6   1 0.12 0.2 0.6
+RS1SS2   1   1 0.4   1 0.2   1 0.08 0.4 0.2
+RS1RS2   1   1 0.4   1 0.4   1 0.16 0.4 0.4
+RS1RR2   1   1 0.4   1 0.6   1 0.24 0.4 0.6
+RR1SS2   1   1 0.6   1 0.2   1 0.12 0.6 0.2
+RR1RS2   1   1 0.6   1 0.4   1 0.24 0.6 0.4
+RR1RR2   1   1 0.6   1 0.6   1 0.36 0.6 0.6
+
+exposure set to 0.8
+       -,- a,-   A,- -,b   -,B a,b      A,B   A,b   a,B
+SS1SS2   1   1 0.500   1 0.500   1 0.250000 0.500 0.500
+SS1RS2   1   1 0.500   1 0.625   1 0.312500 0.500 0.625
+SS1RR2   1   1 0.500   1 0.750   1 0.375000 0.500 0.750
+RS1SS2   1   1 0.625   1 0.500   1 0.312500 0.625 0.500
+RS1RS2   1   1 0.625   1 0.625   1 0.390625 0.625 0.625
+RS1RR2   1   1 0.625   1 0.750   1 0.468750 0.625 0.750
+RR1SS2   1   1 0.750   1 0.500   1 0.375000 0.750 0.500
+RR1RS2   1   1 0.750   1 0.625   1 0.468750 0.750 0.625
+RR1RR2   1   1 0.750   1 0.750   1 0.562500 0.750 0.750
+
+They are different. Is this how you would expect them to be ?
+
+It may be an obvious answer.
+
+Thanks,
+Andy
+
+seems that exposure doesn't come in to the calculation of fitness ?
+
+is it applied afterwards ? yes.
+
+          # multiplies exposure by fitness for all niches & then sums
+          # creates a weighted average of exposure in each niche
+          Windiv[sex,locus1,locus2] <- sum( a[sex,,] * Wniche[locus1,locus2,,])
+
+For exposure 0.8 :
+
+Windiv
+, , locus2 = SS2
+
+   locus1
+sex SS1 RS1 RR1
+  m 0.6 0.7 0.8
+  f 0.6 0.7 0.8
+
+, , locus2 = RS2
+
+   locus1
+sex SS1 RS1 RR1
+  m 0.6 0.7 0.8
+  f 0.6 0.7 0.8
+
+, , locus2 = RR2
+
+   locus1
+sex SS1 RS1 RR1
+  m 0.6 0.7 0.8
+  f 0.6 0.7 0.8
+
+For effectivenesses 0.8 :
+Windiv
+, , locus2 = SS2
+
+   locus1
+sex SS1 RS1 RR1
+  m 0.6 0.6 0.6
+  f 0.6 0.6 0.6
+
+, , locus2 = RS2
+
+   locus1
+sex SS1 RS1 RR1
+  m 0.7 0.7 0.7
+  f 0.7 0.7 0.7
+
+, , locus2 = RR2
+
+   locus1
+sex SS1 RS1 RR1
+  m 0.8 0.8 0.8
+  f 0.8 0.8 0.8
+  
+I think these could be just the same but dimensioned differently ?
+Is it that normalisation works differently on them ?
+
+e.g. these are the same :
+exposure 0.8 :        SS1SS2:0.6 SS1RR2:0.8
+effectivenesses 0.8 : SS1SS2:0.6 SS1RR2:0.8
+
+gametes G in generation1 are identical in each case :
+exposure 0.8 :
+, , locus2 = S2
+
+   locus1
+sex     S1     R1
+  m 0.9801 0.0099
+  f 0.9801 0.0099
+
+, , locus2 = R2
+
+   locus1
+sex     S1    R1
+  m 0.0099 1e-04
+  f 0.0099 1e-04
+  
+effectivenesses 0.8 :
+, , locus2 = S2
+
+   locus1
+sex     S1     R1
+  m 0.9801 0.0099
+  f 0.9801 0.0099
+
+, , locus2 = R2
+
+   locus1
+sex     S1    R1
+  m 0.0099 1e-04
+  f 0.0099 1e-04
+
+#to get at elements  
+G['m','R1','R2']  
+
+# check W.bar & fs : identical
+exposure 0.8 :
+W.bar
+    m     f 
+0.602 0.602 
+Browse[4]> fs
+   loci
+sex    SS1SS2     SS1RS2       SS1RR2     RS1SS2   RS1RS2_cis RS1RS2_trans       RS1RR2       RR1SS2       RR1RS2
+  m 0.9574047 0.01934151 9.768439e-05 0.02256509 0.0002279302 0.0002279302 2.302326e-06 0.0001302458 2.631229e-06
+  f 0.9574047 0.01934151 9.768439e-05 0.02256509 0.0002279302 0.0002279302 2.302326e-06 0.0001302458 2.631229e-06
+   loci
+sex       RR1RR2
+  m 1.328904e-08
+  f 1.328904e-08
+
+effectivenesses 0.8 :
+W.bar
+    m     f 
+0.602 0.602 
+Browse[2]> fs
+   loci
+sex    SS1SS2     SS1RS2       SS1RR2     RS1SS2   RS1RS2_cis RS1RS2_trans       RS1RR2       RR1SS2       RR1RS2
+  m 0.9574047 0.01934151 9.768439e-05 0.02256509 0.0002279302 0.0002279302 2.302326e-06 0.0001302458 2.631229e-06
+  f 0.9574047 0.01934151 9.768439e-05 0.02256509 0.0002279302 0.0002279302 2.302326e-06 0.0001302458 2.631229e-06
+   loci
+sex       RR1RR2
+  m 1.328904e-08
+  f 1.328904e-08
+
+# check genotypes f after random mating : seem identical too
+# need to do this f[], i should probably rename array from f
+exposure 0.8 :
+   loci
+sex    SS1SS2     SS1RS2       SS1RR2     RS1SS2   RS1RS2_cis RS1RS2_trans       RS1RR2       RR1SS2       RR1RS2
+  m 0.9574073 0.01934156 9.768466e-05 0.02255979 0.0002278767 0.0002278767 2.301785e-06 0.0001328965 2.684777e-06
+  f 0.9574073 0.01934156 9.768466e-05 0.02255979 0.0002278767 0.0002278767 2.301785e-06 0.0001328965 2.684777e-06
+   loci
+sex       RR1RR2
+  m 1.355948e-08
+  f 1.355948e-08
+
+effectivenesses 0.8 :
+   loci
+sex    SS1SS2     SS1RS2       SS1RR2     RS1SS2   RS1RS2_cis RS1RS2_trans       RS1RR2       RR1SS2       RR1RS2
+  m 0.9574073 0.01934156 9.768466e-05 0.02255979 0.0002278767 0.0002278767 2.301785e-06 0.0001328965 2.684777e-06
+  f 0.9574073 0.01934156 9.768466e-05 0.02255979 0.0002278767 0.0002278767 2.301785e-06 0.0001328965 2.684777e-06
+   loci
+sex       RR1RR2
+  m 1.355948e-08
+  f 1.355948e-08
+
+# seems that by end of generation1 everything is the same ...
+# but is this just because I'm looking at the first scenario of 3 which is a single insecticide ?
+lef$input
+a.m_00              5e-01 5e-01 5e-01
+a.m_a0              0e+00 0e+00 0e+00
+a.m_A0              5e-01 0e+00 0e+00
+a.m_0b              0e+00 0e+00 0e+00
+a.m_0B              0e+00 5e-01 0e+00
+a.m_ab              0e+00 0e+00 0e+00
+a.m_AB              0e+00 0e+00 5e-01
+
+# look at the results outputs for each mixture scenario
+# then may need to go back & browse through the mixture run by calling runModel2 directly
+
+lef$results[3]
+       Gen       m.R1       m.R2         m.LD       f.R1       f.R2         f.LD M F   dprime.m         r2   dprime.f
+  [1,]   1 0.01000000 0.01000000 7.449750e-05 0.01000000 0.01000000 7.449750e-05 1 1 0.01482686 0.01482686 0.01482686
+  [2,]   2 0.01038778 0.01038778 8.216336e-05 0.01038778 0.01038778 8.216336e-05 1 1 0.01573650 0.01573650 0.01573650
+  [3,]   3 0.01079100 0.01079100 8.964014e-05 0.01079100 0.01079100 8.964014e-05 1 1 0.01652218 0.01652218 0.01652218
+  [4,]   4 0.01121017 0.01121017 9.726565e-05 0.01121017 0.01121017 9.726565e-05 1 1 0.01725288 0.01725288 0.01725288
+  [5,]   5 0.01164588 0.01164588 1.052481e-04 0.01164588 0.01164588 1.052481e-04 1 1 0.01796595 0.01796595 0.01796595
+  [6,]   6 0.01209874 0.01209874 1.137252e-04 0.01209874 0.01209874 1.137252e-04 1 1 0.01868184 0.01868184 0.01868184
+  [7,]   7 0.01256943 0.01256943 1.227971e-04 0.01256943 0.01256943 1.227971e-04 1 1 0.01941196 0.01941196 0.01941196
+  [8,]   8 0.01305865 0.01305865 1.325449e-04 0.01305865 0.01305865 1.325449e-04 1 1 0.02016289 0.02016289 0.02016289
+  [9,]   9 0.01356716 0.01356716 1.430412e-04 0.01356716 0.01356716 1.430412e-04 1 1 0.02093867 0.02093867 0.02093867
+ [10,]  10 0.01409571 0.01409571 1.543562e-04 0.01409571 0.01409571 1.543562e-04 1 1 0.02174195 0.02174195 0.02174195
+lex$results[3] 
+       Gen       m.R1       m.R2         m.LD       f.R1       f.R2         f.LD M F   dprime.m         r2   dprime.f
+  [1,]   1 0.01000000 0.01000000 7.449750e-05 0.01000000 0.01000000 7.449750e-05 1 1 0.01482686 0.01482686 0.01482686
+  [2,]   2 0.01123748 0.01123748 9.475104e-05 0.01123748 0.01123748 9.475104e-05 1 1 0.01677017 0.01677017 0.01677017
+  [3,]   3 0.01262660 0.01262660 1.199875e-04 0.01262660 0.01262660 1.199875e-04 1 1 0.01888719 0.01888719 0.01888719
+  [4,]   4 0.01418541 0.01418541 1.515796e-04 0.01418541 0.01418541 1.515796e-04 1 1 0.02122186 0.02122186 0.02122186
+  [5,]   5 0.01593404 0.01593404 1.912074e-04 0.01593404 0.01593404 1.912074e-04 1 1 0.02381205 0.02381205 0.02381205
+  [6,]   6 0.01789488 0.01789488 2.409450e-04 0.01789488 0.01789488 2.409450e-04 1 1 0.02669330 0.02669330 0.02669330
+  [7,]   7 0.02009277 0.02009277 3.033612e-04 0.02009277 0.02009277 3.033612e-04 1 1 0.02990097 0.02990097 0.02990097
+  [8,]   8 0.02255524 0.02255524 3.816395e-04 0.02255524 0.02255524 3.816395e-04 1 1 0.03347153 0.03347153 0.03347153
+  [9,]   9 0.02531272 0.02531272 4.797215e-04 0.02531272 0.02531272 4.797215e-04 1 1 0.03744322 0.03744322 0.03744322
+ [10,]  10 0.02839878 0.02839878 6.024782e-04 0.02839878 0.02839878 6.024782e-04 1 1 0.04185638 0.04185638 0.04185638
+
+# differences are visible in gen2
+lef$results[3]
+       Gen       m.R1       m.R2         m.LD       f.R1       f.R2         f.LD M F   dprime.m         r2   dprime.f
+  [1,]   1 0.01000000 0.01000000 7.449750e-05 0.01000000 0.01000000 7.449750e-05 1 1 0.01482686 0.01482686 0.01482686
+  [2,]   2 0.01038778 0.01038778 8.216336e-05 0.01038778 0.01038778 8.216336e-05 1 1 0.01573650 0.01573650 0.01573650
+lex$results[3] 
+  [2,]   2 0.01123748 0.01123748 9.475104e-05 0.01123748 0.01123748 9.475104e-05 1 1 0.01677017 0.01677017 0.01677017
+
+# call runModel2 directly & work backwards in the generation loop to find the difference
+# thats tricky ...
+# or do runcurtis_f2() with max_gens set to 2 or 3, & step through scenarios until the 3rd
+
+lef <- runcurtis_f2( max_gen=3,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 1 , strategyLabels = c('seq','','adapt','mix2') )
+
+lex <- runcurtis_f2( max_gen=3,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 1 , strategyLabels = c('seq','','adapt','mix2') )
+
+# so actually comparing Windiv, run & press continue *2 to get to the 3rd mix scenario
+# trimmed out f because mf same
+
+# effectiveness0.8
+
+, , locus2 = SS2
+
+   locus1
+sex  SS1  RS1  RR1
+  m 0.52 0.54 0.56
+
+, , locus2 = RS2
+
+   locus1
+sex  SS1  RS1  RR1
+  m 0.54 0.58 0.62
+
+, , locus2 = RR2
+
+   locus1
+sex  SS1  RS1  RR1
+  m 0.56 0.62 0.68
+
+# exposure 0.8 
+
+, , locus2 = SS2
+
+   locus1
+sex SS1  RS1 RR1
+  m 0.4 0.45 0.5
+
+, , locus2 = RS2
+
+   locus1
+sex  SS1    RS1   RR1
+  m 0.45 0.5125 0.575
+
+, , locus2 = RR2
+
+   locus1
+sex SS1   RS1  RR1
+  m 0.5 0.575 0.65
+
+# putting them next to each other
+, , locus2 = SS2
+
+   locus1
+sex  SS1  RS1  RR1
+  ef 0.52 0.54 0.56
+  ex 0.4 0.45 0.5
+  
+, , locus2 = RS2
+
+   locus1
+sex  SS1  RS1  RR1
+  ef 0.54 0.58 0.62
+  ex 0.45 0.5125 0.575
+  
+, , locus2 = RR2
+
+   locus1
+sex  SS1  RS1  RR1
+  ef 0.56 0.62 0.68
+  ex 0.5 0.575 0.65
+
+# remember fitnesses & exposures are different
+
+#just SS1SS2
+  ef 0.52
+  ex 0.4
+
+# what are the expected calculations for SS1SS2 ?
+
+#fitness * exposure
+
+fitness, ef0.8
+       -,-  A,- -,B A,B
+SS1SS2 1    0.2 0.2 0.04
+
+fitness, ef0.5
+       -,- A,- -,B A,B
+SS1SS2 1   0.5 0.5 0.25
+
+exposure, ex0.8
+       -,- A,- -,B A,B
+       0.2 0   0   0.8
+       
+exposure, ex0.5
+       -,- A,- -,B A,B
+       0.5 0   0   0.5
+
+SS1SS2
+# ef8ex5 :
+        -,-  A,- -,B A,B
+fitness  1    0.2 0.2 0.04
+exposure 0.5  0   0   0.5
+       
+expect   0.5  0   0   0.02  : 0.52     
+       
+# ef5ex8   
+        -,-  A,- -,B A,B
+fitness  1    0.5 0.5 0.25
+exposure 0.2  0   0   0.8
+       
+expect   0.2  0   0   0.2  : 0.4     
+
+# SO THE CALCUALTIONS SEEM TO BE DOING WHAT THEY SHOULD BE
+# I JUST DON'T UNDERSTAND THE BIOLOGICAL MEANING ??
+
+
+Two insecticides with same effectiveness reduce fitness more.
+
+*14/9/2016*
+
+Skyped with Ian about the model :
+
+I was trying to work out: 
+Why does effectiveness increase time-to-resistance in a mixture when exposure decreases it ?
+
+Ian said that increasing exposure will always increase selection pressure.
+
+Seems that I may be misunderstanding something about the model structure.
+I was thinking that you could potentially have 2 different exposures for each insecticide within a single niche.
+
+BUT Ian said that exposure determines which niche an individual experiences. Thus is exposure is 0.8, 80% experience the high niche & 20% the low niche. 
+
+How then does it work with the 3 niches ?
+
+I showed Ian the model diagrams and he said that they could be improved by taking out the 1 niche bit from the titles, & saying that the niches only apply to the selection stage.
+
+( gametes all go in together across all niches).
+
+Ian will read the paper & that should help.
+
+
+
  
 ### TO DO  
 
+Set up more ability to be able to see what is going on with fitnesses from the code.
+Maybe I could even add this to one of my UIs. The inputs will be the same.
+Could put the new outputs in together or in a separate UI.
+
+maybe fitnessGenotype() should be called fitnessNiche() ?
+
+set up some unit tests for the fitness functions
+
+To say to Ian.
+~ if there is no more money, all I can do is get paper2 out & tidy & document the code.
 
 
 Produce some ideas for Ian about how best to spend my time.
