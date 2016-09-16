@@ -3,7 +3,8 @@
 #' allows setting for multiple niches and insecticides within runModel2() by passing arrays h,s,phi,z 
 #'  and testing for a single insecticide by passing effectiveness etc.
 
-#' @param effectiveness effectiveness
+#' @param effectiveness1 effectiveness
+#' @param effectiveness2 effectiveness
 #' @param dominance dominance
 #' @param selection_co selection_coefficient
 #' @param cost fitness cost of R in no insecticide
@@ -12,8 +13,8 @@
 #' @param s selection coefficient array
 #' @param phi effectiveness array
 #' @param z cost array
-#' 
 #' @param Wloci array of single locus fitnesses to fill
+#' 
 #' @examples 
 #' fitnessSingleLocus()
 #' fitnessSingleLocus(effectiveness = 0.8)
@@ -21,7 +22,8 @@
 #' @return fitness values
 #' @export
 
-fitnessSingleLocus <- function ( effectiveness = 0.5,
+fitnessSingleLocus <- function ( effectiveness1 = 0.5,
+                                 effectiveness2 = 0.5,
                                  dominance = 0.5,
                                  selection_co = 0.5,
                                  cost = 0,
@@ -46,26 +48,34 @@ fitnessSingleLocus <- function ( effectiveness = 0.5,
     # dominance coefficient
     h       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi')) 
     h[1, 'hi'] <- dominance
+    h[2, 'hi'] <- dominance
   }
   if ( is.null(s) )  
   {
     # selection coefficient
     s       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
     s[1, 'hi'] <- selection_co
+    s[2, 'hi'] <- selection_co    
   }  
   if ( is.null(phi) )  
   {
-    # fitness of one locus (baseline)
+    # fitness of one locus (baseline), effectiveness
     phi     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
-    phi[1, 'hi'] <- effectiveness
+    phi[1, 'hi'] <- effectiveness1
+    phi[2, 'hi'] <- effectiveness2    
   }  
   if ( is.null(z) )  
   {
     # fitness cost of resistance allele in no insecticide
     z       <- createArray2(locusNum=c(1,2))
     z[1] <- cost
+    z[2] <- cost
   } 
  
+  #testing
+  #cat('effectiveness\n')
+  #print(phi)
+  
   
   for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
   {

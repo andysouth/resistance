@@ -40,7 +40,14 @@ fitnessIndiv <- function ( Wniche = NULL,
     Windiv  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
   }
 
+  #testing
+  # cat("in fitnessIndiv\n")
+  # df_niche <- as.data.frame( aperm( Wniche[,,c('A'),c('B','0')], c('niche2','locus1','locus2')) )
+  # rownames(df_niche)[1] <- 'niche'
+  # print(df_niche[1,])
+  # print(as.data.frame(a)[1,]) #exposure
     
+  
   for( sex in dimnames(Windiv)$sex)
   {
     for( locus1 in dimnames(Windiv)$locus1)
@@ -60,6 +67,10 @@ fitnessIndiv <- function ( Wniche = NULL,
   if ( any( Windiv < 0 ) ) 
     warning( sum( Windiv < 0 ), " individual fitness values (Wloci) are <0")
   
+  #testing
+  #cat("in fitnessIndiv\n")
+  #df_indiv <- as.data.frame(Windiv)
+  #print(df_indiv[1,]) #just m
   
   return(Windiv)
 }

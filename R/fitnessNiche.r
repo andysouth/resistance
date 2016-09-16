@@ -32,9 +32,12 @@ fitnessNiche <- function ( Wloci = NULL,
   {
     # insecticide niche toggle
     niche   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
-    # BEWARE - for default option set just 00 & AB for now
-    niche['0','0'] <- 1
-    niche['A','B'] <- 1
+    #niche['0','0'] <- 1
+    #niche['A','B'] <- 1
+    # set all toggles on if nothing has been passed
+    # this is what happens from runModel2() too
+    niche[] <- 1
+    
   }
   
   if ( is.null(Wniche) )

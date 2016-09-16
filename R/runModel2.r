@@ -252,7 +252,12 @@ runModel2 <- function(input,
     ## Individual fitness based on exposure to niche & 2 locus fitness
     Windiv <- fitnessIndiv( Wniche = Wniche, a = a, Windiv = Windiv )
  
-    
+    #testing
+    # print("testing indiv fitness for exposure:")
+    # df_indiv <- as.data.frame(Windiv)
+    # # [1,] just prints males
+    # print(as.data.frame(a)[1,]) #exposure
+    # print(df_indiv[1,])
        
     #######################################################
     ## generation loop to run model from initial conditions
