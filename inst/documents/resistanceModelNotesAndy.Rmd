@@ -5440,9 +5440,170 @@ I showed Ian the model diagrams and he said that they could be improved by takin
 Ian will read the paper & that should help.
 
 
+aha!
+as.data.frame(Windiv) does what I want in getting an array into column format
+
+Windiv <- fitnessIndiv()
+tst <- as.data.frame(Windiv)
+tst[1,]
+  SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+m     0.6   0.725    0.85     0.6   0.725    0.85     0.6   0.725    0.85
+
+Wniche <- fitnessNiche()
+tst2 <- as.data.frame(Wniche)
+tst2[1,]
+
+Wniche is a bit more complicated, is for all niches.
+I just want the AB bit for now.
+
+Wniche[,,'A','B']
+      locus2
+locus1  SS2  RS2  RR2
+   SS1 0.50 0.50 0.50
+   RS1 0.75 0.75 0.75
+   RR1 1.00 1.00 1.00
+   
+as.data.frame(Wniche[,,'A','B'])
+     SS2  RS2  RR2
+SS1 0.50 0.50 0.50
+RS1 0.75 0.75 0.75
+RR1 1.00 1.00 1.00
+ 
+as.data.frame does what I want on Windiv because it has 3 dimensions, but not on Wniche[,,'A','B'] because it just has 2  
+ 
+this is a hack but does what I want
+tst2 <- as.data.frame( aperm(Wniche[,,c('A'),c('B','0')]) )
+
+  SS2.SS1 RS2.SS1 RR2.SS1 SS2.RS1 RS2.RS1 RR2.RS1 SS2.RR1 RS2.RR1 RR2.RR1
+B     0.5     0.5     0.5    0.75    0.75    0.75       1       1       1
+0     0.0     0.0     0.0    0.00    0.00    0.00       0       0       0 
+tst2[1,]
+
+*15/9/16* on train to liverpool
+developing fitnessPrint()
+
+> fitnessPrint(effectiveness=0.8, exposure=0.5, insecticideUsed='insecticide1')
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+niche     0.2    0.45     0.7     0.2    0.45     0.7     0.2    0.45     0.7
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+ind_m     0.5     0.5     0.5     0.5     0.5     0.5     0.5     0.5     0.5
+> fitnessPrint(effectiveness=0.8, exposure=0.5, insecticideUsed='insecticide2')
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+niche     0.2    0.45     0.7     0.2    0.45     0.7     0.2    0.45     0.7
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+ind_m     0.5     0.5     0.5     0.5     0.5     0.5     0.5     0.5     0.5
+> fitnessPrint(effectiveness=0.8, exposure=0.5, insecticideUsed='mixture')
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+niche     0.2    0.45     0.7     0.2    0.45     0.7     0.2    0.45     0.7
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+ind_m     0.6   0.725    0.85     0.6   0.725    0.85     0.6   0.725    0.85
+
+eeek this suggests something weird going on with individual fitnesses for insecticide 1 & 2.
+they are all set to just the exposure value.
+
+ 
+setExposure(insecticideUsed='insecticide1', exposure=0.8)
+seems OK
+
+as.data.frame(setExposure())
+  0.0 a.0 A.0 0.b a.b A.b 0.B a.B A.B
+m 0.1   0   0   0   0   0   0   0 0.9
+f 0.1   0   0   0   0   0   0   0 0.9
+
+Is it perhaps just something weird about when exposure is 0.5 ?
+> fitnessPrint(effectiveness=0.8, exposure=0.5, insecticideUsed='insecticide1')
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+niche     0.2    0.45     0.7     0.2    0.45     0.7     0.2    0.45     0.7
+  0.0 a.0 A.0 0.b a.b A.b 0.B a.B A.B
+m 0.5   0 0.5   0   0   0   0   0   0
+f 0.5   0 0.5   0   0   0   0   0   0
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+ind_m     0.5     0.5     0.5     0.5     0.5     0.5     0.5     0.5     0.5
+
+no even setting it to 0.6 does the same ?
+it shouldn't matter that both effectivenesses are the same because we are just concerned with 1 insecticide ...
+
+but doesn't seem to happen in runModel2()
+seems it may be a problem with fitnessPrint()
+
+something about how fitnessPrint calls fitnessIndiv() is different from how runModel2() calls it
+
+aha no problem is with calc of Wniche in fitnessNiche()
+maybe it is because of the niche toggle in niche[]
+
+yes in fitnessPrint() this did make a big difference.
+    # maybe set all toggles on if nothing has been passed ?
+    niche[] <- 1
+
+WTF ?
+> fitnessPrint(effectiveness=0.8, exposure=0.5, insecticideUsed='insecticide2')
+  SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+m       1       1       1       1       1       1       1       1       1
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+niche     0.2    0.45     0.7     0.2    0.45     0.7     0.2    0.45     0.7
+  0.0 a.0 A.0 0.b a.b A.b 0.B a.B A.B
+m 0.5   0   0   0   0   0 0.5   0   0
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+ind_m       1       1       1       1       1       1       1       1       1
+
+in fitnessNiche, problem with Wloci :
+Wloci
+     exposure
+loci  no lo   hi
+  SS1  1  1 0.20
+  RS1  1  1 0.45
+  RR1  1  1 0.70
+  SS2  1  1 1.00
+  RS2  1  1 1.00
+  RR2  1  1 1.00
+  
+seems to be a problem with calling of fitnessSingleLocus() ?
+
+i think it may be this :
+    phi     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    phi[1, 'hi'] <- effectiveness
+    
+    should be phi[,'hi'] <- effectiveness
+    
+something still not right with locus fitnesses :
+     exposure
+loci  no lo   hi
+  SS1  1  1 0.20
+  RS1  1  1 0.45
+  RR1  1  1 0.70
+  SS2  1  1 0.20
+  RS2  1  1 0.20
+  RR2  1  1 0.20
+  
+In liverpool :
+
+Ian said that what Matt needs to do is to calculate the change in variance in fitness over time. He can get that from the indiv fitness that I've just calculated, and the change in genotype frequency over time.
+
+Hill-Robinson effect : negative linkage disequilibrium, Ian doesn't quite get it
+
+Macromosaics :
+How best to do ?
+Initially just need 2 popns, but might want more.
+Specify immigration & emigration between.
+
+Does it need to be in or out of runModel2 ?
+Gene flow every time step.
+Will need to make sure that this potentially allows for 3 loci.
+
+
 
  
 ### TO DO  
+
+h & s & z in fitnessPrint() call of fitnessSingleLocus() need to be for both insecticides ?
+dominance & selection coeff
+
+With Ian & Matt
+Can we clarify terminology on fitnessNiche etc.
+
+To check on :
+is dominance dealt with correctly in model i.e. for both insecticides.
+
 
 Set up more ability to be able to see what is going on with fitnesses from the code.
 Maybe I could even add this to one of my UIs. The inputs will be the same.
