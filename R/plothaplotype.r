@@ -5,6 +5,10 @@
 #' locus 2: SS in cyan, RS in dark blue, RR in green
 
 #' @param mat results matrix
+#' @examples 
+#' input <- setInputOneScenario()
+#' listOut <- runModel2(input)
+#' plothaplotype( listOut$genotype[[1]] )
 #' 
 #' @return  list of plot components
 #' @export
@@ -24,7 +28,7 @@ plothaplotype <- function( mat ){
   
   for (k in 1:nrow(mat)){			
     ## haplotype at locus 1
-    m.SS1 <- sum( mat[k,2], mat[k,3], mat[k,4] )
+    m.SS1 <- sum( mat[k,2], mat[k,3], mat[k,4] ) #SS1SS2, SS1SR2, SS1RR2
     m.RS1 <- sum( mat[k,5] + mat[k,6] + mat[k,7] + mat[k,8] )
     m.RR1 <- sum( mat[k,9] + mat[k,10] + mat[k,11] )
     ## haplotype at locus 2
