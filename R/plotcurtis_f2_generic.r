@@ -172,9 +172,6 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
         lines( gens, comb, col=adjustcolor("blue", alpha.f = 0.5), lty=3 )
       }
       
-      #old way of doing which I think was wrong
-      #add the individual use line, with the difference between the indiv start and the new start
-      #lines( gens, ddt-ddt[1]+startR, col="blue", lty=3 )
       
     } else #if cutoff_i2_mix <= cutoff_i1_mix
     {
@@ -200,20 +197,11 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
       }
 
       
-      #old way of doing which I think was wrong
-      #add the individual use line, with the difference between the indiv start and the new start     
-      #lines( gens, hch-hch[1]+startR, col="red", lty=3 )   
-      
     }
     
 
   }  
   
-  
-  #when the switch is made, was hardcoded by Beth
-  #abline( v = 31, col="black" )
-  #yval <- log10( 3 )			
-  #text(27, yval, "Switch to DDT", srt=90, cex=0.75) 
   
   #when switch made from I1 to I2
   abline( v = max(maxGensI1), col="grey", lty=2 )  
