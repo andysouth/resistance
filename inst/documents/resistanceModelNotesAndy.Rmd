@@ -5590,16 +5590,111 @@ Does it need to be in or out of runModel2 ?
 Gene flow every time step.
 Will need to make sure that this potentially allows for 3 loci.
 
+Skype call with Bayer went really well, they loved the UI and how it helped with discussion and to investigate scenarios.
 
+Bayer press release from Oct 2015 on their mixture IRS :
+http://www.press.bayer.com/baynews/baynews.nsf/id/Bayer-develops-the-first-two-way-insecticide-mixture-for-indoor-residual-spraying
 
+With Ian we talked about the arithmetic of how effectiveness can have a different effect to exposure. Ian started on paper & showed how for 2 insecticides the exp & eff have identical effect. He started on paper on the mixture case, and said he would try to get it done. I have the initial paper calculations so I can look at in combination with the Maynard Smith book.
+
+Ian pointed out that the SS & SR genotypes will be most common early in the simulations in the critical period when resistance is rising. (Can I offer an option to add SS,SR & RR to the present allele frequency plots ? Indeed might not need SS. Is theer an existing func to do this ?)
+
+*20/9/16*
+
+~ can I create a plot of frequency of SS,SR,RR ? see Beths plothaplotype().
+
+input <- setInputOneScenario()
+listOut <- runModel2(input)
+plothaplotype( listOut$genotype[[1]] )
+
+but this is just for single strategy.
+
+can I add option to plotallele.freq.andy() to add SR & RR freqs to curtis type plots ? for each strategy ? It's likely to get messy. Perhaps I just need to add as unlabbeled pale grey lines because the reader can work out (with help) what they are. SR will go up first to a peak & decline, RR will approach the overall frequency line.
+
+new code can't go in the func below because it needs to access listOut$genotype
+plotalleleLinesOneScenario()
+ 
+> listOut$results[[1]]
+       Gen        m.R1        m.R2         m.LD        f.R1        f.R2         f.LD M F
+  [1,]   1 0.001000000 0.001000000 7.494997e-07 0.001000000 0.001000000 7.494997e-07 1 1
+  
+> listOut$genotype[[1]]
+       gen       SS1SS2       SS1RS2       SS1RR2       RS1SS2   RS1RS2_cis RS1RS2_trans
+  [1,]   1 9.960060e-01 1.994006e-03 9.980010e-07 1.994006e-03 1.996002e-06 1.996002e-06  
+ 
+Beth gets freqs out like this : 
+  for (k in 1:nrow(mat)){			
+    ## haplotype at locus 1
+    m.SS1 <- sum( mat[k,2], mat[k,3], mat[k,4] ) #SS1SS2, SS1SR2, SS1RR2
+    m.RS1 <- sum( mat[k,5] + mat[k,6] + mat[k,7] + mat[k,8] )
+    m.RR1 <- sum( mat[k,9] + mat[k,10] + mat[k,11] )
+    ## haplotype at locus 2
+    m.SS2 <- sum( mat[k,2] + mat[k,5] + mat[k,9] )
+    m.RS2 <- sum( mat[k,3] + mat[k,6] + mat[k,7] + mat[k,10] )
+    m.RR2 <- sum( mat[k,4] + mat[k,8] + mat[k,11] )  
+ 
+but I could do by querying the column names to check which contain SS1 etc.
+have I done anything like this in the code already ? seems not
+
+namesLoci <- c('SS1SS2','SS1RS2','SS1RR2',
+               'RS1SS2','RS1RS2cis','RS1RS2trans','RS1RR2',
+               'RR1SS2','RR1RS2','RR1RR2') 
+
+Cool these do what I want to get indices :
+grep('SS1',namesLoci)
+grep('RR1',namesLoci)
+ 
+#' @param add_haplotype whether to add haplotype (freqs of SR & RR to plots)
+add_haplotype = TRUE 
+ 
+  if (add_haplotype)
+  {
+    #uses $genotype
+    
+    # probably write a plotSSRS() function or similar
+    # first get it working on the case I want then see if I can extend
+    
+    names_genotypes <- colnames(listOut$genotype[[1]])
+    
+    RS1 <- rowSums( listOut$genotype[[1]][, grep('RS1',names_genotypes)] )
+    RR1 <- rowSums( listOut$genotype[[1]][, grep('RR1',names_genotypes)] )
+    RS2 <- rowSums( listOut$genotype[[1]][, grep('RS2',names_genotypes)] )
+    RR2 <- rowSums( listOut$genotype[[1]][, grep('RR2',names_genotypes)] )
+    
+  } 
+ 
+aha! remember I want it in plotcurtis_f2_generic() rather than in plotallele.freq.andy() 
+ 
+and the problem is that it accepts just the $results bit of the output ...
+plotcurtis_f2_generic( listOut$results[[3]] 
+ 
+so my option is :
+1) to optionally pass
+listOut$genotype[[3]], listOut$genotype[[2]], listOut$genotype[[1]]
+ 
+2) write a new function that accepts the genotype bits, and adds them to an existing plot 
+ 
+1) is probably better, but it's a bit ugly to be passing more args ..., if they are optional, not so bad.
+
+maybe I don't need to do it anyway ? Will it really help with understanding ?
+ 
+ 
  
 ### TO DO  
 
-h & s & z in fitnessPrint() call of fitnessSingleLocus() need to be for both insecticides ?
-dominance & selection coeff
+~ think about whether adding additional plotting options to plotcurtis_f2_generic() and or the UIs (as an optional tab?) could be useful ?
 
-With Ian & Matt
-Can we clarify terminology on fitnessNiche etc.
+~ can I create a plot of frequency of SS,SR,RR ? see Beths plothaplotype().
+
+~ check on my fitness* functions
+~ can I also get them to plot ?
+
+~ look at & incorporate Ians comments on paper2
+
+~ claim for train 15/9/16
+
+~ write down terminology on fitnessNiche etc. ideally within the documentation.
+~ create a vignette explaining how fitness is calculated, so that it can be stored in the package in future, it can access my new fitness functions.
 
 To check on :
 is dominance dealt with correctly in model i.e. for both insecticides.
@@ -5635,9 +5730,6 @@ write protocol for Matt, include that pull request from his fork.
 ~ from coverage/plot_feeding
 
 
-show IVCC runUI5() to look at mosaics
-at low effectiveness when seq is btter than mixture, a mosaic is also better than mixture.
-increasing effectiveness (I1&2to 0.8) favours mixtures over sequences & mosaics.
 
 try creating a function to plot mean fitness over time
 
@@ -5651,11 +5743,6 @@ not yet
 I suggested that best to get the basic code streamlined before trying to add the other stuff on top of it.
 ~ split up runModel2() e.g. have functions to fill arrays from the input matrix
 
-
-at liverpool meeting :
-~ ask Ian to go through my paper2
-~ ask Ian about a strategy for approaching IVCC for further funding to make the model more useable, when can we do it, what can I do to help ? 
-~ ask Ian to clarify the spatial scale issue in the mosaic runs
 
 
 check out the github thing I saw on twitter about keeping uptodate with an upstream repository.
