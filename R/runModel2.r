@@ -430,46 +430,14 @@ runModel2 <- function(input,
     }	####### end of generation loop 
     
     
-    
     ## Assign results matrices to lists for multiple runs
     listOut$results[[i]] <- results
     listOut$genotype[[i]] <- genotype
     
     
     ## Plots ####
-    if( produce.plots == TRUE ){
-      # Plot of R and S allele frequencies over generations
-      # Prints male frequency of R allele at locus 1 (blue) and locus 2 (green)
-      # and same in female at locus 1 (red) and locus 2 (orange)
-      genplot <- plotallele.freq( listOut$results[[i]] )
-      if (savePlots)
-      {
-        # Saves plot into same directory as code documents
-        dev.copy(png, (paste(i,'freq-Rallele-bygender.png')))		## WARNING: this will overwrite every time, move or rename files! ##
-        dev.off()
-      }
-      
-      # Plot of RR, RS and SS at each locus over generations
-      # locus 1: SS in pink, RS in orange, RR in red
-      # locus 2: SS in cyan, RS in dark blue, RR in green
-      genplot <- plothaplotype( listOut$genotype[[i]] )
-      
-      if (savePlots)
-      {
-        # Saves plot into same directory as code documents
-        dev.copy(png,(paste(i,'haplotype-frequencies.png')))		## WARNING: this will overwrite every time, move or rename files! ##
-        dev.off()
-      }
-      
-      # Plot of LD over time
-      genplot <- plotlinkage( listOut$results[[i]] )
-      if (savePlots)
-      {
-        # Saves plot into same directory as code documents
-        dev.copy(png,(paste(i,'LD.png')))		## WARNING: this will overwrite every time, move or rename files! ##
-        dev.off()
-      }
-    }
+    if( produce.plots ) plot_outputs_all( listOut=listOut, scen_num=i, savePlots=savePlots)
+
     
     ## Prints fitnesses calculated by niche by genotype to matrix ##
     ## To save in .csv, enter save.param as TRUE above ##
