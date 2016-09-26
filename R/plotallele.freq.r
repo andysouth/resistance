@@ -1,6 +1,6 @@
 #' plot allele frequencies over time
 #' 
-#' plot of R and S allele frequencies over time
+#' Beth's plot of R and S allele frequencies over time
 #' Prints male frequency of R allele at locus 1 (blue) and locus 2 (green)
 #' and same in female at locus 1 (red) and locus 2 (orange)
 
