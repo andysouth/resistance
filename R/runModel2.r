@@ -281,7 +281,7 @@ runModel2 <- function(input,
       results[k,6] <- f.R2
       
       # record total fitnesses for males and females
-      #question aren't these always 1
+      # question aren't these always 1 ?
       results[k,8] <- sum(f['m',])
       results[k,9] <- sum(f['f',])
       
@@ -296,9 +296,7 @@ runModel2 <- function(input,
       ## Gametes from after selection
       G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
       
-      
-      ###################
-      ## Random Mating ##
+      ## Random Mating
       # males & females will only be different if sexLinked=TRUE
       
       # males
@@ -309,7 +307,6 @@ runModel2 <- function(input,
       # females
       fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=FALSE)
       f['f',] <- genotypesLong2Short(fGenotypeExpanded)      
-      
       
       #these warnings allow for rounding differences
       if ( !isTRUE( all.equal(1, sum(f['m',])  )))
@@ -323,21 +320,17 @@ runModel2 <- function(input,
         f['f', ] <- genotype.freq[]
       }
       
-      
     }	####### end of generation loop 
-    
     
     ## Assign results matrices to lists for multiple runs
     listOut$results[[i]] <- results
     listOut$genotype[[i]] <- genotype
     
-    
-    ## Plots ####
+    ## Plots
     if( produce.plots ) plot_outputs_all( listOut=listOut, scen_num=i, savePlots=savePlots)
 
     
-    ## Prints fitnesses calculated by niche by genotype to matrix ##
-    ## To save in .csv, enter save.param as TRUE above ##
+    ## output fitnesses by niche & genotype
     if( coll.fitvals == 1 ){
       
       fbn <- matrix( ncol=9, nrow=9 )
@@ -349,9 +342,6 @@ runModel2 <- function(input,
       rownames(fbn) <- c("SS1SS2", "SS1RS2", "SS1RR2",
                          "RS1SS2", "RS1RS2", "RS1RR2",
                          "RR1SS2", "RR1RS2", "RR1RR2" )
-      
-      
-      #!r refactored 81 lines of previous code with
 
       for( locus1 in dimnames(Wniche)$locus1)
       {
@@ -387,10 +377,10 @@ runModel2 <- function(input,
     }
     
     
-  }		### loop through columns of parameter input table - produces results lists ###
+  }		### end of scenarios loop (each column in input) 
+  
   
   #return list of outputs
   invisible(listOut)
   
-   
 }
