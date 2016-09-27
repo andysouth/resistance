@@ -50,7 +50,7 @@ runModel2 <- function(input,
     # max generations
     max_gen <- input[2,i]
     
-    # not used, now always output fitness
+    # not used, now always output fitness, input rows 3 & 4 now free
     # coll.fitvals <- input[3,i]
     # not used anymore
     # save.fitvals <- input[4,i]		
@@ -278,8 +278,8 @@ runModel2 <- function(input,
       results[k,5] <- f.R1
       results[k,6] <- f.R2
       
-      # record total fitnesses for males and females
-      # question aren't these always 1 ?
+      # record total fitnesses for m & f
+      # which are always 1, not sure why Beth has here ?
       results[k,8] <- sum(f['m',])
       results[k,9] <- sum(f['f',])
       
@@ -332,5 +332,4 @@ runModel2 <- function(input,
   
   # return list of outputs
   invisible(listOut)
-  
 }
