@@ -213,7 +213,7 @@ runModel2 <- function(input,
     # HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
     namesLoci <- rownames( genotype.freq )
-    f <- fs <- createArray2( sex=c("m","f"), loci=namesLoci )
+    f <- createArray2( sex=c("m","f"), loci=namesLoci )
     
     #setting genotype freq at start to same for m & f 
     f['m', ] <- f['f', ] <- genotype.freq[]
@@ -251,7 +251,7 @@ runModel2 <- function(input,
            
     ##################
     ## generation loop
-    ##################    
+    
     
     for (k in 1:max_gen){
       
@@ -287,82 +287,13 @@ runModel2 <- function(input,
       
       # previous sequential insecticide code that was here now done post-processing
       
-      # linkage calculations
-      results <- linkage_calc( freq=f, recomb_rate=recomb_rate, gen_num=k, results = results )
+      ## linkage calculations
+      results <- linkage_calc( freq=f, recomb_rate=recomb_rate, gen_num=k, results=results )
 
-            
-      #####################################################
-      ## calculate genotype frequencies following selection
-      
-      if(calibration==103){		## no selection calibration
-        
-        # copy after selection frequencies from those before selection to eliminate selection step
-        fs <- f
-        
-      }else{
-        
-        #todo : address comment from Ian on ms 12/2015
-        #W.bar may not be necessary
-        #I had originally normalised these finesses by dividing by  Wbar. 
-        #In retrospect this was not necessary
-        #Ian said thi is necessary at this stage to ensure that the gamete frequencies in each sex sum to 1
-        
-        # W bar - Sum of numerators
-        W.bar <- createArray2(sex=c('m','f'))
-        
-        for( sex in dimnames(Windiv)$sex)
-        {
-          for( locus1 in dimnames(Windiv)$locus1)
-          {
-            for( locus2 in dimnames(Windiv)$locus2)
-            {
-              #have to do cis/trans specially
-              if ( locus1=='RS1' & locus2=='RS2' )
-              {
-                W.bar[sex] = W.bar[sex] + (f[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2])
-                W.bar[sex] = W.bar[sex] + (f[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2])
-              }else
-              {
-                W.bar[sex] = W.bar[sex] + (f[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2])                
-              }
-            }
-          }
-        }
-        
-        # doing calculation using W.bar from above
-        
-        for( sex in dimnames(Windiv)$sex)
-        {
-          for( locus1 in dimnames(Windiv)$locus1)
-          {
-            for( locus2 in dimnames(Windiv)$locus2)
-            {
-              #have to do cis/trans specially
-              if ( locus1=='RS1' & locus2=='RS2' )
-              {
-                fs[sex,'RS1RS2_cis']   <- (f[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
-                fs[sex,'RS1RS2_trans'] <- (f[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
-              }else
-              {
-                fs[sex,paste0(locus1,locus2)] <- (f[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2]) / W.bar[sex]                
-              }
-            }
-          }
-        }
-      }
-      
-      # check that genotype frequencies total 1.
-      for(sex in c('m','f'))
-      {
-        # allow for rounding differences
-        if ( !isTRUE( all.equal(1, sum(fs[sex,])  )))
-          warning(sex," genotype frequencies after selection total != 1 ", sum(fs[sex,]) )         
-      }
+      ## selection
+      fs <- selection( freq=f, Windiv=Windiv, calibration=calibration)
 
-      
-      ###############################
       ## Gametes from after selection
-      # fs = frequency of genotypes after selection
       G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
       
       
