@@ -260,8 +260,9 @@ runModel2 <- function(input,
       
       # save record of genotype proportions each generation
       genotype[k,1] <- k	
-      # todo : question is it right that only male frequencies seem to be saved ?
-      genotype[k,2:11] <- f['m',]
+      #genotype[k,2:11] <- f['m',]
+      # 27/9/16 changing this to output mean of m&f
+      genotype[k,2:11] <- sum( 0.5*(f['f',] + f['m',]))
       
       # saving results 
       results[k,1] <- k #generation number
