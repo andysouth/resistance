@@ -50,10 +50,10 @@ runModel2 <- function(input,
     # max generations
     max_gen <- input[2,i]
     
-    # to save parameters in a matrix, set coll.fitvals to 1
-    coll.fitvals <- input[3,i]
-    # to save this matrix to an external .csv (in same drive as this doc is saved), set save.params to 1 ##
-    save.fitvals <- input[4,i]		
+    # not used, now always output fitness
+    # coll.fitvals <- input[3,i]
+    # not used anymore
+    # save.fitvals <- input[4,i]		
     
     # frequency of resistance allele at locus 1&2 respectively
     P_1 <- input[5,i]	
@@ -330,8 +330,8 @@ runModel2 <- function(input,
     if( produce.plots ) plot_outputs_all( listOut=listOut, scen_num=i, savePlots=savePlots)
 
     
+    
     ## output fitnesses by niche & genotype
-    if( coll.fitvals == 1 ){
       
       fbn <- matrix( ncol=9, nrow=9 )
       
@@ -368,13 +368,9 @@ runModel2 <- function(input,
         }
       }
       
-      
       listOut$fitness[[i]] <- fbn
       
-    }					  
-    if( save.fitvals==1 ){
-      write.csv ( fbn, (paste(i,"two-locus_fitness-scores.csv")), row.names=T)
-    }
+
     
     
   }		### end of scenarios loop (each column in input) 
