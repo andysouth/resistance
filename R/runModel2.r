@@ -364,20 +364,6 @@ runModel2 <- function(input,
         }
       }
       
-      # calibration 104, selection on one genotype
-      if( calibration == 104 ){
-        
-        x.m <- select.gen.m				## Setting fitness of genotype to select on as separate variable
-        x.f <- select.gen.f				## Not lost in reprinting in next step
-        
-        # copy after selection frequencies from those before selection to eliminate selection step
-        fs <- f
-        
-        select.gen.m <- x.m			## Reprinting fitness that is intended to be selected on
-        select.gen.f <- x.f			## with after selection fitness saved as variable above
-        
-      }
-      
       # check that genotype frequencies total 1.
       for(sex in c('m','f'))
       {
