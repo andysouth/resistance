@@ -375,13 +375,8 @@ runModel2 <- function(input,
       
       ###############################
       ## Gametes from after selection
-
-      # Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
-      # 1 - both parts of genotype contribute, 
-      # 0.5 - half of genotype contributes, 
-      # 0 - neither part of genotype can produce this gamete
       
-      #note this uses fs, frequency of genotypes after selection
+      # fs = frequency of genotypes after selection
       G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
       
       

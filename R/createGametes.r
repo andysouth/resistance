@@ -1,7 +1,10 @@
 #' create gametes array
 #' 
 #' create gametes based on the frequency of genotypes in the population and the recombination rate.
-#' This is refactored from code in runModel()
+#' Gametes produced are estimated by the frequency of the genotype and their contribution to each genotype of gamete
+#' 1 - both parts of genotype contribute.   
+#' 0.5 - half of genotype contributes.    
+#' 0 - neither part of genotype can produce this gamete.   
 #' 
 #' @param f array with frequencies of genotypes in the popn.
 #' @param recomb_rate recombination rate 
