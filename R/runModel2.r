@@ -208,31 +208,22 @@ runModel2 <- function(input,
                             "RR1SS2", "RR1RS2", "RR1RR2")
     
 
-    ## genotype frequencies
+    ## genotype frequencies before selection (f) and after (fs)
     
-    # frequencies of genotypes before selection - in HW equilibrium 
+    # HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
-    
     namesLoci <- rownames( genotype.freq )
-    sex2 <- c("m","f")
-    # f  = genotype frequencies before selection
-    # fs = genotype frequencies after selection
-    f <- createArray2( sex=sex2, loci=namesLoci )
-    fs <- createArray2( sex=sex2, loci=namesLoci )      
+    f <- fs <- createArray2( sex=c("m","f"), loci=namesLoci )
     
     #setting genotype freq at start to same for m & f 
-    f['m', ] <- genotype.freq[]
-    f['f', ] <- genotype.freq[]
+    f['m', ] <- f['f', ] <- genotype.freq[]
     
-    
-    #these warnings allow for rounding differences
+    # warning allows for rounding differences
+    # only check 'm' because m&f set same above
     if ( !isTRUE( all.equal(1, sum(f['m',])  )))
-      warning("Male frequencies before selection total != 1 ", sum(f['m',]) ) 
-    if ( !isTRUE( all.equal(1, sum(f['f',])  )))
-      warning("Female frequencies before selection total != 1 ", sum(f['f',]) )  
+      warning("genotype frequencies before selection total != 1 ", sum(f['m',]) ) 
+
     
-    
-    #########################
     ## Single locus fitnesses
     Wloci <- fitnessSingleLocus(Wloci=Wloci,
                                 h = h,
@@ -241,14 +232,12 @@ runModel2 <- function(input,
                                 z = z)
     
     
-    ##################################################
     ## Two locus niche fitness in two insecticide Niche
     Wniche <- fitnessNiche( Wloci = Wloci,
                             niche = niche,
                             Wniche = Wniche )
     
     
-    #####################################################################
     ## Individual fitness based on exposure to niche & 2 locus fitness
     Windiv <- fitnessIndiv( Wniche = Wniche, a = a, Windiv = Windiv )
  
@@ -258,23 +247,20 @@ runModel2 <- function(input,
     # # [1,] just prints males
     # print(as.data.frame(a)[1,]) #exposure
     # print(df_indiv[1,])
-       
-    #######################################################
-    ## generation loop to run model from initial conditions
-    #######################################################    
-    
-    #browser()
+
+           
+    ##################
+    ## generation loop
+    ##################    
     
     for (k in 1:max_gen){
       
       # In calibration 1011, selection relaxed for a set time
       if( calibration == 1011 & i==2 ) Windiv <- relaxSelection(Windiv, k)      
       
-      #genotype frequency code that was here now moved to before the loop start
-      
       # save record of genotype proportions each generation
       genotype[k,1] <- k	
-      #question is it right that only male frequencies seem to be saved ?
+      # todo : question is it right that only male frequencies seem to be saved ?
       genotype[k,2:11] <- f['m',]
       
       # Printing Results to matrix 
@@ -375,14 +361,12 @@ runModel2 <- function(input,
       
       ###############################
       ## Gametes from after selection
-      
       # fs = frequency of genotypes after selection
       G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
       
       
       ###################
       ## Random Mating ##
-
       # males & females will only be different if sexLinked=TRUE
       
       # males
