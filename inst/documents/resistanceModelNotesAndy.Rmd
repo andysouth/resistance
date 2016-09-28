@@ -5678,9 +5678,118 @@ listOut$genotype[[3]], listOut$genotype[[2]], listOut$genotype[[1]]
 
 maybe I don't need to do it anyway ? Will it really help with understanding ?
  
- 
+*26/9/16* 
+looking at how macromosaics could work & tidying. see below.
+done ~ move the linkage disequilibrium calc into a function : linkage_calc()
+
+*26/9/16* 
+tidying runModel2() as prep for macromosaics
+~ deleted calibration == 104 because it didn't do anything
+
+ag did my old problem of 'ammend previous commit' after I'd pushed
+
+To git@github.com:AndySouth/resistance.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'git@github.com:AndySouth/resistance.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+RStudio, Pull gives
+0 [main] sh.exe" 6308 sync_with_child: child 5216(0x1AC) died before initialization with status code 0x1
+45194 [main] sh.exe" 6308 sync_with_child: *** child state waiting for longjmp
+C:\Program Files (x86)\Git/libexec/git-core\git-pull: fork: Resource temporarily unavailable
+
+from 
+ohshitgit.com
+git reflog
+git reset HEAD@{0}
+then a bit of pushing & pulling worked
+
+~ changed genotype outputs to mean of m&f
+genotype[k,2:11] <- sum( 0.5*(f['f',] + f['m',]))
+
+done ~ put selection into a function
+done ~ put fitness outputs into a function fitnessOutput(Wniche)
+
+*weds 28/9/16*
+
+
  
 ### TO DO  
+
+# Weds 
+~ look at adding a couple of simple unit-tests of some of the helper functions (& probably disable the expect_equal with runModel())
+
+~ make edits to paper2
+~ send msg to Ian & Matt
+
+
+
+
+send msg to matt & ian about tidied code, include mention of the following :
+
+~ say that I've been tidying & rearranging runModel2() to prepare for macro-mosaic & 3-locus options (which are now revealed both to be quite big jobs on the scale of weeks rather than days) 
+~ genotype frequency outputs (SS1SS2 etc. are now mean of m&f where they were m only, I don't think this effects any outputs we've used in the paper or elsewhere)
+~ can Matt check that linkage results are unchanged ?
+
+
+
+##Macromosaics
+~ Start with 2 popns
+~ allow for more if possible 
+~ immigration & emigration specified at each time step.
+~ allow for change to 3 loci.
+~ i think transfer should be between the genotype frequency arrays (f & fs for before & after selection)
+~ i think the best way to do this would be within a successor to runModel2() where there is effectively a loop near the start, for(pop_num in 1:num_pops) & migration is done if num_pops > 1.
+~ there could be a single migration 'exchange' input for 2 pops. Would get trickier for 3+ pops. If just done as exchange:
+Num pops  : num ex  : exchanges
+2         : 1       :  1-2
+3         : 3       :  1-2, 1-3, 2-3, 
+4         : 6       :  1-2, 1-3, 2-3, 1-4, 2-4, 3-4
+5         : 10      :  1-2, 1-3, 2-3, 1-4, 2-4, 3-4, 1-5, 2-5, 3-5, 4-5
+
+num exchanges = f(num_pops)
+
+##3+ loci
+~ it is a big job certainly weeks rather than days (> 4 weeks, important to plan first, & maybe run the plan past another coder, SSI, even apply for a SSI code review grant ?)
+~ might be better to plan from scratch ?
+~ would want to decide whether to keep 2 locus model & rewrite a 3 locus, or whether, ideally, could have run_model(num_loci=2)
+~ most functions would need to be re-written incl. : createGametes(), fitnessIndiv(), fitnessNiche(), randomMating(), genotypeLong2Short()
+~ currently there is some redundancy in dimension naming, e.g. using SS1 & SS2, rather than could have, locusNum=c(1,2) haplotype=c('SS','RS','RR') 
+~ array (probable) changes :
+exposure (a) from :
+sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B')
+to :
+sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B'), niche3=c('0','c','C')
+
+fitness by locus from :
+loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') 
+to :
+loci=c('SS1','RS1','RR1','SS2','RS2','RR2','SS3','RS3','RR3'), exposure=c('no','lo','hi')
+
+fitness by niche from :    
+locus1=c('SS1','RS1','RR1'), locus2=c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B')   
+to :
+locus1=c('SS1','RS1','RR1'), locus2=c('SS2','RS2','RR2'), locus3=c('SS3','RS3','RR3'), niche1=c('0','a','A'), niche2=c('0','b','B'), niche3=c('0','c','C')
+
+fitness by individual from :
+sex=c('m','f'), locus1=c('SS1','RS1','RR1'), locus2=c('SS2','RS2','RR2')
+to :
+sex=c('m','f'), locus1=c('SS1','RS1','RR1'), locus2=c('SS2','RS2','RR2'), locus3=c('SS3','RS3','RR3')
+
+an easy bit 4+ arrays that have these dimensions can be changed from :
+locusNum=c(1,2), exposure=c('no','lo','hi')
+to :
+locusNum=c(1,2,3), exposure=c('no','lo','hi')
+
+
+##runModel2 tidying
+~ I want to put the input reading into a function
+~ trickines is that inputs are mostly read into single named variables so can't all be returned from a single function unless I return them as a list ? Maybe do that as in_ or something similar
+        
+
 
 ~ think about whether adding additional plotting options to plotcurtis_f2_generic() and or the UIs (as an optional tab?) could be useful ?
 
@@ -5714,8 +5823,6 @@ To say to Ian.
 
 Produce some ideas for Ian about how best to spend my time.
 
-~ check on travel claim for last visit to liverpool
-~ add few hours for 25/7 fig production to my claim
 
 https://www.software.ac.uk/software-evaluation-guide
 
@@ -5728,7 +5835,6 @@ write protocol for Matt, include that pull request from his fork.
 ~ I could start with 1 insecticide ...
 ~ base it on my killeen coverage app ...
 ~ from coverage/plot_feeding
-
 
 
 try creating a function to plot mean fitness over time
