@@ -305,12 +305,8 @@ runModel2 <- function(input,
       fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=FALSE)
       f['f',] <- genotypesLong2Short(fGenotypeExpanded)      
       
-      
       #calibration 102 : genotype frequencies reset to what they were at start of loop
-      if( calibration == 102 ){
-        f['m', ] <- genotype.freq[]
-        f['f', ] <- genotype.freq[]
-      }
+      if( calibration == 102 ){ f['m', ] <- f['f', ] <- genotype.freq[] }
       
     }	## end of generation loop 
     
