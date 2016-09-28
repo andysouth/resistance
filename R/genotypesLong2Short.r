@@ -7,7 +7,7 @@
 #' @param aLong array with frequencies of expanded genotypes
 #' 
 #' @examples 
-#' #genotypesContract() 
+#' #genotypesLong2Short() 
 #' @return array with frequencies of genotypes
 #' @export
 
