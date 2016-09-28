@@ -305,11 +305,6 @@ runModel2 <- function(input,
       fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=FALSE)
       f['f',] <- genotypesLong2Short(fGenotypeExpanded)      
       
-      #these warnings allow for rounding differences
-      if ( !isTRUE( all.equal(1, sum(f['m',])  )))
-        warning("Male genotype frequencies generation",k,", total != 1 ", sum(f['m',]) ) 
-      if ( !isTRUE( all.equal(1, sum(f['f',])  )))
-        warning("Female genotype frequencies generation",k,", total != 1 ", sum(f['f',]) )  
       
       #calibration 102 : genotype frequencies reset to what they were at start of loop
       if( calibration == 102 ){
