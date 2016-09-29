@@ -73,7 +73,7 @@ runModel2 <- function(input,
     
 
     ## Exposure levels of males and females to each insecticide niche
-    # lower case = low concentration, upper case = high concentration, 0 = absence   
+    # lower case = low concentration, upper case = high, 0 = absence   
     
     # males
     a['m','0','0'] <- input[8,i]
@@ -197,8 +197,7 @@ runModel2 <- function(input,
     
     # HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
-    namesLoci <- rownames( genotype.freq )
-    f <- createArray2( sex=c("m","f"), loci=namesLoci )
+    f <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
     
     #setting genotype freq at start to same for m & f 
     f['m', ] <- f['f', ] <- genotype.freq[]
@@ -250,10 +249,8 @@ runModel2 <- function(input,
       # saving results 
       results[k,1] <- k #generation number
       
-      ##################################
       ## frequency of resistance alleles
-      #todo this can be refactored further
-      #ian jan2015 there may be redundancy here if this also calc for gametes
+      # SS1SS2,SS1RS2,SS1RR2,RS1SS2,RS1RS2_cis,RS1RS2_trans,RS1RR2,RR1SS2,RR1RS2,RR1RR2
       m.R1 <- sum(f['m',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS1",colnames(f))]))
       m.R2 <- sum(f['m',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS2",colnames(f))]))
       f.R1 <- sum(f['f',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS1",colnames(f))]))
