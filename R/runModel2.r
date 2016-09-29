@@ -65,7 +65,7 @@ runModel2 <- function(input,
     # fitness of one locus (baseline)
     effectness     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # dominance coefficient
-    h       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    a_dom       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # fitness cost of resistance allele in no insecticide
     z       <- createArray2(locusNum=c(1,2))
     
@@ -82,13 +82,13 @@ runModel2 <- function(input,
     Wloci['SS1','no'] <- input[30,scen_num]
     Wloci['SS2','no'] <- input[31,scen_num]    
 
-    # h = dominance coefficient
-    h[1,'no'] <- input[32,scen_num]
-    h[1,'lo'] <- input[33,scen_num]
-    h[1,'hi'] <- input[34,scen_num]
-    h[2,'no'] <- input[35,scen_num]
-    h[2,'lo'] <- input[36,scen_num]
-    h[2,'hi'] <- input[37,scen_num]    
+    # dominance = dominance coefficient
+    a_dom[1,'no'] <- input[32,scen_num]
+    a_dom[1,'lo'] <- input[33,scen_num]
+    a_dom[1,'hi'] <- input[34,scen_num]
+    a_dom[2,'no'] <- input[35,scen_num]
+    a_dom[2,'lo'] <- input[36,scen_num]
+    a_dom[2,'hi'] <- input[37,scen_num]    
     
     # s = selection coefficient
     s[1,'lo'] <- input[38,scen_num]
@@ -157,7 +157,7 @@ runModel2 <- function(input,
 
     ## Single locus fitnesses
     Wloci <- fitnessSingleLocus(Wloci=Wloci,
-                                h = h,
+                                a_dom = a_dom,
                                 s = s,
                                 effectness = effectness,
                                 z = z)
