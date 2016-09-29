@@ -184,26 +184,26 @@ runModel2 <- function(input,
            
     ##################
     ## generation loop
-    for (k in 1:max_gen){
+    for (gen_num in 1:max_gen){
       
       # In calibration 1011, selection relaxed for a set time
-      if( calibration == 1011 & scen_num==2 ) Windiv <- relaxSelection(Windiv, k)      
+      if( calibration == 1011 & scen_num==2 ) Windiv <- relaxSelection(Windiv, gen_num)      
       
       # save record of genotype proportions each generation
-      genotype[k,1] <- k	
-      #genotype[k,2:11] <- fgenotypes['m',]
+      genotype[gen_num,1] <- gen_num	
+      #genotype[gen_num,2:11] <- fgenotypes['m',]
       # 27/9/16 changing this to output mean of m&f
-      genotype[k,2:11] <- sum( 0.5*(fgenotypes['f',] + fgenotypes['m',]))
+      genotype[gen_num,2:11] <- sum( 0.5*(fgenotypes['f',] + fgenotypes['m',]))
       
       # saving results 
-      results[k,1] <- k #generation number
-      # 
-      results <- resistance_freq_count( fgenotypes=fgenotypes, gen_num=k, results=results )
+      results[gen_num,1] <- gen_num #generation number
+      
+      results <- resistance_freq_count( fgenotypes=fgenotypes, gen_num=gen_num, results=results )
       
       # previous sequential insecticide code that was here now done post-processing
       
       ## linkage calculations
-      results <- linkage_calc( fgenotypes=fgenotypes, recomb_rate=recomb_rate, gen_num=k, results=results )
+      results <- linkage_calc( fgenotypes=fgenotypes, recomb_rate=recomb_rate, gen_num=gen_num, results=results )
 
       ## selection
       fgenotypes_s <- selection( fgenotypes=fgenotypes, Windiv=Windiv, calibration=calibration)

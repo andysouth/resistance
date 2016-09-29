@@ -5714,15 +5714,33 @@ done ~ put selection into a function
 done ~ put fitness outputs into a function fitnessOutput(Wniche)
 
 *weds 28/9/16*
+~ started adding a couple of simple unit-tests of some of the helper functions
+
+*thurs 29/9/16*
+
+? what to call the array f, before it causes us any problems !!
+fgenotypes
+
+do I need a separet genotypes_s for after selection ? seems not ...
+
+beware that we already have genotype[] as part of the output lists ...
+
+genotype[gen,] is a matrix of summarised gen frequencies per generation
+fgenotypes[] will be an array of genotype fgrequencies in this generation
+
+~ created resistance_freq_count() function
 
 
  
 ### TO DO  
 
 # Weds 
-~ look at adding a couple of simple unit-tests of some of the helper functions (& probably disable the expect_equal with runModel())
+
+
+
 
 ~ make edits to paper2
+~ more unit-tests
 ~ send msg to Ian & Matt
 
 
@@ -5734,6 +5752,10 @@ send msg to matt & ian about tidied code, include mention of the following :
 ~ genotype frequency outputs (SS1SS2 etc. are now mean of m&f where they were m only, I don't think this effects any outputs we've used in the paper or elsewhere)
 ~ can Matt check that linkage results are unchanged ?
 
+List of other tidying things todo if/when I get proper time (oct 2016)
+~ can runModel2() accept exposure over time input to be able to do sequences ?
+~ spend a day deciding whether to rewrite parts from scratch or to continue improving
+~ check make.genotypemat() probably replace with more efficient code
 
 
 ##Macromosaics
