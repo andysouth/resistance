@@ -19,6 +19,8 @@ fitnessOutput <- function ( Wniche = NULL )
   #default order is different : 00 a0 A0 0b ab Ab 0B aB AB
   #potential problems in ordering of rows & cols avoided by filling by name below
   
+  #29/9/16 note this doesn't output cis & trans separately
+  
   rownames(fbn) <- c("SS1SS2", "SS1RS2", "SS1RR2",
                      "RS1SS2", "RS1RS2", "RS1RR2",
                      "RR1SS2", "RR1RS2", "RR1RR2" )
