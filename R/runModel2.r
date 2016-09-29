@@ -173,18 +173,13 @@ runModel2 <- function(input,
     
     ## end of reading inputs into parameters
     
-    # Set up matrices to output results to
+    # Set up matrices to output results
     # matrix:results - for overall freq of R and S allele per locus per sex, LD and overall allele freq (i.e. 1)
     results <- matrix ( nrow = max_gen, ncol = 12 )
     colnames( results ) <- c( "Gen", "m.R1", "m.R2", "m.LD", 
                               "f.R1", "f.R2", "f.LD", "M", "F", "dprime.m", "r2", "dprime.f" )
     
-    # matrix:fitness - fitness scores for each niche for each genotype
-    fitness <- matrix ( nrow = 10, ncol = 9, c(rep(0,90)))
-    colnames(fitness) <- c( "-,-", "a,-", "A,-", "b,-", "B,-", "a,b", "A,B", "A,b", "a,B" )
-    rownames(fitness) <- c( "SS1SS2", "SS1RS2", "SS1RR2", 
-                            "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
-                            "RR1SS2", "RR1RS2", "RR1RR2")
+    # matrix:fitness used to be created here & not used, now created in fitnessOutput()
     
     # matrix:genotype - frequencies of each of the 10 two locus genotypes each generation
     genotype <- matrix( nrow=max_gen, ncol=11 )
@@ -213,12 +208,10 @@ runModel2 <- function(input,
                                 phi = phi,
                                 z = z)
     
-    
     ## Two locus niche fitness in two insecticide Niche
     Wniche <- fitnessNiche( Wloci = Wloci,
                             niche = niche,
                             Wniche = Wniche )
-    
     
     ## Individual fitness based on exposure to niche & 2 locus fitness
     Windiv <- fitnessIndiv( Wniche = Wniche, a = a, Windiv = Windiv )
