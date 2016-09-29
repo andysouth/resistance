@@ -51,8 +51,6 @@ runModel2 <- function(input,
     recomb_rate <- input[7,scen_num]		# recombination rate
     
     ## named arrays to store model components
-    # exposure
-    a       <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
     # fitness by locus
     Wloci   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
     # fitness by niche    
