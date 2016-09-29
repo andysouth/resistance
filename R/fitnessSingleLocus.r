@@ -1,6 +1,6 @@
 #' calculate single locus fitness from insecticide exposure
 #' 
-#' allows setting for multiple niches and insecticides within runModel2() by passing arrays dominance,s,effectness,z 
+#' allows setting for multiple niches and insecticides within runModel2() by passing arrays a_dom,s,a_effect,z 
 #'  and testing for a single insecticide by passing effectiveness etc.
 
 #' @param effectiveness1 effectiveness
@@ -11,7 +11,7 @@
 #' @param SS fitness of SS if no insecticide
 #' @param dominance dominance array
 #' @param s selection coefficient array
-#' @param effectness effectiveness array
+#' @param a_effect effectiveness array
 #' @param z cost array
 #' @param Wloci array of single locus fitnesses to fill
 #' 
@@ -30,7 +30,7 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
                                  SS = 1,
                                  a_dom = NULL,
                                  s = NULL,
-                                 effectness = NULL,
+                                 a_effect = NULL,
                                  z = NULL,
                                  Wloci = NULL)
 {
@@ -57,12 +57,12 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
     s[1, 'hi'] <- selection_co
     s[2, 'hi'] <- selection_co    
   }  
-  if ( is.null(effectness) )  
+  if ( is.null(a_effect) )  
   {
     # fitness of one locus (baseline), effectiveness
-    effectness     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
-    effectness[1, 'hi'] <- effectiveness1
-    effectness[2, 'hi'] <- effectiveness2    
+    a_effect     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    a_effect[1, 'hi'] <- effectiveness1
+    a_effect[2, 'hi'] <- effectiveness2    
   }  
   if ( is.null(z) )  
   {
@@ -74,7 +74,7 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
  
   #testing
   #cat('effectiveness\n')
-  #print(effectness)
+  #print(a_effect)
   
   
   for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
@@ -85,12 +85,12 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
     
     for( exposID in c('lo','hi') )
     {
-      Wloci[ paste0('SS',locusNum), exposID] <-  1 - effectness[locusNum, exposID] 
+      Wloci[ paste0('SS',locusNum), exposID] <-  1 - a_effect[locusNum, exposID] 
       
-      Wloci[ paste0('RS',locusNum), exposID] <- (1 - effectness[locusNum, exposID]) + 
+      Wloci[ paste0('RS',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
         (a_dom[locusNum, exposID] * s[locusNum, exposID])
       
-      Wloci[ paste0('RR',locusNum), exposID] <- (1 - effectness[locusNum, exposID]) + 
+      Wloci[ paste0('RR',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
         (s[locusNum, exposID])
     }
   }
