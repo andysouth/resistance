@@ -11,14 +11,14 @@
 #' 
 #' Wloci <- fitnessSingleLocus( effectiveness = 0.8 )
 #' Wniche <- fitnessNiche( Wloci = Wloci )
-#' a <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
-#' Windiv <- fitnessIndiv( Wniche = Wniche, a = a )
+#' expos <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
+#' Windiv <- fitnessIndiv( Wniche = Wniche, expos = expos )
 
 #' @return fitness values in an array
 #' @export
 
 fitnessIndiv <- function ( Wniche = NULL,
-                           a = NULL,
+                           expos = NULL,
                            Windiv = NULL )
 {
   
@@ -28,10 +28,10 @@ fitnessIndiv <- function ( Wniche = NULL,
     Wniche   <- fitnessNiche()
   }  
 
-  if ( is.null(a) )
+  if ( is.null(expos) )
   {
-    a <- setExposure()
-    #a <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
+    expos <- setExposure()
+    #expos <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
   }
   
   if ( is.null(Windiv) )
@@ -45,7 +45,7 @@ fitnessIndiv <- function ( Wniche = NULL,
   # df_niche <- as.data.frame( aperm( Wniche[,,c('A'),c('B','0')], c('niche2','locus1','locus2')) )
   # rownames(df_niche)[1] <- 'niche'
   # print(df_niche[1,])
-  # print(as.data.frame(a)[1,]) #exposure
+  # print(as.data.frame(expos)[1,]) #exposure
     
   
   for( sex in dimnames(Windiv)$sex)
@@ -56,7 +56,7 @@ fitnessIndiv <- function ( Wniche = NULL,
       {
         # multiplies exposure by fitness for all niches & then sums
         # creates a weighted average of exposure in each niche
-        Windiv[sex,locus1,locus2] <- sum( a[sex,,] * Wniche[locus1,locus2,,])
+        Windiv[sex,locus1,locus2] <- sum( expos[sex,,] * Wniche[locus1,locus2,,])
       }
     }
   }

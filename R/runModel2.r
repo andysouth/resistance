@@ -28,27 +28,27 @@ runModel2 <- function(input,
   listOut <- list( results=list(), fitness=list(), genotype=list(), input=input )
 
   ## Scenario loop : each scenario from 1 column of 'input'
-  for (i in 1:ncol( input ) ){
+  for (scen_num in 1:ncol( input ) ){
     
-    if (i%%10==0) cat("in runModel2() scenario",i,"/",ncol( input ),'\n')
+    if (scen_num%%10==0) cat("in runModel2() scenario",scen_num,"/",ncol( input ),'\n')
     
     # calibrations - allows run to be modified : not used in new runs
-    calibration <- input[1,i]
+    calibration <- input[1,scen_num]
     
     # max generations
-    max_gen <- input[2,i]
+    max_gen <- input[2,scen_num]
     
     # not used, now always output fitness, input rows 3 & 4 now free
-    # coll.fitvals <- input[3,i]
+    # coll.fitvals <- input[3,scen_num]
     # not used anymore
-    # save.fitvals <- input[4,i]		
+    # save.fitvals <- input[4,scen_num]		
     
     # frequency of resistance allele at locus 1&2
-    P_1 <- input[5,i]	
-    P_2	<- input[6,i]	
+    P_1 <- input[5,scen_num]	
+    P_2	<- input[6,scen_num]	
     if ( P_1 > 1 | P_2 >1 ) warning('input resistance frequence >1 P_1:',P_1,' P_2:',P_2,'\n')
     
-    recomb_rate <- input[7,i]		# recombination rate
+    recomb_rate <- input[7,scen_num]		# recombination rate
     
     ## named arrays to store model components
     # exposure
@@ -71,103 +71,61 @@ runModel2 <- function(input,
     # fitness cost of resistance allele in no insecticide
     z       <- createArray2(locusNum=c(1,2))
     
-
-    ## Exposure levels of males and females to each insecticide niche
-    # lower case = low concentration, upper case = high, 0 = absence   
-    
-    # males
-    a['m','0','0'] <- input[8,i]
-    
-    a['m','a','0'] <- input[9,i]
-    a['m','A','0'] <- input[10,i]
-    
-    a['m','0','b'] <- input[11,i]
-    a['m','0','B'] <- input[12,i]
-    
-    a['m','a','b'] <- input[13,i]
-    a['m','A','B'] <- input[14,i]    
-    
-    a['m','A','b'] <- input[15,i]
-    a['m','a','B'] <- input[16,i]      
-    
-    #allow rounding errors
-    if ( !isTRUE( all.equal(1, sum(a['m',,])  ))){
-    	stop( paste("Error in male exposures: must total one: ", sum(a['m',,])) )
-    	}
-    
-    # females
-    a['f','0','0'] <- input[17,i]
-    
-    a['f','a','0'] <- input[18,i]
-    a['f','A','0'] <- input[19,i]
-    
-    a['f','0','b'] <- input[20,i]
-    a['f','0','B'] <- input[21,i]
-    
-    a['f','a','b'] <- input[22,i]
-    a['f','A','B'] <- input[23,i] 
-    
-    a['f','A','b'] <- input[24,i]
-    a['f','a','B'] <- input[25,i] 
-
-    #allow rounding errors
-    if ( !isTRUE( all.equal(1, sum(a['f',,])  ))){    
-      stop( paste("Error in female exposures: must total one: ", sum(a['f',,])) )
-    }
-    
+    # exposure to insecticides
+    expos <- setExposureFromInput( input, scen_num=scen_num )    
     
     ## Fitness Values
     # Baseline of SS in each insecticide/concentration (NOT niche, see Table 3. of brief)
     # User entered fitness values to allow some survival of homozygote susceptible due to chance
-    phi[1,'lo'] <- input[26,i]
-    phi[1,'hi'] <- input[27,i]
-    phi[2,'lo'] <- input[28,i]
-    phi[2,'hi'] <- input[29,i]
+    phi[1,'lo'] <- input[26,scen_num]
+    phi[1,'hi'] <- input[27,scen_num]
+    phi[2,'lo'] <- input[28,scen_num]
+    phi[2,'hi'] <- input[29,scen_num]
     
     # fitness of SS in environment with no insecticide are set to 1
-    Wloci['SS1','no'] <- input[30,i]
-    Wloci['SS2','no'] <- input[31,i]    
+    Wloci['SS1','no'] <- input[30,scen_num]
+    Wloci['SS2','no'] <- input[31,scen_num]    
 
     # h = dominance coefficient
-    h[1,'no'] <- input[32,i]
-    h[1,'lo'] <- input[33,i]
-    h[1,'hi'] <- input[34,i]
-    h[2,'no'] <- input[35,i]
-    h[2,'lo'] <- input[36,i]
-    h[2,'hi'] <- input[37,i]    
+    h[1,'no'] <- input[32,scen_num]
+    h[1,'lo'] <- input[33,scen_num]
+    h[1,'hi'] <- input[34,scen_num]
+    h[2,'no'] <- input[35,scen_num]
+    h[2,'lo'] <- input[36,scen_num]
+    h[2,'hi'] <- input[37,scen_num]    
     
     # s = selection coefficient
-    s[1,'lo'] <- input[38,i]
-    s[1,'hi'] <- input[39,i]
-    s[2,'lo'] <- input[40,i]
-    s[2,'hi'] <- input[41,i]
+    s[1,'lo'] <- input[38,scen_num]
+    s[1,'hi'] <- input[39,scen_num]
+    s[2,'lo'] <- input[40,scen_num]
+    s[2,'hi'] <- input[41,scen_num]
     
     # z = fitness cost of resistance allele in insecticide free environment
-    z[1] <- input[42,i]
-    z[2] <- input[43,i]
+    z[1] <- input[42,scen_num]
+    z[2] <- input[43,scen_num]
     #todo but this could perhaps be
-    #s[1,'no'] <- input[42,i]
-    #s[2,'no'] <- input[43,i]    
+    #s[1,'no'] <- input[42,scen_num]
+    #s[2,'no'] <- input[43,scen_num]    
     
     ## Toggle Insecticide Niches on and off
     # allows setting specific combinations of insecticide niches
     # if toggled FALSE the calculation of fitness in that niche is cancelled and results printed as 0
     # even if all set to TRUE, calibration == 1011||1012 will change the correct ones to OFF to run Curtis/Comparator
     
-    niche['0','0'] <- input[44,i]
-    niche['a','0'] <- input[45,i]
-    niche['A','0'] <- input[46,i]
-    niche['0','b'] <- input[47,i]
-    niche['0','B'] <- input[48,i]
-    niche['a','b'] <- input[49,i]
-    niche['A','B'] <- input[50,i]
-    niche['A','b'] <- input[51,i]
-    niche['a','B'] <- input[52,i]
+    niche['0','0'] <- input[44,scen_num]
+    niche['a','0'] <- input[45,scen_num]
+    niche['A','0'] <- input[46,scen_num]
+    niche['0','b'] <- input[47,scen_num]
+    niche['0','B'] <- input[48,scen_num]
+    niche['a','b'] <- input[49,scen_num]
+    niche['A','B'] <- input[50,scen_num]
+    niche['A','b'] <- input[51,scen_num]
+    niche['a','B'] <- input[52,scen_num]
     
     #andy to read new sexLinked parameter, if not present set to FALSE
     sexLinked <- FALSE
     if (nrow(input) > 52)
-      sexLinked <- as.logical(input[53,i]) #0 to FALSE, 1 to TRUE 
+      sexLinked <- as.logical(input[53,scen_num]) #0 to FALSE, 1 to TRUE 
     #extra check in case NA value gets in
     if ( is.na(sexLinked) | !is.logical(sexLinked) ) sexLinked <- FALSE
     
@@ -214,13 +172,13 @@ runModel2 <- function(input,
                             Wniche = Wniche )
     
     ## Individual fitness based on exposure to niche & 2 locus fitness
-    Windiv <- fitnessIndiv( Wniche = Wniche, a = a, Windiv = Windiv )
+    Windiv <- fitnessIndiv( Wniche = Wniche, expos = expos, Windiv = Windiv )
  
     #testing
     # print("testing indiv fitness for exposure:")
     # df_indiv <- as.data.frame(Windiv)
     # # [1,] just prints males
-    # print(as.data.frame(a)[1,]) #exposure
+    # print(as.data.frame(expos)[1,]) #exposure
     # print(df_indiv[1,])
 
            
@@ -229,7 +187,7 @@ runModel2 <- function(input,
     for (k in 1:max_gen){
       
       # In calibration 1011, selection relaxed for a set time
-      if( calibration == 1011 & i==2 ) Windiv <- relaxSelection(Windiv, k)      
+      if( calibration == 1011 & scen_num==2 ) Windiv <- relaxSelection(Windiv, k)      
       
       # save record of genotype proportions each generation
       genotype[k,1] <- k	
@@ -270,12 +228,12 @@ runModel2 <- function(input,
     }	## end of generation loop 
     
     ## Assign results matrices to lists for multiple runs
-    listOut$results[[i]] <- results
-    listOut$genotype[[i]] <- genotype
-    listOut$fitness[[i]] <- fitnessOutput( Wniche )    
+    listOut$results[[scen_num]] <- results
+    listOut$genotype[[scen_num]] <- genotype
+    listOut$fitness[[scen_num]] <- fitnessOutput( Wniche )    
     
     ## Plots
-    if( produce.plots ) plot_outputs_all( listOut=listOut, scen_num=i, savePlots=savePlots)
+    if( produce.plots ) plot_outputs_all( listOut=listOut, scen_num=scen_num, savePlots=savePlots)
 
   }		## end of scenarios loop (each column in input) 
   
