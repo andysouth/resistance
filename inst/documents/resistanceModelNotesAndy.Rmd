@@ -5729,26 +5729,22 @@ genotype[gen,] is a matrix of summarised gen frequencies per generation
 fgenotypes[] will be an array of genotype fgrequencies in this generation
 
 ~ created resistance_freq_count() function
-
-
+~ renamed a to expos, i to scen_num, moved code into setExposureFromInput()
+~ renamed k to gen_num
+ 
  
 ### TO DO  
 
 # Weds 
-
-
-
 
 ~ make edits to paper2
 ~ more unit-tests
 ~ send msg to Ian & Matt
 
 
-
-
 send msg to matt & ian about tidied code, include mention of the following :
 
-~ say that I've been tidying & rearranging runModel2() to prepare for macro-mosaic & 3-locus options (which are now revealed both to be quite big jobs on the scale of weeks rather than days) 
+~ I've been tidying & rearranging runModel2() to prepare for macro-mosaic & 3-locus options (which are now revealed both to be quite big jobs on the scale of weeks rather than days) 
 ~ genotype frequency outputs (SS1SS2 etc. are now mean of m&f where they were m only, I don't think this effects any outputs we've used in the paper or elsewhere)
 ~ can Matt check that linkage results are unchanged ?
 
