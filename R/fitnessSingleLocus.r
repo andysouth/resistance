@@ -1,6 +1,6 @@
 #' calculate single locus fitness from insecticide exposure
 #' 
-#' allows setting for multiple niches and insecticides within runModel2() by passing arrays h,s,phi,z 
+#' allows setting for multiple niches and insecticides within runModel2() by passing arrays h,s,effectness,z 
 #'  and testing for a single insecticide by passing effectiveness etc.
 
 #' @param effectiveness1 effectiveness
@@ -11,7 +11,7 @@
 #' @param SS fitness of SS if no insecticide
 #' @param h dominance array
 #' @param s selection coefficient array
-#' @param phi effectiveness array
+#' @param effectness effectiveness array
 #' @param z cost array
 #' @param Wloci array of single locus fitnesses to fill
 #' 
@@ -30,7 +30,7 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
                                  SS = 1,
                                  h = NULL,
                                  s = NULL,
-                                 phi = NULL,
+                                 effectness = NULL,
                                  z = NULL,
                                  Wloci = NULL)
 {
@@ -57,12 +57,12 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
     s[1, 'hi'] <- selection_co
     s[2, 'hi'] <- selection_co    
   }  
-  if ( is.null(phi) )  
+  if ( is.null(effectness) )  
   {
     # fitness of one locus (baseline), effectiveness
-    phi     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
-    phi[1, 'hi'] <- effectiveness1
-    phi[2, 'hi'] <- effectiveness2    
+    effectness     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    effectness[1, 'hi'] <- effectiveness1
+    effectness[2, 'hi'] <- effectiveness2    
   }  
   if ( is.null(z) )  
   {
@@ -74,7 +74,7 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
  
   #testing
   #cat('effectiveness\n')
-  #print(phi)
+  #print(effectness)
   
   
   for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
@@ -85,12 +85,12 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
     
     for( exposID in c('lo','hi') )
     {
-      Wloci[ paste0('SS',locusNum), exposID] <-  1 - phi[locusNum, exposID] 
+      Wloci[ paste0('SS',locusNum), exposID] <-  1 - effectness[locusNum, exposID] 
       
-      Wloci[ paste0('RS',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
+      Wloci[ paste0('RS',locusNum), exposID] <- (1 - effectness[locusNum, exposID]) + 
         (h[locusNum, exposID] * s[locusNum, exposID])
       
-      Wloci[ paste0('RR',locusNum), exposID] <- (1 - phi[locusNum, exposID]) + 
+      Wloci[ paste0('RR',locusNum), exposID] <- (1 - effectness[locusNum, exposID]) + 
         (s[locusNum, exposID])
     }
   }

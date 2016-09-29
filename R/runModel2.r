@@ -63,7 +63,7 @@ runModel2 <- function(input,
     # selection coefficient
     s       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
     # fitness of one locus (baseline)
-    phi     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    effectness     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # dominance coefficient
     h       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # fitness cost of resistance allele in no insecticide
@@ -72,13 +72,11 @@ runModel2 <- function(input,
     # exposure to insecticides
     expos <- setExposureFromInput( input, scen_num=scen_num )    
     
-    ## Fitness Values
-    # Baseline of SS in each insecticide/concentration (NOT niche, see Table 3. of brief)
-    # User entered fitness values to allow some survival of homozygote susceptible due to chance
-    phi[1,'lo'] <- input[26,scen_num]
-    phi[1,'hi'] <- input[27,scen_num]
-    phi[2,'lo'] <- input[28,scen_num]
-    phi[2,'hi'] <- input[29,scen_num]
+    # Effectiveness, fitness of SS in each insecticide/concentration
+    effectness[1,'lo'] <- input[26,scen_num]
+    effectness[1,'hi'] <- input[27,scen_num]
+    effectness[2,'lo'] <- input[28,scen_num]
+    effectness[2,'hi'] <- input[29,scen_num]
     
     # fitness of SS in environment with no insecticide are set to 1
     Wloci['SS1','no'] <- input[30,scen_num]
@@ -161,7 +159,7 @@ runModel2 <- function(input,
     Wloci <- fitnessSingleLocus(Wloci=Wloci,
                                 h = h,
                                 s = s,
-                                phi = phi,
+                                effectness = effectness,
                                 z = z)
     
     ## Two locus niche fitness in two insecticide Niche
