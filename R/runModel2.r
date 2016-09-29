@@ -194,8 +194,6 @@ runModel2 <- function(input,
       genotype[gen_num,2:11] <- sum( 0.5*(fgenotypes['f',] + fgenotypes['m',]))
       
       # saving results 
-      results[gen_num,1] <- gen_num #generation number
-      
       results <- resistance_freq_count( fgenotypes=fgenotypes, gen_num=gen_num, results=results )
       
       # previous sequential insecticide code that was here now done post-processing

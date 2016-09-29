@@ -34,6 +34,8 @@ resistance_freq_count <- function ( fgenotypes,
   # returning results, either to the passed results matrix or as a new object
   if ( !is.null(results) & !is.null(gen_num) )
   {
+    results[gen_num,1] <- gen_num #generation number
+    
     results[gen_num,2] <- arr_freq['m','R1']
     results[gen_num,3] <- arr_freq['m','R2']
     results[gen_num,5] <- arr_freq['f','R1']
