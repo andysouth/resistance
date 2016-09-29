@@ -16,16 +16,6 @@
 #' #sex linked
 #' input <- setInputOneScenario(sexLinked=1)
 #' tst <- runModel2(input) 
-#' #sequential insecticide use
-#' #? should I assume that exposure to the 2nd insecticide has been set to 0
-#' #? I should probably check
-#' #setting calibration & exposures to insecticides as the same for mf
-#' #this doesn't quite seem to work yet, freq of R stays at 0
-#' input <- setInputOneScenario(calibration=1013, 
-#'                              a.m_A0 = 0.9, a.m_00 = 0.1, a.m_AB = 0, 
-#'                              a.f_A0 = 0.9, a.f_00 = 0.1, a.f_AB = 0)
-#' #can either set calibration to 1013 as an arg to setInput or runModel2()
-#' tst <- runModel2(input)
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
@@ -34,17 +24,15 @@ runModel2 <- function(input,
                      produce.plots = FALSE,
                      savePlots=FALSE){
  
-  ### Lists to store results ####
-  #replacing 3 results lists with a list of 3 lists
+  ## Lists to store results
   listOut <- list( results=list(), fitness=list(), genotype=list(), input=input )
 
-  ## Scenario loop
-  ## inputs for each scenario are stored in columns of 'input'
+  ## Scenario loop : each scenario from 1 column of 'input'
   for (i in 1:ncol( input ) ){
     
     if (i%%10==0) cat("in runModel2() scenario",i,"/",ncol( input ),'\n')
     
-    # Calibrations
+    # calibrations - allows run to be modified : not used in new runs
     calibration <- input[1,i]
     
     # max generations
@@ -55,15 +43,14 @@ runModel2 <- function(input,
     # not used anymore
     # save.fitvals <- input[4,i]		
     
-    # frequency of resistance allele at locus 1&2 respectively
+    # frequency of resistance allele at locus 1&2
     P_1 <- input[5,i]	
     P_2	<- input[6,i]	
     if ( P_1 > 1 | P_2 >1 ) warning('input resistance frequence >1 P_1:',P_1,' P_2:',P_2,'\n')
     
-    # Recombination
     recomb_rate <- input[7,i]		# recombination rate
     
-    ## named arrays created to store model components
+    ## named arrays to store model components
     # exposure
     a       <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
     # fitness by locus
