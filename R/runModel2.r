@@ -246,23 +246,8 @@ runModel2 <- function(input,
       
       # saving results 
       results[k,1] <- k #generation number
-      
-      ## frequency of resistance alleles
-      # SS1SS2,SS1RS2,SS1RR2,RS1SS2,RS1RS2_cis,RS1RS2_trans,RS1RR2,RR1SS2,RR1RS2,RR1RR2
-      names_genotypes <- colnames(fgenotypes)
-      m.R1 <- sum(fgenotypes['m',grep("RR1",names_genotypes)]) + ( 0.5 * sum(fgenotypes['m',grep("RS1",names_genotypes)]))
-      m.R2 <- sum(fgenotypes['m',grep("RR2",names_genotypes)]) + ( 0.5 * sum(fgenotypes['m',grep("RS2",names_genotypes)]))
-      f.R1 <- sum(fgenotypes['f',grep("RR1",names_genotypes)]) + ( 0.5 * sum(fgenotypes['f',grep("RS1",names_genotypes)]))
-      f.R2 <- sum(fgenotypes['f',grep("RR2",names_genotypes)]) + ( 0.5 * sum(fgenotypes['f',grep("RS2",names_genotypes)]))   
-      results[k,2] <- m.R1
-      results[k,3] <- m.R2
-      results[k,5] <- f.R1
-      results[k,6] <- f.R2
-      
-      # record total fitnesses for m & f
-      # which are always 1, not sure why Beth has here ?
-      results[k,8] <- sum(fgenotypes['m',])
-      results[k,9] <- sum(fgenotypes['f',])
+      # 
+      results <- resistance_freq_count( fgenotypes=fgenotypes, gen_num=k, results=results )
       
       # previous sequential insecticide code that was here now done post-processing
       
