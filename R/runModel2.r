@@ -192,22 +192,20 @@ runModel2 <- function(input,
                             "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                             "RR1SS2", "RR1RS2", "RR1RR2")
     
-
-    ## genotype frequencies before selection (f) and after (fs)
+    ## genotype frequencies before selection (fgenotypes) and after (fgenotypes_s)
     
     # HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
-    f <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
+    fgenotypes <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
     
     #setting genotype freq at start to same for m & f 
-    f['m', ] <- f['f', ] <- genotype.freq[]
+    fgenotypes['m', ] <- fgenotypes['f', ] <- genotype.freq[]
     
     # warning allows for rounding differences
     # only check 'm' because m&f set same above
-    if ( !isTRUE( all.equal(1, sum(f['m',])  )))
-      warning("genotype frequencies before selection total != 1 ", sum(f['m',]) ) 
+    if ( !isTRUE( all.equal(1, sum(fgenotypes['m',])  )))
+      warning("genotype frequencies before selection total != 1 ", sum(fgenotypes['m',]) ) 
 
-    
     ## Single locus fitnesses
     Wloci <- fitnessSingleLocus(Wloci=Wloci,
                                 h = h,
@@ -242,19 +240,20 @@ runModel2 <- function(input,
       
       # save record of genotype proportions each generation
       genotype[k,1] <- k	
-      #genotype[k,2:11] <- f['m',]
+      #genotype[k,2:11] <- fgenotypes['m',]
       # 27/9/16 changing this to output mean of m&f
-      genotype[k,2:11] <- sum( 0.5*(f['f',] + f['m',]))
+      genotype[k,2:11] <- sum( 0.5*(fgenotypes['f',] + fgenotypes['m',]))
       
       # saving results 
       results[k,1] <- k #generation number
       
       ## frequency of resistance alleles
       # SS1SS2,SS1RS2,SS1RR2,RS1SS2,RS1RS2_cis,RS1RS2_trans,RS1RR2,RR1SS2,RR1RS2,RR1RR2
-      m.R1 <- sum(f['m',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS1",colnames(f))]))
-      m.R2 <- sum(f['m',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['m',grep("RS2",colnames(f))]))
-      f.R1 <- sum(f['f',grep("RR1",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS1",colnames(f))]))
-      f.R2 <- sum(f['f',grep("RR2",colnames(f))]) + ( 0.5 * sum(f['f',grep("RS2",colnames(f))]))   
+      names_genotypes <- colnames(fgenotypes)
+      m.R1 <- sum(fgenotypes['m',grep("RR1",names_genotypes)]) + ( 0.5 * sum(fgenotypes['m',grep("RS1",names_genotypes)]))
+      m.R2 <- sum(fgenotypes['m',grep("RR2",names_genotypes)]) + ( 0.5 * sum(fgenotypes['m',grep("RS2",names_genotypes)]))
+      f.R1 <- sum(fgenotypes['f',grep("RR1",names_genotypes)]) + ( 0.5 * sum(fgenotypes['f',grep("RS1",names_genotypes)]))
+      f.R2 <- sum(fgenotypes['f',grep("RR2",names_genotypes)]) + ( 0.5 * sum(fgenotypes['f',grep("RS2",names_genotypes)]))   
       results[k,2] <- m.R1
       results[k,3] <- m.R2
       results[k,5] <- f.R1
@@ -262,33 +261,33 @@ runModel2 <- function(input,
       
       # record total fitnesses for m & f
       # which are always 1, not sure why Beth has here ?
-      results[k,8] <- sum(f['m',])
-      results[k,9] <- sum(f['f',])
+      results[k,8] <- sum(fgenotypes['m',])
+      results[k,9] <- sum(fgenotypes['f',])
       
       # previous sequential insecticide code that was here now done post-processing
       
       ## linkage calculations
-      results <- linkage_calc( freq=f, recomb_rate=recomb_rate, gen_num=k, results=results )
+      results <- linkage_calc( fgenotypes=fgenotypes, recomb_rate=recomb_rate, gen_num=k, results=results )
 
       ## selection
-      fs <- selection( freq=f, Windiv=Windiv, calibration=calibration)
+      fgenotypes_s <- selection( fgenotypes=fgenotypes, Windiv=Windiv, calibration=calibration)
 
       ## Gametes from after selection
-      G <- createGametes( f = fs, recomb_rate = recomb_rate ) 
+      G <- createGametes( fgenotypes=fgenotypes_s, recomb_rate=recomb_rate ) 
       
       ## Random Mating
       # males & females will only be different if sexLinked=TRUE
       
       # males (initially by calculating 'expanded' genotypes)
       fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=TRUE)
-      f['m',] <- genotypesLong2Short(fGenotypeExpanded)
+      fgenotypes['m',] <- genotypesLong2Short(fGenotypeExpanded)
       
       # females
       fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=FALSE)
-      f['f',] <- genotypesLong2Short(fGenotypeExpanded)      
+      fgenotypes['f',] <- genotypesLong2Short(fGenotypeExpanded)      
       
       #calibration 102 : genotype frequencies reset to what they were at start of loop
-      if( calibration == 102 ){ f['m', ] <- f['f', ] <- genotype.freq[] }
+      if( calibration == 102 ){ fgenotypes['m', ] <- fgenotypes['f', ] <- genotype.freq[] }
       
     }	## end of generation loop 
     

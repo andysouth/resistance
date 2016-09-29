@@ -2,7 +2,7 @@
 #' 
 #'   
 #' 
-#' @param freq array with frequencies of genotypes in the popn.
+#' @param fgenotypes array with frequencies of genotypes in the popn.
 #' @param Windiv array of individual fitnesses by genotype 
 #' @param calibration flag if set to 103 turns off selection
 #' 
@@ -13,12 +13,12 @@
 
 
 
-selection <- function( freq, Windiv, calibration)
+selection <- function( fgenotypes, Windiv, calibration)
 {
 
   # copy after selection frequencies from before
   # to initialise array
-  fs <- freq
+  fgenotypes_s <- fgenotypes
   
   if(calibration!=103){		## no selection calibration
     
@@ -40,11 +40,11 @@ selection <- function( freq, Windiv, calibration)
           #have to do cis/trans specially
           if ( locus1=='RS1' & locus2=='RS2' )
           {
-            W.bar[sex] = W.bar[sex] + (freq[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2])
-            W.bar[sex] = W.bar[sex] + (freq[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2])
+            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2])
+            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2])
           }else
           {
-            W.bar[sex] = W.bar[sex] + (freq[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2])                
+            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2])                
           }
         }
       }
@@ -61,11 +61,11 @@ selection <- function( freq, Windiv, calibration)
           #have to do cis/trans specially
           if ( locus1=='RS1' & locus2=='RS2' )
           {
-            fs[sex,'RS1RS2_cis']   <- (freq[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
-            fs[sex,'RS1RS2_trans'] <- (freq[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
+            fgenotypes_s[sex,'RS1RS2_cis']   <- (fgenotypes[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
+            fgenotypes_s[sex,'RS1RS2_trans'] <- (fgenotypes[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
           }else
           {
-            fs[sex,paste0(locus1,locus2)] <- (freq[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2]) / W.bar[sex]                
+            fgenotypes_s[sex,paste0(locus1,locus2)] <- (fgenotypes[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2]) / W.bar[sex]                
           }
         }
       }
@@ -76,10 +76,10 @@ selection <- function( freq, Windiv, calibration)
   for(sex in c('m','f'))
   {
     # allow for rounding differences
-    if ( !isTRUE( all.equal(1, sum(fs[sex,])  )))
-      warning(sex," genotype frequencies after selection total != 1 ", sum(fs[sex,]) )         
+    if ( !isTRUE( all.equal(1, sum(fgenotypes_s[sex,])  )))
+      warning(sex," genotype frequencies after selection total != 1 ", sum(fgenotypes_s[sex,]) )         
   }
   
-  return(fs)
+  return(fgenotypes_s)
   
 }
