@@ -67,7 +67,7 @@ runModel2 <- function(input,
     # dominance coefficient
     a_dom       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # fitness cost of resistance allele in no insecticide
-    z       <- createArray2(locusNum=c(1,2))
+    a_cost       <- createArray2(locusNum=c(1,2))
     
     # exposure to insecticides
     a_expos <- setExposureFromInput( input, scen_num=scen_num )    
@@ -96,9 +96,9 @@ runModel2 <- function(input,
     a_sel[2,'lo'] <- input[40,scen_num]
     a_sel[2,'hi'] <- input[41,scen_num]
     
-    # z = fitness cost of resistance allele in insecticide free environment
-    z[1] <- input[42,scen_num]
-    z[2] <- input[43,scen_num]
+    # a_cost = fitness cost of resistance allele in insecticide free environment
+    a_cost[1] <- input[42,scen_num]
+    a_cost[2] <- input[43,scen_num]
     #todo but this could perhaps be
     #a_sel[1,'no'] <- input[42,scen_num]
     #a_sel[2,'no'] <- input[43,scen_num]    
@@ -160,7 +160,7 @@ runModel2 <- function(input,
                                    a_dom = a_dom,
                                    a_sel = a_sel,
                                    a_effect = a_effect,
-                                   z = z)
+                                   a_cost = a_cost)
     
     ## Two locus niche fitness in two insecticide Niche
     a_fitnic <- fitnessNiche( a_fitloc = a_fitloc,

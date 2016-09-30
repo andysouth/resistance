@@ -1,6 +1,6 @@
 #' calculate single locus fitness from insecticide exposure
 #' 
-#' allows setting for multiple niches and insecticides within runModel2() by passing arrays a_dom,s,a_effect,z 
+#' allows setting for multiple niches and insecticides within runModel2() by passing arrays a_dom,s,a_effect,a_cost 
 #'  and testing for a single insecticide by passing effectiveness etc.
 
 #' @param effectiveness1 effectiveness
@@ -12,7 +12,7 @@
 #' @param a_dom dominance array
 #' @param a_sel selection coefficient array
 #' @param a_effect effectiveness array
-#' @param z cost array
+#' @param a_cost cost array
 #' @param a_fitloc array of single locus fitnesses to fill
 #' 
 #' @examples 
@@ -31,7 +31,7 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
                                  a_dom = NULL,
                                  a_sel = NULL,
                                  a_effect = NULL,
-                                 z = NULL,
+                                 a_cost = NULL,
                                  a_fitloc = NULL)
 {
   
@@ -64,12 +64,12 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
     a_effect[1, 'hi'] <- effectiveness1
     a_effect[2, 'hi'] <- effectiveness2    
   }  
-  if ( is.null(z) )  
+  if ( is.null(a_cost) )  
   {
     # fitness cost of resistance allele in no insecticide
-    z       <- createArray2(locusNum=c(1,2))
-    z[1] <- cost
-    z[2] <- cost
+    a_cost       <- createArray2(locusNum=c(1,2))
+    a_cost[1] <- cost
+    a_cost[2] <- cost
   } 
  
   #testing
@@ -80,8 +80,8 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
   for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
   {
     #exposure 0 'no'
-    a_fitloc[ paste0('RS',locusNum), 'no'] <- 1 - (a_dom[locusNum, 'no'] * z[locusNum])
-    a_fitloc[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
+    a_fitloc[ paste0('RS',locusNum), 'no'] <- 1 - (a_dom[locusNum, 'no'] * a_cost[locusNum])
+    a_fitloc[ paste0('RR',locusNum), 'no'] <- 1 - a_cost[locusNum]
     
     for( exposID in c('lo','hi') )
     {
