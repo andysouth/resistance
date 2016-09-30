@@ -2,7 +2,7 @@
 #' 
 #' 
 #' 
-#' @param fgenotypes array of genotype frequencies
+#' @param a_gtypes array of genotype frequencies
 #' @param recomb_rate recombination rate
 #' @param gen_num generation number
 #' @param results matrix
@@ -13,7 +13,7 @@
 #' @return results matrix with values for this generation added
 #' @export
 
-linkage_calc <- function ( fgenotypes, 
+linkage_calc <- function ( a_gtypes, 
                            recomb_rate,
                            gen_num,
                            results ){	
@@ -23,7 +23,7 @@ linkage_calc <- function ( fgenotypes,
   # also these vars not used later : dprime*, r2
   
   # Gametes from before selection frequencies to estimate linkage disequilibrium 
-  G <- createGametes( fgenotypes = fgenotypes, recomb_rate = recomb_rate ) 
+  G <- createGametes( a_gtypes = a_gtypes, recomb_rate = recomb_rate ) 
   
   ## Linkage Disequilibrium of resistant allele in gametes
   # Male

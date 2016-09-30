@@ -141,19 +141,19 @@ runModel2 <- function(input,
                             "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                             "RR1SS2", "RR1RS2", "RR1RR2")
     
-    ## genotype frequencies before selection (fgenotypes) and after (fgenotypes_s)
+    ## genotype frequencies before selection (a_gtypes) and after (a_gtypes_s)
     
     # HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
-    fgenotypes <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
+    a_gtypes <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
     
     #setting genotype freq at start to same for m & f 
-    fgenotypes['m', ] <- fgenotypes['f', ] <- genotype.freq[]
+    a_gtypes['m', ] <- a_gtypes['f', ] <- genotype.freq[]
     
     # warning allows for rounding differences
     # only check 'm' because m&f set same above
-    if ( !isTRUE( all.equal(1, sum(fgenotypes['m',])  )))
-      warning("genotype frequencies before selection total != 1 ", sum(fgenotypes['m',]) ) 
+    if ( !isTRUE( all.equal(1, sum(a_gtypes['m',])  )))
+      warning("genotype frequencies before selection total != 1 ", sum(a_gtypes['m',]) ) 
 
     ## Single locus fitnesses
     a_fitloc <- fitnessSingleLocus(a_fitloc = a_fitloc,
@@ -164,8 +164,8 @@ runModel2 <- function(input,
     
     ## Two locus niche fitness in two insecticide Niche
     a_fitnic <- fitnessNiche( a_fitloc = a_fitloc,
-                            niche = niche,
-                            a_fitnic = a_fitnic )
+                              niche = niche,
+                              a_fitnic = a_fitnic )
     
     ## Individual fitness based on exposure to niche & 2 locus fitness
     a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, expos = expos, a_fitgen = a_fitgen )
@@ -187,37 +187,37 @@ runModel2 <- function(input,
       
       # save record of genotype proportions each generation
       genotype[gen_num,1] <- gen_num	
-      #genotype[gen_num,2:11] <- fgenotypes['m',]
+      #genotype[gen_num,2:11] <- a_gtypes['m',]
       # 27/9/16 changing this to output mean of m&f
-      genotype[gen_num,2:11] <- sum( 0.5*(fgenotypes['f',] + fgenotypes['m',]))
+      genotype[gen_num,2:11] <- sum( 0.5*(a_gtypes['f',] + a_gtypes['m',]))
       
       # saving results 
-      results <- resistance_freq_count( fgenotypes=fgenotypes, gen_num=gen_num, results=results )
+      results <- resistance_freq_count( a_gtypes=a_gtypes, gen_num=gen_num, results=results )
       
       # previous sequential insecticide code that was here now done post-processing
       
       ## linkage calculations
-      results <- linkage_calc( fgenotypes=fgenotypes, recomb_rate=recomb_rate, gen_num=gen_num, results=results )
+      results <- linkage_calc( a_gtypes=a_gtypes, recomb_rate=recomb_rate, gen_num=gen_num, results=results )
 
       ## selection
-      fgenotypes_s <- selection( fgenotypes=fgenotypes, a_fitgen=a_fitgen, calibration=calibration)
+      a_gtypes_s <- selection( a_gtypes=a_gtypes, a_fitgen=a_fitgen, calibration=calibration)
 
       ## Gametes from after selection
-      G <- createGametes( fgenotypes=fgenotypes_s, recomb_rate=recomb_rate ) 
+      G <- createGametes( a_gtypes=a_gtypes_s, recomb_rate=recomb_rate ) 
       
       ## Random Mating
       # males & females will only be different if sexLinked=TRUE
       
       # males (initially by calculating 'expanded' genotypes)
       fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=TRUE)
-      fgenotypes['m',] <- genotypesLong2Short(fGenotypeExpanded)
+      a_gtypes['m',] <- genotypesLong2Short(fGenotypeExpanded)
       
       # females
       fGenotypeExpanded <- randomMating(G, sexLinked=sexLinked, isMale=FALSE)
-      fgenotypes['f',] <- genotypesLong2Short(fGenotypeExpanded)      
+      a_gtypes['f',] <- genotypesLong2Short(fGenotypeExpanded)      
       
       #calibration 102 : genotype frequencies reset to what they were at start of loop
-      if( calibration == 102 ){ fgenotypes['m', ] <- fgenotypes['f', ] <- genotype.freq[] }
+      if( calibration == 102 ){ a_gtypes['m', ] <- a_gtypes['f', ] <- genotype.freq[] }
       
     }	## end of generation loop 
     
