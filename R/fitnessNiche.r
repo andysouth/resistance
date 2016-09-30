@@ -4,22 +4,22 @@
 
 #' @param a_fitloc array of single locus fitnesses
 #' @param niche insecticide niche toggle allowing niches to be turned off
-#' @param Wniche array of genotype fitnesses to fill
+#' @param a_fitnic array of genotype fitnesses to fill
 #' 
 #' @examples 
 #' fitnessNiche()
 #' 
 #' a_fitloc <- fitnessSingleLocus( effectiveness = 0.8 )
-#' Wniche <- fitnessNiche( a_fitloc = a_fitloc )
+#' a_fitnic <- fitnessNiche( a_fitloc = a_fitloc )
 #' a <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
-#' Windiv <- fitnessIndiv( Wniche = Wniche, a = a )
+#' Windiv <- fitnessIndiv( a_fitnic = a_fitnic, a = a )
 
 #' @return fitness values in an array
 #' @export
 
 fitnessNiche <- function ( a_fitloc = NULL,
                            niche = NULL,
-                           Wniche = NULL )
+                           a_fitnic = NULL )
 {
   
   # to allow this function to be called with no args
@@ -40,9 +40,9 @@ fitnessNiche <- function ( a_fitloc = NULL,
     
   }
   
-  if ( is.null(Wniche) )
+  if ( is.null(a_fitnic) )
   {
-    Wniche  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    a_fitnic  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
   }
   
   ##################################################
@@ -60,27 +60,27 @@ fitnessNiche <- function ( a_fitloc = NULL,
       #temporary solution
       #to get both niche (one of 0aAbB)
       #and exposure (one of no,lo,hi)
-      niche1 <- dimnames(Wniche)$niche1[ nicheNum1 ]
-      niche2 <- dimnames(Wniche)$niche2[ nicheNum2 ]
+      niche1 <- dimnames(a_fitnic)$niche1[ nicheNum1 ]
+      niche2 <- dimnames(a_fitnic)$niche2[ nicheNum2 ]
       exposure1 <- dimnames(a_fitloc)$exposure[ nicheNum1 ]
       exposure2 <- dimnames(a_fitloc)$exposure[ nicheNum2 ]        
       
       #if this niche toggled off set fitness to 0
       if (niche[niche1,niche2] == 0)
       {
-        Wniche[,,niche1,niche2] <- 0
+        a_fitnic[,,niche1,niche2] <- 0
       } else{
         #otherwise set fitness to product of the 2 loci
-        for( locus1 in dimnames(Wniche)$locus1)
+        for( locus1 in dimnames(a_fitnic)$locus1)
         {
-          for( locus2 in dimnames(Wniche)$locus2)
+          for( locus2 in dimnames(a_fitnic)$locus2)
           {
             ###########################################################################
             #6/1/16 i think ians new insecticide interaction parameter can just go here
             #does in need to be just one param or 4 ?
             #ΛAB, ΛAb, ΛaB or Λab 
-            #Wniche[locus1,locus2,niche1,niche2] <- interaction * a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
-            Wniche[locus1,locus2,niche1,niche2] <- a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
+            #a_fitnic[locus1,locus2,niche1,niche2] <- interaction * a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
+            a_fitnic[locus1,locus2,niche1,niche2] <- a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
           }
         }          
       }
@@ -88,11 +88,11 @@ fitnessNiche <- function ( a_fitloc = NULL,
   }
   
   #error check for fitnesses > 1 or < 0
-  if ( any(Wniche > 1  ) ) 
-    warning( sum(Wniche > 1  ), " niche fitness values (Wniche) are >1 ")
-  if ( any( Wniche < 0 ) ) 
-    warning( sum( Wniche < 0 ), " niche fitness values (Wniche) are <0")    
+  if ( any(a_fitnic > 1  ) ) 
+    warning( sum(a_fitnic > 1  ), " niche fitness values (a_fitnic) are >1 ")
+  if ( any( a_fitnic < 0 ) ) 
+    warning( sum( a_fitnic < 0 ), " niche fitness values (a_fitnic) are <0")    
  
    
-  return(Wniche)
+  return(a_fitnic)
 }

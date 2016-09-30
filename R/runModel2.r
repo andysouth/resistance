@@ -54,7 +54,7 @@ runModel2 <- function(input,
     # fitness by locus
     a_fitloc   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
     # fitness by niche    
-    Wniche  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    a_fitnic  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
     # fitness by individual
     Windiv  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
     # insecticide niche toggle
@@ -163,12 +163,12 @@ runModel2 <- function(input,
                                    z = z)
     
     ## Two locus niche fitness in two insecticide Niche
-    Wniche <- fitnessNiche( a_fitloc = a_fitloc,
+    a_fitnic <- fitnessNiche( a_fitloc = a_fitloc,
                             niche = niche,
-                            Wniche = Wniche )
+                            a_fitnic = a_fitnic )
     
     ## Individual fitness based on exposure to niche & 2 locus fitness
-    Windiv <- fitnessIndiv( Wniche = Wniche, expos = expos, Windiv = Windiv )
+    Windiv <- fitnessIndiv( a_fitnic = a_fitnic, expos = expos, Windiv = Windiv )
  
     #testing
     # print("testing indiv fitness for exposure:")
@@ -224,7 +224,7 @@ runModel2 <- function(input,
     ## Assign results matrices to lists for multiple runs
     listOut$results[[scen_num]] <- results
     listOut$genotype[[scen_num]] <- genotype
-    listOut$fitness[[scen_num]] <- fitnessOutput( Wniche )    
+    listOut$fitness[[scen_num]] <- fitnessOutput( a_fitnic )    
     
     ## Plots
     if( produce.plots ) plot_outputs_all( listOut=listOut, scen_num=scen_num, savePlots=savePlots)

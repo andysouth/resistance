@@ -2,30 +2,30 @@
 #' 
 #' allows calling from runModel2() and independently 
 
-#' @param Wniche array of niche fitnesses
+#' @param a_fitnic array of niche fitnesses
 #' @param a array of exposure in each niche
 #' @param Windiv array of individual fitnesses to fill
 #' 
 #' @examples 
 #' fitnessIndiv()
 #' 
-#' Wloci <- fitnessSingleLocus( effectiveness = 0.8 )
-#' Wniche <- fitnessNiche( Wloci = Wloci )
+#' a_fitloc <- fitnessSingleLocus( effectiveness = 0.8 )
+#' a_fitnic <- fitnessNiche( a_fitloc = a_fitloc )
 #' expos <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
-#' Windiv <- fitnessIndiv( Wniche = Wniche, expos = expos )
+#' Windiv <- fitnessIndiv( a_fitnic = a_fitnic, expos = expos )
 
 #' @return fitness values in an array
 #' @export
 
-fitnessIndiv <- function ( Wniche = NULL,
+fitnessIndiv <- function ( a_fitnic = NULL,
                            expos = NULL,
                            Windiv = NULL )
 {
   
   # to allow this function to be called with no args
-  if ( is.null(Wniche) )
+  if ( is.null(a_fitnic) )
   {
-    Wniche   <- fitnessNiche()
+    a_fitnic   <- fitnessNiche()
   }  
 
   if ( is.null(expos) )
@@ -42,7 +42,7 @@ fitnessIndiv <- function ( Wniche = NULL,
 
   #testing
   # cat("in fitnessIndiv\n")
-  # df_niche <- as.data.frame( aperm( Wniche[,,c('A'),c('B','0')], c('niche2','locus1','locus2')) )
+  # df_niche <- as.data.frame( aperm( a_fitnic[,,c('A'),c('B','0')], c('niche2','locus1','locus2')) )
   # rownames(df_niche)[1] <- 'niche'
   # print(df_niche[1,])
   # print(as.data.frame(expos)[1,]) #exposure
@@ -56,7 +56,7 @@ fitnessIndiv <- function ( Wniche = NULL,
       {
         # multiplies exposure by fitness for all niches & then sums
         # creates a weighted average of exposure in each niche
-        Windiv[sex,locus1,locus2] <- sum( expos[sex,,] * Wniche[locus1,locus2,,])
+        Windiv[sex,locus1,locus2] <- sum( expos[sex,,] * a_fitnic[locus1,locus2,,])
       }
     }
   }

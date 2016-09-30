@@ -1,6 +1,6 @@
 #' output fitness by niche
 #' 
-#' @param Wniche array of niche fitnesses
+#' @param a_fitnic array of niche fitnesses
 #' 
 #' @examples 
 #' #fitnessOutput()
@@ -8,7 +8,7 @@
 #' @return fitness values in a matrix
 #' @export
 
-fitnessOutput <- function ( Wniche = NULL )
+fitnessOutput <- function ( a_fitnic = NULL )
 {
   
   ## output fitnesses by niche & genotype
@@ -25,18 +25,18 @@ fitnessOutput <- function ( Wniche = NULL )
                      "RS1SS2", "RS1RS2", "RS1RR2",
                      "RR1SS2", "RR1RS2", "RR1RR2" )
   
-  for( locus1 in dimnames(Wniche)$locus1)
+  for( locus1 in dimnames(a_fitnic)$locus1)
   {
-    for( locus2 in dimnames(Wniche)$locus2)
+    for( locus2 in dimnames(a_fitnic)$locus2)
     {
       #this is a good way of doing but the columns end in a different order
       #which wouldn't be a problem except that initially I'm trying
       #to keep results identical to Beths
-      #fbn[paste0(locus1,locus2),] <- Wniche[locus1,locus2,,]
+      #fbn[paste0(locus1,locus2),] <- a_fitnic[locus1,locus2,,]
       #so instead go through each niche
-      for( niche1 in dimnames(Wniche)$niche1)
+      for( niche1 in dimnames(a_fitnic)$niche1)
       {
-        for( niche2 in dimnames(Wniche)$niche2)
+        for( niche2 in dimnames(a_fitnic)$niche2)
         {
           #get columnName by converting 0 to - and inserting commas
           columnName <- paste0(niche1,",",niche2)
@@ -44,7 +44,7 @@ fitnessOutput <- function ( Wniche = NULL )
           #get rowname by pasting
           rowName <- paste0(locus1,locus2)
           
-          fbn[rowName,columnName] <- Wniche[locus1,locus2,niche1,niche2]
+          fbn[rowName,columnName] <- a_fitnic[locus1,locus2,niche1,niche2]
         }
       }
     }
