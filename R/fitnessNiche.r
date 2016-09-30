@@ -3,7 +3,7 @@
 #' allows calling from runModel2() and independently 
 
 #' @param a_fitloc array of single locus fitnesses
-#' @param niche insecticide niche toggle allowing niches to be turned off
+#' @param a_nichetog insecticide niche toggle allowing niches to be turned off
 #' @param a_fitnic array of genotype fitnesses to fill
 #' 
 #' @examples 
@@ -18,7 +18,7 @@
 #' @export
 
 fitnessNiche <- function ( a_fitloc = NULL,
-                           niche = NULL,
+                           a_nichetog = NULL,
                            a_fitnic = NULL )
 {
   
@@ -28,15 +28,15 @@ fitnessNiche <- function ( a_fitloc = NULL,
     a_fitloc   <- fitnessSingleLocus()
   }  
 
-  if ( is.null(niche) )
+  if ( is.null(a_nichetog) )
   {
     # insecticide niche toggle
-    niche   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
-    #niche['0','0'] <- 1
-    #niche['A','B'] <- 1
+    a_nichetog   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
+    #a_nichetog['0','0'] <- 1
+    #a_nichetog['A','B'] <- 1
     # set all toggles on if nothing has been passed
     # this is what happens from runModel2() too
-    niche[] <- 1
+    a_nichetog[] <- 1
     
   }
   
@@ -66,7 +66,7 @@ fitnessNiche <- function ( a_fitloc = NULL,
       exposure2 <- dimnames(a_fitloc)$exposure[ nicheNum2 ]        
       
       #if this niche toggled off set fitness to 0
-      if (niche[niche1,niche2] == 0)
+      if (a_nichetog[niche1,niche2] == 0)
       {
         a_fitnic[,,niche1,niche2] <- 0
       } else{

@@ -58,7 +58,7 @@ runModel2 <- function(input,
     # fitness by genotype
     a_fitgen  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
     # insecticide niche toggle
-    niche   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
+    a_nichetog   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
     
     # selection coefficient
     a_sel       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
@@ -104,19 +104,18 @@ runModel2 <- function(input,
     #a_sel[2,'no'] <- input[43,scen_num]    
     
     ## Toggle Insecticide Niches on and off
-    # allows setting specific combinations of insecticide niches
     # if toggled FALSE the calculation of fitness in that niche is cancelled and results printed as 0
     # even if all set to TRUE, calibration == 1011||1012 will change the correct ones to OFF to run Curtis/Comparator
     
-    niche['0','0'] <- input[44,scen_num]
-    niche['a','0'] <- input[45,scen_num]
-    niche['A','0'] <- input[46,scen_num]
-    niche['0','b'] <- input[47,scen_num]
-    niche['0','B'] <- input[48,scen_num]
-    niche['a','b'] <- input[49,scen_num]
-    niche['A','B'] <- input[50,scen_num]
-    niche['A','b'] <- input[51,scen_num]
-    niche['a','B'] <- input[52,scen_num]
+    a_nichetog['0','0'] <- input[44,scen_num]
+    a_nichetog['a','0'] <- input[45,scen_num]
+    a_nichetog['A','0'] <- input[46,scen_num]
+    a_nichetog['0','b'] <- input[47,scen_num]
+    a_nichetog['0','B'] <- input[48,scen_num]
+    a_nichetog['a','b'] <- input[49,scen_num]
+    a_nichetog['A','B'] <- input[50,scen_num]
+    a_nichetog['A','b'] <- input[51,scen_num]
+    a_nichetog['a','B'] <- input[52,scen_num]
     
     #andy to read new sexLinked parameter, if not present set to FALSE
     sexLinked <- FALSE
@@ -164,7 +163,7 @@ runModel2 <- function(input,
     
     ## Two locus niche fitness in two insecticide Niche
     a_fitnic <- fitnessNiche( a_fitloc = a_fitloc,
-                              niche = niche,
+                              a_nichetog = a_nichetog,
                               a_fitnic = a_fitnic )
     
     ## Individual fitness based on exposure to niche & 2 locus fitness
