@@ -61,7 +61,7 @@ runModel2 <- function(input,
     niche   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
     
     # selection coefficient
-    s       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
+    a_sel       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
     # fitness of one locus (baseline)
     a_effect     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # dominance coefficient
@@ -90,18 +90,18 @@ runModel2 <- function(input,
     a_dom[2,'lo'] <- input[36,scen_num]
     a_dom[2,'hi'] <- input[37,scen_num]    
     
-    # s = selection coefficient
-    s[1,'lo'] <- input[38,scen_num]
-    s[1,'hi'] <- input[39,scen_num]
-    s[2,'lo'] <- input[40,scen_num]
-    s[2,'hi'] <- input[41,scen_num]
+    # a_sel = selection coefficient
+    a_sel[1,'lo'] <- input[38,scen_num]
+    a_sel[1,'hi'] <- input[39,scen_num]
+    a_sel[2,'lo'] <- input[40,scen_num]
+    a_sel[2,'hi'] <- input[41,scen_num]
     
     # z = fitness cost of resistance allele in insecticide free environment
     z[1] <- input[42,scen_num]
     z[2] <- input[43,scen_num]
     #todo but this could perhaps be
-    #s[1,'no'] <- input[42,scen_num]
-    #s[2,'no'] <- input[43,scen_num]    
+    #a_sel[1,'no'] <- input[42,scen_num]
+    #a_sel[2,'no'] <- input[43,scen_num]    
     
     ## Toggle Insecticide Niches on and off
     # allows setting specific combinations of insecticide niches
@@ -158,7 +158,7 @@ runModel2 <- function(input,
     ## Single locus fitnesses
     Wloci <- fitnessSingleLocus(Wloci=Wloci,
                                 a_dom = a_dom,
-                                s = s,
+                                a_sel = a_sel,
                                 a_effect = a_effect,
                                 z = z)
     

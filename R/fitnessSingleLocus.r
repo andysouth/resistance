@@ -10,7 +10,7 @@
 #' @param cost fitness cost of R in no insecticide
 #' @param SS fitness of SS if no insecticide
 #' @param dominance dominance array
-#' @param s selection coefficient array
+#' @param a_sel selection coefficient array
 #' @param a_effect effectiveness array
 #' @param z cost array
 #' @param Wloci array of single locus fitnesses to fill
@@ -29,7 +29,7 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
                                  cost = 0,
                                  SS = 1,
                                  a_dom = NULL,
-                                 s = NULL,
+                                 a_sel = NULL,
                                  a_effect = NULL,
                                  z = NULL,
                                  Wloci = NULL)
@@ -50,12 +50,12 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
     a_dom[1, 'hi'] <- dominance
     a_dom[2, 'hi'] <- dominance
   }
-  if ( is.null(s) )  
+  if ( is.null(a_sel) )  
   {
     # selection coefficient
-    s       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
-    s[1, 'hi'] <- selection_co
-    s[2, 'hi'] <- selection_co    
+    a_sel       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
+    a_sel[1, 'hi'] <- selection_co
+    a_sel[2, 'hi'] <- selection_co    
   }  
   if ( is.null(a_effect) )  
   {
@@ -88,10 +88,10 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
       Wloci[ paste0('SS',locusNum), exposID] <-  1 - a_effect[locusNum, exposID] 
       
       Wloci[ paste0('RS',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
-        (a_dom[locusNum, exposID] * s[locusNum, exposID])
+        (a_dom[locusNum, exposID] * a_sel[locusNum, exposID])
       
       Wloci[ paste0('RR',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
-        (s[locusNum, exposID])
+        (a_sel[locusNum, exposID])
     }
   }
   
