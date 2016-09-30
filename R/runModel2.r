@@ -55,8 +55,8 @@ runModel2 <- function(input,
     a_fitloc   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
     # fitness by niche    
     a_fitnic  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
-    # fitness by individual
-    Windiv  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+    # fitness by genotype
+    a_fitgen  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
     # insecticide niche toggle
     niche   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
     
@@ -168,11 +168,11 @@ runModel2 <- function(input,
                             a_fitnic = a_fitnic )
     
     ## Individual fitness based on exposure to niche & 2 locus fitness
-    Windiv <- fitnessIndiv( a_fitnic = a_fitnic, expos = expos, Windiv = Windiv )
+    a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, expos = expos, a_fitgen = a_fitgen )
  
     #testing
     # print("testing indiv fitness for exposure:")
-    # df_indiv <- as.data.frame(Windiv)
+    # df_indiv <- as.data.frame(a_fitgen)
     # # [1,] just prints males
     # print(as.data.frame(expos)[1,]) #exposure
     # print(df_indiv[1,])
@@ -183,7 +183,7 @@ runModel2 <- function(input,
     for (gen_num in 1:max_gen){
       
       # In calibration 1011, selection relaxed for a set time
-      if( calibration == 1011 & scen_num==2 ) Windiv <- relaxSelection(Windiv, gen_num)      
+      if( calibration == 1011 & scen_num==2 ) a_fitgen <- relaxSelection(a_fitgen, gen_num)      
       
       # save record of genotype proportions each generation
       genotype[gen_num,1] <- gen_num	
@@ -200,7 +200,7 @@ runModel2 <- function(input,
       results <- linkage_calc( fgenotypes=fgenotypes, recomb_rate=recomb_rate, gen_num=gen_num, results=results )
 
       ## selection
-      fgenotypes_s <- selection( fgenotypes=fgenotypes, Windiv=Windiv, calibration=calibration)
+      fgenotypes_s <- selection( fgenotypes=fgenotypes, a_fitgen=a_fitgen, calibration=calibration)
 
       ## Gametes from after selection
       G <- createGametes( fgenotypes=fgenotypes_s, recomb_rate=recomb_rate ) 

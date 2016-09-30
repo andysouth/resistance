@@ -3,7 +3,7 @@
 #'   
 #' 
 #' @param fgenotypes array with frequencies of genotypes in the popn.
-#' @param Windiv array of individual fitnesses by genotype 
+#' @param a_fitgen array of individual fitnesses by genotype 
 #' @param calibration flag if set to 103 turns off selection
 #' 
 #' @examples 
@@ -13,7 +13,7 @@
 
 
 
-selection <- function( fgenotypes, Windiv, calibration)
+selection <- function( fgenotypes, a_fitgen, calibration)
 {
 
   # copy after selection frequencies from before
@@ -31,20 +31,20 @@ selection <- function( fgenotypes, Windiv, calibration)
     # W bar - Sum of numerators
     W.bar <- createArray2(sex=c('m','f'))
     
-    for( sex in dimnames(Windiv)$sex)
+    for( sex in dimnames(a_fitgen)$sex)
     {
-      for( locus1 in dimnames(Windiv)$locus1)
+      for( locus1 in dimnames(a_fitgen)$locus1)
       {
-        for( locus2 in dimnames(Windiv)$locus2)
+        for( locus2 in dimnames(a_fitgen)$locus2)
         {
           #have to do cis/trans specially
           if ( locus1=='RS1' & locus2=='RS2' )
           {
-            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2])
-            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2])
+            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,'RS1RS2_cis'] * a_fitgen[sex,locus1,locus2])
+            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,'RS1RS2_trans'] * a_fitgen[sex,locus1,locus2])
           }else
           {
-            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2])                
+            W.bar[sex] = W.bar[sex] + (fgenotypes[sex,paste0(locus1,locus2)] * a_fitgen[sex,locus1,locus2])                
           }
         }
       }
@@ -52,20 +52,20 @@ selection <- function( fgenotypes, Windiv, calibration)
     
     # doing calculation using W.bar from above
     
-    for( sex in dimnames(Windiv)$sex)
+    for( sex in dimnames(a_fitgen)$sex)
     {
-      for( locus1 in dimnames(Windiv)$locus1)
+      for( locus1 in dimnames(a_fitgen)$locus1)
       {
-        for( locus2 in dimnames(Windiv)$locus2)
+        for( locus2 in dimnames(a_fitgen)$locus2)
         {
           #have to do cis/trans specially
           if ( locus1=='RS1' & locus2=='RS2' )
           {
-            fgenotypes_s[sex,'RS1RS2_cis']   <- (fgenotypes[sex,'RS1RS2_cis'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
-            fgenotypes_s[sex,'RS1RS2_trans'] <- (fgenotypes[sex,'RS1RS2_trans'] * Windiv[sex,locus1,locus2]) / W.bar[sex]
+            fgenotypes_s[sex,'RS1RS2_cis']   <- (fgenotypes[sex,'RS1RS2_cis'] * a_fitgen[sex,locus1,locus2]) / W.bar[sex]
+            fgenotypes_s[sex,'RS1RS2_trans'] <- (fgenotypes[sex,'RS1RS2_trans'] * a_fitgen[sex,locus1,locus2]) / W.bar[sex]
           }else
           {
-            fgenotypes_s[sex,paste0(locus1,locus2)] <- (fgenotypes[sex,paste0(locus1,locus2)] * Windiv[sex,locus1,locus2]) / W.bar[sex]                
+            fgenotypes_s[sex,paste0(locus1,locus2)] <- (fgenotypes[sex,paste0(locus1,locus2)] * a_fitgen[sex,locus1,locus2]) / W.bar[sex]                
           }
         }
       }
