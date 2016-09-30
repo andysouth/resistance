@@ -2,30 +2,30 @@
 #' 
 #' allows calling from runModel2() and independently 
 
-#' @param Wloci array of single locus fitnesses
+#' @param a_fitloc array of single locus fitnesses
 #' @param niche insecticide niche toggle allowing niches to be turned off
 #' @param Wniche array of genotype fitnesses to fill
 #' 
 #' @examples 
 #' fitnessNiche()
 #' 
-#' Wloci <- fitnessSingleLocus( effectiveness = 0.8 )
-#' Wniche <- fitnessNiche( Wloci = Wloci )
+#' a_fitloc <- fitnessSingleLocus( effectiveness = 0.8 )
+#' Wniche <- fitnessNiche( a_fitloc = a_fitloc )
 #' a <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
 #' Windiv <- fitnessIndiv( Wniche = Wniche, a = a )
 
 #' @return fitness values in an array
 #' @export
 
-fitnessNiche <- function ( Wloci = NULL,
+fitnessNiche <- function ( a_fitloc = NULL,
                            niche = NULL,
                            Wniche = NULL )
 {
   
   # to allow this function to be called with no args
-  if ( is.null(Wloci) )
+  if ( is.null(a_fitloc) )
   {
-    Wloci   <- fitnessSingleLocus()
+    a_fitloc   <- fitnessSingleLocus()
   }  
 
   if ( is.null(niche) )
@@ -62,8 +62,8 @@ fitnessNiche <- function ( Wloci = NULL,
       #and exposure (one of no,lo,hi)
       niche1 <- dimnames(Wniche)$niche1[ nicheNum1 ]
       niche2 <- dimnames(Wniche)$niche2[ nicheNum2 ]
-      exposure1 <- dimnames(Wloci)$exposure[ nicheNum1 ]
-      exposure2 <- dimnames(Wloci)$exposure[ nicheNum2 ]        
+      exposure1 <- dimnames(a_fitloc)$exposure[ nicheNum1 ]
+      exposure2 <- dimnames(a_fitloc)$exposure[ nicheNum2 ]        
       
       #if this niche toggled off set fitness to 0
       if (niche[niche1,niche2] == 0)
@@ -79,8 +79,8 @@ fitnessNiche <- function ( Wloci = NULL,
             #6/1/16 i think ians new insecticide interaction parameter can just go here
             #does in need to be just one param or 4 ?
             #ΛAB, ΛAb, ΛaB or Λab 
-            #Wniche[locus1,locus2,niche1,niche2] <- interaction * Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
-            Wniche[locus1,locus2,niche1,niche2] <- Wloci[locus1,exposure1] * Wloci[locus2,exposure2]
+            #Wniche[locus1,locus2,niche1,niche2] <- interaction * a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
+            Wniche[locus1,locus2,niche1,niche2] <- a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
           }
         }          
       }

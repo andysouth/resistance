@@ -9,11 +9,11 @@
 #' @param selection_co selection_coefficient
 #' @param cost fitness cost of R in no insecticide
 #' @param SS fitness of SS if no insecticide
-#' @param dominance dominance array
+#' @param a_dom dominance array
 #' @param a_sel selection coefficient array
 #' @param a_effect effectiveness array
 #' @param z cost array
-#' @param Wloci array of single locus fitnesses to fill
+#' @param a_fitloc array of single locus fitnesses to fill
 #' 
 #' @examples 
 #' fitnessSingleLocus()
@@ -32,15 +32,15 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
                                  a_sel = NULL,
                                  a_effect = NULL,
                                  z = NULL,
-                                 Wloci = NULL)
+                                 a_fitloc = NULL)
 {
   
-  if ( is.null(Wloci) )
+  if ( is.null(a_fitloc) )
   {
-    Wloci   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+    a_fitloc   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
     #set from input file in runModel2()
-    Wloci['SS1','no'] <- SS #input[30,i]
-    Wloci['SS2','no'] <- SS #input[31,i] 
+    a_fitloc['SS1','no'] <- SS #input[30,i]
+    a_fitloc['SS2','no'] <- SS #input[31,i] 
   }
 
   if ( is.null(a_dom) )  
@@ -80,26 +80,26 @@ fitnessSingleLocus <- function ( effectiveness1 = 0.5,
   for( locusNum in 1:2 ) #todo improve 1:2 get it from somewhere
   {
     #exposure 0 'no'
-    Wloci[ paste0('RS',locusNum), 'no'] <- 1 - (a_dom[locusNum, 'no'] * z[locusNum])
-    Wloci[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
+    a_fitloc[ paste0('RS',locusNum), 'no'] <- 1 - (a_dom[locusNum, 'no'] * z[locusNum])
+    a_fitloc[ paste0('RR',locusNum), 'no'] <- 1 - z[locusNum]
     
     for( exposID in c('lo','hi') )
     {
-      Wloci[ paste0('SS',locusNum), exposID] <-  1 - a_effect[locusNum, exposID] 
+      a_fitloc[ paste0('SS',locusNum), exposID] <-  1 - a_effect[locusNum, exposID] 
       
-      Wloci[ paste0('RS',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
+      a_fitloc[ paste0('RS',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
         (a_dom[locusNum, exposID] * a_sel[locusNum, exposID])
       
-      Wloci[ paste0('RR',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
+      a_fitloc[ paste0('RR',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
         (a_sel[locusNum, exposID])
     }
   }
   
   #error check for fitnesses > 1 or < 0
-  if ( any( Wloci > 1  ) ) 
-    warning( sum(Wloci > 1 ), " locus fitness values (Wloci) are >1 : ", Wloci[Wloci>1])
-  if ( any( Wloci < 0 ) ) 
-    warning( sum( Wloci < 0 ), " locus fitness values (Wloci) are <0")     
+  if ( any( a_fitloc > 1  ) ) 
+    warning( sum(a_fitloc > 1 ), " locus fitness values (a_fitloc) are >1 : ", a_fitloc[a_fitloc>1])
+  if ( any( a_fitloc < 0 ) ) 
+    warning( sum( a_fitloc < 0 ), " locus fitness values (a_fitloc) are <0")     
   
-  return(Wloci)
+  return(a_fitloc)
 }

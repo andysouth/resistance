@@ -52,7 +52,7 @@ runModel2 <- function(input,
     
     ## named arrays to store model components
     # fitness by locus
-    Wloci   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+    a_fitloc   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
     # fitness by niche    
     Wniche  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
     # fitness by individual
@@ -79,8 +79,8 @@ runModel2 <- function(input,
     a_effect[2,'hi'] <- input[29,scen_num]
     
     # fitness of SS in environment with no insecticide are set to 1
-    Wloci['SS1','no'] <- input[30,scen_num]
-    Wloci['SS2','no'] <- input[31,scen_num]    
+    a_fitloc['SS1','no'] <- input[30,scen_num]
+    a_fitloc['SS2','no'] <- input[31,scen_num]    
 
     # dominance = dominance coefficient
     a_dom[1,'no'] <- input[32,scen_num]
@@ -156,14 +156,14 @@ runModel2 <- function(input,
       warning("genotype frequencies before selection total != 1 ", sum(fgenotypes['m',]) ) 
 
     ## Single locus fitnesses
-    Wloci <- fitnessSingleLocus(Wloci=Wloci,
-                                a_dom = a_dom,
-                                a_sel = a_sel,
-                                a_effect = a_effect,
-                                z = z)
+    a_fitloc <- fitnessSingleLocus(a_fitloc = a_fitloc,
+                                   a_dom = a_dom,
+                                   a_sel = a_sel,
+                                   a_effect = a_effect,
+                                   z = z)
     
     ## Two locus niche fitness in two insecticide Niche
-    Wniche <- fitnessNiche( Wloci = Wloci,
+    Wniche <- fitnessNiche( a_fitloc = a_fitloc,
                             niche = niche,
                             Wniche = Wniche )
     
