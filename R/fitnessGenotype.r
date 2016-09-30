@@ -3,7 +3,7 @@
 #' allows calling from runModel2() and independently 
 
 #' @param a_fitnic array of niche fitnesses
-#' @param a array of exposure in each niche
+#' @param a_expos array of exposure in each niche
 #' @param a_fitgen array of individual fitnesses to fill
 #' 
 #' @examples 
@@ -11,15 +11,15 @@
 #' 
 #' a_fitloc <- fitnessSingleLocus( effectiveness = 0.8 )
 #' a_fitnic <- fitnessNiche( a_fitloc = a_fitloc )
-#' expos <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
-#' a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, expos = expos )
+#' a_expos <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
+#' a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, a_expos = a_expos )
 
 #' @return fitness values in an array
 #' @export
 
 fitnessGenotype <- function ( a_fitnic = NULL,
-                           expos = NULL,
-                           a_fitgen = NULL )
+                              a_expos = NULL,
+                              a_fitgen = NULL )
 {
   
   # to allow this function to be called with no args
@@ -28,10 +28,10 @@ fitnessGenotype <- function ( a_fitnic = NULL,
     a_fitnic   <- fitnessNiche()
   }  
 
-  if ( is.null(expos) )
+  if ( is.null(a_expos) )
   {
-    expos <- setExposure()
-    #expos <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
+    a_expos <- setExposure()
+    #a_expos <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
   }
   
   if ( is.null(a_fitgen) )
@@ -45,7 +45,7 @@ fitnessGenotype <- function ( a_fitnic = NULL,
   # df_niche <- as.data.frame( aperm( a_fitnic[,,c('A'),c('B','0')], c('niche2','locus1','locus2')) )
   # rownames(df_niche)[1] <- 'niche'
   # print(df_niche[1,])
-  # print(as.data.frame(expos)[1,]) #exposure
+  # print(as.data.frame(a_expos)[1,]) #exposure
     
   
   for( sex in dimnames(a_fitgen)$sex)
@@ -56,7 +56,7 @@ fitnessGenotype <- function ( a_fitnic = NULL,
       {
         # multiplies exposure by fitness for all niches & then sums
         # creates a weighted average of exposure in each niche
-        a_fitgen[sex,locus1,locus2] <- sum( expos[sex,,] * a_fitnic[locus1,locus2,,])
+        a_fitgen[sex,locus1,locus2] <- sum( a_expos[sex,,] * a_fitnic[locus1,locus2,,])
       }
     }
   }

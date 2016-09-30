@@ -70,7 +70,7 @@ runModel2 <- function(input,
     z       <- createArray2(locusNum=c(1,2))
     
     # exposure to insecticides
-    expos <- setExposureFromInput( input, scen_num=scen_num )    
+    a_expos <- setExposureFromInput( input, scen_num=scen_num )    
     
     # Effectiveness, fitness of SS in each insecticide/concentration
     a_effect[1,'lo'] <- input[26,scen_num]
@@ -168,13 +168,13 @@ runModel2 <- function(input,
                               a_fitnic = a_fitnic )
     
     ## Individual fitness based on exposure to niche & 2 locus fitness
-    a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, expos = expos, a_fitgen = a_fitgen )
+    a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, a_expos = a_expos, a_fitgen = a_fitgen )
  
     #testing
     # print("testing indiv fitness for exposure:")
     # df_indiv <- as.data.frame(a_fitgen)
     # # [1,] just prints males
-    # print(as.data.frame(expos)[1,]) #exposure
+    # print(as.data.frame(a_expos)[1,]) #exposure
     # print(df_indiv[1,])
 
            
