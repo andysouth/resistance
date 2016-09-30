@@ -5710,6 +5710,8 @@ then a bit of pushing & pulling worked
 ~ changed genotype outputs to mean of m&f
 genotype[k,2:11] <- sum( 0.5*(f['f',] + f['m',]))
 
+~ genotype frequency outputs (SS1SS2 etc. are now mean of m&f where they were m only, I don't think this effects any outputs we've used in the paper or elsewhere)
+
 done ~ put selection into a function
 done ~ put fitness outputs into a function fitnessOutput(Wniche)
 
@@ -5732,21 +5734,82 @@ fgenotypes[] will be an array of genotype fgrequencies in this generation
 ~ renamed a to expos, i to scen_num, moved code into setExposureFromInput()
 ~ renamed k to gen_num
  
+Sent msg to Ian & Matt
+Hi Ian, Matt,
+
+I trust you are both well.
+
+An update on what I've been up to and a paper I came across that you might like to read.
+
+I've been tidying the code, and putting more of it into functions so that it will make it easier to implement macro-mosaics & 3+ loci. Now the main function running the model is down to < 250 lines (from >1500 when I got it from Beth).
+
+Macro-mosaics is possible to implement, maybe a weeks work for an initial version with just 2 popns. But, we might want to think about re-organising some things before we did that (e.g. to allow us to represent sequences within a single run rather than having to post-process).
+
+3+ loci is a bigger job, it would need a restructuring of much of the present code, and again it would be good to think about whether to try to extend the current code or to re-design from the bottom up.
+
+The changes I've made shouldn't alter the outputs. Matt can you double check that outputs are looking the same ? (after updating your version with the changes from my repository using the instructions we went over before).
+
+Matt, I haven't been able to find your mosaic code, have you tried to commit it to your repository yet ? When we were in Liverpool I tried to suggest it's a good idea regularly to commit what you are doing. This would help you have a backup and for us all in the project to be able to see what stage we are all at. If you need any questions answered on doing this, I'm happy to answer. e.g. you can see on my page the frequency I commit stuff :
+https://github.com/AndySouth/resistance/commits/master
+
+The attached paper has some recommendations about good-enough software practice and you'll see in section 5 that some of these issues are mentioned.
+
+All the best,
+Andy 
+
+*Fri 30/9/16*
+
+~ rename arrays to a_*
+s to a_sel
+
+~ rename :
+Wloci : a_fitloc : fitness by locus
+Wniche : a_fitnic : fitness by niche
+Windiv : a_fitgen : fitness by genotype
+
+~ rename fgenotypes to a_gtypes
+~ rename expos to a_expos
+
+~ I chose not to put a_cost into a_sel yet. It could cause confusion. The cost is subtracted where the selection coefficients are added.
+ 
+ 
  
 ### TO DO  
 
-# Weds 
+~ perhaps add dominance into the simpfitvis calc ?
+
+~ try to recreate Ians diagrams in the ppt he gave to IVCC. Hastings resistance May 2016.pptx
+~ cool starting to get simpfitvis working ...
+
+
+
+# Mon
+
+~ When my head is clear, think through the ppt & the code about the best terminology for the fitness calcs.
+
+~ in the code I use NicheFitness, then multiplied by exposure to give GenotypeFitness, I don't think either naming scheme is quite right yet ... locusFitness is calcualted for each niche too ...
+
+Locus fitness : 	SS = 1-effectiveness
+		RS = 1-effectiveness + (dominance*selection coeff.)
+		RR = 1-effectiveness + selection coeff.
+
+Allele fitness : 	SS1SS2 = SS * SS
+		SS1RS2 = SS * RS
+		…
+		RR1RR2 = RR * RR
+
+Genotype fitness = Allele fitness * exposure to insecticide
+
 
 ~ make edits to paper2
+
+~ have a look at the arithmetic calcs that Ian started in Liverpool to explain difference between effectiveness & exposure
+
 ~ more unit-tests
-~ send msg to Ian & Matt
 
 
-send msg to matt & ian about tidied code, include mention of the following :
 
-~ I've been tidying & rearranging runModel2() to prepare for macro-mosaic & 3-locus options (which are now revealed both to be quite big jobs on the scale of weeks rather than days) 
-~ genotype frequency outputs (SS1SS2 etc. are now mean of m&f where they were m only, I don't think this effects any outputs we've used in the paper or elsewhere)
-~ can Matt check that linkage results are unchanged ?
+
 
 List of other tidying things todo if/when I get proper time (oct 2016)
 ~ can runModel2() accept exposure over time input to be able to do sequences ?
