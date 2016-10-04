@@ -21,18 +21,40 @@
 fitnessGenotype <- function ( a_fitnic = NULL,
                               a_expos = NULL,
                               a_fitgen = NULL,
+                              eff1 = 0.5,
+                              eff2 = 0.5,
+                              dom1 = 0.5,
+                              dom2 = 0.5,
+                              rr_1 = 0.5,
+                              rr_2 = 0.5,
+                              cost1 = 0,
+                              cost2 = 0,
+                              fitSS1 = 1,
+                              fitSS2 = 1,
+                              exposure = 0.5,
                               plot = FALSE )
 {
   
   # to allow this function to be called with no args
   if ( is.null(a_fitnic) )
   {
-    a_fitnic   <- fitnessNiche()
+    a_fitloc   <- fitnessSingleLocus(eff1 = eff1,
+                                     eff2 = eff2,
+                                     dom1 = dom1,
+                                     dom2 = dom2,
+                                     rr_1 = rr_1,
+                                     rr_2 = rr_2,
+                                     cost1 = cost1,
+                                     cost2 = cost2,
+                                     fitSS1 = fitSS1,
+                                     fitSS2 = fitSS2)
+    
+    a_fitnic   <- fitnessNiche( a_fitloc = a_fitloc)
   }  
 
   if ( is.null(a_expos) )
   {
-    a_expos <- setExposure()
+    a_expos <- setExposure(exposure=exposure)
     #a_expos <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
   }
   
