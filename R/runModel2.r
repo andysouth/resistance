@@ -154,19 +154,19 @@ runModel2 <- function(input,
     if ( !isTRUE( all.equal(1, sum(a_gtypes['m',])  )))
       warning("genotype frequencies before selection total != 1 ", sum(a_gtypes['m',]) ) 
 
-    ## Single locus fitnesses
+    ## Single locus fitnesses in each niche
     a_fitloc <- fitnessSingleLocus(a_fitloc = a_fitloc,
                                    a_dom = a_dom,
                                    a_sel = a_sel,
                                    a_effect = a_effect,
                                    a_cost = a_cost)
     
-    ## Two locus niche fitness in two insecticide Niche
+    ## fitness of each genotype in each niche
     a_fitnic <- fitnessNiche( a_fitloc = a_fitloc,
                               a_nichetog = a_nichetog,
                               a_fitnic = a_fitnic )
     
-    ## Individual fitness based on exposure to niche & 2 locus fitness
+    ## fitness of each genotype by sex
     a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, a_expos = a_expos, a_fitgen = a_fitgen )
  
     #testing

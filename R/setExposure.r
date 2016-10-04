@@ -4,6 +4,8 @@
 #' initially assumes same for M&F could change later
 #' also assumes exposure is the same to each insecticide which can also be changed in future
 #' 
+#' NOTE that currently this just works for 'no' & 'hi' exposure, it can't fill in 'lo' exposure
+#' 
 #' @param exposure exposure to the insecticide(s)
 #' @param insecticideUsed one of 'insecticide1','insecticide2','mixture'
 #' @param male_exposure_prop proportion tht males are exposed relative to f, default 1, likely to be <1
