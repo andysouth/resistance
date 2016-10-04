@@ -3,10 +3,12 @@
 #' initially for a single insecticide
 #' 
 #' @param exposure prop vectors exposed to insecticide
-#' @param effectivness prop exposed susceptible vectors killed
-#' @param dominance dominance of resistance allele
-#' @param rr_restoration not used yet, ability of homozygous resistance to restore fitness
-#' 
+#' @param eff1 effectiveness1
+#' @param eff2 effectiveness2
+#' @param dom1 dominance1
+#' @param dom2 dominance2
+#' @param rr_1 resistance restoration 1 selection coefficient = resistance restoration * effectiveness
+#' @param rr_2 resistance restoration 2#' 
 #' @examples 
 #' #
 
@@ -14,17 +16,20 @@
 #' @export
 
 plotsimpfit <- function ( exposure = 0.8, 
-                          effectiveness1 = 0.8,
-                          effectiveness2 = 0.8,
-                          dominance = 0.8,
-                          rr_restoration1 = 0.8 ){	
+                          eff1 = 0.8,
+                          eff2 = 0.8,
+                          dom1 = 0.8,
+                          dom2 = 0.8,                          
+                          rr_1 = 0.8,
+                          rr_2 = 0.8){	
 
 # todo decide whether to do for a single locus or 2  
-a_fitloc <- fitnessSingleLocus( effectiveness1 = effectiveness1,
-                                effectiveness2 = effectiveness2,
-                                dominance = dominance,
-                                selection_co = rr_restoration1 * effectiveness1,
-                                cost = 0 )
+a_fitloc <- fitnessSingleLocus( eff1 = eff1,
+                                eff2 = eff2,
+                                dom1 = dom1,
+                                dom2 = dom2,                          
+                                rr_1 = rr_1,
+                                rr_2 = rr_2 )
   
 #remove blank borders
 par(mar = c(0,0,0,0),oma = c(0, 0, 0, 0))

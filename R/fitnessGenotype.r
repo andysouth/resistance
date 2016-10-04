@@ -5,6 +5,7 @@
 #' @param a_fitnic array of niche fitnesses
 #' @param a_expos array of exposure in each niche
 #' @param a_fitgen array of individual fitnesses to fill
+#' @param plot whether to plot fitness results
 #' 
 #' @examples 
 #' fitnessGenotype()
@@ -19,7 +20,8 @@
 
 fitnessGenotype <- function ( a_fitnic = NULL,
                               a_expos = NULL,
-                              a_fitgen = NULL )
+                              a_fitgen = NULL,
+                              plot = FALSE )
 {
   
   # to allow this function to be called with no args
@@ -71,6 +73,15 @@ fitnessGenotype <- function ( a_fitnic = NULL,
   #cat("in fitnessGenotype\n")
   #df_indiv <- as.data.frame(a_fitgen)
   #print(df_indiv[1,]) #just m
+  
+  if (plot)
+  {
+    #transpose to get in useable format
+    df_fit3 <- as.data.frame(t(as.data.frame(a_fitgen)))
+    # I could melt & then facet m&f
+    # melt(df_fit3)
+    plot_fit_rs(df_fit3,'f')
+  }
   
   return(a_fitgen)
 }
