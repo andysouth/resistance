@@ -22,9 +22,19 @@ shinyServer(function(input, output, session) {
       #isolate reactivity of other objects
     #  isolate({
 
-        plotsimpfit( effectiveness1 = input$effectiveness_A1,
-                     dominance = input$dominance_A1,
-                     rr_restoration1 = input$advantage_A1 )
+        # plotsimpfit( effectiveness1 = input$effectiveness_A1,
+        #              dominance = input$dominance_A1,
+        #              rr_restoration1 = input$advantage_A1 )
+    
+        #trying new way
+        fitnessSingleLocus( eff1 = input$effectiveness_A1,
+                            eff2 = input$effectiveness_A2,
+                            dom1 = input$dominance_A1,
+                            dom2 = input$dominance_A2,
+                            rr_1 = input$advantage_A1,
+                            rr_2 = input$advantage_A2,
+                            plot = TRUE)
+    
 
       #}) #end isolate
     #} #end if ( input$aButtonRun > 0 )
@@ -39,9 +49,23 @@ shinyServer(function(input, output, session) {
     #isolate reactivity of other objects
     #  isolate({
     
-    plotsimpfit( effectiveness1 = input$effectiveness_B1,
-                 dominance = input$dominance_B1,
-                 rr_restoration1 = input$advantage_B1 )
+    # plotsimpfit( eff1 = input$effectiveness_A1,
+    #              eff2 = input$effectiveness_A2,
+    #              dom1 = input$dominance_A1,
+    #              dom2 = input$dominance_A2,
+    #              rr_1 = input$advantage_A1,
+    #              rr_2 = input$advantage_A2 )
+    
+    #trying new way
+    fitnessGenotype( eff1 = input$effectiveness_A1,
+                        eff2 = input$effectiveness_A2,
+                        dom1 = input$dominance_A1,
+                        dom2 = input$dominance_A2,
+                        rr_1 = input$advantage_A1,
+                        rr_2 = input$advantage_A2,
+                        exposure = input$exposure_A,
+                        plot = TRUE)
+    
     
     #}) #end isolate
     #} #end if ( input$aButtonRun > 0 )
