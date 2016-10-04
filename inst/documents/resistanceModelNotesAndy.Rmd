@@ -5772,20 +5772,114 @@ Windiv : a_fitgen : fitness by genotype
 
 ~ I chose not to put a_cost into a_sel yet. It could cause confusion. The cost is subtracted where the selection coefficients are added.
  
+~ try to recreate Ians diagrams in the ppt he gave to IVCC. Hastings resistance May 2016.pptx
+~ cool starting to get simpfitvis working ...
+
+*3/10/2016*
+
+~ Why does fitnessSingleLoc() have different effectivenesses per no,lo,hi exposure ?
+So far I think we just use for the hi exposure niche :
+    a_effect     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    a_effect[1, 'hi'] <- effectiveness1
+    a_effect[2, 'hi'] <- effectiveness2  
+    
+There is the potential to set effectiveness, selection co and dominance to be different in the lo exposure niche, it's just that we don't do it yet :
+
+    a_effect[1,'lo'] <- input[26,scen_num]
+    a_effect[1,'hi'] <- input[27,scen_num]
+    a_effect[2,'lo'] <- input[28,scen_num]
+    a_effect[2,'hi'] <- input[29,scen_num]
+
+    # dominance = dominance coefficient
+    a_dom[1,'no'] <- input[32,scen_num]
+    a_dom[1,'lo'] <- input[33,scen_num]
+    a_dom[1,'hi'] <- input[34,scen_num]
+    a_dom[2,'no'] <- input[35,scen_num]
+    a_dom[2,'lo'] <- input[36,scen_num]
+    a_dom[2,'hi'] <- input[37,scen_num]    
+    
+    # a_sel = selection coefficient
+    a_sel[1,'lo'] <- input[38,scen_num]
+    a_sel[1,'hi'] <- input[39,scen_num]
+    a_sel[2,'lo'] <- input[40,scen_num]
+    a_sel[2,'hi'] <- input[41,scen_num] 
+
+This is helpful for understanding whats happening with the different fitness calcs.
+
+#dimnames(fitnessSingleLocus())
+
+$loci
+[1] "SS1" "RS1" "RR1" "SS2" "RS2" "RR2"
+$exposure
+[1] "no" "lo" "hi"
+
+#dimnames(fitnessNiche())
+
+$locus1
+[1] "SS1" "RS1" "RR1"
+$locus2
+[1] "SS2" "RS2" "RR2"
+$niche1
+[1] "0" "a" "A"
+$niche2
+[1] "0" "b" "B"
+
+#dimnames(fitnessGenotype())
+
+$sex
+[1] "m" "f"
+$locus1
+[1] "SS1" "RS1" "RR1"
+$locus2
+[1] "SS2" "RS2" "RR2" 
+ 
+Aha! I think where I've been getting a little confused is that the exposure input determines what proportion of the population are in the 'hi' exposure niche versus the 'no' niche. (Whereas I was thinking that there was the potential to have different exposure values within each niche). If that had of been the case what would have determined the proportion of the different niches.
+
+All of the work that we've done so far is on a 4 niche situation. Maybe I should make that clearer in paper2 ?
+
+~ try producing some flexible fitness vis outputs
+
+df_fit1 <- as.data.frame(fitnessSingleLocus())
+ggplot(df_fit1, aes(x=1, y=hi) ) +
+   geom_point()
+
+library(ggrepel)
+ggplot(df_fit1, aes(x=1, y=hi, label=rownames(df_fit1) )) +
+   ylim(0,1) +
+   geom_point() +
+   #geom_text(hjust = 0) #, nudge_x = 0.05)
+   geom_text_repel(nudge_x=0.1)
+
+#transpose to get in a similar format to earlier
+df_fit3 <- as.data.frame(t(as.data.frame(fitnessGenotype())))
+
+ggplot(df_fit3, aes(x=1, y=f, label=rownames(df_fit3) )) +
+   ylim(0,1) +
+   geom_point() +
+   #geom_text(hjust = 0) #, nudge_x = 0.05)
+   geom_text_repel(nudge_x=0.1)
+
+
+*Tue 4/10/16*
+ 
+~ Q in fitnessSingleLocus() why is there just a single dominance ? just a shortcut, fixing it now, separate dominances are used in the main analysis. 
  
  
 ### TO DO  
 
-~ perhaps add dominance into the simpfitvis calc ?
-
-~ try to recreate Ians diagrams in the ppt he gave to IVCC. Hastings resistance May 2016.pptx
-~ cool starting to get simpfitvis working ...
-
+~ get fitvis function working
+~ can I colour points by R & S ?
+~ can I make it generic to work on any dataframe with rownames of S&R ?
 
 
-# Mon
+   
 
-~ When my head is clear, think through the ppt & the code about the best terminology for the fitness calcs.
+~ produce exposure UI
+
+
+~ do I completely have it straight in my head what the model is doing re niches ? Yes I think I do now.
+
+~ confirm best terminology for fitness calcs.
 
 ~ in the code I use NicheFitness, then multiplied by exposure to give GenotypeFitness, I don't think either naming scheme is quite right yet ... locusFitness is calcualted for each niche too ...
 
@@ -5801,12 +5895,13 @@ Allele fitness : 	SS1SS2 = SS * SS
 Genotype fitness = Allele fitness * exposure to insecticide
 
 
+~ perhaps add exposure into the simpfitvis calc ?
+
 ~ make edits to paper2
 
 ~ have a look at the arithmetic calcs that Ian started in Liverpool to explain difference between effectiveness & exposure
 
 ~ more unit-tests
-
 
 
 
@@ -5871,7 +5966,6 @@ locusNum=c(1,2,3), exposure=c('no','lo','hi')
 ~ trickines is that inputs are mostly read into single named variables so can't all be returned from a single function unless I return them as a list ? Maybe do that as in_ or something similar
         
 
-
 ~ think about whether adding additional plotting options to plotcurtis_f2_generic() and or the UIs (as an optional tab?) could be useful ?
 
 ~ can I create a plot of frequency of SS,SR,RR ? see Beths plothaplotype().
@@ -5886,15 +5980,10 @@ locusNum=c(1,2,3), exposure=c('no','lo','hi')
 ~ write down terminology on fitnessNiche etc. ideally within the documentation.
 ~ create a vignette explaining how fitness is calculated, so that it can be stored in the package in future, it can access my new fitness functions.
 
-To check on :
-is dominance dealt with correctly in model i.e. for both insecticides.
-
 
 Set up more ability to be able to see what is going on with fitnesses from the code.
 Maybe I could even add this to one of my UIs. The inputs will be the same.
 Could put the new outputs in together or in a separate UI.
-
-maybe fitnessGenotype() should be called fitnessNiche() ?
 
 set up some unit tests for the fitness functions
 
@@ -5912,11 +6001,6 @@ https://www.software.ac.uk/software-evaluation-guide
 
 write protocol for Matt, include that pull request from his fork.
 
-~ look at visualising exposure, effectiveness and dominance fitness patterns as in Ians ppt to IVCC (slide 14).
-~ I could start with 1 insecticide ...
-~ base it on my killeen coverage app ...
-~ from coverage/plot_feeding
-
 
 try creating a function to plot mean fitness over time
 
@@ -5929,7 +6013,6 @@ not yet
 
 I suggested that best to get the basic code streamlined before trying to add the other stuff on top of it.
 ~ split up runModel2() e.g. have functions to fill arrays from the input matrix
-
 
 
 check out the github thing I saw on twitter about keeping uptodate with an upstream repository.
@@ -5997,10 +6080,8 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 
 ~ check code in findResistancePointsMixResponsive()
 
-
 1. create a vignette that shows how best to run current model
 1. fix the testthat tests to avoid new input addition
-1. create functions fitnessLocus(), fitnessNiche(), fitnessIndiv()
 
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
@@ -6026,24 +6107,6 @@ tst <- runModel(input)
 1. add some defensive checks, e.g. for sensible input variables
 
 
-Want to do:
-1. rename a to exposure
-1. rename W to ?fitness : fitnessLocus, fitnessNiche and fitnessIndiv
-
-
-### variable naming conventions
-**SS1, RS1, RR1** homozygous susceptible, heterozygous or homozygous resistant genotypes at each locus.   
-With 2 loci there are ten possible genotypes (including cis & trans forms of the double heterozygous).  
-
-** A, B, a, b, -** 2 insecticides at 3 levels; low(ab), high(AB), absent(--) resulting in 9 niches.  
-Locus1 relates to resistance for insecticide A, and locus2 for B. Locus2 does not effect exposure to A.  
-
-```
-colnames(fitness) <- c( "-,-", "a,-", "A,-", "b,-", "B,-", "a,b", "A,B", "A,b", "a,B" )
-rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2", 
-                        "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
-                        "RR1SS2", "RR1RS2", "RR1RR2")
-```
 #### inputs
 ** a ** exposure to insecticide
 ** W.SS1_00 & W.SS2_00** fitness of SS in no insecticide
@@ -6053,32 +6116,12 @@ rownames(fitness) <- c( "SS1SS2", "SS2RS2", "SS1RR2",
 ** z ** fitness cost of resistance allele in no insecticide
 ** niche_ ** insecticide niche toggle
 
-#### calculated
-** W ** fitnesses by niche and sex
-** f ** genotype frequency
-** fs ** genotype frequency following selection
-** G ** gametes
 
-Different W fitness variables
-`W.RR1_00 : [locus, niche1, niche2]` single locus (Wloci)
-`W.RR1SS2_0b :   [locus1, locus2, niche1, niche2]` niche (Wniche)
-`W.m.SS1SS2 : [sex, locus1, locus2]` (Windiv)
-
-```
-a.m_a0 ... *18 2*3*3  to: a[sex, niche1, niche2]
-W.m.SS1SS2 ... *18 2*3*3 to:  Windiv[sex, locus1, locus2]
-W.RR1SS2_0b ... *81 3*3*3*3 to: Wniche[locus1, locus2, niche1, niche2] 
-W.RR1_00 etc. with Wloci[loci, niche1, niche2]
-
-because of cis/trans:
-f.m.SS1SS2 ... *19 2*3*3+1 to: f[sex, genotype]
-```
 
 ### outputs ###
 From runModel2()
 A list of 3 lists of one or more scenarios: 
 1. results : by generation freq of R allele at each loci in each sex plus linkage stuff
-    columns include Gen, m.R1, m.R2, f.R1, f.R2
 2. genotype : frequencies of each of the ten genotypes, per generation
 3. fitness : fitness scores of each genotype/niche combination (table 4. of Main Document)
 4. input
