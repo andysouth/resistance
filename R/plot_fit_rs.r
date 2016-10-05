@@ -5,6 +5,7 @@
 #' @param df_fit dataframe
 #' @param column name of column containing fitness values
 #' @param column_facet optional column to facet by
+#' @param title optional title for the plot
 #' 
 #' @examples 
 #' #singleLocus
@@ -29,7 +30,7 @@
 #' @return 
 #' @export
 
-plot_fit_rs <- function ( df_fit, column, column_facet = NULL ){
+plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL ){
  
   library(ggrepel)
   
@@ -45,6 +46,7 @@ plot_fit_rs <- function ( df_fit, column, column_facet = NULL ){
         geom_point(size=3, colour=df_fit$col) +
         geom_text_repel( aes(label=rownames(df_fit)), nudge_x=0.1) +
         ylab('fitness') +
+        ggtitle(title) + 
         theme_bw() +
         theme(axis.text.x = element_blank(),
               axis.title.x = element_blank(),

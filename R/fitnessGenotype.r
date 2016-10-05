@@ -102,7 +102,7 @@ fitnessGenotype <- function ( a_fitnic = NULL,
     df_fit3 <- as.data.frame(t(as.data.frame(a_fitgen)))
     # I could melt & then facet m&f
     # melt(df_fit3)
-    plot_fit_rs(df_fit3,'f')
+    plot_fit_rs(df_fit3,'f',title='genotype dependent on exposure')
   }
   
   return(a_fitgen)
