@@ -10,12 +10,12 @@
 
 #' @examples 
 #' input <- setInputOneScenario()
-#' tst <- runModel2(input)
+#' listOut <- runModel2(input)
 #' input <- setInputOneScenario(max_gen=5)
-#' tst <- runModel2(input)
+#' listOut <- runModel2(input)
 #' #sex linked
 #' input <- setInputOneScenario(sexLinked=1)
-#' tst <- runModel2(input) 
+#' listOut <- runModel2(input) 
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
