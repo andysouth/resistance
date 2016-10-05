@@ -11,7 +11,9 @@
 #' df_fit1 <- as.data.frame(fitnessSingleLocus())
 #' #temp adding an extra column for faceting
 #' df_fit1$locus <- paste('locus', c(1,1,1,2,2,2))
+#' plot_fit_rs(df_fit1, 'hi', column_facet='locus')
 #' 
+#'  
 #' #niche
 #' library(reshape2)
 #' df_fit2 <- melt(fitnessNiche()[,,'A','B'])
@@ -41,8 +43,24 @@ plot_fit_rs <- function ( df_fit, column, column_facet = NULL ){
   gg <- ggplot(df_fit, aes_string(x=1, y=column)) +
         ylim(0,1) +
         geom_point(size=3, colour=df_fit$col) +
-        geom_text_repel( aes(label=rownames(df_fit)), nudge_x=0.1)
+        geom_text_repel( aes(label=rownames(df_fit)), nudge_x=0.1) +
+        ylab('fitness') +
+        theme_bw() +
+        theme(axis.text.x = element_blank(),
+              axis.title.x = element_blank(),
+              axis.line.x = element_blank(),
+              axis.ticks.x = element_blank(),
+              panel.grid.major.x = element_blank())
+        # or blank & add back in
+        # theme_void() +
+        # theme(axis.text.y = element_text(hjust=0.1), 
+        #       axis.title.y = element_text(angle=90),
+        #       axis.line.y = element_line(size=1),
+        #       axis.ticks.y = element_line(size=1),
+        #       panel.grid.major.y = element_line(size=1))
 
+  gg
+  
   # optional facet
   if ( !is.null(column_facet) )
   {
