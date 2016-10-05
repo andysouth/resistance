@@ -1,5 +1,6 @@
-#' plot simple vis of fitness and how it is influenced by inputs
+#' bar plot simple vis of fitness and how it is influenced by inputs
 #' 
+#' DEPRECATED see plot_fit_rs() which does it a better way with points rather than bars
 #' initially for a single insecticide
 #' 
 #' @param exposure prop vectors exposed to insecticide
