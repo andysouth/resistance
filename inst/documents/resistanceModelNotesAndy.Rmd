@@ -5871,7 +5871,7 @@ ggplot(df_fit3, aes(x=1, y=f, label=rownames(df_fit3) )) +
 ~ can I colour points by R & S ?
 ~ can I make it generic to work on any dataframe with rownames of S&R ?
 
-
+~ plot of mean popn fitness over time
    
 
 ~ produce exposure UI
