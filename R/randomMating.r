@@ -16,12 +16,11 @@
 #'                 "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
 #'                 "RR1SS2", "RR1RS2", "RR1RR2")
 #' sex2 <- c("m","f")
-#' #f  = genotype frequencies before selection
-#' f <- createArray2( sex=sex2, loci=namesLoci )
+#' a_gtypes <- createArray2( sex=sex2, loci=namesLoci )
 #' #assign all of both parents to one genotype for convenience
-#' f['m','RS1RS2_trans'] <- 1
-#' f['f','RS1RS2_trans'] <- 1
-#' G <- createGametes( f = f, recomb_rate = 0.5 )
+#' a_gtypes['m','RS1RS2_trans'] <- 1
+#' a_gtypes['f','RS1RS2_trans'] <- 1
+#' G <- createGametes( a_gtypes = a_gtypes, recomb_rate = 0.5 )
 #' fGenotypeExpanded <- randomMating(G) 
 #' #and for sex linked
 #' fGenotypeExpanded2 <- randomMating(G, sexLinked=TRUE, isMale=TRUE) 

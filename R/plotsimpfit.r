@@ -42,7 +42,7 @@ par(mar = c(0,0,0,0),oma = c(0, 0, 0, 0))
 plot(c(-0.2,1.5),c(0,1), type='n', axes=FALSE, xlab='', ylab='', asp=1)
 
 
-rect(xleft = 0, xright = 0.05, ybottom = 0, ytop = 1, col=rgb(r=0, g=0, b=0.5, a=0.5))
+rect(xleft = 0, xright = 0.05, ybottom = 0, ytop = 1, col=rgb(0, 0, 0.5, alpha=0.5))
 
 text(x=c(0,0), y=c(0,1), labels=c(0,1), pos=2) #pos=1234 bltr
 

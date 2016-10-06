@@ -1,8 +1,8 @@
 #' plot Linkage Disequilibrium over generations
 #' 
 #' @param mat results matrix
-#' @param plot_d
-#' @param plot_dprime
+#' @param plot_d whether to plot d
+#' @param plot_dprime whether to plot d_prime
 #' @param main plot title
 #' @param xlab xlab
 #' @param ylab ylab

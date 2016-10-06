@@ -5,10 +5,14 @@
 
 library(shiny)
 #library(devtools)
-#install_github('AndySouth/coverage')
-library(coverage)
+#install_github('AndySouth/resistance')
 library(resistance)
 library(png)
+
+#these may be needed: I should really import them to resistance
+library(ggrepel)
+library(stringr)
+
 
 shinyServer(function(input, output, session) {
 

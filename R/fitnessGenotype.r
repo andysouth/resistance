@@ -5,12 +5,23 @@
 #' @param a_fitnic array of niche fitnesses
 #' @param a_expos array of exposure in each niche
 #' @param a_fitgen array of individual fitnesses to fill
+#' @param eff1 effectiveness1
+#' @param eff2 effectiveness2
+#' @param dom1 dominance1
+#' @param dom2 dominance2
+#' @param rr_1 resistance restoration 1 selection coefficient = resistance restoration * effectiveness
+#' @param rr_2 resistance restoration 2
+#' @param cost1 fitness cost of R in no insecticide
+#' @param cost2 fitness cost of R in no insecticide
+#' @param fitSS1 fitness of SS1 if no insecticide
+#' @param fitSS2 fitness of SS2 if no insecticide
+#' @param exposure exposure 
 #' @param plot whether to plot fitness results
 #' 
 #' @examples 
 #' fitnessGenotype()
 #' 
-#' a_fitloc <- fitnessSingleLocus( effectiveness = 0.8 )
+#' a_fitloc <- fitnessSingleLocus( eff1 = 0.8, eff2 = 0.8 )
 #' a_fitnic <- fitnessNiche( a_fitloc = a_fitloc )
 #' a_expos <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
 #' a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, a_expos = a_expos )
@@ -87,9 +98,9 @@ fitnessGenotype <- function ( a_fitnic = NULL,
   
   #error check for fitnesses > 1 or < 0
   if ( any(a_fitgen > 1 ) ) 
-    warning( sum(a_fitgen > 1  ), " individual fitness values (Wloci) are >1")
+    warning( sum(a_fitgen > 1  ), " individual fitness values (a_fitloc) are >1")
   if ( any( a_fitgen < 0 ) ) 
-    warning( sum( a_fitgen < 0 ), " individual fitness values (Wloci) are <0")
+    warning( sum( a_fitgen < 0 ), " individual fitness values (a_fitloc) are <0")
   
   #testing
   #cat("in fitnessGenotype\n")

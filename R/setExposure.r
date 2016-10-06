@@ -11,7 +11,6 @@
 #' @param male_exposure_prop proportion tht males are exposed relative to f, default 1, likely to be <1
 #' @param correct_mix_deploy proportion of times that mixture is deployed correctly, 
 #'    assumes that when not deployed correctly the single insecticides are used instead
-#'    TODO check my understanding of this
 #' 
 #' @examples
 #' a <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )

@@ -8,10 +8,15 @@ Authors@R: c( person("Andy", "South", , "southandy@gmail.com", role = c("aut", "
 Description: enables running of multiple insecticide resistance scenarios.
 Depends:
     R (>= 3.1.2)
+Imports:
+    ggplot2,
+    stringr,
+    ggrepel
 Suggests:
     shiny,
     testthat,
-    rpart
+    rpart,
+    reshape2
 License: GPL-2
 LazyData: true
 RoxygenNote: 5.0.1

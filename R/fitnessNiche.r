@@ -9,10 +9,10 @@
 #' @examples 
 #' fitnessNiche()
 #' 
-#' a_fitloc <- fitnessSingleLocus( effectiveness = 0.8 )
+#' a_fitloc <- fitnessSingleLocus( eff1 = 0.8 )
 #' a_fitnic <- fitnessNiche( a_fitloc = a_fitloc )
-#' a <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
-#' Windiv <- fitnessIndiv( a_fitnic = a_fitnic, a = a )
+#' a_expos <- setExposure( exposure=0.5, insecticideUsed = 'mixture' )
+#' a_fitgen <- fitnessGenotype( a_fitnic = a_fitnic, a_expos = a_expos )
 
 #' @return fitness values in an array
 #' @export

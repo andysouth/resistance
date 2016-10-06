@@ -29,8 +29,8 @@
 #' @param z.RR2_00 fitness cost of resistance allele 2 in insecticide free environment
 #' @param sexLinked whether resistance is sex linked, default=0(FALSE)
 #' @param male_exposure_prop male exposure as a propoertion of female, default 1 for same, likely <1  
-#' @param  proportion of correct deployment of mixtures, 
-#'    if <1 other portion divided between single insecticides
+#' @param correct_mix_deploy proportion of times that mixture is deployed correctly, 
+#'    assumes that when not deployed correctly the single insecticides are used instead
 #' @param addCombinedStrategy whether to add a line for the combined mixture/individual strategy, makes plot confusing so set to FALSE by default
 #' @param addStrategyLabels add labels to plot for where strategies cross 0.5 line TRUE gives seq,mix1,mix2,mix3
 #' @param strategyLabels = c("seq","mix1","adapt","mix2")

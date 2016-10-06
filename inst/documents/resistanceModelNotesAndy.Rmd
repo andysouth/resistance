@@ -5870,17 +5870,24 @@ ggplot(df_fit3, aes(x=1, y=f, label=rownames(df_fit3) )) +
  
 *wed 5/10/16* 
  
+emailed Justin
+
+skyped with Ian about :
+~ any news on review or grant ?
+~ future : possibility of a 2:3 day split, it is a possibility
+~~ Ian suggested the BBSRC grant would be better for me in publication terms, it's more of a conventional research job. Beth could apply for it. I think I would rather work separately for M&I. I said M very ambitious. Also potential for open malaria resistance modelling work funded by Gates.
+~ arithmetic for 2 locus fitness effect of effectiveness & exposure. I forgot to ask about this one.
+~ Matts work, how he getting on, Ian hasn't heard from him. He was off on holiday ? Might that explain not hearing since last week.
+~ ASTMH booking, we'll coordinate next week 
+ 
+~ running package check on resistance
+
+ 
 ### TO DO  
 
-email Justin
+~ why can't my fitvis app find resistance functions ?
 
-talk with Ian about :
-~ any news on review or grant ?
-~ future : possibility of a 2:3 day split
-~ arithmetic for 2 locus fitness effect of effectiveness & exposure
-~ Matts work, how's he getting on
-~ ASTMH booking
-
+~ allow exposure to be set separately for I1 & I2 (maybe retain ability to set a single value with 'exposure')
 
 ~ plot of mean popn fitness over time
 ~~ we have 
@@ -5907,7 +5914,7 @@ listOut$genotype[[1]]
 [5,]   5      1      1      1      1          1            1      1      1      1      1   
    
    
-   
+~ I could use plot_fit_rs() to produce some figs for paper2 on how inputs influence fitness maybe initially for single locus ? then to include exposure need to show genotype popn fitness.   
 
 ~ produce exposure UI
 
