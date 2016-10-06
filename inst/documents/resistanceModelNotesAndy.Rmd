@@ -5863,15 +5863,50 @@ ggplot(df_fit3, aes(x=1, y=f, label=rownames(df_fit3) )) +
 *Tue 4/10/16*
  
 ~ Q in fitnessSingleLocus() why is there just a single dominance ? just a shortcut, fixing it now, separate dominances are used in the main analysis. 
+
+~ plot_fit_rs() fitvis function working well
+~ points coloured by R & S ?
+~ generic to work on any dataframe with rownames of S&R
  
+*wed 5/10/16* 
  
 ### TO DO  
 
-~ get fitvis function working
-~ can I colour points by R & S ?
-~ can I make it generic to work on any dataframe with rownames of S&R ?
+email Justin
+
+talk with Ian about :
+~ any news on review or grant ?
+~ future : possibility of a 2:3 day split
+~ arithmetic for 2 locus fitness effect of effectiveness & exposure
+~ Matts work, how's he getting on
+~ ASTMH booking
+
 
 ~ plot of mean popn fitness over time
+~~ we have 
+~~ fitness by genotype : listOut$fitness   
+~~ genotype by generation : listOut$genotype
+
+BUT the values seem not as I'd expect (all 0s & 1s)
+for
+input <- setInputOneScenario(max_gen=5)
+listOut <- runModel2(input)
+
+This may be just due to daft defaults in setInputOneScenario()
+
+listOut$fitness[[1]][,'A,B']
+SS1SS2 SS1RS2 SS1RR2 RS1SS2 RS1RS2 RS1RR2 RR1SS2 RR1RS2 RR1RR2 
+     0      0      0      0      1      1      0      1      1 
+     
+listOut$genotype[[1]]
+     gen SS1SS2 SS1RS2 SS1RR2 RS1SS2 RS1RS2_cis RS1RS2_trans RS1RR2 RR1SS2 RR1RS2 RR1RR2
+[1,]   1      1      1      1      1          1            1      1      1      1      1
+[2,]   2      1      1      1      1          1            1      1      1      1      1
+[3,]   3      1      1      1      1          1            1      1      1      1      1
+[4,]   4      1      1      1      1          1            1      1      1      1      1
+[5,]   5      1      1      1      1          1            1      1      1      1      1   
+   
+   
    
 
 ~ produce exposure UI
@@ -5895,9 +5930,6 @@ Allele fitness : 	SS1SS2 = SS * SS
 Genotype fitness = Allele fitness * exposure to insecticide
 
 
-~ perhaps add exposure into the simpfitvis calc ?
-
-~ make edits to paper2
 
 ~ have a look at the arithmetic calcs that Ian started in Liverpool to explain difference between effectiveness & exposure
 
@@ -5970,11 +6002,6 @@ locusNum=c(1,2,3), exposure=c('no','lo','hi')
 
 ~ can I create a plot of frequency of SS,SR,RR ? see Beths plothaplotype().
 
-~ check on my fitness* functions
-~ can I also get them to plot ?
-
-~ look at & incorporate Ians comments on paper2
-
 ~ claim for train 15/9/16
 
 ~ write down terminology on fitnessNiche etc. ideally within the documentation.
@@ -6001,8 +6028,6 @@ https://www.software.ac.uk/software-evaluation-guide
 
 write protocol for Matt, include that pull request from his fork.
 
-
-try creating a function to plot mean fitness over time
 
 Scope out
 1) 6 subpop macro-mosaics
