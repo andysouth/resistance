@@ -10,8 +10,8 @@ library(resistance)
 library(png)
 
 #these may be needed: I should really import them to resistance
-library(ggrepel)
-library(stringr)
+#library(ggrepel)
+#library(stringr)
 
 
 shinyServer(function(input, output, session) {
@@ -37,6 +37,8 @@ shinyServer(function(input, output, session) {
                             dom2 = input$dominance_A2,
                             rr_1 = input$advantage_A1,
                             rr_2 = input$advantage_A2,
+                            cost1 = input$cost_A1,
+                            cost2 = input$cost_A2,                            
                             plot = TRUE)
     
 
@@ -62,13 +64,15 @@ shinyServer(function(input, output, session) {
     
     #trying new way
     fitnessGenotype( eff1 = input$effectiveness_A1,
-                        eff2 = input$effectiveness_A2,
-                        dom1 = input$dominance_A1,
-                        dom2 = input$dominance_A2,
-                        rr_1 = input$advantage_A1,
-                        rr_2 = input$advantage_A2,
-                        exposure = input$exposure_A,
-                        plot = TRUE)
+                     eff2 = input$effectiveness_A2,
+                     dom1 = input$dominance_A1,
+                     dom2 = input$dominance_A2,
+                     rr_1 = input$advantage_A1,
+                     rr_2 = input$advantage_A2,
+                     cost1 = input$cost_A1,
+                     cost2 = input$cost_A2, 
+                     exposure = input$exposure_A,
+                     plot = TRUE)
     
     
     #}) #end isolate
