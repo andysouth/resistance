@@ -5881,13 +5881,36 @@ skyped with Ian about :
 ~ ASTMH booking, we'll coordinate next week 
  
 ~ running package check on resistance
+~ fixed things to pass R CMD check
 
+*7/10/16*
+
+~ looking at setExposure for diff insecticides
+~ TRICKY BEWARE
  
 ### TO DO  
 
-~ why can't my fitvis app find resistance functions ?
+~ check on separate exposure TRICKINESS
 
 ~ allow exposure to be set separately for I1 & I2 (maybe retain ability to set a single value with 'exposure')
+~~ start with setExposure(), exp1 & exp2, set to NULL by default
+~~ later may also need to allow male_exposure_prop & correct_mix_deploy to be set for each insecticide
+
+
+~ why doesn't cost of resistance seem to affect single loc fitness ?
+It's because cost only effects fitness of RR in the 'no' exposure niche.
+Is this how we want it to work ???
+
+fitnessSingleLocus(cost1 = 1, plot = TRUE)
+     exposure
+loci  no lo    hi
+  SS1  1  1 0.500
+  RS1  1  1 0.625
+  RR1  0  1 0.750
+  SS2  1  1 0.500
+  RS2  1  1 0.625
+  RR2  1  1 0.750
+
 
 ~ plot of mean popn fitness over time
 ~~ we have 
