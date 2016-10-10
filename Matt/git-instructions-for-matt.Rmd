@@ -1,0 +1,36 @@
+---
+title: "git-instructions-for-matt"
+author: "Andy South"
+date: "10 October 2016"
+output: html_document
+---
+
+Instructions for creating a fork of the resistance repository, being able to add your own updates, and to receive updates from me.
+
+https://github.com/AndySouth/resistance
+
+1) click fork
+will create : https://github.com/Mapowney/resistance
+
+2) click clone to get the URL to use in git clone
+#from new local folder 
+git clone git@github.com:Mapowney/resistance.git
+
+3) set up syncing
+cd resistance
+git remote add upstream git@github.com:AndySouth/resistance.git
+
+#to view remote repos
+git remote -v
+
+4) SYNC FORK from upstream, to get updates from me
+git fetch upstream
+git checkout master
+git merge upstream/master
+
+5) COMMIT & PUSH local changes to the fork, to put your own updates on github
+(this step can be done from RStudio UI)
+git commit -a -m "message" 
+git push
+
+6) 
