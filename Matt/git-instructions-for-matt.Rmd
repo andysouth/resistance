@@ -33,4 +33,5 @@ git merge upstream/master
 git commit -a -m "message" 
 git push
 
-6) 
+6) To submit changes to Andys repo
+From Github, create Pull request
