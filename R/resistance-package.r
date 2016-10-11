@@ -8,7 +8,7 @@
 #' @author Andy South
 #' 
 #' @keywords package
-#' @import grDevices graphics ggplot2
+#' @import grDevices graphics tidyverse
 #' @importFrom stats as.formula runif
 #' @importFrom utils read.csv write.csv
 
