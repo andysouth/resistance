@@ -13,6 +13,7 @@
 #' @param male_exposure_prop proportion tht males are exposed relative to f, default 1, likely to be <1
 #' @param correct_mix_deploy proportion of times that mixture is deployed correctly, 
 #'    assumes that when not deployed correctly the single insecticides are used instead
+#' @param plot whether to plot exposure    
 #' 
 #' @examples
 #' a <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
@@ -29,7 +30,8 @@ setExposure <- function( exposure = 0.9,
                          exp2 = NULL,
                          insecticideUsed = 'mixture',
                          male_exposure_prop = 1,
-                         correct_mix_deploy = 1 )
+                         correct_mix_deploy = 1,
+                         plot = TRUE) #set to FALSE after testing
 {
 
   #exposure to insecticide
@@ -128,7 +130,9 @@ setExposure <- function( exposure = 0.9,
   {
     stop("insecticideUsed needs to be one of (insecticide1, insecticide2, mixture) it is ",insecticideUsed)
   }
-  
+ 
+  if (plot) plot_exposure(a)
+   
   
   return(a)
 }
