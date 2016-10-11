@@ -5888,9 +5888,121 @@ skyped with Ian about :
 ~ looking at setExposure for diff insecticides
 ~ TRICKY BEWARE
  
+*10/10/16*
+
+trying to diagnose Matts problems with github pushing (2.5 hours)
+
+We changed to ssh which changed the previous error.
+Generated a new ssh key, and made sure the origin was Matts repo not mine.
+
+Now getting an error about public key not working.
+ssh_askpass: exec(/usr/X11R6/bin/ssh-askpass): No such file or directory
+Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+These instructions from here seem to suuggest a solution : I emailed them to Matt.
+
+https://support.rstudio.com/hc/en-us/community/posts/200660237-Using-Git-with-password-authentication-on-OS-X
+
+Since OS X El Capitan you have to install ssh-askpass yourself and in the right location (indicated by the error message above).
+
+Simple solution:
+
+1. Download ssh-askpass from the link mentiond by Ian Pylvainen in his comment:
+https://github.com/markcarver/mac-ssh-askpass
+
+2. Copy the file into a local folder you have user rights
+
+3. Create a symbolic link in the place where OS X is looking for the file:
+sudo ln -s <your path to>/ssh-askpass /usr/X11R6/bin/ssh-askpass
+
+or just run the INSTALL script
+
+that didn't work either. I suggested trying to write a file to the usr folder, failed.
+
+so suggested Matt rebooted following these instructions that I had seen somewehere else too.
+
+reboot your mac and press cmd+r when booting up. Then go into utilities > terminal and type the following commands:
+
+csrutil disable
+reboot
+
+we did that & it still had a problem. Matt created the folder that didn't exist & then the command to create the symbolic link did work.
+
+Matts work is in InteractionPlotsMosaics.R & sensiAnMosaicInteractions.R
+
+*11/10/16*
+
+looking at Matts stuff
+
+bugs in sensiAnMosaicInteractions.R
+
+A: sensiAnMosaicInteractions <- function( ... propwithboth=propboth )
+B: correct_mix_deploy <- propboth
+
+
+Hi Matt,
+
+This is a good start. I would like to see some more detail about what is going on in the results from the simulations. The plots that you show are good but a lot could be hidden in the clouds of points. Which other inputs are influencing the magnitude of difference between sequence and mosaic ? 
+
+I'd also like to see you create a reproducible Rmd file of the analysis as detailed below to address potential problems. It's good that we now have the github sharing working again, keeping up committing what you are doing can help avoid problems.
+
+If you have any questions, I'm happy to answer.
+
+Andy
+
+
+You created 2 files.
+
+InteractionPlotsMosaics.R : a script to create the plots
+sensiAnMosaicInteractions.R : a function helping with the creation of the plots
+
+I suggested before that you convert InteractionPlotsMosaics.R to an Rmd (rmarkdown) file. This will allow you to put figures directly into a document and make your workflow more efficient. There are very good beginners resources here : http://rmarkdown.rstudio.com/lesson-1.html. And you can see lots of examples of how I have used it in the documents folder of the resistance package (e.g. testfigs.Rmd is a very short one I created to look at a problem I had with figure positioning on the page).
+
+As a part of this you should aim to make each document reproducible (i.e. I or anyone else should be able to run it to repeat the analysis). 
+
+For example in your script (InteractionPlotsMosaics.R), there are a couple of lines :
+#Find resistance points of previously generated sequential data
+resistPointsI1 <- findResistancePoints(listOutI1, locus=1)
+
+If I try to run this script R says 'listOutI1' does not exist. I don't know how that object was generated. To make it reproducible would just require that you copy in the code that you used to generate the object.
+
+I noticed that there are a couple of bugs in your sensiAnMosaicInteractions.R that could also cause problems with the analysis, although it may have been OK for yours. I'll try explain it to help your understanding, It gets a bit complicated, feel free to ask any questions if I fail.
+
+In sensiAnMosaicInteractions.R you have :
+
+Line 26: sensiAnMosaicInteractions <- function( nScenarios = 10, ... propwithboth=propboth)
+
+Line 90: correct_mix_deploy <- propboth
+
+Line 26: In the function definition any values assigned to inputs are default values that are used if a value is not supplied when the function is called. Thus nScenarios would be set to 10. If no value was supplied at the call R would try to set propwithboth to propboth. In a new R session propboth has no value and this would fail. 
+
+Line 90: correct_mix_deploy <- propboth
+At line 26 you set propwithboth in the function. But here you have used propboth. R would look to see if you have a value for this in your current session and use it if you do or fail if you don't. This also contributes to the analysis not being reproducible.
+
+Actually I notice that in your script you call sensiAnMosaicInteractions(...propboth=*) which when I run it gives :
+Error in sensiAnMosaicInteractions(nScenarios, insecticideUsed = "mosaic",  : 
+  unused argument (propboth = 0.1)
+
+The solution is actually very simple.
+Line 26 change : 
+propwithboth=propboth TO propboth=1 
+This will set the default value to 1.
+
+start using tidyverse :
+install.packages("tidyverse")
+
+because I should start using tidyr::gather instead of melt
+ 
+ 
+ 
+ 
 ### TO DO  
 
+~ add a warning if exposure & exp1,2 are passed
+
 ~ check on separate exposure TRICKINESS
+~ produce exposure UI
 
 ~ allow exposure to be set separately for I1 & I2 (maybe retain ability to set a single value with 'exposure')
 ~~ start with setExposure(), exp1 & exp2, set to NULL by default
@@ -5910,6 +6022,9 @@ loci  no lo    hi
   SS2  1  1 0.500
   RS2  1  1 0.625
   RR2  1  1 0.750
+
+~ can I setup something clear for Matt to do that will be useful for us ?
+~ ask him to work out the arithmetic about effectiveness & exposure that Ian started when we were in liverpool.
 
 
 ~ plot of mean popn fitness over time
@@ -5938,8 +6053,6 @@ listOut$genotype[[1]]
    
    
 ~ I could use plot_fit_rs() to produce some figs for paper2 on how inputs influence fitness maybe initially for single locus ? then to include exposure need to show genotype popn fitness.   
-
-~ produce exposure UI
 
 
 ~ do I completely have it straight in my head what the model is doing re niches ? Yes I think I do now.
@@ -6044,19 +6157,11 @@ Could put the new outputs in together or in a separate UI.
 
 set up some unit tests for the fitness functions
 
-To say to Ian.
-~ if there is no more money, all I can do is get paper2 out & tidy & document the code.
-
-
-Produce some ideas for Ian about how best to spend my time.
 
 
 https://www.software.ac.uk/software-evaluation-guide
 
 ~ look at colin gillespies efficient R prog book on github
-
-
-write protocol for Matt, include that pull request from his fork.
 
 
 Scope out
