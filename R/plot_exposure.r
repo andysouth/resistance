@@ -38,20 +38,25 @@ plot_exposure <- function ( a_expos, num_levels = 2, title = NULL ){
   }
 
   #todo would be nice to colour bars 00=pale A0=1col AB=2cols combined
+  #counting A&B, and making a first test colour scheme with green for one insecticide & blue the other
+  #initial case insensitive so colour would be same for aa as AA
+  #actually not very helpful in the case where there are just 2 options hi & no
+  num_a <- stringr::str_count(df_e$exp_id, 'A') # c('a','A'))
+  num_b <- stringr::str_count(df_e$exp_id, 'B') #c('b','B'))
+  df_e$col <- rgb(0,num_a/max(num_a),num_b/max(num_b), alpha=0.5)
+
   
-  gg <- ggplot(df_e, aes(exp_id,exposure)) +
+  
+  gg <- ggplot(df_e, aes(exp_id,exposure, fill=col)) +
     geom_bar(stat = "identity", width = 0.5) +
     #geom_point() +
+    guides(fill=FALSE) + # to turn off legend
     facet_wrap('sex') +
     ggtitle(title) +
     theme_light() +
     theme(axis.title.x = element_blank())
     
-  # #counting S & R, and making a first test colour scheme with red for resist & blue for susceptible 
-  # df_fit$num_s <- stringr::str_count(rownames(df_fit),'S')
-  # df_fit$num_r <- stringr::str_count(rownames(df_fit),'R')  
-  # df_fit$col <- rgb(df_fit$num_r/max(df_fit$num_r),0,df_fit$num_s/max(df_fit$num_s), alpha=0.5)
-  # 
+ 
   # gg <- ggplot(df_fit, aes_string(x=1, y=column)) +
   #       ylim(0,1) +
   #       geom_point(size=3, colour=df_fit$col) +

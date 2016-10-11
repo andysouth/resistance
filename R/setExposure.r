@@ -31,7 +31,7 @@ setExposure <- function( exposure = 0.9,
                          insecticideUsed = 'mixture',
                          male_exposure_prop = 1,
                          correct_mix_deploy = 1,
-                         plot = TRUE) #set to FALSE after testing
+                         plot = FALSE)
 {
 
   #exposure to insecticide
