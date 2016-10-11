@@ -1,7 +1,4 @@
-#resistance/inst/shiny/simpfitvis/ui.r
-# copied from
-#resistance/shiny/resistmob2/ui.r
-#uses NEW system where rr_restoration used as input instead of selection coefficient
+#resistance/inst/shiny/expovis/ui.r
 
 library(shiny)
 
@@ -48,9 +45,9 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
      
      #fixedRow(
      fluidRow(
-       #column(1),    
-       column(6, plotOutput('plotA')),
-       column(6, plotOutput('plotB'))
+       column(3),    
+       column(6, plotOutput('plotA'))
+       #column(6, plotOutput('plotB'))
        #column(1)    
      ), #end fixed row
      
@@ -67,36 +64,6 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
               #h2("B2")
        ),
 
-       column(2, offset = 0, h5("Effectiveness"),
-              
-              sliderInput("effectiveness_A1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
-              sliderInput("effectiveness_A2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)
-              #hr(),
-              #sliderInput("effectiveness_B1", NULL, val=0.9, min = 0, max = 1, step = 0.1, ticks=FALSE),
-              #sliderInput("effectiveness_B2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)             
-       ),
-       column(2, offset = 0, h5("Resistance restoration"),
-
-              sliderInput("advantage_A1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
-              sliderInput("advantage_A2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)
-              #hr(),
-              #sliderInput("advantage_B1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
-              #sliderInput("advantage_B2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)             
-       ),
-       column(2, offset = 0, h5("Dominance"),
-              
-              sliderInput("dominance_A1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
-              sliderInput("dominance_A2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)
-              #hr(),
-              #sliderInput("dominance_B1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
-              #sliderInput("dominance_B2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)
-       ),
-       column(2, offset = 0, h5("Cost of resistance"),
-              
-              sliderInput("cost_A1", NULL, val=0, min = 0, max = 1, step = 0.1, ticks=FALSE),
-              sliderInput("cost_A2", NULL, val=0, min = 0, max = 1, step = 0.1, ticks=FALSE)
-
-       ),                     
        column(2, offset = 0, h5("Exposure"),
               sliderInput("exposure_A1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
               sliderInput("exposure_A2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)                            
@@ -104,12 +71,24 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
               #sliderInput("exposure_B", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
               #hr()
               #sliderInput("exposure_B2", NULL, val=0.2, min = 0, max = 1, step = 0.1, ticks=FALSE)           
-       )  
-       # column(2, offset = 0,
-       #        h5("Extra params not included in Curtis"),
-       #        numericInput("correct_mix_deploy", "Mixture correct deployment", 1, min = 0, max = 1, step = 0.1),
-       #        checkboxInput("addCombinedStrategy", "plot adaptive strategy",FALSE)
-       # )
+       ),       
+              
+       column(2, offset = 0,        
+              radioButtons("insecticideUsed", "Which insecticide(s) :",
+                           c('insecticide1'='insecticide1',
+                             'insecticide2'='insecticide2',
+                             'mixture'='mixture'))
+       ),
+       
+       column(2, offset = 0,
+              h5("Mixture correct deployment"),
+              sliderInput("correct_mix_deploy", NULL, 1, min = 0, max = 1, step = 0.1, ticks=FALSE)
+       ),
+       column(2, offset = 0,
+              h5("Male exposure proportion"),
+              sliderInput("male_exposure_prop", NULL, 1, min = 0, max = 1, step = 0.1, ticks=FALSE)
+       )
+       
      ) #end fixed row
                    
 ))
