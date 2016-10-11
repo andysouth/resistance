@@ -15,7 +15,9 @@
 #' @param cost2 fitness cost of R in no insecticide
 #' @param fitSS1 fitness of SS1 if no insecticide
 #' @param fitSS2 fitness of SS2 if no insecticide
-#' @param exposure exposure 
+#' @param exposure exposure if set the same for both 
+#' @param exp1 option to set exposure differently for the diff insecticides
+#' @param exp2 option to set exposure differently for the diff insecticides 
 #' @param plot whether to plot fitness results
 #' 
 #' @examples 
@@ -43,6 +45,8 @@ fitnessGenotype <- function ( a_fitnic = NULL,
                               fitSS1 = 1,
                               fitSS2 = 1,
                               exposure = 0.5,
+                              exp1 = NULL,
+                              exp2 = NULL,
                               plot = FALSE )
 {
   
@@ -65,7 +69,7 @@ fitnessGenotype <- function ( a_fitnic = NULL,
 
   if ( is.null(a_expos) )
   {
-    a_expos <- setExposure(exposure=exposure)
+    a_expos <- setExposure(exposure=exposure, exp1=exp1, exp2=exp2)
     #a_expos <- setExposure( exposure=0.9, insecticideUsed = 'mixture' )
   }
   

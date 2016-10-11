@@ -38,8 +38,12 @@ setExposure <- function( exposure = 0.9,
   #exposure array initialise with 0s 
   a <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
 
-  #option to set exposure diferently for the 2 insecticides
+  #option to set exposure differently for the 2 insecticides
   #BEWARE of what the defaults are
+  # if (!is.null(exp1) & !is.null(exp2) & !is.null(exposure))
+  # {
+  #   warning("either set exposure singly(exposure) or separately(exp1&exp2), in this case exp1&2 will be used")
+  # }
   #to set exp1 & 2 from exposure if they are not passed, partly for backwards compatibility
   if (is.null(exp1) & is.null(exp2))
   {
