@@ -5,6 +5,7 @@
 #' @param a_expos array of exposures
 # @param ? whether to plot m&f, or just f
 #' @param num_levels number of exposure levels, 2 just shows no & hi, 3 shows lo as well
+#' @param ymax default is to set ymax in plots to 1
 #' @param title optional title for the plot
 #' 
 #' @examples 
@@ -14,7 +15,7 @@
 #' @return dataframe of plotted exposures
 #' @export
 
-plot_exposure <- function ( a_expos, num_levels = 2, title = NULL ){
+plot_exposure <- function ( a_expos, num_levels = 2, ymax = 1, title = NULL ){
  
   #convert to df & transpose to get in useable form
   df_e <- as.data.frame(t(as.data.frame(a_expos)))
@@ -51,6 +52,7 @@ plot_exposure <- function ( a_expos, num_levels = 2, title = NULL ){
     geom_bar(stat = "identity", width = 0.5) +
     #geom_point() +
     guides(fill=FALSE) + # to turn off legend
+    ylim(0, ymax) +
     facet_wrap('sex') +
     ggtitle(title) +
     theme_light() +

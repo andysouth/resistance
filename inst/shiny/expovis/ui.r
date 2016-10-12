@@ -41,7 +41,7 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
      
      title = "resistance to insecticide mixtures",
      
-     h6("Fitness of insecticide resistant genotypes in mixtures. Modify inputs and see fitness respond. by @southmapr"),  
+     h6("Exposure of vectors to insecticides. Modify inputs and see responces. by @southmapr"),  
      
      #fixedRow(
      fluidRow(
@@ -57,8 +57,8 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
        column(1,
               #h5("scenario & insecticide "),
               h5("Insecticide "),
-              h2("1"),
-              h2("2")
+              h2("A"),
+              h2("B")
               #hr(),
               #h2("B1"),
               #h2("B2")
@@ -73,10 +73,10 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
               #sliderInput("exposure_B2", NULL, val=0.2, min = 0, max = 1, step = 0.1, ticks=FALSE)           
        ),       
               
-       column(2, offset = 0,        
+       column(2, offset = 1,        
               radioButtons("insecticideUsed", "Which insecticide(s) :",
-                           c('insecticide1'='insecticide1',
-                             'insecticide2'='insecticide2',
+                           c('insecticide A'='insecticide1',
+                             'insecticide B'='insecticide2',
                              'mixture'='mixture'))
        ),
        
