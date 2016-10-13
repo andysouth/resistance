@@ -7,7 +7,9 @@
 #' @param num_levels number of exposure levels, 2 just shows no & hi, 3 shows lo as well
 #' @param ymax default is to set ymax in plots to 1
 #' @param title optional title for the plot
-#' 
+
+#' @import ggplot2
+#' @importFrom tidyr gather
 #' @examples 
 #' a_expos <- setExposure()
 #' plot_exposure(a_expos)
