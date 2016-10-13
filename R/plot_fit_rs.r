@@ -14,6 +14,12 @@
 #' df_fit1$locus <- paste('locus', c(1,1,1,2,2,2))
 #' plot_fit_rs(df_fit1, 'hi', column_facet='locus')
 #' 
+#' #trying to be able to facet for no & hi 
+#' #but the function relies on rownames which get lost this way
+#' #might want to convert the whole function, but want to keep it working for niche&genotype examples
+#' #df_fit2 <- gather(df_fit1, key=exposure_group, value=fitness, no, lo, hi) 
+#' #plot_fit_rs(df_fit2, 'fitness', column_facet='exposure_group')  
+#'  
 #'  
 #' #niche
 #' #library(reshape2)
