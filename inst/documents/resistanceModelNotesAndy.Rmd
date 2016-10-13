@@ -5887,6 +5887,10 @@ skyped with Ian about :
 
 ~ looking at setExposure for diff insecticides
 ~ TRICKY BEWARE
+~ allow exposure to be set separately for I1 & I2 (maybe retain ability to set a single value with 'exposure')
+~~ start with setExposure(), exp1 & exp2, set to NULL by default
+~~ later may also need to allow male_exposure_prop & correct_mix_deploy to be set for each insecticide 
+ 
  
 *10/10/16*
 
@@ -5994,20 +5998,9 @@ install.packages("tidyverse")
 
 because I should start using tidyr::gather instead of melt
  
+~ working on exposure UI : expovis
  
- 
- 
-### TO DO  
-
-~ add a warning if exposure & exp1,2 are passed
-
-~ check on separate exposure TRICKINESS
-~ produce exposure UI
-
-~ allow exposure to be set separately for I1 & I2 (maybe retain ability to set a single value with 'exposure')
-~~ start with setExposure(), exp1 & exp2, set to NULL by default
-~~ later may also need to allow male_exposure_prop & correct_mix_deploy to be set for each insecticide
-
+*12/10/16*
 
 ~ why doesn't cost of resistance seem to affect single loc fitness ?
 It's because cost only effects fitness of RR in the 'no' exposure niche.
@@ -6022,6 +6015,191 @@ loci  no lo    hi
   SS2  1  1 0.500
   RS2  1  1 0.625
   RR2  1  1 0.750
+
+done ~ add ability to see fit in no insecticide to fitvis
+
+
+*13/10/16*
+
+~ uploaded fitvis & expovis & send to Ian & Matt
+~ add ability to set exposures separately to resistmob_mosaic
+
+
+wehay! PLOS comp biol paper has been accepted (nearly)
+
+From: em.pcompbiol.0.4e821a.369efd4a@editorialmanager.com [mailto:em.pcompbiol.0.4e821a.369efd4a@editorialmanager.com] On Behalf Of PLOS Computational Biology
+Sent: 13 October 2016 14:24
+To: Ian Hastings <Ian.Hastings@lstmed.ac.uk>
+Subject: Decision on your article submitted to PLOS Computational Biology (PCOMPBIOL-D-16-01210) - [EMID:f9886403228b3245]
+
+Dear Dr Hastings,
+
+Thank you very much for submitting your manuscript, 'A two-locus model of the evolution of insecticide resistance to inform and optimise public health insecticide deployment strategies.', to PLOS Computational Biology. As with all papers submitted to the journal, yours was fully evaluated by the PLOS Computational Biology editorial team, and in this case, by independent peer reviewers. The reviewers appreciated the attention to an important topic and the valuable contribution of the paper.  Referee 2 identified however some aspects of the manuscript that should be addressed to improve the clarity of the methods and results, and in particular the figures.
+
+We would therefore like to ask you to modify the manuscript according to the reviewer recommendations before we can consider your manuscript for final acceptance. Your revisions should address the specific points made by reviewer 2 concerning the clarity and length of the figures and text. Regarding the figures, please consider any issues with copyrights that would require replacement or modification.
+
+In addition, when you are ready to resubmit, please be prepared to provide the following:
+(1) A detailed list of your responses to the review comments and the changes you have made in the manuscript. We require a file of this nature before your manuscript is passed back to the editors.
+(2) A copy of your manuscript with the changes highlighted (encouraged). We encourage authors, if possible to show clearly where changes have been made to their manuscript e.g. by highlighting text.
+(3) PLOS offers a figure-checking tool, PACE (http://pace.apexcovantage.com/), to help authors to ensure all figures meet PLOS requirements so that the quality of published figures is as high as possible. Please use this tool to help you format your figures.
+PACE is a digital diagnostic and conversion tool for figure files. It will provide information about any failed check(s) and, if able, will automatically convert the figure file into an acceptable file that passes quality checks. PACE requires you to register for an account to ensure your figure files are processed securely.
+(4) A striking still image to accompany your article (optional). If the image is judged to be suitable by the editors, it may be featured on our website and might be chosen as the issue image for that month. These square, high-quality images should be accompanied by a short caption. Please note as well that there should be no copyright restrictions on the use of the image, so that it can be published under the Open-Access license and be subject only to appropriate attribution.
+
+Before you resubmit your manuscript, please consult our Submission Checklist to ensure your manuscript is formatted correctly for PLOS Computational Biology: http://www.ploscompbiol.org/static/checklist.action. Some key points to remember are:
+
+- Figures uploaded separately as TIFF or EPS files (if you wish, your figures may remain in your main manuscript file in addition).
+- Supporting Information uploaded as separate files, titled 'Dataset', 'Figure', 'Table', 'Text', 'Protocol', 'Audio', or 'Video'.
+- Funding information in the 'Financial Disclosure' box in the online system.
+
+We hope to receive your revised manuscript within the next 30 days. 
+
+
+Reviewer's Responses to Questions
+
+Comments to the Authors:
+Please note here if the review is uploaded as an attachment.
+
+Reviewer #1: This is a very useful paper and provides both very useful general guidance and a framework for more detailed study of one of the most important and under-researched problems in resistance management, and has done much to sort out confusion from Curtis' paper. My apologies to both the authors and editors for taking so long with it, but amid other interruptions, it took me some time to get through the complexity. On personal preferences, I would have changed emphasis on topics covered, especially mosaics, but in the end, I think the authors are correct to stop here, and explore this in future papers.
+
+There are a number of minor typos in the paper, which is understandable in such a long and detailed paper, and the authors are likely to catch on review, but examples are line 487 (analyses or analysis?), line 551 (organism or organisms?, punctuation in lines 805 and 809, and the symbol guide in Fig.11 has 3 solid but only one dashed line.
+
+Reviewer #2: The manuscript develops a framework to determine whether mixtures or the sequential use of insecticide is better at delaying the spread of resistance. The work is important and timely for reasons the authors outline and the manuscript is generally well written and is an interesting read. The methods are generally clear and discussion is extensive and relevant. I found some of the figures and results hard to interpret, requiring further reading of references cited. The paper is already very long and though this isn’t a problem (and is indeed necessary given the complexity of the model) I think the manuscript would benefit from improved figure legends and abstracts (as some readers may not make it through the detailed methods and results). The online tool of the model is useful.
+
+Major points
+
+(1) With the exception of Figure 1 all other figures need greater detail in the caption. Ideally figures should stand alone and in long papers this is especially important. .
+
+(1.1) It took me a while to get my head round all panels in Figure 2 and similar later versions. A more detailed explanation of what the lines meant and what it shows would help the reader grasp the concepts quicker.
+
+1.1.1. In figure 2D why does the switch to DDT happen after the dashed line has gone past 50% (on a logged figure this could be substantially after).
+
+1.1.2. Figure 3. What does mix2 and seq on the top of the figure mean? Similar notation is seen on figure 11.
+
+1.2. A more detailed explanation of what PRCC does would help the reader interpret the text and Figures 5 and 7. A sentence like “ values above the dashed line indicate…..” would help.
+
+1.3. Equally with Figures 9 and 10. After reading the text a few times I got it but explanation in the caption would be helpful.
+
+2. In Line 743 it clearly states that developing an insecticide in a mixture always delays the spread of resistance to this insecticide. This is an important point and might get missed in the abstract by the less informed reader. The public health penalty of sequential use (as mentioned by the authors) could also be mentioned if space allowed.
+
+3. In the discussion the frailties of using a relative measure for the time till resistance (generation time) could be discussed. The danger is that people look at column 1 in figure 4, see on average (mean) approximately 50 generations to resistance and then over interpret and say resistance will take 50/12 years. A simple sentence would reduce the chance of this happening.
+
+Minor points
+
+4. Typo Line 172 – Captial L in Lines.
+5. Typo Line 276 and onwards, plos comp boil call it Supporting Information and not Supplementary.
+6. Line 202 – talk about retreating bednets though I am unsure of how common this is now.
+7. Line 235 – should it be “whose fitness is denoted 1 IN THE ABSENCE OF INSECTICIDE”?
+8. HCH and DDT need to be defined initially.
+9. Typo Line 463 “lifespan” not “Lifespan”?
+10. Caption of Table 3 could be more informative
+11. The “rr restoration coefficient” could do with more explanation including why the impact is predicted to be what it is.
+12. Typo Line 527 “and is”
+13. Line 630 “2.5 fold” instead of “2.5x”.
+14. Equations 7 and 8 could go in enhanced figure legends.
+15. Typo Line 805 “data.”
+
+
+A couple of points that I can address :
+Rev1 :
+the symbol guide in Fig.11 has 3 solid but only one dashed line
+#A This was because the final 2 solid lines indicate which colours refer to insecticides 1 & 2. I've changed the final two lines to squares to reduce any confusion.
+
+Rev2 :
+1.1.1. In figure 2D why does the switch to DDT happen after the dashed line has gone past 50% (on a logged figure this could be substantially after).
+#A The switch to the second insecticide is triggered one generation after the threshold of 50% is crossed. This is because the model operates on a discrete  generational timesteps. Thus there is the potential for the level of resistance to 'overshoot' the threshold particularly when the rate of increase in resistance is high.   
+
+1.1.2. Figure 3. What does mix2 and seq on the top of the figure mean? Similar notation is seen on figure 11.
+#A mix2 indicates the generation at which the resistance threshold is reached for the second insecticide in a mixture, and seq indicates when the threshold is reached for the second insecticide in a sequence. We will add an explanation of this to the figure legends. 
+
+#A [I could change these to just mix & seq, and actually it seems seq in Fig 3 isn't in the right place contributing to the reviewers confusion. Ian you generated Fig 3. from one of my web interfaces, if you can remind me of the input values next week I can check it.]
+
+Can I regenerate Fig 3 ? (which I think Ian generated from one of my web UIs).
+I should before final submission create a slimmed doc with all the figs in the paper in it.
+
+This is the Fig3 legend :
+Fig 3.  Recreating example vi  of Curtis as given in his Table 1. Curtis reported results for only the first generation of selection so this plot shows the subsequent, multi-generational dynamics of resistance spread assuming, as he did, that the first insecticide deployed in a sequence become non-beneficial, and is switched, when alleles encoding resistance to the insecticide reach 50%. 
+
+As a first step change the symbols in the legend for the 2 coloured lines ?
+plotcurtis_f2_generic()
+
+So increasing the exposure to just one insecticide from 0.5 to 0.8 decreases both the time-to-resistance to the first insecticide and the 2nd in the mixture.
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exp1 = 0.8 , exp2 = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, correct_mix_deploy = 1 , strategyLabels = c('seq','','adapt','mix2') )
+
+Whereas when effectiveness is increased to 0.8 the time-to-resistance to the 2nd insecticide in the mixture is increased.
+
+Finally try to get to the bottom of why this is ...
+
+My fitvis UI may help.
+
+These show the fitnesses for females under different inputs :
+
+#all 0.5
+as.data.frame(fitnessGenotype(plot=TRUE))[2,]
+  SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2   RS1.RS2  RR1.RS2 SS1.RR2  RS1.RR2 RR1.RR2
+f   0.625 0.65625  0.6875 0.65625 0.6953125 0.734375  0.6875 0.734375 0.78125
+
+#exposure1 0.8
+as.data.frame(fitnessGenotype(exp1=0.8, exp2=0.5, plot=TRUE))[2,]
+  SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2   RS1.RS2  RR1.RS2 SS1.RR2  RS1.RR2 RR1.RR2
+f   0.475 0.54375  0.6125 0.50625 0.5828125 0.659375  0.5375 0.621875 0.70625
+
+#effectiveness1 0.8
+as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, eff1=0.8,  plot=TRUE))[2,]
+  SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2 RS1.RS2 RR1.RS2 SS1.RR2 RS1.RR2 RR1.RR2
+f    0.55     0.6    0.65  0.5625   0.625  0.6875   0.575    0.65   0.725
+
+Can I check out the ratios between the genotypes within them ?
+Just divide by the maximum ?
+Or what about the mean fitness of R & S ?
+
+> df_ef <- as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, eff1=0.8,  plot=TRUE))[2,]
+> df_ef <- df_ef/max(df_ef)
+> df_ef
+    SS1.SS2   RS1.SS2   RR1.SS2   SS1.RS2  RS1.RS2   RR1.RS2   SS1.RR2   RS1.RR2 RR1.RR2
+f 0.7586207 0.8275862 0.8965517 0.7758621 0.862069 0.9482759 0.7931034 0.8965517       1
+> df_ex <- as.data.frame(fitnessGenotype(exp1=0.8, exp2=0.5, plot=TRUE))[2,]
+> df_ex <- df_ex/max(df_ex)
+> df_ex
+    SS1.SS2   RS1.SS2   RR1.SS2   SS1.RS2   RS1.RS2   RR1.RS2   SS1.RR2  RS1.RR2 RR1.RR2
+f 0.6725664 0.7699115 0.8672566 0.7168142 0.8252212 0.9336283 0.7610619 0.880531       1
+
+#to allow me to plot them
+
+df_ef <- data.frame(t(df_ef),row.names=row.names(t(df_ef)))
+df_ex <- data.frame(t(df_ex),row.names=row.names(t(df_ex)))
+
+x11()
+plot_fit_rs(df_ef, column='f', title='effectiveness')
+x11()
+plot_fit_rs(df_ex, column='f', title='exposure')
+
+Seems that in the case where effectiveness is increased the fitnesses are closer together so does that mean that there is less selection for resistance.
+
+? maybe do the one for all 0.5 too ?
+
+ 
+### TO DO  
+# now paper1 is nearly accepted I need to get a move on with paper2
+# get to bottom of the different effects oif effectiveness & exposure
+
+~ have a look at the arithmetic calcs that Ian started in Liverpool to explain difference between effectiveness & exposure
+
+~ The main figures that I use in paper2 too. Could they be modified to work in black & white ? Curtis had I1 dashed, I2 dotted and arrows to which are a mixture.
+I might want to save this for paper2 ? Check what they look like in b&w.
+
+
+~ more unit-tests
+
+
+~ friday am : check on exposures set separately
+
+
+
+
+~ might I want to combine fitvis & expovis ?
+
+
 
 ~ can I setup something clear for Matt to do that will be useful for us ?
 ~ ask him to work out the arithmetic about effectiveness & exposure that Ian started when we were in liverpool.
@@ -6073,10 +6251,6 @@ Allele fitness : 	SS1SS2 = SS * SS
 Genotype fitness = Allele fitness * exposure to insecticide
 
 
-
-~ have a look at the arithmetic calcs that Ian started in Liverpool to explain difference between effectiveness & exposure
-
-~ more unit-tests
 
 
 
