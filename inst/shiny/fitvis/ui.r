@@ -1,7 +1,4 @@
-#resistance/inst/shiny/simpfitvis/ui.r
-# copied from
-#resistance/shiny/resistmob2/ui.r
-#uses NEW system where rr_restoration used as input instead of selection coefficient
+#resistance/inst/shiny/fitvis/ui.r
 
 library(shiny)
 
@@ -45,14 +42,20 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
      title = "resistance to insecticide mixtures",
      
      h6("Fitness of insecticide resistant genotypes in mixtures. Modify inputs and see fitness respond. by @southmapr"),  
-     
-     #fixedRow(
+
+     fluidRow(
+       column(3, h4("  half genotype : no insecticide")),
+       column(3, h4("  half genotype : insecticide present")),
+       column(6, h4("  full genotype"))
+     ),     
+
      fluidRow(
        #column(1),    
-       column(6, plotOutput('plotA')),
+       column(3, plotOutput('plotA2')),
+       column(3, plotOutput('plotA')),
        column(6, plotOutput('plotB'))
        #column(1)    
-     ), #end fixed row
+     ),
      
      hr(),
      
