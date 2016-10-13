@@ -58,3 +58,22 @@ runUI5 <- function() {
   
   shiny::runApp(system.file('shiny/resistmob_mosaic', package='resistance'))
 }
+
+#' run a shiny User Interface to display fitness
+#' 
+#' @return nothing
+#' @export
+runUIfit <- function() {
+  
+  shiny::runApp(system.file('shiny/fitvis', package='resistance'))
+}
+
+#' run a shiny User Interface to display exposure
+#' 
+#' @return nothing
+#' @export
+runUIexpo <- function() {
+  
+  shiny::runApp(system.file('shiny/expovis', package='resistance'))
+}
+
