@@ -212,11 +212,11 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
     {
       #added a dotted line for combined
       legend( 'bottomright', legend=c("sequential", "mixture", "adaptive", "insecticide 1", "insecticide 2"), 
-              col=c("black","black","black","red", "blue"), lty=c(2,1,3,1,1), bty="n", cex=0.7 )     
+              col=c("black","black","black","red", "blue"), lty=c(2,1,3,0,0), pch=c(NA,NA,NA,15,15), bty="n", cex=0.7 )     
     } else
     {
       legend( 'bottomright', legend=c("sequential", "mixture", "insecticide 1", "insecticide 2"), 
-              col=c("black","black","red", "blue"), lty=c(2,1,1,1), bty="n", cex=0.7 )    
+              col=c("black","black","red", "blue"), lty=c(2,1,0,0), pch=c(NA,NA,15,15), bty="n", cex=0.7 )    
     }    
   }
 
