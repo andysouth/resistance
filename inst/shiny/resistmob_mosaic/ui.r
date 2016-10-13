@@ -105,11 +105,13 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
            #in Curtis it assumes exposure to AB the same at 0.9 & same for M&F
            #numericInput("exposure", "same for both insecticides in Curtis 0.9", 0.9, min = 0.1, max = 1, step = 0.05)
            #sliderInput("exposure", NULL, val=0.2, min = 0, max = 1, step = 0.1, ticks=FALSE),
-           hr(),
-           sliderInput("exposure_A", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
-           hr(),hr(),hr(),
-           sliderInput("exposure_B", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
-           hr()
+           #hr(),
+           sliderInput("exposure_A1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
+           sliderInput("exposure_A2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
+           hr(),#hr(),hr(),
+           sliderInput("exposure_B1", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE),
+           sliderInput("exposure_B2", NULL, val=0.5, min = 0, max = 1, step = 0.1, ticks=FALSE)
+           #hr()
            #sliderInput("exposure_B2", NULL, val=0.2, min = 0, max = 1, step = 0.1, ticks=FALSE)           
     ),    
     column(2, offset = 0,

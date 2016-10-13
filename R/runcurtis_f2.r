@@ -6,7 +6,9 @@
 #' @param P_1 locus 1 frequency of resistance allele
 #' @param P_2 locus 2 frequency of resistance allele
 #' @param recomb_rate recombination rate
-#' @param exposure the single exposure param used to generate the array
+#' @param exposure exposure to the insecticide(s) if set same for both
+#' @param exp1 option to set exposure differently for the diff insecticides
+#' @param exp2 option to set exposure differently for the diff insecticides
 #' @param phi.SS1_a0 Baseline fitness of SS1 in a0
 #' @param phi.SS1_A0 Baseline fitness of SS1 in A0
 #' @param phi.SS2_0b Baseline fitness of SS2 in 0b
@@ -51,6 +53,8 @@ runcurtis_f2 <- function( max_gen = 500,
                           P_2 = 0.01,
                           recomb_rate = 0.5,
                           exposure = 0.9,
+                          exp1 = NULL,
+                          exp2 = NULL,
                           phi.SS1_a0	=	0	,
                           phi.SS1_A0	=	0.73	,
                           phi.SS2_0b	=	0	,
@@ -91,7 +95,8 @@ runcurtis_f2 <- function( max_gen = 500,
 {
   
   #fill exposure array I1
-  a <- setExposure(exposure=exposure, insecticideUsed = "insecticide1",
+  a <- setExposure(exposure=exposure, exp1=exp1, exp2=exp2,
+                   insecticideUsed = "insecticide1",
                    male_exposure_prop = male_exposure_prop,
                    correct_mix_deploy = correct_mix_deploy )
   
@@ -127,7 +132,8 @@ runcurtis_f2 <- function( max_gen = 500,
                                  correct_mix_deploy = correct_mix_deploy )
   
   #fill exposure array I2
-  a <- setExposure(exposure=exposure, insecticideUsed = "insecticide2",
+  a <- setExposure(exposure=exposure, exp1=exp1, exp2=exp2,
+                   insecticideUsed = "insecticide2",
                    male_exposure_prop = male_exposure_prop,
                    correct_mix_deploy = correct_mix_deploy )
   
@@ -163,7 +169,8 @@ runcurtis_f2 <- function( max_gen = 500,
                                  correct_mix_deploy = correct_mix_deploy )
   
   #fill exposure array mix
-  a <- setExposure(exposure=exposure, insecticideUsed = "mixture",
+  a <- setExposure(exposure=exposure,  exp1=exp1, exp2=exp2,
+                   insecticideUsed = "mixture",
                    male_exposure_prop = male_exposure_prop,
                    correct_mix_deploy = correct_mix_deploy  )
   
