@@ -15,8 +15,14 @@
 #' @return dataframe of plotted exposures
 #' @export
 
-plot_exposure <- function ( a_expos, num_levels = 2, ymax = 1, title = NULL ){
+plot_exposure <- function ( a_expos = NULL, num_levels = 2, ymax = 1, title = NULL ){
  
+  # to allow it to be run with no args
+  if ( is.null(a_expos))
+  {
+    a_expos <- setExposure()
+  }
+  
   #convert to df & transpose to get in useable form
   df_e <- as.data.frame(t(as.data.frame(a_expos)))
 
@@ -44,7 +50,10 @@ plot_exposure <- function ( a_expos, num_levels = 2, ymax = 1, title = NULL ){
   #actually not very helpful in the case where there are just 2 options hi & no
   num_a <- stringr::str_count(df_e$exp_id, 'A') # c('a','A'))
   num_b <- stringr::str_count(df_e$exp_id, 'B') #c('b','B'))
-  df_e$col <- rgb(0,num_a/max(num_a),num_b/max(num_b), alpha=0.5)
+  # I'm not sure this quite does what I think !
+  # I changed it & the colours didn't change
+  # ideally I'd like the 00 to be paler than the others
+  df_e$col <- rgb(1,1-(num_a/max(num_a)),1-(num_b/max(num_b)), alpha=0.5)
 
   
   
