@@ -549,12 +549,12 @@ potential IRM strategies :
 #plot margins
 oldpar <- par(mar=c(4, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.', maxX = 120 )
 
 #plot margins
 par(mar=c(4, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab="", main='B.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab="", ylabs = FALSE, main='B.', maxX = 120 )
 
 par(oldpar)
 
@@ -565,7 +565,7 @@ par(oldpar)
 #plot margins
 oldpar <- par(mar=c(4, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), maxX = 120 )
 
 ```
 
@@ -576,13 +576,13 @@ runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B 
 oldpar <- par(mar=c(4, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.', maxX = 120 )
 #cat("Fig. Exposure 0.8 benefit of sequence over mixture increases")
 
 #plot margins
 par(mar=c(4, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), main='B.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylabs = FALSE, main='B.', maxX = 120 )
 #cat("Fig. Effectiveness 0.8, Exposure 0.8, increased exposure nullifies the effect of increased effectiveness, sequence remains better")
 ```
 
@@ -591,13 +591,13 @@ runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B 
 #plot margins
 oldpar <- par(mar=c(4, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.', maxX = 120 )
 #cat("Dominance of insecticide1 0.8")
 
 #plot margins
 par(mar=c(4, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.8 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab='', main='B.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.8 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab='', ylabs = FALSE, main='B.', maxX = 120 )
 #cat("Dominance of both insecticides 0.8")
 
 par(oldpar)
@@ -610,13 +610,13 @@ par(oldpar)
 #plot margins
 oldpar <- par(mar=c(4, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.', maxX = 120 )
 #cat("Fig. rr_restoration I1 0.8")
 
 #plot margins
 par(mar=c(4, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.8 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab='', main='B.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.8 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab='', ylabs = FALSE, main='B.', maxX = 120 )
 #cat("Fig. CC. rr_restoration I2 0.2")
 
 par(oldpar)
@@ -629,13 +629,13 @@ par(oldpar)
 oldpar <- par(mar=c(4, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #P_1 to 0.001 seq remains better
-runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.', maxX = 150 )
 
 #plot margins
 par(mar=c(4, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #P_1 to 0.001 & effect1 to 0.8 mix remains better
-runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab='', main='B.' )
+runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab='', ylabs = FALSE, main='B.', maxX = 150 )
 
 par(oldpar)
 
