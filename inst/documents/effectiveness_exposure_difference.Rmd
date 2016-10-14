@@ -1,0 +1,120 @@
+---
+title: "Why is time-to-resistance in mixtures influenced differently by effectiveness and exposure ?"
+output: pdf_document
+#output: word_document
+author: "Andy South"
+date: "`r Sys.Date()`"
+---
+  
+```{r,echo=FALSE,results='hide'}
+library(resistance)
+library(ggplot2)
+```
+
+Increasing the exposure to one insecticide in a mixture has liitle influence 
+on the time-to-resistance of the other. In contrast increasing the effectiveness 
+of one insecticide in a mixture increases the time-to-resistance of the other.
+
+Why is there this difference between the effects of effectiviness and exposure in mixtures ?
+
+For single insecticide application increasing effectiveness or exposure have the same effect
+of decreasing time-to-resistance by increasing selection pressure.
+
+
+
+```{r, eval=TRUE, echo=FALSE}
+
+#setting up the data
+
+df_base_ <- as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, plot=FALSE))[2,]
+df_base <- df_base_/max(df_base_)
+
+
+df_ef_ <- as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, eff1=0.8,  plot=FALSE))[2,]
+df_ef <- df_ef_/max(df_ef_)
+#df_ef
+
+df_ex_ <- as.data.frame(fitnessGenotype(exp1=0.8, exp2=0.5, plot=FALSE))[2,]
+df_ex <- df_ex_/max(df_ex_)
+#df_ex
+
+#to allow me to plot them
+
+#normalised ones
+df_base <- data.frame(t(df_base),row.names=row.names(t(df_base)))
+df_ef <- data.frame(t(df_ef),row.names=row.names(t(df_ef)))
+df_ex <- data.frame(t(df_ex),row.names=row.names(t(df_ex)))
+#not normalised
+df_base_ <- data.frame(t(df_base_),row.names=row.names(t(df_base_)))
+df_ef_ <- data.frame(t(df_ef_),row.names=row.names(t(df_ef_)))
+df_ex_ <- data.frame(t(df_ex_),row.names=row.names(t(df_ex_)))
+
+```
+
+
+```{r, eval=TRUE, echo=FALSE}
+
+plot_fit_rs(df_base, column='f', title='base')
+
+plot_fit_rs(df_ef, column='f', title='effectiveness')
+
+plot_fit_rs(df_ex, column='f', title='exposure')
+
+```
+
+Seems that in the case where effectiveness is increased the fitnesses are closer together so does that mean that there is less selection for resistance ?
+
+What is happening with the 2nd insecticide ? 
+
+#Normalised
+```{r, eval=TRUE, echo=FALSE}
+
+calc_fit_rs(df_base,'f',round_places=3)
+#R2-S2  R2-S2 0.066
+
+calc_fit_rs(df_ef,'f',round_places=3)
+#R2-S2  R2-S2 0.045
+
+calc_fit_rs(df_ex,'f',round_places=3)
+#R2-S2  R2-S2 0.073
+```
+
+So yes, increasing effectiveness I1 results in a decrease in the difference between the relative fitness of S & R to I2 (from 0.066 to 0.045), this can explain the slower selection for resistance.
+
+In contrast increasing exposure to I1 results in an increase in the difference between the relative fitness of S & R to I2 (from 0.066 to 0.073), this can explain the faster selection for resistance.
+
+Be a bit careful, does my normalising do anything weird ? I might be able to run calc_fit_rs() on the non normalised versions.
+not normalised
+calc_fit_rs(df_base_,'f')
+      allele    meanfit
+R1        R1 0.721
+S1        S1 0.669
+R2        R2 0.721
+S2        S2 0.669
+R1-S1  R1-S1 0.052
+#R2-S2  R2-S2 0.052
+
+calc_fit_rs(df_ef_,'f')
+      allele    meanfit
+R1        R1 0.666
+S1        S1 0.583
+R2        R2 0.641
+S2        S2 0.608
+R1-S1  R1-S1 0.083
+#R2-S2  R2-S2 0.033
+
+calc_fit_rs(df_ex_,'f')
+      allele    meanfit
+R1        R1 0.633
+S1        S1 0.531
+R2        R2 0.608
+S2        S2 0.556
+R1-S1  R1-S1 0.102
+#R2-S2  R2-S2 0.052
+
+So in the non normalised version the difference in fitness for S&R I2 stays the same when I1 exposure is increased but decreases when I1 effectiveness is increased.
+
+In text form :
+In a mixture, increasing the exposure to one insecticide has very little effect on the selection pressure for resistance to the other. In contrast increasing the effectiveness of one insecticide in a mixture decreases the slection pressure for resistance to the other.
+
+
