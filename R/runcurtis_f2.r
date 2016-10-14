@@ -44,6 +44,7 @@
 #' @param addLegend whether to add a legend inside plot
 #' @param main title for the plot
 #' @param vlines colour of vertical lines to add to plot, NULL for none
+#' @param maxX optional max x value for the plot to facilitate comparison with other plots
 #'  
 #' @return list of plot components
 #' @export
@@ -90,7 +91,8 @@ runcurtis_f2 <- function( max_gen = 500,
                           cex.axis = 0.8,
                           addLegend = TRUE,
                           main = "",
-                          vlines = 'grey95'
+                          vlines = 'grey95',
+                          maxX = NULL
                           )
 {
   
@@ -227,7 +229,8 @@ runcurtis_f2 <- function( max_gen = 500,
                          cex.axis = cex.axis,
                          addLegend = addLegend,
                          main = main,
-                         vlines = vlines
+                         vlines = vlines,
+                         maxX = maxX
                          )  
   
   #add returning the results

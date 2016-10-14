@@ -21,6 +21,7 @@
 #' @param cex.axis scaling for x&y tick labs 
 #' @param addLegend whether to add a legend inside plot
 #' @param vlines colour of vertical lines to add to plot, NULL for none
+#' @param maxX optional max x value for the plot to facilitate comparison with other plots
 #' 
 #' @examples
 #' listOutMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -44,7 +45,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    xlab = "Generation",
                                    cex.axis = 0.8,
                                    addLegend = TRUE,
-                                   vlines = 'grey95'
+                                   vlines = 'grey95',
+                                   maxX = NULL
                                    
                                    ){
   
@@ -53,8 +55,18 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   maxGensI1 <- findResistancePoints(amat, locus=1, criticalPoints = criticalPoints)
   maxGensI2 <- findResistancePoints(bmat, locus=2, criticalPoints = criticalPoints)  
   maxGensMix <- findResistancePoints(combmat, locus='both', criticalPoints = criticalPoints)    
-  
-  maxGens <- max( (maxGensI1+maxGensI2), maxGensMix )
+
+  maxGens <- max( (maxGensI1+maxGensI2), maxGensMix )  
+    
+  #maxX can be set as an arg to facilitate plot comparisons
+  if (is.null(maxX))
+  {
+    maxX <- maxGens    
+  } else if (maxX < maxGens)
+  {
+    warning("the specified maxX = ",maxX," is less than max generations needed for the plot = ",maxGens)
+  }
+
   
   minf <- min( combmat[,r1col], combmat[,r2col] )
   #cat("in plotcurtis_f2_generic minf:",minf," ", log10(minf),"\n")
@@ -69,10 +81,12 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         #xlim=c(1,maxGens), ylim=c(0,(max(fl))),
-        xlim=c(1,maxGens), ylim=c(min(fl),(max(fl))),
+        xlim=c(1,maxX), ylim=c(min(fl),(max(fl))),
         #xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
-        xlab=xlab, ylab=ylab, main=main)
+        xlab=xlab, ylab=ylab ) #, main=main)
   
+  #to left justify title
+  title(main,adj=0)
   
   # add axis labels
   # default x axis
