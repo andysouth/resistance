@@ -6150,49 +6150,170 @@ as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, eff1=0.8,  plot=TRUE))[2,]
 f    0.55     0.6    0.65  0.5625   0.625  0.6875   0.575    0.65   0.725
 
 Can I check out the ratios between the genotypes within them ?
-Just divide by the maximum ?
-Or what about the mean fitness of R & S ?
+Just divide by the maximum  to normalise.
 
-> df_ef <- as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, eff1=0.8,  plot=TRUE))[2,]
-> df_ef <- df_ef/max(df_ef)
-> df_ef
+
+df_ef_ <- as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, eff1=0.8,  plot=TRUE))[2,]
+df_ef <- df_ef_/max(df_ef_)
+df_ef
     SS1.SS2   RS1.SS2   RR1.SS2   SS1.RS2  RS1.RS2   RR1.RS2   SS1.RR2   RS1.RR2 RR1.RR2
 f 0.7586207 0.8275862 0.8965517 0.7758621 0.862069 0.9482759 0.7931034 0.8965517       1
-> df_ex <- as.data.frame(fitnessGenotype(exp1=0.8, exp2=0.5, plot=TRUE))[2,]
-> df_ex <- df_ex/max(df_ex)
-> df_ex
+
+df_ex_ <- as.data.frame(fitnessGenotype(exp1=0.8, exp2=0.5, plot=TRUE))[2,]
+df_ex <- df_ex_/max(df_ex_)
+df_ex
     SS1.SS2   RS1.SS2   RR1.SS2   SS1.RS2   RS1.RS2   RR1.RS2   SS1.RR2  RS1.RR2 RR1.RR2
 f 0.6725664 0.7699115 0.8672566 0.7168142 0.8252212 0.9336283 0.7610619 0.880531       1
 
+df_base_ <- as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, plot=TRUE))[2,]
+df_base <- df_base_/max(df_base_)
+
+
 #to allow me to plot them
 
+#normalised ones
+df_base <- data.frame(t(df_base),row.names=row.names(t(df_base)))
 df_ef <- data.frame(t(df_ef),row.names=row.names(t(df_ef)))
 df_ex <- data.frame(t(df_ex),row.names=row.names(t(df_ex)))
+#not normalised
+df_base_ <- data.frame(t(df_base_),row.names=row.names(t(df_base_)))
+df_ef_ <- data.frame(t(df_ef_),row.names=row.names(t(df_ef_)))
+df_ex_ <- data.frame(t(df_ex_),row.names=row.names(t(df_ex_)))
 
+x11()
+plot_fit_rs(df_base, column='f', title='base')
 x11()
 plot_fit_rs(df_ef, column='f', title='effectiveness')
 x11()
 plot_fit_rs(df_ex, column='f', title='exposure')
 
-Seems that in the case where effectiveness is increased the fitnesses are closer together so does that mean that there is less selection for resistance.
+Seems that in the case where effectiveness is increased the fitnesses are closer together so does that mean that there is less selection for resistance ?
 
-? maybe do the one for all 0.5 too ?
+*14/10/16*
 
+what is happening with the 2nd insecticide ? 
+
+calc_fit_rs(df_base,'f')
+      allele    meanfit
+R1        R1 0.923
+S1        S1 0.856
+R2        R2 0.923
+S2        S2 0.856
+R1-S1  R1-S1 0.066
+#R2-S2  R2-S2 0.066
+
+calc_fit_rs(df_ef,'f')
+      allele    meanfit
+R1        R1 0.919
+S1        S1 0.804
+R2        R2 0.885
+S2        S2 0.839
+R1-S1  R1-S1 0.114
+#R2-S2  R2-S2 0.045
+
+calc_fit_rs(df_ex,'f')
+      allele    meanfit
+R1        R1 0.897
+S1        S1 0.752
+R2        R2 0.862
+S2        S2 0.788
+R1-S1  R1-S1 0.144
+#R2-S2  R2-S2 0.073
+
+So yes, increasing effectiveness I1 results in a decrease in the difference between the relative fitness of S & R to I2 (from 0.066 to 0.045), this can explain the slower selection for resistance.
+
+In contrast increasing exposure to I1 results in an increase in the difference between the relative fitness of S & R to I2 (from 0.066 to 0.073), this can explain the faster selection for resistance.
+
+Be a bit careful, does my normalising do anything weird ? I might be able to run calc_fit_rs() on the non normalised versions.
+not normalised
+calc_fit_rs(df_base_,'f')
+      allele    meanfit
+R1        R1 0.721
+S1        S1 0.669
+R2        R2 0.721
+S2        S2 0.669
+R1-S1  R1-S1 0.052
+#R2-S2  R2-S2 0.052
+
+calc_fit_rs(df_ef_,'f')
+      allele    meanfit
+R1        R1 0.666
+S1        S1 0.583
+R2        R2 0.641
+S2        S2 0.608
+R1-S1  R1-S1 0.083
+#R2-S2  R2-S2 0.033
+
+calc_fit_rs(df_ex_,'f')
+      allele    meanfit
+R1        R1 0.633
+S1        S1 0.531
+R2        R2 0.608
+S2        S2 0.556
+R1-S1  R1-S1 0.102
+#R2-S2  R2-S2 0.052
+
+So in the non normalised version the difference in fitness for S&R I2 stays the same when I1 exposure is increased but decreases when I1 effectiveness is increased.
+
+In text form :
+> In a mixture, increasing the exposure to one insecticide has very little effect on the selection pressure for resistance to the other. In contrast increasing the effectiveness of one insecticide in a mixture decreases the slection pressure for resistance to the other.
+ 
+Can I recreate this result by arithmetic ?
+
+selection coefficient = resistance restoration * effectiveness
+Locus fitness :
+SS = 1-effectiveness
+RS = 1-effectiveness + (dominance*selection coeff.)
+RR = 1-effectiveness + selection coeff.
+Allele fitness :
+SS1SS2 = SS * SS
+SS1RS2 = SS * RS
+. . . and for other combinations
+RR1RR2 = RR * RR
+Population fitness = Allele fitness * exposure to insecticide
+ 
+ 
+Locus fitness using rr :
+SS = 1-effectiveness
+RS = 1-effectiveness + (dominance*resistance restoration*effectiveness)
+RR = 1-effectiveness + (resistance restoration*effectiveness) 
+ 
+f1, f2 : effectiveness
+x1, x2 : exposure
+r1, r2 : resistance restoration
+d1, d2 : dominance
+fitSS  : fitness
+
+fitSS1 = 1-f1
+fitRS1 = 1-f1 + (d1*r1*f1)
+fitRR1 = 1-f1 + (r1*f1)
+
+fitSS1
+ 
+eek is this really going to get me anywhere ? I would need to repeat for all of RS1RS2 etc. then I might want to get back to R & S like I've done in my version.
+ 
  
 ### TO DO  
 # now paper1 is nearly accepted I need to get a move on with paper2
-# get to bottom of the different effects oif effectiveness & exposure
+# get to bottom of the different effects of effectiveness & exposure
 
-~ have a look at the arithmetic calcs that Ian started in Liverpool to explain difference between effectiveness & exposure
+Put my fitness investigation into a small Rmd to send to Ian & Matt.
+
+Could I test this SR mean fitness difference as a predictor of time-to-resistance in the full simulation results ? I can probably calculate it for the 10,000 runs with a little work.
+WOuld probably just need to write a short script that queries ggSubset or similar to get input values and creates a new filed to store the new potential predictor.
+
 
 ~ The main figures that I use in paper2 too. Could they be modified to work in black & white ? Curtis had I1 dashed, I2 dotted and arrows to which are a mixture.
 I might want to save this for paper2 ? Check what they look like in b&w.
+Indeed is there any other way that they could be improved too ? perhaps by putting them closer together & avoiding repetition of axis labels.
 
+In paper2 setting the x-axis constant would help with interpretation. Could set it to 100 for all except figs 11 A&B which I could set to 150.
+
+
+~ can I allow lable of just m & s horizontally for mix & seq in plotcurtis_f2_generic ?
+~ can I create the plot grid that I drew out on paper for paper2. Will the plots show up when made smaller ? Do I need to fiddle with plot boundaries ? Might be able to remove x labels from all but the lower row.
 
 ~ more unit-tests
-
-
-~ friday am : check on exposures set separately
 
 
 
