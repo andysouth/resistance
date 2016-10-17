@@ -6,6 +6,8 @@
 #' @param column name of column containing fitness values
 #' @param column_facet optional column to facet by
 #' @param title optional title for the plot
+#' @param ylim ylim, default = c(0,1)
+#' @param yblank whether to remove y axis title & labels
 #' 
 #' @examples 
 #' #singleLocus
@@ -36,7 +38,7 @@
 #' @return dataframe of plotted fitness values and colours
 #' @export
 
-plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL ){
+plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL, ylim = c(0,1), yblank = FALSE ){
  
   #library(ggrepel)
   #library(stringr)
@@ -47,9 +49,11 @@ plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL ){
   df_fit$col <- rgb(df_fit$num_r/max(df_fit$num_r),0,df_fit$num_s/max(df_fit$num_s), alpha=0.5)
   
   gg <- ggplot(df_fit, aes_string(x=1, y=column)) +
-        ylim(0,1) +
+        #ylim(0,1) +
+        ylim(ylim) +
+        xlim(0.9,1.5) +
         geom_point(size=3, colour=df_fit$col) +
-        ggrepel::geom_text_repel( aes(label=rownames(df_fit)), nudge_x=0.1) +
+        ggrepel::geom_text_repel( aes(label=rownames(df_fit)), nudge_x=0.2, size=2) +
         ylab('fitness') +
         ggtitle(title) + 
         theme_bw() +
@@ -57,7 +61,17 @@ plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL ){
               axis.title.x = element_blank(),
               axis.line.x = element_blank(),
               axis.ticks.x = element_blank(),
-              panel.grid.major.x = element_blank())
+              #panel.grid.major.x = element_blank(),
+              panel.grid.major.x = element_blank(),
+              panel.grid.minor.x = element_blank()
+              )
+  
+  if (yblank)
+  {
+    gg <- gg + theme(axis.text.y = element_blank(),
+                     axis.title.y = element_blank())
+  }
+  
         # or blank & add back in
         # theme_void() +
         # theme(axis.text.y = element_text(hjust=0.1), 
