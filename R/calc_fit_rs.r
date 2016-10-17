@@ -11,38 +11,20 @@
 #' @param column name of column containing fitness values
 #' @param column_facet optional column to facet by
 #' @param round_places decimal places to round output to
-#' @param title optional title for the plot
+#' @param verbose whether to print stuff to console
 #' 
 #' @examples 
-#' #singleLocus
-#' df_fit1 <- as.data.frame(fitnessSingleLocus())
-#' #temp adding an extra column for faceting
-#' df_fit1$locus <- paste('locus', c(1,1,1,2,2,2))
-#' plot_fit_rs(df_fit1, 'hi', column_facet='locus')
+#' #see also effectiveness_exposure_difference.Rmd
+#' df_base_ <- as.data.frame(fitnessGenotype(exp1=0.5, exp2=0.5, plot=FALSE))[2,]
+#' df_base_ <- data.frame(t(df_base_),row.names=row.names(t(df_base_)))
 #' 
-#' #trying to be able to facet for no & hi 
-#' #but the function relies on rownames which get lost this way
-#' #might want to convert the whole function, but want to keep it working for niche&genotype examples
-#' #df_fit2 <- gather(df_fit1, key=exposure_group, value=fitness, no, lo, hi) 
-#' #plot_fit_rs(df_fit2, 'fitness', column_facet='exposure_group')  
-#'  
-#'  
-#' #niche
-#' #library(reshape2)
-#' df_fit2 <- reshape2::melt(fitnessNiche()[,,'A','B'])
-#' rownames(df_fit2) <- paste(df_fit2$locus1, df_fit2$locus2)
-#' plot_fit_rs(df_fit2, 'value')
+#' calc_fit_rs(df_base_,'f', round_places=2)
 #' 
-#'  
-#' #genotype
-#' #transpose to get in useable format
-#' df_fit3 <- as.data.frame(t(as.data.frame(fitnessGenotype())))
-#' plot_fit_rs(df_fit3,'f')
-#' 
-#' @return dataframe of plotted fitness values and colours
+#' @return dataframe of mean fitness
 #' @export
 
-calc_fit_rs <- function ( df_fit, column, column_facet = NULL, round_places = 3, title = NULL ){
+calc_fit_rs <- function ( df_fit, column, column_facet = NULL, round_places = 3,
+                          verbose = FALSE ){
   
   
   #counting S1,S2,R1,R2 
@@ -50,9 +32,13 @@ calc_fit_rs <- function ( df_fit, column, column_facet = NULL, round_places = 3,
   df_fit$R1 <- stringr::str_count(stringr::str_sub(rownames(df_fit),1,2),'R')
   df_fit$S2 <- stringr::str_count(stringr::str_sub(rownames(df_fit),5,6),'S')
   df_fit$R2 <- stringr::str_count(stringr::str_sub(rownames(df_fit),5,6),'R')
-  
+
   
   alleles <- c('R1','S1','R2','S2')
+  
+  #just for testing & verbose output
+  #and there must be a better way of doing
+  df_fit$S1fit <- df_fit$R1fit <- df_fit$S2fit <- df_fit$R2fit <- 0
 
   df_meanfit <- data.frame(allele=alleles, row.names=alleles)
   
@@ -60,8 +46,15 @@ calc_fit_rs <- function ( df_fit, column, column_facet = NULL, round_places = 3,
   
   for(allele in alleles)
   {
-    df_meanfit[allele,'meanfit'] <- mean( (df_fit[,allele] * df_fit[,column]) )    
+    df_meanfit[allele,'meanfit'] <- mean( (df_fit[,allele] * df_fit[,column]) ) 
+    
+    #just to test the calc & for verbose output
+    df_fit[paste0(allele,'fit')] <- df_fit[,allele] * df_fit[,column]
   }
+  
+  # testing
+  if (verbose)
+    print(round(df_fit, round_places))
   
   #df_meanfit['R1','meanfit'] <- mean( (df_fit$num_r1 * df_fit[,column]) )  
   
