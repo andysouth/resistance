@@ -1093,6 +1093,110 @@ for(i in names_results)
   
 ```
 
+```{r, eval=FALSE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5} 
+#eval=FALSE so this one not displayed
+
+## Fig. x8 Introducing a new insecticide when there is already resistance to an existing one. This takes Curtis Fig 2 and sets the starting frequency for each allele in turn to a higher level to represent an 'old' insecticide to which there is resistance. In both cases resistance to the new insecticide develops slower when the 'old' insecticide continues to be used (mixture) than when it doesn't (sequence).
+
+#curtis_f2 with P_1 changed from 0.01 to 0.45 : mix slower than seq
+runcurtis_f2( P_1 = 0.49 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , rr_restoration_ins1=0.23/0.73, rr_restoration_ins2 = 0.43/1, addCombinedStrategy=FALSE )
+
+#curtis_f2 with P_2 changed from 0.01 to 0.45 : mix slower than seq
+runcurtis_f2( P_1 = 0.01 , P_2 = 0.49 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 1 , rr_restoration_ins1=0.23/0.73, rr_restoration_ins2 = 0.43/1, addCombinedStrategy=FALSE )
+
+
+```
+
+## Fig. x5.1 modified for mix2 vs seq 
+NOT USED IN PAPER1
+fewer runs where sequential gives slower resistance
+
+```{r, eval=TRUE, echo=FALSE, fig.height=6} 
+  
+
+  ggSubset <- dif_mix2_seq
+  #if mix-seq >1 resistance took longer for mix so mix is better
+  ggSubset$mix2_better_seq0.5 <- ifelse( ggSubset$mix2_minus_seq0.5 > 0, 1, 0 )
+  ggSubset$seq_better_mix20.5 <- ifelse( ggSubset$mix2_minus_seq0.5 < 0, 1, 0 )
+  ggSubset$abs_diff <- abs(ggSubset$mix2_minus_seq0.5)
+  
+  #tricky
+  #be a bit careful what to do with zeros where results are same for both strategies
+  #I use these better vars to facet the plots
+  #may want the zeroes in both facets
+  #to get that I can rbind the zeros from one onto the other BEWARE this may screw up existing plots
+  df_same <- ggSubset[which(ggSubset$abs_diff==0),]
+  #set these to 1 (they were 0)
+  df_same$mix2_better_seq0.5 <- 1
+  df_same$seq_better_mix20.5 <- 1
+  #rbind them back onto other dataset
+  ggSubset <- rbind( ggSubset, df_same)
+
+  #add an option for 20% better, put the not in to get facets in correct order in ggplot later
+  ggSubset$mix2_not20pc_better_seq0.5 <- ifelse( ggSubset$mix2_minus_seq0.5 / ggSubset$gen_cP0.5seq <= 0.2, 1, 0 )   
+  
+    #find unequal runs
+    unequal <- ggSubset[ggSubset$resist_start_lo_div_hi < 0.01,]
+    #nrow(ggSubset)
+    #nrow(unequal)
+    #2721 out of the 6189 remaining runs
+    
+    #in how many runs was seq better than mix
+    #sum(unequal$seq_better_mix20.5)
+    #311
+  
+    library(viridis)
+
+    print( ggplot(ggSubset, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2, colour=abs_diff))+
+             
+             facet_grid( ~ seq_better_mix20.5, labeller=as_labeller( c('0'='mixture\ntime to resistance\nlonger','1'='sequential\ntime to resistance\nlonger'))) +
+
+             #YlGnBu looks really good except that the yellow points are very faint
+             #scale_colour_distiller(palette='YlGnBu', direction=1) +
+             #option="plasma" looks good too
+             scale_color_viridis(begin=1, end=0, option="viridis", 
+                                 guide=guide_colourbar(title="difference in \ngenerations to reach\nresistance threshold", direction='horizontal')) + 
+             theme_bw() +
+             theme(legend.position = "bottom") +
+             #theme_minimal() +
+             #add point for Curtis inputs
+             geom_point(data = curtisInputs, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2), colour='black', shape=3) +
+             #failing to add legend for curtis point
+             #scale_fill_manual(name = "Curtis Fig.2", values = 'red', labels = 'test') +
+             #scale_size_manual(name = "Curtis Fig.2", values="test") +
+             #scale_shape_manual(name = "Curtis Fig.2", values="test") +             
+             ylab('effectiveness of insecticides added') +
+             xlab('exposure to both insecticides') + 
+             #main points for the plot
+             geom_point(alpha=1, size=0.5) + 
+             #!!!NOW can I add a lm fitted to the 0 points abs_diff
+             geom_smooth(data=ggSubset[which(ggSubset$abs_diff==0),], method = "lm", se = FALSE, colour='red', lwd=0.5) +
+             #can I subtley highlight the zero points which are repeated in each plot ?
+             geom_point(data=ggSubset[which(ggSubset$abs_diff==0),], size=0.8, colour='red', shape=2, fill='white') + 
+             
+             #now add the unequal points
+             #showed that they were on both sides
+             #geom_point(data = unequal, aes(x=exposure, y=effectiveness_ins1 + effectiveness_ins2), colour='red', shape=2) +
+             
+             #add text for Curtis point
+             geom_label(data = curtisInputs, inherit.aes = FALSE, aes_string(x = 'exposure', y='effectiveness_ins1 + effectiveness_ins2', label='"Curtis Fig.2"', hjust='"right"'), nudge_x=-0.02, size=3, colour='black')
+           ) 
+    
+  # doing the lm outside of ggplot    
+  x1=df_same$exposure 
+  y1=df_same$effectiveness_ins1 + df_same$effectiveness_ins2
+  
+  l_mod <- lm(y1 ~ x1)
+  #l_mod$coefficients
+  #(Intercept)          x1 
+  #1.019330    0.560508
+  
+  #approximation
+  #x2 <- seq(0,1,0.1)
+  #y2 <- 0.6*x2+0.98
+  #plot(x2,y2)    
+    
+```
 
 
 
