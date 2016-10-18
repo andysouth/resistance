@@ -6292,16 +6292,154 @@ fitSS1
  
 eek is this really going to get me anywhere ? I would need to repeat for all of RS1RS2 etc. then I might want to get back to R & S like I've done in my version.
  
+perhaps ask Ian or Matt to look at the arithmetic 
+ 
+*17/10/16* 
+
+~ working on effectiveness_exposure_difference.Rmd
+~ nice lining up of fitness plots
+ 
+~ will need to produce high res figs for PLOS
+(3) PLOS offers a figure-checking tool, PACE (http://pace.apexcovantage.com/), to help authors to ensure all figures meet PLOS requirements so that the quality of published figures is as high as possible. Please use this tool to help you format your figures.
+PACE is a digital diagnostic and conversion tool for figure files. It will provide information about any failed check(s) and, if able, will automatically convert the figure file into an acceptable file that passes quality checks. PACE requires you to register for an account to ensure your figure files are processed securely.
+
+- Figures uploaded separately as TIFF or EPS files (if you wish, your figures may remain in your main manuscript file in addition).
+
+http://journals.plos.org/ploscompbiol/s/figures
+
+~ TIFF or EPS
+~ Width: 789 – 2250 pixels (at 300 dpi). Height maximum: 2625 pixels (at 300 dpi).
+~ Resolution 300 – 600 dpi
+~ File Size <10 MB
+~ Text Within Figures : Arial, Times, or Symbol font only in 8-12 point
+~ Fig1.tif, Fig2.eps, and so on. Match file name to caption label and citation.
+~ Captions : In the manuscript, not in the figure file.
+
+Tiff is recomended as being easier 
+from the web I got this :
+library(knitr)
+opts_chunk$set(dev="tiff", 
+               dev.args=list(compression="lzw"),
+               dpi=300)
+               
+Global Options
+To set global options that apply to every chunk in your file, call knitr::opts_chunk$set in a code chunk. Knitr will treat each option that you pass to knitr::opts_chunk$set as a global default that can be overwritten in individual chunk headers 
+
+Pandoc problems
+starting to get some tiffs
+
+I put the figures through Pace and they passed although some of them don't look very good. 
+ 
+trying to work out what the fonts are in ggplot2.
+It's apparently complicated and depends on your system.
+Seems it will be one of the ones indicated by this :
+windowsFonts()
+$serif
+[1] "TT Times New Roman"
+$sans
+[1] "TT Arial"
+$mono
+[1] "TT Courier New"
+ 
+*18/10/16* 
+Place all panels from a multipart figure into a single page and file. If you have a multipart figure spanning multiple files:
+
+Combine multiple panels into one page, or break them apart into separate figures.
+Re-number all figures and in-text citations accordingly.
+
+To create a multipanel figure from individual files, use a presentation program such as Microsoft PowerPoint. Then convert to TIFF.
+
+To set up the page, use the values listed in Dimensions.
+Use an Insert tool to place figures. Do not drag/drop or copy/paste images into the file. If your figures have numerous pictures, charts, or small text, they will render best at a resolution of 600 dpi. 
+ 
+ 
+failed attempt to create Ians fig1 from the main model.
+not quite sure why. Not very useful anyway.
+try to create from v.simple scartch instead.
+
+  a <- setExposure(exposure=1, insecticideUsed='insecticide1')
+
+  effectiveness1 <- 1
+  rr_restoration_ins1 <- 1
+  
+  i1 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0, 
+                      h.RS2_0B = 0,
+                      a = a,
+                      phi.SS1_A0 = effectiveness1,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = rr_restoration_ins1,
+                      rr_restoration_ins2 = 0.5 )
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0,
+                      a = a,
+                      phi.SS1_A0 = effectiveness1,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = rr_restoration_ins1,
+                      rr_restoration_ins2 = 0.5 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      h.RS1_A0 = 1, 
+                      h.RS2_0B = 0,
+                      a = a,
+                      phi.SS1_A0 = effectiveness1,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = rr_restoration_ins1,
+                      rr_restoration_ins2 = 0.5 )
+  
+  #input <- cbind(input, inputOneScenario)
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(h.RS1_A0))) + 
+         theme_bw() +  
+         theme(legend.position = "bottom", legend.key = element_blank()) + 
+         guides(colour = guide_legend(reverse=TRUE)) +  
+         labs(colour = "dominance") +
+         #coord_trans(y = "log10") +    
+         geom_line()   
+       ) 
+ 
+created this function to help generate fig1 in paper1 : 
+selection_simple()
+ 
+these are the dimension requirements :
+~ Width: 789 – 2250 pixels (at 300 dpi). Height maximum: 2625 pixels (at 300 dpi).
+ 
+Right click on the tiffs can get dimensions.
+(but presumably these are checked by the online tool ??)
+Alt-enter within windows photo viewer
+ 
+4.55 start trying to create fig 1B, see if I can do in 30 mins.
+
+
+ 
  
 ### TO DO  
 # now paper1 is nearly accepted I need to get a move on with paper2
 # get to bottom of the different effects of effectiveness & exposure
 
-Put my fitness investigation into a small Rmd to send to Ian & Matt.
+Fig changes needed :
+
+Fig 1 from Ians data
+Fig 2 B & D. text labels need tweaking slightly
+done ~ Fig 3. got input values from Ian, removed mex2 & seq labels because on top of each other
+done ~ Fig 6.1. move 'curtis fig 2' to the left
+done ~ Fig 8.1 tree 1. Make text less bold. Turn ovals into rectangles.
+Fig 11 do I want to keep mix1,2 & seq labels ? I think so.
+
+              
+
 
 Could I test this SR mean fitness difference as a predictor of time-to-resistance in the full simulation results ? I can probably calculate it for the 10,000 runs with a little work.
 WOuld probably just need to write a short script that queries ggSubset or similar to get input values and creates a new filed to store the new potential predictor.
 
+~ 17/10/16 I had a slight concern that we might not normalise the fitness calcs where we should do, because of whats coming out in the effectiveness vs exposure investigation
 
 ~ The main figures that I use in paper2 too. Could they be modified to work in black & white ? Curtis had I1 dashed, I2 dotted and arrows to which are a mixture.
 I might want to save this for paper2 ? Check what they look like in b&w.
