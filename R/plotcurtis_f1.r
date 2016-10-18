@@ -26,7 +26,7 @@ plotcurtis_f1 <- function ( nrelaxmat, relaxmat, gencol, r1col ){
   par(pty="s") 			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         xlim=c(1,(max(nrelaxmat[,gencol]))), ylim=c((min(fl)),(max(fl))),
-        xlab="Generation", ylab="Allele Frequency - (A[R]= B[R])", main="Frequency of R allele through time.")
+        xlab="Generation", ylab="Allele Frequency - (A[R]= B[R])", main="")
   
   axis( side=1, at=c(0,2,4,6,8,10,12,14,16,18), labels=c(0,2,4,6,8,10,12,14,16,18), tick=T )
   axis( side=2, at=fl, labels=labs, tick=T )
@@ -45,7 +45,7 @@ plotcurtis_f1 <- function ( nrelaxmat, relaxmat, gencol, r1col ){
   
   
   pos <- log10( 4.5 )
-  legend( 7, pos , legend=c("R at Locus 1( = R at Locus 2 )", "With relaxed selection"), 
+  legend( 7, pos , legend=c("selection by mixture", "selection relaxed"), 
           col=c("black", "darkviolet"), pch=c(16,16), bty="n" )
   
   box()

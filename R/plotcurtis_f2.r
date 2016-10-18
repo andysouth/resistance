@@ -22,7 +22,7 @@ plotcurtis_f2 <- function( combmat, bmat, amat, gencol, r1col, r2col ){
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
-        xlab="Generation", ylab="Allele Frequency", main="Frequency of R allele through time.")
+        xlab="Generation", ylab="Allele Frequency", main="")
   
   # plotting combination scenario (in combmat)
   # set frequencies in vectors as log10 percentages from frequencies
