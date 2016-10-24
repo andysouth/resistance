@@ -188,7 +188,9 @@ runModel2 <- function(input,
       genotype[gen_num,1] <- gen_num	
       #genotype[gen_num,2:11] <- a_gtypes['m',]
       # 27/9/16 changing this to output mean of m&f
-      genotype[gen_num,2:11] <- sum( 0.5*(a_gtypes['f',] + a_gtypes['m',]))
+      #genotype[gen_num,2:11] <- sum( 0.5*(a_gtypes['f',] + a_gtypes['m',]))
+      # 24/10/16 correcting bug above sum()
+      genotype[gen_num,2:11] <- 0.5*(a_gtypes['f',] + a_gtypes['m',])
       
       # saving results 
       results <- resistance_freq_count( a_gtypes=a_gtypes, gen_num=gen_num, results=results )
