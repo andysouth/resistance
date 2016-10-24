@@ -6417,21 +6417,104 @@ Alt-enter within windows photo viewer
  
 4.55 start trying to create fig 1B, see if I can do in 30 mins.
 
+*19/10/16*
+Bayer purchase order came through 13,650 EUR, hurrah!
+
+These were my travel quotes : So cheaper to register at ASTMH before tomorrow !
+
+Labour. 30 days @ EUR 360 per day. 10,800
+ASTMH Registration (before Oct 20th) at member rate $ 605 540
+ASTMH membership $ 230 205
+ASTMH Accommodation (Sun-Weds) $ 1,250 1,116
+ASTMH Travel £ 850 989
+
+http://www.astmh.org/about-astmh/about-us/join-astmh
+
+Fig dimensions in inches :
+Minimum width 2.63	
+Maximum width 7.5 or 5.2 to fit in text column.
+Maximum height 8.75  
+
+At the height maximum, the figure occupies the whole page and excludes the caption
+
+“Dimensions” refers to the dimensions of the entire figure, excluding any white space. The closer figures match these dimensions, the closer they will meet expectations on publication.
+
+TIPS
+
+To align your figure with the text column of the PDF version of the article, make it no wider than 5.2 inches.
+
+*20/10/16*
+
+working on responses to editors for paper1
+
+Note from CUP website :
+http://www.cambridge.org/rights/permissions/permission.htm
+
+Cambridge University Press grants permission freely for the reproduction in another work of a short prose extract (less than 400 words), a single figure or a single table in which it holds rights (see the important caveat in the Notes below). In such cases a request for permission need not be submitted, but the reproduced material must be accompanied by a full citation of the original source.
+ 
+In the case of some journals published by Cambridge on behalf of a learned society, permission may need to be obtained directly from the society. Check the cover of the journal before proceeding. 
+ 
+ASTMH booked hotel
+ 
+*21/10/16* 
+ 
+I skyped Ian & showed him the effectiveness, exposure genotype fitness comparison. He said he liked it.
+
+He asked whether this was at linkage equilibrium - I didn't quite know how to answer. I talked about how this was at the start of the simulation before any evolution.
+
+I should look into. Will it change when the frequency of resistance changes ? I think not. I think that this is the selection pressure that is exerted every generation.
+
+So is it independent of linkage ?
+
+Also I talked Ian through my calculation of R-S mean fitness for each locus. He didn't say much about it (at least not much negative!). Before doing this I realised it's probably similar to what goes on in the selection() function.
+ 
+Ian said that he had spoken to IVCC about me developing a 'plain english' resistance modelling paper and they liked the idea.
+
+01516652347
+
+*24/10/16* train to liverpool
+
+reading through paper1 intro & discussion to work out what I can put in paper2
+
+starting to work on paper2 grid figs for exposure & effectiveness difference. Getting there looking good. This will radically reduce num figs in paper2 and make it much easier for the reader to see what is going on (and for me to explain in the legend).
+
+should I stick with 2x2 plots or could I go up to 3x3 ?
+
+2x2 might make it easier to understand for the reader.
+
+grid1
+eff1  0.5  0.8
+exp
+0.5    1   2
+0.8    3   4
+
+
+potential 3x3
+eff1
+eff2
+
+
+
+
 
  
- 
 ### TO DO  
+
+~ check whether my R-S calc in calc_fit_rs() is similar to what happens in selection()
+~ think of a good way to present R-S calc
+
 # now paper1 is nearly accepted I need to get a move on with paper2
 # get to bottom of the different effects of effectiveness & exposure
 
 Fig changes needed :
 
-Fig 1 from Ians data
-Fig 2 B & D. text labels need tweaking slightly
+Fig 1 add A) & B)
+Fig 2 add A) & B) potentially add scans of Curtis figs
 done ~ Fig 3. got input values from Ian, removed mex2 & seq labels because on top of each other
-done ~ Fig 6.1. move 'curtis fig 2' to the left
+done ~ Fig 6 add A) ,B), C)
 done ~ Fig 8.1 tree 1. Make text less bold. Turn ovals into rectangles.
-Fig 11 do I want to keep mix1,2 & seq labels ? I think so.
+done ~ Fig 11 do I want to keep mix1,2 & seq labels ? I think so.
+
 
               
 
