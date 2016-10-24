@@ -23,10 +23,17 @@ plotcurtis_f1 <- function ( nrelaxmat, relaxmat, gencol, r1col ){
   nrelax <- log10( 100 * nrelaxmat[,r1col] )			# only prints results from males, m = f, A[R] = B[R], so only prints one col
   gens <- nrelaxmat[,gencol]	
   
-  par(pty="s") 			
+  #tcl for smaller ticks (def=-0.5)
+  #mgp margin line for axis title, labels and line.
+  #mgp[1] affects title whereas mgp[2:3] affect axis. default is c(3, 1, 0).
+  par(pty="s", tcl=-0.2, mgp=c(2.5, 0.5, 0) ) #, plt=c(0.1,0.8,0.1,0.8)) 
+  
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         xlim=c(1,(max(nrelaxmat[,gencol]))), ylim=c((min(fl)),(max(fl))),
-        xlab="Generation", ylab="Allele Frequency - (A[R]= B[R])", main="")
+        xlab="", ylab="", main="")
+  
+  #to put titles closer to axes
+  title(xlab="Generation", ylab="Allele Frequency",line=2)
   
   axis( side=1, at=c(0,2,4,6,8,10,12,14,16,18), labels=c(0,2,4,6,8,10,12,14,16,18), tick=T )
   axis( side=2, at=fl, labels=labs, tick=T )
@@ -46,7 +53,7 @@ plotcurtis_f1 <- function ( nrelaxmat, relaxmat, gencol, r1col ){
   
   pos <- log10( 4.5 )
   legend( 7, pos , legend=c("selection by mixture", "selection relaxed"), 
-          col=c("black", "darkviolet"), pch=c(16,16), bty="n" )
+          col=c("black", "darkviolet"),lty=c(1,0), pch=c(NA,16), bty="n", cex=0.7 )
   
   box()
   

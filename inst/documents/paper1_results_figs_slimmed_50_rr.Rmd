@@ -68,7 +68,12 @@ opts_chunk$set(dev="tiff",
 ```
 
 #Fig1 
-```{r Fig1, eval=TRUE, echo=FALSE, fig.height=7.5, fig.width=5, fig.show='hold', fig.align='left'}
+```{r Fig1, eval=TRUE, echo=FALSE, fig.height=7.5, fig.width=6, fig.show='hold'}
+#, fig.align='left'}
+
+#PLOS fig dimensions
+#Maximum width 7.5 or 5.2 to fit in text column.
+#Maximum height 8.75
 
 library(ggplot2)
 library(cowplot)
@@ -101,6 +106,7 @@ plotlist[[1]] <- ggplot(df_to_plot, aes(x=generation, y=freq,
        ylab("Resistance Allele Frequency") +   
        #coord_trans(y = "log10") +    
        geom_line()
+       #annotate('text',label='A)',x=-10, y=1.1)
 
 #Fig 1B
 
@@ -130,19 +136,26 @@ plotlist[[2]] <- ggplot(data.frame(x=c(0,100),y=c(80,0)), aes(x=x, y=y)) +
        theme(axis.text = element_blank(),
              axis.ticks = element_blank(),
              panel.grid = element_blank())
+       #draw_plot_label('B)') +
 
-plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1)) 
+
+
+plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1), labels='AUTO') 
+
+#draw_figure_label('B)', pos='top.left')
+
 
 ```
 
 
 # Fig2 replicating Curtis
-```{r Fig2, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=5.5, fig.keep='last'} 
+```{r Fig2, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5, fig.width=6, fig.keep='last'} 
 
   #Beths code for these figures taken from resistanceMaster
 
   #set layout for 2 plots
   layout(t(1:2))
+  par(mar=c(0.4,2.9,0,0.4)) #bltr default is c(5, 4, 4, 2)
 
   #2A
   calibration <- 1011
@@ -151,13 +164,16 @@ plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1))
   #we submitted the LD one but should have done the Fig1
   #plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
   plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
-  
+  #side=1=bottom, 2=left, 3=top, 4=right, adj=0 left justify, lines move outwards
+  mtext('A)',side=3, adj=0, line=1)
+    
   #2B
   calibration <- 1012
   input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
   listOut <- runModel2( input, calibration )  
   plotcurtis_f2( listOut$results[[3]], listOut$results[[1]], listOut$results[[2]], 1, 2, 3 )
-  
+  #side=1=bottom, 2=left, 3=top, 4=right, adj=0 left justify, lines move outwards
+  mtext('B)',side=3, adj=0, line=1)
   
 ```
 
@@ -558,7 +574,7 @@ for(i in names_results)
   theme_set(theme_bw())
   
   #plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],plotlist[[4]],ncol=1, rel_heights=c(1,1,1,1.8))  
-  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],ncol=1, rel_heights=c(1,1,1.6))    
+  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],ncol=1, rel_heights=c(1,1,1.6), labels='AUTO')    
       
 ```
 
@@ -632,7 +648,7 @@ for(i in names_results)
   #theme_set(theme_gray())
   theme_set(theme_bw())
   
-  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],ncol=1, rel_heights=c(1,1,1))   
+  plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],ncol=1, rel_heights=c(1,1,1), labels='AUTO', vjust=1)   
     
 ```
 
@@ -702,7 +718,7 @@ for(i in names_results)
   #theme_set(theme_gray())
   theme_set(theme_bw())
   
-  plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(1,1.6)) 
+  plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(1,1.6), labels='AUTO') 
     
     
 ```

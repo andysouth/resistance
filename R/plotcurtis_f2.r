@@ -17,12 +17,20 @@
 plotcurtis_f2 <- function( combmat, bmat, amat, gencol, r1col, r2col ){
   
   f <- c(1:100)				## for y axis 
-  fl <- log10(f)				
-  par(pty="s") 
+  fl <- log10(f)
+  
+  #tcl for smaller ticks (def=-0.5)
+  #mgp margin line for axis title, labels and line.
+  #mgp[1] affects title whereas mgp[2:3] affect axis. default is c(3, 1, 0).
+  par(pty="s", tcl=-0.2, mgp=c(2.5, 0.5, 0) ) #, plt=c(0.1,0.8,0.1,0.8)) 
+  
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
-        xlab="Generation", ylab="Allele Frequency", main="")
+        xlab="", ylab="", main="")
+  
+  #to put titles closer to axes
+  title(xlab="Generation", ylab="Allele Frequency",line=2)
   
   # plotting combination scenario (in combmat)
   # set frequencies in vectors as log10 percentages from frequencies
@@ -63,12 +71,15 @@ plotcurtis_f2 <- function( combmat, bmat, amat, gencol, r1col, r2col ){
   
   abline( v = 31, col="black" )
   
-  yval <- log10( 2 )
-  legend( 105, yval, legend=c("Sequential", "Combination","R at Locus 1 (DDT)", "R at Locus 2(HCH)"), 
-          col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.7 )
+  yval <- log10( 3 )
+  # legend( 105, yval, legend=c("Sequence", "Mixture","DDT", "HCH"), 
+  #         col=c("black","black","red", "darkblue"), lty=c(2,1,1,1), bty="n", cex=0.6 )
+  legend( 105, yval, legend=c("HCH alone", "HCH in mix", "DDT alone", "DDT in mix"), 
+          col=c("blue","blue","red","red"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.6 )    
+  
   
   yval <- log10( 3 )			
-  text(27, yval, "Switch to DDT", srt=90, cex=0.75) 			
+  text(27, yval, "Switch to DDT", srt=90, cex=0.6) 			
   
   box()
   

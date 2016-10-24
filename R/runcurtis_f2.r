@@ -39,6 +39,7 @@
 #' @param xlab xlab
 #' @param ylab ylab
 #' @param ylabs whether to add tick labels
+#' @param xlabs whether to add tick labels
 #' @param yticks tick positions
 #' @param cex.axis scaling for x&y tick labs 
 #' @param addLegend whether to add a legend inside plot
@@ -88,6 +89,7 @@ runcurtis_f2 <- function( max_gen = 500,
                           ylabs = TRUE,
                           yticks = c(0.1,1,5,10,50,100),
                           xlab = "Generation",
+                          xlabs = TRUE,
                           cex.axis = 0.8,
                           addLegend = TRUE,
                           main = "",
@@ -223,6 +225,7 @@ runcurtis_f2 <- function( max_gen = 500,
                          addStrategyLabels = addStrategyLabels,
                          strategyLabels = strategyLabels,
                          xlab = xlab,
+                         xlabs = xlabs,
                          ylab = ylab,
                          ylabs = ylabs,
                          yticks = yticks,

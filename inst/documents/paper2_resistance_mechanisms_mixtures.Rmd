@@ -549,11 +549,13 @@ potential IRM strategies :
 #plot margins
 oldpar <- par(mar=c(4, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
+#base scenario
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), addLegend=FALSE, main='A.', maxX = 120 )
 
 #plot margins
 par(mar=c(4, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
+#effectiveness1 0.8
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2'), ylab="", ylabs = FALSE, main='B.', maxX = 120 )
 
 par(oldpar)
@@ -643,6 +645,10 @@ par(oldpar)
 
 
 ![Summarising mechanisms of single insecticide effects.](paper2_input_effects_single.png)
+
+
+
+
 
 
 

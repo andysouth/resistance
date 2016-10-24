@@ -17,6 +17,7 @@
 #' @param xlab xlab
 #' @param ylab ylab
 #' @param ylabs whether to add tick labels
+#' @param xlabs whether to add tick labels
 #' @param yticks tick positions
 #' @param cex.axis scaling for x&y tick labs 
 #' @param addLegend whether to add a legend inside plot
@@ -43,6 +44,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    ylabs = TRUE,
                                    yticks = c(0.1,1,5,10,50,100),
                                    xlab = "Generation",
+                                   xlabs = TRUE,
                                    cex.axis = 0.8,
                                    addLegend = TRUE,
                                    vlines = 'grey95',
@@ -75,22 +77,27 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   #f <- c(1:100)				## for y axis 
   fl <- log10(f)
   
-  #28/6/16 disabled this, then put it back
-  par(pty="s") #to create a square plot region
+  #pty="s" #to create a square plot region
+  #tcl for smaller ticks (def=-0.5)
+  #mgp margin line for axis title, labels and line.
+  #mgp[1] affects title whereas mgp[2:3] affect axis. default is c(3, 1, 0).
+  par(pty="s", tcl=-0.2, mgp=c(2.5, 0.5, 0) ) #, plt=c(0.1,0.8,0.1,0.8)) 
   
   # blank plot with x axis max as max_gen for combination scenario, and y axis max as log10(100) (for 100%)			
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         #xlim=c(1,maxGens), ylim=c(0,(max(fl))),
         xlim=c(1,maxX), ylim=c(min(fl),(max(fl))),
         #xlim=c(1,(max(combmat[,gencol]))), ylim=c(0,(max(fl))),
-        xlab=xlab, ylab=ylab ) #, main=main)
+        xlab="", ylab="" ) #, main=main)
   
   #to left justify title
   title(main,adj=0)
+  #to put titles closer to axes
+  title(xlab=xlab, ylab=ylab,line=2)
   
   # add axis labels
   # default x axis
-  xticks <- axis( side=1, cex.axis=cex.axis )
+  xticks <- axis( side=1, labels=xlabs, cex.axis=cex.axis, col='grey' )
   #to add vertical lines
   if (!is.null(vlines)) abline(v=xticks, col=vlines)
 
@@ -109,14 +116,14 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   lines( gens, R2, col=adjustcolor("blue", alpha.f = 0.5) )
   
   # add line at maximum of critical points
-  abline( h=(log10(100*max(criticalPoints)) ) )
+  abline( h=(log10(100*max(criticalPoints)) ), col='grey' )
   
   
   
   #allows ylabs to be set to FALSE for no labels
   logylabs <- log10( yticks )
   if (ylabs)  ylabs <- yticks
-  axis( side=2, at=logylabs, labels=ylabs, tick=T, cex.axis = cex.axis, las = 1 ) #las=1 for horiz labs  
+  axis( side=2, at=logylabs, labels=ylabs, tick=T, cex.axis = cex.axis, las = 1, col='grey' ) #las=1 for horiz labs  
   
   ## Single insecticide scenarios
   #andy remember that in this from Beth hch is insecticide1 & ddt is insecticide2
@@ -229,8 +236,12 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
               col=c("black","black","black","red", "blue"), lty=c(2,1,3,0,0), pch=c(NA,NA,NA,15,15), bty="n", cex=0.7 )     
     } else
     {
-      legend( 'bottomright', legend=c("sequential", "mixture", "insecticide 1", "insecticide 2"), 
-              col=c("black","black","red", "blue"), lty=c(2,1,0,0), pch=c(NA,NA,15,15), bty="n", cex=0.7 )    
+      #legend( 'bottomright', legend=c("sequential", "mixture", "insecticide 1", "insecticide 2"), 
+      #        col=c("black","black","red", "blue"), lty=c(2,1,0,0), pch=c(NA,NA,15,15), bty="n", cex=0.7 )    
+      # trying clearer 
+      legend( 'bottomright', legend=c("insecticide1 alone", "insecticide1 in mix", "insecticide2 alone", "insecticide2 in mix"), 
+              col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.7 )    
+      
     }    
   }
 
@@ -269,15 +280,20 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
        }
   
     #or can I add these as an axis above
-    #horizontal labels
-    #axis(3, at=at, labels=strategyLabels, cex.axis=0.6, tcl=-0.3, padj=1, hadj=1 )
-    #vertical labels
-    axis(3, at=at, labels=strategyLabels, cex.axis=0.8, tcl=-0.3, padj=0, hadj=0.4, las=3 )
+    #horizontal labels if max of 2 chars in label
+    if (max(nchar(strategyLabels)<3))
+    {
+      axis(3, at=at, labels=strategyLabels, cex.axis=0.6, hadj=1.5 )#, tcl=-0.3, padj=1,    
+    } else 
+    {
+      #vertical labels hadj bigger moves away from axis
+      axis(3, at=at, labels=strategyLabels, cex.axis=0.8, tcl=-0.2, padj=0, hadj=0.1, las=3 )      
+    }
         
    }
   
     			
   
-  box()
+  box(col='grey')
   
 }

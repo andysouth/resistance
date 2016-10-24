@@ -59,11 +59,11 @@ df_ex_ <- data.frame(t(df_ex_),row.names=row.names(t(df_ex_)))
 # before normalisation
 ```{r, eval=TRUE, echo=FALSE, results='hide', fig.width=2}
 
-plot_fit_rs(df_base_, column='f', title='base', ylim=c(0.4,0.8))
+plot_fit_rs(df_base_, column='f', title='base 0.5', ylim=c(0.4,0.8))
 
-plot_fit_rs(df_ef_, column='f', title='effectiveness', ylim=c(0.4,0.8), yblank=TRUE)
+plot_fit_rs(df_ef_, column='f', title='effectivenessI1 0.8', ylim=c(0.4,0.8), yblank=TRUE)
 
-plot_fit_rs(df_ex_, column='f', title='exposure', ylim=c(0.4,0.8), yblank=TRUE)
+plot_fit_rs(df_ex_, column='f', title='exposureI1 0.8', ylim=c(0.4,0.8), yblank=TRUE)
 
 ```
 
@@ -75,6 +75,8 @@ plot_fit_rs(df_base, column='f', title='base', ylim=c(0.5,1))
 plot_fit_rs(df_ef, column='f', title='effectiveness', ylim=c(0.5,1), yblank=TRUE)
 
 plot_fit_rs(df_ex, column='f', title='exposure', ylim=c(0.5,1), yblank=TRUE)
+
+#can use cowplot to size 1st plot with y axis differently
 
 ```
 
@@ -129,4 +131,53 @@ So in the non normalised version the difference in fitness for S&R I2 stays the 
 In text form :
 In a mixture, increasing the exposure to one insecticide has very little effect on the selection pressure for resistance to the other. In contrast increasing the effectiveness of one insecticide in a mixture decreases the slection pressure for resistance to the other.
 
+
+
+```{r, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=5, fig.show='hold', fig.align='left', fig.cap="test A.  B. C. D."}
+
+#todo to get grid fig working.
+#think about implementing in ggplot2 to make my life easier later ?
+#although I'm not sure it would ?
+#allow x axis labels and title to be removed
+#add axis titles outside of the plot region
+#remove curve legend on plots and put it somewhere else maybe on bottom
+#? allow curves to be thicker
+
+
+#test of rearranging figures on a grid
+#eff1  0.5  0.8
+#exp
+#0.5    1   2
+#0.8    3   4
+
+layout(matrix(1:4,2,2, byrow = TRUE))
+#effectiveness on mixture
+
+#plot margins
+oldpar <- par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#base scenario
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), xlabs = FALSE, cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#effectiveness1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
+
+#plot margins
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#exposure 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 & expos 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
+
+par(oldpar)
+
+```
 
