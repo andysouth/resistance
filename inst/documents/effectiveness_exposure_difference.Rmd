@@ -20,7 +20,7 @@ Why is there this difference between the effects of effectiviness and exposure i
 For single insecticide application increasing effectiveness or exposure have the same effect
 of decreasing time-to-resistance by increasing selection pressure.
 
-scaneario exploration :
+scenario exploration :
 
 1. base : all inputs set to 0.5
 1. effectiveness : effectiveness set to 0.8
