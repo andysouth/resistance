@@ -9,6 +9,8 @@
 #' 
 #' @examples 
 #' fit_time_genotype()
+#' #to get fitness over time for females
+#' #listOut$fit_time_genotype[,'f',]
 
 #' @return fitness values in an array
 #' @export
@@ -41,13 +43,21 @@ fit_time_genotype <- function ( genotype = NULL,
   # could be a bit like the genotype matrix (1 less column for no cis/trans)
   # but would need an extra dimension for gender
   # maybe start by doing for just m
-  a_fit_time_gen <- matrix( nrow=max_gen, ncol=10 )
-  colnames(a_fit_time_gen) <- c("gen", "SS1SS2", "SS1RS2", "SS1RR2", 
-                          "RS1SS2", "RS1RS2", "RS1RR2",
-                          "RR1SS2", "RR1RS2", "RR1RR2")
+  # a_fit_time_gen <- matrix( nrow=max_gen, ncol=10 )
+  # colnames(a_fit_time_gen) <- c("gen", "SS1SS2", "SS1RS2", "SS1RR2", 
+  #                         "RS1SS2", "RS1RS2", "RS1RR2",
+  #                         "RR1SS2", "RR1RS2", "RR1RR2")
+  
+  
+  max_gen <- nrow(genotype) 
+  
+  a_fit_time_gen  <- createArray2( gen = c(1:max_gen), 
+                                   sex=c('m','f'), 
+                                   genotype = c("SS1SS2", "SS1RS2", "SS1RR2", 
+                                                "RS1SS2", "RS1RS2", "RS1RR2",
+                                                "RR1SS2", "RR1RS2", "RR1RR2") )
   
   #for each generation 
-  max_gen <- nrow(genotype) 
   for (gen_num in 1:max_gen)
   {
     for( sex in dimnames(a_fitgen)$sex)
@@ -60,27 +70,19 @@ fit_time_genotype <- function ( genotype = NULL,
           # have to do cis/trans specially
           if ( locus1=='RS1' & locus2=='RS2' )
           {
-            a_fit_time_gen[gen_num, sex,locus1,locus2] <- 
-              genotype[gen_num, 'RS1RS2_cis'] * a_fitgen[sex,locus1,locus2]) +
-              genotype[gen_num, 'RS1RS2_trans'] * a_fitgen[sex,locus1,locus2])      
+            a_fit_time_gen[gen_num, sex, paste0(locus1,locus2)] <- 
+              genotype[gen_num, 'RS1RS2_cis'] * a_fitgen[sex,locus1,locus2] +
+              genotype[gen_num, 'RS1RS2_trans'] * a_fitgen[sex,locus1,locus2]      
 
           }else
           {
-            a_fit_time_gen[gen_num,sex,locus1,locus2] <- genotype[gen_num, paste0(locus1,locus2)] * a_fitgen[sex,locus1,locus2])
+            a_fit_time_gen[gen_num,sex,paste0(locus1,locus2)] <- genotype[gen_num, paste0(locus1,locus2)] * a_fitgen[sex,locus1,locus2]
           }
-          
-          
-          
-
         }
       }
     }
+  } #end gen_num loop
   
-  #error check for fitnesses > 1 or < 0
-  if ( any(a_fitgen > 1 ) ) 
-    warning( sum(a_fitgen > 1  ), " individual fitness values (a_fitgen) are >1")
-  if ( any( a_fitgen < 0 ) ) 
-    warning( sum( a_fitgen < 0 ), " individual fitness values (a_fitgen) are <0")
   
   #testing
   #cat("in fitnessGenotype\n")
