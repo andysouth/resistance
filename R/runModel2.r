@@ -4,7 +4,6 @@
 #' run model scenarios and put the results for each in a results object
 #' 
 #' @param input a matrix with parameters in rows and scenarios in columns
-#' @param calibration one of a limited set of integers effecting how scenarios are run
 #' @param produce.plots whether to produce plots
 #' @param savePlots whether to save plots to hardcoded filenames
 
@@ -19,11 +18,13 @@
 #' @return a list of 3 lists of one or more scenarios: results, genotype and fitness. e.g. listOut$results[1] gives a results matrix for the first scenario
 #' @export
 
-runModel2 <- function(input,
-                     calibration,
+runModel2 <- function(input = NULL,
                      produce.plots = FALSE,
                      savePlots=FALSE){
  
+  # to allow default run
+  if (is.null(input)) input <- setInputOneScenario()
+  
   ## Lists to store results
   listOut <- list( results=list(), fitness=list(), genotype=list(), input=input )
 
