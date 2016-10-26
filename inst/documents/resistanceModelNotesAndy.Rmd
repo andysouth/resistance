@@ -6494,11 +6494,135 @@ eff1
 eff2
 
 
+~ plot of mean popn fitness over time
+~~ we have 
+~~ fitness by genotype : listOut$fitness   
+~~ genotype by generation : listOut$genotype
+
+BUT the values seem not as I'd expect (all 0s & 1s)
+for
+input <- setInputOneScenario(max_gen=5)
+listOut <- runModel2(input)
+
+but Matt suggested the fitness needs to come from fitness_indiv as in fitnessPrint()
+      SS1.SS2 RS1.SS2 RR1.SS2 SS1.RS2   RS1.RS2  RR1.RS2 SS1.RR2  RS1.RR2 RR1.RR2
+ind_m   0.625 0.65625  0.6875 0.65625 0.6953125 0.734375  0.6875 0.734375 0.78125
+
+which does look better ... 
+
+listOut$fitness[[1]][,'A,B']
+SS1SS2 SS1RS2 SS1RR2 RS1SS2 RS1RS2 RS1RR2 RR1SS2 RR1RS2 RR1RR2 
+     0      0      0      0      1      1      0      1      1 
+ 
+# there was a bug here before 24/10/16     
+listOut$genotype[[1]]
+       gen       SS1SS2       SS1RS2       SS1RR2       RS1SS2   RS1RS2_cis RS1RS2_trans       RS1RR2
+  [1,]   1 9.960060e-01 1.994006e-03 9.980010e-07 1.994006e-03 1.996002e-06 1.996002e-06 1.998000e-09
+  [2,]   2 9.959523e-01 2.011825e-03 1.015973e-06 2.011825e-03 1.995876e-05 2.031946e-06 2.015837e-08
+  [3,]   3 9.956472e-01 2.118965e-03 1.127410e-06 2.118965e-03 1.100964e-04 2.254820e-06 1.171552e-07
+  [4,]   4 9.940823e-01 2.673485e-03 1.797517e-06 2.673485e-03 5.619192e-04 3.595034e-06 7.556126e-07 
+a_fitgen <- fitnessGenotype()  
+df_indiv <- as.data.frame(a_fitgen)
+
+
+*25/10/16* with Ian in Liverpool
+
+
+Ian & Matt explained that if two different AIs on different bednets that is technically a Mosaic.
+
+Mixture (where the molecules are next to each other), individuals are always exposed to both.
+Mosaic, most are exposed to just one but some are exposed to both (through the correct deployment parameter).
+
+Ian wasn't that keen on the exposure vis and didn't quite get the need to be able to set the exposures differently.
+
+
+input <- setInputOneScenario(max_gen=200)
+listOut <- runModel2(input)
+layout(matrix(c(1:2),2,1))
+plot(listOut$fit_time_genotype[,'f','variance'])
+
+# seems to be going up over time and not decreasing as Ian & Matt expected ...
+
+# can I plot frequency of RR to check ?
+plot(listOut$fit_time_genotype[,'f','RR1RR2'])
+
+tst <- as.data.frame(listOut$fit_time_genotype[,'f',])
+
+Ian worked out how the calculation of the variance should be done.
+
+for each sex :
+
+mean fitness = mean( fitness per genotype * genotype frequency )
+
+sum( (fitness of each genotype - mean fitness)2 ) #squared
 
 
 
  
 ### TO DO  
+~ do some more stuff on paper2 text so it has clearer structure before ASTMH
+
+~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
+
+~ before ASTMH improve my understanding of LD. E.g. looking at GPIRM figure. maybe see Charelsworth 2012 p 422. Ian may have said that LD can lead to higher than expected frequencies of RR & SS whih may lead to less variance in fitness because most of the gametes are in the middle. [I may have got this wrong].
+
+prepare fig2 of paper1 with Curtis figs
+
+create slides for ASTMH : 10 mins
+keep the messages simple
+introduce the basics. Ian will cover Curtis.
+include my yellow/green slide about non-adaptive mixtures vs sequential ? 
+
+add an adaptive mixture strategy to my slide ?
+
+
+Maybe I should look back at Justins email of 14 September which contains a couple of trickyish scenarios we coud try to represent.
+
+I'd like to do graphic of mixture/seq/mosaic, should I do in R or powerpoint ? ppt would be quicker and more flexible.
+
+Ian said go and produce the graph for fig2 with both of Curtis' figs in.
+
+Tangent : check whether I have power of attorney for M&D
+
+Fitness calc.
+I need to work out how to multiply these together.
+a_fitgen or df_indiv['m',]
+listOut$genotype[[1]]
+
+and how to output them so that we can use ? can I add it to the list object ? Would this cause any issues with existing outputs. I may even be able to replace the existing fitness output if we don't use it for anything else ?
+
+
+one issue is to mean 
+RS1RS2_cis RS1RS2_trans
+to 
+RS1RS2
+
+
+I think it my be similar to this bit of code in selection.r.
+although I think this just calculates fitness by M&F.
+
+    # W bar - Sum of numerators
+    W.bar <- createArray2(sex=c('m','f'))
+    
+    for( sex in dimnames(a_fitgen)$sex)
+    {
+      for( locus1 in dimnames(a_fitgen)$locus1)
+      {
+        for( locus2 in dimnames(a_fitgen)$locus2)
+        {
+          #have to do cis/trans specially
+          if ( locus1=='RS1' & locus2=='RS2' )
+          {
+            W.bar[sex] = W.bar[sex] + (a_gtypes[sex,'RS1RS2_cis'] * a_fitgen[sex,locus1,locus2])
+            W.bar[sex] = W.bar[sex] + (a_gtypes[sex,'RS1RS2_trans'] * a_fitgen[sex,locus1,locus2])
+          }else
+          {
+            W.bar[sex] = W.bar[sex] + (a_gtypes[sex,paste0(locus1,locus2)] * a_fitgen[sex,locus1,locus2])                
+          }
+        }
+      }
+    }
+
 
 ~ check whether my R-S calc in calc_fit_rs() is similar to what happens in selection()
 ~ think of a good way to present R-S calc
@@ -6547,29 +6671,7 @@ In paper2 setting the x-axis constant would help with interpretation. Could set 
 ~ ask him to work out the arithmetic about effectiveness & exposure that Ian started when we were in liverpool.
 
 
-~ plot of mean popn fitness over time
-~~ we have 
-~~ fitness by genotype : listOut$fitness   
-~~ genotype by generation : listOut$genotype
 
-BUT the values seem not as I'd expect (all 0s & 1s)
-for
-input <- setInputOneScenario(max_gen=5)
-listOut <- runModel2(input)
-
-This may be just due to daft defaults in setInputOneScenario()
-
-listOut$fitness[[1]][,'A,B']
-SS1SS2 SS1RS2 SS1RR2 RS1SS2 RS1RS2 RS1RR2 RR1SS2 RR1RS2 RR1RR2 
-     0      0      0      0      1      1      0      1      1 
-     
-listOut$genotype[[1]]
-     gen SS1SS2 SS1RS2 SS1RR2 RS1SS2 RS1RS2_cis RS1RS2_trans RS1RR2 RR1SS2 RR1RS2 RR1RR2
-[1,]   1      1      1      1      1          1            1      1      1      1      1
-[2,]   2      1      1      1      1          1            1      1      1      1      1
-[3,]   3      1      1      1      1          1            1      1      1      1      1
-[4,]   4      1      1      1      1          1            1      1      1      1      1
-[5,]   5      1      1      1      1          1            1      1      1      1      1   
    
    
 ~ I could use plot_fit_rs() to produce some figs for paper2 on how inputs influence fitness maybe initially for single locus ? then to include exposure need to show genotype popn fitness.   
