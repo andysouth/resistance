@@ -148,8 +148,51 @@ plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1), labels='AUT
 ```
 
 
-# Fig2 replicating Curtis
-```{r Fig2, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5, fig.width=6, fig.keep='last'} 
+![curtis fig1](pap1_curtis1.png)
+
+# Fig2 replicating Curtis, and now adding in copies of Curtis plots
+```{r Fig2, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=8.5, fig.width=6, fig.keep='last'} 
+
+  #Beths code for these figures taken from resistanceMaster
+
+  #set layout for 4 plots, A&C Curtis, B&D new ones
+  layout(matrix(1:4,2,2,byrow=FALSE))
+
+  #add in images of curtis plots here
+  #to get into the layout I need to do from R
+  #may be ugly
+  par(mar=c(0.4,2.9,0,0.4)) #bltr default is c(5, 4, 4, 2)
+
+  image(system.file("documents","pap1_curtis1.png", package="resistance"))
+
+  image(system.file("documents","pap1_curtis2.png", package="resistance"))
+
+  
+  
+  par(mar=c(0.4,2.9,0,0.4)) #bltr default is c(5, 4, 4, 2)
+
+  #2B
+  calibration <- 1011
+  input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
+  listOut <- runModel2( input, calibration )
+  #we submitted the LD one but should have done the Fig1
+  #plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
+  plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
+  #side=1=bottom, 2=left, 3=top, 4=right, adj=0 left justify, lines move outwards
+  mtext('B)',side=3, adj=0, line=1)
+    
+  #2D
+  calibration <- 1012
+  input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
+  listOut <- runModel2( input, calibration )  
+  plotcurtis_f2( listOut$results[[3]], listOut$results[[1]], listOut$results[[2]], 1, 2, 3 )
+  #side=1=bottom, 2=left, 3=top, 4=right, adj=0 left justify, lines move outwards
+  mtext('D)',side=3, adj=0, line=1)
+  
+```
+
+
+```{r Fig2_justNew, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3.5, fig.width=6, fig.keep='last'} 
 
   #Beths code for these figures taken from resistanceMaster
 
