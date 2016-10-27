@@ -17,7 +17,7 @@
 
 fit_time_genotype <- function ( genotype = NULL,
                                 a_fitgen = NULL,
-                                plot = TRUE )
+                                plot = FALSE )
 {
   #I'm not sure if these default args will work
   # to allow this function to be called with no args
