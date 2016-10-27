@@ -48,7 +48,7 @@ plotcurtis_f1 <- function ( nrelaxmat, relaxmat, gencol, r1col ){
   points( c(3:12), relax[3:12], col="darkviolet", pch=16 )
   points( c(16:18), relax[16:18], col="darkviolet", pch=16 )
   
-  abline( h=(log10(5) ) )
+  #abline( h=(log10(5) ) )
   
   
   pos <- log10( 4.5 )
