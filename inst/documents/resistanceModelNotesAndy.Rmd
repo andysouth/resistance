@@ -6470,7 +6470,6 @@ Also I talked Ian through my calculation of R-S mean fitness for each locus. He 
  
 Ian said that he had spoken to IVCC about me developing a 'plain english' resistance modelling paper and they liked the idea.
 
-01516652347
 
 *24/10/16* train to liverpool
 
@@ -6525,8 +6524,7 @@ a_fitgen <- fitnessGenotype()
 df_indiv <- as.data.frame(a_fitgen)
 
 
-*25/10/16* with Ian in Liverpool
-
+*25/10/16* with Ian & Matt in Liverpool
 
 Ian & Matt explained that if two different AIs on different bednets that is technically a Mosaic.
 
@@ -6557,16 +6555,44 @@ mean fitness = mean( fitness per genotype * genotype frequency )
 sum( (fitness of each genotype - mean fitness)2 ) #squared
 
 
+*26/10/16* with Ian & Matt in Liverpool
+
+Matt said :
+he will start committing his changes to the Matt folder now that he is starting to work with Rmd files
+he will produce an Rmd of the mosaic work, he is just working out how best to summarise because he has lots of simulations to compare. I said try to produce a sumary at the start & then fine to have more details afterwards.
+
+~ has my removing calibration from runModel2() messed something up in pap1 plotting ?
+i.e. I'm getting LD etc. plots that I wasn't getting before ...
+But I thought that it shouldn't make any difference ...
+check github for previous version and may need to revert 
+  calibration <- 1011
+  input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
+  listOut <- runModel2( input, calibration )
+is it that calibration is saved in input as 1011.00 so maybe that doesn't work in runModel2() ?
+however this suggests not a problem :
+1011 == 1011.00
+[1] TRUE
+Ah yes it was because calibration was put into the produce.plots arg !
+listOut <- runModel2( input, calibration )
+  solution just change to :
+listOut <- runModel2( input=input )
+
+
 
  
 ### TO DO  
+
+insecticide_strategy_diagrams.ppt can be a good start for my slides for ASTMH
+
+still seems to be something weird going on because LD plots are produced when I build the package ??
+
+
 ~ do some more stuff on paper2 text so it has clearer structure before ASTMH
 
 ~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
 
 ~ before ASTMH improve my understanding of LD. E.g. looking at GPIRM figure. maybe see Charelsworth 2012 p 422. Ian may have said that LD can lead to higher than expected frequencies of RR & SS whih may lead to less variance in fitness because most of the gametes are in the middle. [I may have got this wrong].
 
-prepare fig2 of paper1 with Curtis figs
 
 create slides for ASTMH : 10 mins
 keep the messages simple
