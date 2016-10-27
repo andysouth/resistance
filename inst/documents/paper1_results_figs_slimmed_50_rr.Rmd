@@ -161,11 +161,21 @@ plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1), labels='AUT
   #add in images of curtis plots here
   #to get into the layout I need to do from R
   #may be ugly
-  par(mar=c(0.4,2.9,0,0.4)) #bltr default is c(5, 4, 4, 2)
+  #par(mar=c(0,0,0,0)) #bltr default is c(5, 4, 4, 2)
+  #pty="s" #to create a square plot region
+  par(pty="s",mar=c(0.4,2.9,0,0.4)) #bltr default is c(5, 4, 4, 2)
 
-  image(system.file("documents","pap1_curtis1.png", package="resistance"))
+  library(png)
+  f1png <- readPNG(system.file("documents","pap1_curtis1.png", package="resistance"))
+  plot( 0, 0, type="n", axes=F, xlim=c(0,1), ylim=c(0,1), xlab="", ylab="")
+  rasterImage(f1png, xleft=0, ybottom=0, xright=1, ytop=1, interpolate = FALSE)
+  mtext('A)',side=3, adj=0, line=1)
 
-  image(system.file("documents","pap1_curtis2.png", package="resistance"))
+  
+  f2png <- readPNG(system.file("documents","pap1_curtis2.png", package="resistance"))
+  plot( 0, 0, type="n", axes=F, xlim=c(0,1), ylim=c(0,1), xlab="", ylab="")
+  rasterImage(f2png, xleft=0, ybottom=0, xright=1, ytop=1, interpolate = FALSE)
+  mtext('C)',side=3, adj=0, line=1)
 
   
   
@@ -174,7 +184,7 @@ plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1), labels='AUT
   #2B
   calibration <- 1011
   input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
-  listOut <- runModel2( input, calibration )
+  listOut <- runModel2( input=input )
   #we submitted the LD one but should have done the Fig1
   #plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
   plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
@@ -184,7 +194,7 @@ plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1), labels='AUT
   #2D
   calibration <- 1012
   input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
-  listOut <- runModel2( input, calibration )  
+  listOut <- runModel2( input=input )  
   plotcurtis_f2( listOut$results[[3]], listOut$results[[1]], listOut$results[[2]], 1, 2, 3 )
   #side=1=bottom, 2=left, 3=top, 4=right, adj=0 left justify, lines move outwards
   mtext('D)',side=3, adj=0, line=1)
@@ -203,7 +213,7 @@ plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1), labels='AUT
   #2A
   calibration <- 1011
   input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
-  listOut <- runModel2( input, calibration )
+  listOut <- runModel2( input=input )
   #we submitted the LD one but should have done the Fig1
   #plotcurtis_ld( listOut$results[[1]], listOut$results[[2]], 1, 4 )
   plotcurtis_f1( listOut$results[[1]], listOut$results[[2]], 1, 2 )
@@ -213,7 +223,7 @@ plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(0.7,1), labels='AUT
   #2B
   calibration <- 1012
   input <- createInputMatrix( params.csv=FALSE, calibration=calibration )
-  listOut <- runModel2( input, calibration )  
+  listOut <- runModel2( input=input )  
   plotcurtis_f2( listOut$results[[3]], listOut$results[[1]], listOut$results[[2]], 1, 2, 3 )
   #side=1=bottom, 2=left, 3=top, 4=right, adj=0 left justify, lines move outwards
   mtext('B)',side=3, adj=0, line=1)
