@@ -6577,15 +6577,38 @@ listOut <- runModel2( input, calibration )
   solution just change to :
 listOut <- runModel2( input=input )
 
+*27/10/16*
+
+~ updated pap1 figs e.g. fignames
+~ emailed Ian & Beth about email from PLOS, suggesting that we go without the Curtis copies.
+
+
+~ have a quick look at creating Linkage disequilibrium plots like the ones on p122 of GPIRM
+~~ see yellow notebook notes from 26/10/16
+
+#' input <- setInputOneScenario()
+#' listOut <- runModel2(input)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=5)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=6)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=7)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=8)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=9)
+
+Seems that I can do something similar.
+But is it really showing what we want ??
+
+This version doesn't include dominance.
+Come back to this after back from SA when I have more time.
 
 
  
 ### TO DO  
 
+
+
 insecticide_strategy_diagrams.ppt can be a good start for my slides for ASTMH
 
 still seems to be something weird going on because LD plots are produced when I build the package ??
-
 
 ~ do some more stuff on paper2 text so it has clearer structure before ASTMH
 
