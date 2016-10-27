@@ -71,7 +71,7 @@ resistanceMaster <- function(params.csv = FALSE,
   #### Run Model ####
   #creates listOut$results, listOut$genotype & listOut$fitness
   #listOut <- runModel( input, calibration )
-  listOut <- runModel2( input, calibration )  
+  listOut <- runModel2( input )  
   
   ### Actions needing the full listOut$results ####
   
