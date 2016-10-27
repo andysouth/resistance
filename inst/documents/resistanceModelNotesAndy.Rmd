@@ -6579,9 +6579,10 @@ listOut <- runModel2( input=input )
 
 *27/10/16*
 
+~ emailed Ian & Matt, asked Matt if he had committed the code to do the rotation plots
+
 ~ updated pap1 figs e.g. fignames
 ~ emailed Ian & Beth about email from PLOS, suggesting that we go without the Curtis copies.
-
 
 ~ have a quick look at creating Linkage disequilibrium plots like the ones on p122 of GPIRM
 ~~ see yellow notebook notes from 26/10/16
