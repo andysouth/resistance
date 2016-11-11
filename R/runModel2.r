@@ -229,7 +229,7 @@ runModel2 <- function(input = NULL,
     # does this really output what we want ?
     listOut$fitness[[scen_num]] <- fitnessOutput( a_fitnic )    
     
-    #25/0/16 can I add output of fitness by genotype and generation
+    #25/10/16 can I add output of fitness by genotype and generation
     #BEWARE that this doesn't mess other stuff up
     listOut$fit_time_genotype <- fit_time_genotype(genotype, a_fitgen)
     
