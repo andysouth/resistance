@@ -6533,7 +6533,6 @@ Mosaic, most are exposed to just one but some are exposed to both (through the c
 
 Ian wasn't that keen on the exposure vis and didn't quite get the need to be able to set the exposures differently.
 
-
 input <- setInputOneScenario(max_gen=200)
 listOut <- runModel2(input)
 layout(matrix(c(1:2),2,1))
@@ -6601,15 +6600,52 @@ But is it really showing what we want ??
 This version doesn't include dominance.
 Come back to this after back from SA when I have more time.
 
+Fig changes paper1 :
 
+done ~ Fig 1 add A) & B)
+done ~ Fig 2 add A) & B) potentially add scans of Curtis figs
+done ~ Fig 3. got input values from Ian, removed mex2 & seq labels because on top of each other
+done ~ Fig 6 add A) ,B), C)
+done ~ Fig 8.1 tree 1. Make text less bold. Turn ovals into rectangles.
+done ~ Fig 11 do I want to keep mix1,2 & seq labels ? I think so.
+
+*9/11/16* train back from heathrow after SA
+
+fitness variance :
+This is where I got to in Liverpool a few weeks back : results stored in listOut$fit_time_genotype
+
+called from runModel2() :
+listOut$fit_time_genotype <- fit_time_genotype(genotype, a_fitgen)
+
+input <- setInputOneScenario(max_gen=200)
+listOut <- runModel2(input)
+layout(matrix(c(1:2),2,1))
+plot(listOut$fit_time_genotype[,'f','variance'])
+
+*10/11/16* Bayer working on slides for ASTMH
+
+Interesting comment from Justin on Ians ppt the decision tree slide
+I think this slide could be interesting to spend some time on. For instance it might be worth mentioning – what is the theoretical exposure level of IRS vs LLINs? With universal coverage (and usage) of LLINs is exposure assumed to be high? IRS tends to be more limited in its application (only about 5% of people at risk protected by IRS) – does that mean an assumption of low exposure or are the geographies of discrete mosquito populations so well understood that IRS coverage in one or two districts can be assumed to be high exposure to ‘discrete’ mosquito populations. Is there any such thing as a discrete population anyway?
+
+What does it mean if there is LLIN use and IRS deployment ? I think that question might come. 
+
+*11/11/16*
+sent Ian & Matt first draft of my presentation
+
+modifying fig2 again for Ian. He wants in the LD plot
+  #f1png <- readPNG(system.file("documents","pap1_curtis1.png", package="resistance"))
+  #both the ld and the rfreq plots (ld on its own means little with the way axes are labelled)
+  f1png <- readPNG(system.file("documents","pap1_curtis1_both.png", package="resistance"))
+ 
+ 
  
 ### TO DO  
 
+How best to sort our figure 2
 
-
-insecticide_strategy_diagrams.ppt can be a good start for my slides for ASTMH
-
-still seems to be something weird going on because LD plots are produced when I build the package ??
+~ before ASTMH
+~~ think how we can address Justins question
+~~ What does it mean if there is LLIN use and IRS deployment ?
 
 ~ do some more stuff on paper2 text so it has clearer structure before ASTMH
 
@@ -6629,8 +6665,6 @@ add an adaptive mixture strategy to my slide ?
 Maybe I should look back at Justins email of 14 September which contains a couple of trickyish scenarios we coud try to represent.
 
 I'd like to do graphic of mixture/seq/mosaic, should I do in R or powerpoint ? ppt would be quicker and more flexible.
-
-Ian said go and produce the graph for fig2 with both of Curtis' figs in.
 
 Tangent : check whether I have power of attorney for M&D
 
@@ -6680,14 +6714,7 @@ although I think this just calculates fitness by M&F.
 # now paper1 is nearly accepted I need to get a move on with paper2
 # get to bottom of the different effects of effectiveness & exposure
 
-Fig changes needed :
 
-Fig 1 add A) & B)
-Fig 2 add A) & B) potentially add scans of Curtis figs
-done ~ Fig 3. got input values from Ian, removed mex2 & seq labels because on top of each other
-done ~ Fig 6 add A) ,B), C)
-done ~ Fig 8.1 tree 1. Make text less bold. Turn ovals into rectangles.
-done ~ Fig 11 do I want to keep mix1,2 & seq labels ? I think so.
 
 
               
@@ -6994,7 +7021,9 @@ Pay (217 per day)			4774
 Prev days remaining			47.75
 Days remaining (from 85)			25.75
 
-
+# to fix git problem (if I amend a commit I've already pushed)
+git reset HEAD@{1}
+this takes git back to before the last commit (from ohshitgit.com)
 
 # files to do runs
 1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
