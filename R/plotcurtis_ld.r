@@ -25,7 +25,7 @@ plotcurtis_ld <- function(nrelaxmat, relaxmat, gencol, ldcol){
   
   plot( 0, 0, type="n", axes=F,						## Blank square 1,1 plot
         xlim=c(1,(max(nrelaxmat[,gencol]))), ylim=c(ymin,ymax),
-        xlab="Generation", ylab="Index of Linkage Disequilibrium - D", main="Linkage Disequilibrium")
+        xlab="Generation", ylab="Index of Linkage Disequilibrium - D", main="")#"Linkage Disequilibrium")
   
   lines( gens, res )		#plot log10 LD against generation
   lines( gens, rel )
@@ -33,7 +33,7 @@ plotcurtis_ld <- function(nrelaxmat, relaxmat, gencol, ldcol){
   points( c(3:12), rel[3:12], col="darkviolet", pch=16 )		# add purple points on relaxed line to indicate relaxed generations
   points( c(15:18), rel[15:18], col="darkviolet", pch=16 )
   
-  axis( side=1, at=c(0,2,4,6,8,10,12,14,16,18), labels=c(0,2,4,6,8,10,12,14,16,18), tick=T )
+  axis( side=1, at=c(0,2,4,6,8,10,12,14,16,18), labels=c(0,2,4,6,8,10,12,14,16,18), tick=T, cex=0.7 )
   
   labs <- c(0.000001,0.00001,0.0001,0.001,0.01)
   labpos <- log10(labs)
@@ -41,8 +41,8 @@ plotcurtis_ld <- function(nrelaxmat, relaxmat, gencol, ldcol){
   axis( side=2, at=labpos, labels=labs, tick=T )
   
   pos <- log10( 0.01 )
-  legend( 9, pos , legend=c("Linkage disequilbrium","With relaxed selection"), 
-          col=c("black", "darkviolet"), pch=c(16,16), bty="n" )
+  legend( 7, pos , legend=c("Linkage disequilbrium","With relaxed selection"), 
+          col=c("black", "darkviolet"),lty=c(1,0), pch=c(NA,16), bty="n", cex=0.7 )
   
   box()
   
