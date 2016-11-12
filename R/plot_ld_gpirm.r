@@ -1,6 +1,7 @@
 #' try to plot genotype frequencies to show linkage disequilibrium
 #' 
 #' as done in GPIRM p122
+#' BEWARE this initial version assumes dominance=1
 
 #' @param genotype genotype frequencies by generation
 #' @param gen_num which generation to plot for
@@ -8,21 +9,32 @@
 #' @examples 
 #' input <- setInputOneScenario()
 #' listOut <- runModel2(input)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=5)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=6)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=7)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=8)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=9)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=10)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=11)
-#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen_num=12)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=8)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=11)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=7:12)
 #' 
+#' #for single insecticide
+#' a <- setExposure( exposure=0.9,  insecticideUsed = 'insecticide1' )
+#' input <- setInputOneScenario( a=a )
+#' listOut <- runModel2(input)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=c(2:9))
 #' 
 #' @return dataframe of plotted fitness values and colours
 #' @export
 
-plot_ld_gpirm <- function ( genotype, gen_num = 1  ){
+plot_ld_gpirm <- function ( genotype, gen = 1  ){
  
+  num_panels <- length(gen)
+  
+  #remove blank borders
+  par(mar = c(0,0,0,0),oma = c(0, 0, 0, 0))
+  
+  # first go at setting layout of panels
+  # this does constant 2 rows
+  # if odd add 1
+  if (num_panels %% 2 != 0) num_panels=num_panels+1
+  layout( matrix(c(1:num_panels), 2, byrow = TRUE))
+  layout.show(num_panels)
   
   #could use listOut$genotype but it has cis & trans in ...
   #AHA 2nd problem was that genotype includes cis & trans
@@ -33,33 +45,37 @@ plot_ld_gpirm <- function ( genotype, gen_num = 1  ){
   colnames(gen2)[ which(colnames(gen2)=='RS1RS2_cis')] <- 'RS1RS2'
   gen2 <- gen2[,- which(colnames(gen2)=='RS1RS2_trans')]
   
-  tp <- gen2[gen_num,]
+  for( gen_num in gen)
+  {
+    
+    tp <- gen2[gen_num,]
+    
+    #rectangle  boundaries (see notebook)
+    #first assuming complete dominance
+    #TODO see notebook for way of including dominance 
+    p1 <- tp['RR1SS2'] + tp['RS1SS2']
+    p2 <- tp['RR1RR2'] + tp['RS1RR2'] +
+      tp['RR1RS2'] + tp['RS1RS2']
+    p3 <- tp['SS1RR2'] + tp['SS1RS2']
+    p4 <- p2
+    
+    
+    #create blank plot
+    #can change extents here to allow in more or less things in borders
+    plot(c(-0.2,1.25),c(0,1), type='n', axes=FALSE, xlab='', ylab='', asp=1)
+    
+    #rectangles
+    # b first so a goes on top
+    rect(xleft = p1, xright = 1, ybottom = 0, ytop = 1-p3, col='yellow')
+    # a
+    rect(xleft = 0,  xright = p2, ybottom = 1-p4, ytop = 1, col='purple') 
+    # c
+    rect(xleft = p2,  xright = 1, ybottom = 1-p3, ytop = 1, col='blue')  
+    # d
+    rect(xleft = 0,  xright = p1, ybottom = 0, ytop = 1-p4, col='red')  
+    
+  }
   
-  #rectangle  boundaries (see notebook)
-  #first assuming complete dominance
-  #TODO see notebook for way of including dominance 
-  p1 <- tp['RR1SS2'] + tp['RS1SS2']
-  p2 <- tp['RR1RR2'] + tp['RS1RR2'] +
-        tp['RR1RS2'] + tp['RS1RS2']
-  p3 <- tp['SS1RR2'] + tp['SS1RS2']
-  p4 <- p2
-  
-  #remove blank borders
-  par(mar = c(0,0,0,0),oma = c(0, 0, 0, 0))
-  
-  #create blank plot
-  #can change extents here to allow in more or less things in borders
-  plot(c(-0.2,1.25),c(0,1), type='n', axes=FALSE, xlab='', ylab='', asp=1)
-  
-  #rectangles
-  # b first so a goes on top
-  rect(xleft = p1, xright = 1, ybottom = 0, ytop = 1-p3, col='yellow')
-  # a
-  rect(xleft = 0,  xright = p2, ybottom = 1-p4, ytop = 1, col='purple') 
-  # c
-  rect(xleft = p2,  xright = 1, ybottom = 1-p3, ytop = 1, col='blue')  
-  # d
-  rect(xleft = 0,  xright = p1, ybottom = 0, ytop = 1-p4, col='red')  
 
     
   
