@@ -74,6 +74,11 @@ plot_ld_gpirm <- function ( genotype, gen = 1  ){
     # d
     rect(xleft = 0,  xright = p1, ybottom = 0, ytop = 1-p4, col='red')  
     
+    #text labels
+    #text(x=p1+0.5*(1-p1), y=1.1, "ASBS")
+    text(x=0.9, y=0.1, expression(A^SB^S))
+    text(x=0.1, y=0.9, expression(A^RB^R))   
+    
   }
   
 
