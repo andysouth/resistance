@@ -6638,10 +6638,24 @@ modifying fig2 again for Ian. He wants in the LD plot
   f1png <- readPNG(system.file("documents","pap1_curtis1_both.png", package="resistance"))
  
  
+recheck figures through PACE : http://pace.apexcovantage.com/ 
+couldn't remember passwd : w77  
+ 
+all passed 
+
+Can I upload them for Ian ?
+Thank you for registering for the PLOS Editorial Manager online submission and review system for PLOS Computational Biology.
+
+see email from July 27
+Here is your username and confidential password, which you will need to access the site at http://pcompbiol.edmgr.com/.
+
+I logged in and it didn't seem to have any record of resubmission needed.
+
+
+ 
  
 ### TO DO  
 
-How best to sort our figure 2
 
 ~ before ASTMH
 ~~ think how we can address Justins question
