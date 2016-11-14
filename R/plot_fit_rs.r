@@ -8,6 +8,7 @@
 #' @param title optional title for the plot
 #' @param ylim ylim, default = c(0,1)
 #' @param yblank whether to remove y axis title & labels
+#' @param size text size for RS labels, default 4
 #' 
 #' @examples 
 #' #singleLocus
@@ -38,7 +39,9 @@
 #' @return dataframe of plotted fitness values and colours
 #' @export
 
-plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL, ylim = c(0,1), yblank = FALSE ){
+plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL, ylim = c(0,1), 
+                          yblank = FALSE,
+                          size = 4){
  
   #library(ggrepel)
   #library(stringr)
@@ -53,7 +56,7 @@ plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL, yli
         ylim(ylim) +
         xlim(0.9,1.5) +
         geom_point(size=3, colour=df_fit$col) +
-        ggrepel::geom_text_repel( aes(label=rownames(df_fit)), nudge_x=0.2, size=2) +
+        ggrepel::geom_text_repel( aes(label=rownames(df_fit)), nudge_x=0.2, size=size) +
         ylab('fitness') +
         ggtitle(title) + 
         theme_bw() +
