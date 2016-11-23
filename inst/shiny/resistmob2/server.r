@@ -45,8 +45,12 @@ shinyServer(function(input, output) {
                       rr_restoration_ins1 = input$advantage_A1,
                       rr_restoration_ins2 = input$advantage_A2,
                       
-                      addCombinedStrategy = FALSE,
-                      strategyLabels = c('seq','','adapt','mix2') )
+                      cex.axis = 1,
+                      
+                      #strategyLabels = c('seq','','adapt','mix2'),
+                      
+                      addCombinedStrategy = FALSE )
+        
                       #correct_mix_deploy = input$correct_mix_deploy,
                       #addCombinedStrategy = input$addCombinedStrategy )
         
@@ -94,9 +98,11 @@ shinyServer(function(input, output) {
                       #s.RR2_0B = input$advantage_B2,
                       rr_restoration_ins1 = input$advantage_B1,
                       rr_restoration_ins2 = input$advantage_B2,
+                      cex.axis = 1,
                       
-                      addCombinedStrategy = FALSE,
-                      strategyLabels = c('seq','','adapt','mix2') )
+                      #strategyLabels = c('seq','','adapt','mix2'),
+                      
+                      addCombinedStrategy = FALSE )
         #correct_mix_deploy = input$correct_mix_deploy,
         #addCombinedStrategy = input$addCombinedStrategy )
         
