@@ -6651,17 +6651,120 @@ Here is your username and confidential password, which you will need to access t
 
 I logged in and it didn't seem to have any record of resubmission needed.
 
+14/11/16
+
+problem with fitvis :
+Warning: Error in : 'as_tibble' is not an exported object from 'namespace:tibble'
+Stack trace (innermost first):
+
+online it said this should work :
+install.packages("tibble")
+ 
+# ASTMH
+Disease outbreak library for disease categorisation in social media posts.
+This could be useful for Thibaut
+For CDC Emergency communication group
+University of Georgia
+Zion Tsz Ho Tse, College of Engineering, The University of Georgia
+He said thet they are still testing in Beta, but they hope to make it open-source in future.
+Also said he was happy to discuss offline
+ 
+Tatiana Vorovchenko 
+Nuffield, Oxford
+Media consultant for WHO
+
+*15/11/16*
+
+my talk at ASTMH
+went well, people looked like it was quite hard work for them but when I asked them they said they got it. I had been slightly concerned that I had made things too easy, I don't think I did. For me it showed that there are still opportunities to improve the communication of how these models work.
+
+Next time I could prepare explicit input combinations to show in the UI. Otherwise I get blinded in the headlights and don't know which to show. e.g. there is interest in insecticides with existing resistance.
+
+One question that I didn't answer very well. I think I passed it on to Ian and I'm not sure he answered it too well either. We show that higher exposure and effectiveness lead to more rapid evolution of resistance. How does fit with the conventional wisdom that poor spraying leads to more rapid evolution of resistance ?
+
+I asked Ian afterwards and he referred to our Figure 1. I'm still not quite sure I get it.
+
+Our figure 1 shows how dominance of the resistance allele can increase over time as the insecticide degrades and presumably there could be a similar effect due to poor application.
+
+So I think Ians suggestion is that poor application leads to higher dominance of resistance which in turn leads to faster increase in resistance. 
+
+But we don't look at it this way in the model ...
+So if it is this important perhaps we could change how we present dominance ?
+
+
+
+*16/11/16*
+systematic review of 21 vector control tools (VCTs)
+Yasmin Wiliams, UCSF (Gerry Killeen on author list)
+
+WHO recomendation requires phase 3 community trials
+
+Insecticide resistance seesion, Tessa Knox
+
+Five country study starting in 2009. Little previously known about relationship between resistance and malaria outcomes. Known that plenty of resistance but what are the epidemiological outcomes.
+
+Benin, Cameroon, Kenya, India, 
+
+One interesting result (final photo) that pyrethroid resistance increased more slowly in an area with another effective IRS AI, than in an area where nets were used alone (supports our results).
+Or does it :
+The development of pyr resistance was slower in areas with pyr IRS than in an area with LLINs only.
+That doesn't quite make sense to me
+
+Nets continue to provide protection despite resistance.
+
+*17/11/16*
+
+Hilary Ransom
+Global decline of malaria
+But locally some less +ve 
+Burkin Faso since 2006 steady increase in malaria cases
+
+Prevailing view is bednets still work despite 
+WHO 5 countries study :
+No relationship between pyrethroid resistance and malaria cases
+Nets still give personal protection where there is resistance
+
+So :
+A) is resistance not a problem ?
+or B) is it a time bomb waiting to explode, and we'll get much lower control soon
+
+*22/11/16* back from ASTMH
+
+~ skyped Ian, worked on new fig 1b
+
+
+*23/11/16*
+
+~ completed copyright request form & sent to ian with request to send to cambridge
+~ accepting Matt's pull requests :
+
+https://help.github.com/articles/merging-a-pull-request/
+
+When someone sends you a pull request from a fork or branch of your repository, you may want to merge it locally to resolve a merge conflict or to test and verify the changes on your local computer before merging on GitHub. For more information, see https://help.github.com/articles/checking-out-pull-requests-locally/
+
+seems like I only have the option to review rather than merge the pull request
+
+https://help.github.com/articles/about-pull-request-reviews/
+
+Yes after I accepted in review, then I got option to merge.
+
 
  
  
 ### TO DO  
 
+~ email copyright form to publisher
 
-~ before ASTMH
+
+~ after ASTMH
 ~~ think how we can address Justins question
 ~~ What does it mean if there is LLIN use and IRS deployment ?
 
-~ do some more stuff on paper2 text so it has clearer structure before ASTMH
+~~ for linkage disequilibrium it will be cool to be able to put the gpirm LD figures (from plot_ld_gpirm) on a common scale for mixtures & sequences
+
+~ I think I should probably change the model to be able to represent sequences directly rather than through post-processing. Quite a big job, maybe a week or more.
+
+~ do some more stuff on paper2 text so it has clearer structure
 
 ~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
 
