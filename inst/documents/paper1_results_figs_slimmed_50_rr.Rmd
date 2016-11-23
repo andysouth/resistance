@@ -83,7 +83,7 @@ df_to_plot <- rbind(dfd1, dfd05, dfd0)
 
 plotlist[[1]] <- ggplot(df_to_plot, aes(x=generation, y=freq, 
                               colour=factor(dominance,labels=c("0   recessive",
-                                                               "0.5 partial",
+                                                               "0.5 semi-dominant",
                                                                "1   dominant")))) + 
        theme_bw() +  
        #theme(legend.position = "bottom", legend.key = element_blank()) + 
@@ -91,35 +91,55 @@ plotlist[[1]] <- ggplot(df_to_plot, aes(x=generation, y=freq,
        labs(colour = "dominance") +
        ylab("Resistance Allele Frequency") +   
        #coord_trans(y = "log10") +    
-       geom_line()
+       geom_line() +
+       theme(axis.text.x = element_blank(),
+             axis.ticks = element_blank(),
+             panel.grid = element_blank())  
        #annotate('text',label='A)',x=-10, y=1.1)
 
 #Fig 1B
 
-df_labs <- data.frame(lab=rep(c('RR','RS','SS'),4),
-                      x=c(10,10,10,30,30,30,50,50,50,70,70,70),
-                      y=c(50,46,42,38,34,30,26,22,18,14,10,6),
-                      #col=c(2,1,1,2,1.5,1,2,2,1,2,2,2))
-                      col=c(1,0,0,1,0.5,0,1,1,0,1,1,1))
+#22/11/16 adding extra section on left where all killed following request from Ian
+#first try adding on left @-10 and modify x extent so I don't have to fiddle with all coords
+df_labs <- data.frame(lab=rep(c('RR','RS','SS'),5),
+                      x=c(-10,-10,-10,10,10,10,30,30,30,50,50,50,70,70,70),
+                      y=seq(62,6,-4),
+                      #y=c(50,46,42,38,34,30,26,22,18,14,10,6),
+                      col=c(0,0,0,1,0,0,1,0.5,0,1,1,0,1,1,1))
 
-df_boxes <- data.frame(lab=c('R recessive\n(slow spread)',
+df_boxes <- data.frame(lab=c('All killed\n(no spread)',
+                             'R recessive\n(slow spread)',
                              'R semi-dominant\n(rapid spread)',
                              'R dominant\n(rapid spread)',
-                             'No selection for R'),
-                      x=c(10,30,50,80),
-                      y=c(90,75,60,35))
+                             'All survive\n(no spread)'),
+                      x=c(-10,10,30,50,70),
+                      y=c(105,90,75,60,45))
 
-plotlist[[2]] <- ggplot(data.frame(x=c(0,100),y=c(80,0)), aes(x=x, y=y)) + 
+# df_labs <- data.frame(lab=rep(c('RR','RS','SS'),4),
+#                       x=c(10,10,10,30,30,30,50,50,50,70,70,70),
+#                       y=c(50,46,42,38,34,30,26,22,18,14,10,6),
+#                       #col=c(2,1,1,2,1.5,1,2,2,1,2,2,2))
+#                       col=c(1,0,0,1,0.5,0,1,1,0,1,1,1))
+# 
+# df_boxes <- data.frame(lab=c('R recessive\n(slow spread)',
+#                              'R semi-dominant\n(rapid spread)',
+#                              'R dominant\n(rapid spread)',
+#                              'No selection for R'),
+#                       x=c(10,30,50,80),
+#                       y=c(90,75,60,35))
+
+plotlist[[2]] <- ggplot(data.frame(x=c(-20,85),y=c(90,15)), aes(x=x, y=y)) + 
        theme_bw() + 
-       ylim(0,100) +
+       ylim(0,115) +
+       xlim(-20,85) +
        coord_cartesian(expand = FALSE) + #so that axes fit data exactly
        ylab("Insecticide concentration") +
        xlab("Time since treatment") +         
        geom_line(size=2, colour=rgb(0.5,0,0.5)) +
-       geom_vline(xintercept = c(20,40,60), linetype=2) +
+       geom_vline(xintercept = c(0,20,40,60), linetype=2) +
        geom_text(data=df_labs,aes(x=x, y=y, label=lab, colour=factor(col)),size=4) +
        scale_colour_manual(values = c("0" = "red","0.5" = "orange","1" = "green"), guide=FALSE) +  
-       geom_label(data=df_boxes,aes(x=x, y=y, label=lab)) +
+       geom_label(data=df_boxes,aes(x=x, y=y, label=lab),size=3) +
        theme(axis.text = element_blank(),
              axis.ticks = element_blank(),
              panel.grid = element_blank())
