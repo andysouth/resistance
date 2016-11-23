@@ -1,3 +1,24 @@
+#' Find number of generations to reach critical points of resistance for rotation strategy
+#' 
+#' Post processes model output files to find the number of generations it takes 
+#' for the R allele frequency to reach passed criticalPoints.
+#' Returns NA if freq does not reach 
+
+#' @param rotation_generations is the number of generations an insecticide will be deployed before changing insecticides
+#' @param listOut results from a set of scenario runs (or a single results matrix)
+#' @param locus locus of interest (1,2 or 'both')
+#' @param criticalPoints the critical resistance thresholds that you want to assess
+
+
+#' @examples 
+#' input <- setInputSensiScenarios( nScenarios=3, h.RS1_A0=c(0,1) )
+#' listOut <- runModel2(input)
+#' findResistancePoints(listOut$results, locus='both')
+#' @return matrix with a column for each scenario, giving the generation number at which frequency of R is first greater than critical points
+#' @export
+
+
+
 findResistancePointsRotation <- function( rotation_generations = 10,
                                           listOutI1,
                                           listOutI2,

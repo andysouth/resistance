@@ -1,0 +1,323 @@
+---
+title: "AttemptPlottingRotations"
+output: pdf_document
+author: "Matt Powney"
+date: "`r Sys.Date()`"
+---
+
+
+#The following code generates and plots the rotation resistances for Curtis figure 2.
+  
+```{r,echo=FALSE,results='hide'}
+findResistancePointsRotation <- function( rotation_generations = 10,
+                                          listOutI1,
+                                          listOutI2,
+                                          locus,
+                                          criticalPoints = c(0.1,0.25,0.5)
+){
+  
+  #set the number of scenarios
+  numScenarios <- length(listOutI1$results) 
+  
+  #create matrix to receive the results, name rows including gen_cP for generations to reach criticalPoints.
+  resistGens <- matrix( nrow=length(criticalPoints), ncol=numScenarios, dimnames=list(paste0('gen_cP',criticalPoints) ) )
+  
+  #for each scenario
+  for(scenarioNum in 1:numScenarios)
+  {
+    #for each critical point
+    for(criticalPointNum in seq_along(criticalPoints) )
+    {
+      criticalPoint <- criticalPoints[criticalPointNum]
+      #cat("criticalPoint ", criticalPoint,"\n")
+      
+      #getting results matrix out of the list for the separate insecticides
+      resultsI1 <- listOutI1$results[[scenarioNum]]
+      resultsI2 <- listOutI2$results[[scenarioNum]]
+      
+      
+      #extracting the resistances for insecticides 1 and 2
+      resistancesI1 <-    rowMeans(cbind(resultsI1[,'m.R1'],
+                                         resultsI1[,'f.R1'] ))
+      resistancesI2 <-    rowMeans(cbind(resultsI2[,'m.R2'],
+                                         resultsI2[,'f.R2'] ))
+      
+      #Isolating generations where resistance hasn't been met for I1 and I2.
+      gensI1 <- which( resistancesI1 < criticalPoint)
+      gensI2 <- which( resistancesI2 < criticalPoint)
+      
+      #Connecting first detectable resistance generations.
+      gensI1=c(gensI1, max(gensI1)+1)
+      gensI2=c(gensI2, max(gensI2)+1)
+      
+      #Calculate total number of generations until resistance for rotation.
+      overallgens = length(gensI1) + length(gensI2)
+      
+      #The following code calculates the final number of generations before resistance for each insecticide individually.
+      
+      roundsI1=(length(gensI1)%/%rotation_generations)
+      roundsI2=(length(gensI2)%/%rotation_generations)
+      
+      leftover=(length(gensI2)%%rotation_generations)
+      
+      
+      if (roundsI1 > roundsI2){
+        
+        
+        
+        I1gen=overallgens
+        
+        if (leftover==0){
+          
+          I2gen=(2*roundsI2)*rotation_generations + leftover
+        }
+        
+        if (leftover!=0){
+          
+          I2gen=(2*roundsI2 + 1)*rotation_generations + leftover
+        }
+        
+      }
+      
+      else 
+      {
+        I2gen=overallgens
+        
+        I1gen=(2*(roundsI1)*rotation_generations + leftover)
+        
+      }   
+      
+      
+      
+      #Calculate total number of generations until resistance for rotation.
+      if (locus == "both")
+      {
+        if (I1gen>I2gen){
+          resistGens[criticalPointNum,scenarioNum] <- I1gen
+        }
+        
+        if (I1gen<I2gen){
+          resistGens[criticalPointNum,scenarioNum] <- I2gen
+        }
+        
+      }
+      
+      #Report number of generations for insecticide 1 and insecticide 2.
+      else if (locus ==1)
+      {
+        resistGens[criticalPointNum,scenarioNum] <- I1gen
+        
+      }
+      
+      else if (locus == 2)
+      {
+        resistGens[criticalPointNum,scenarioNum] <- I2gen
+        
+      }
+      
+      
+      
+    }
+  }
+  
+  #replace any NAs with 999 to show that resistance not reached
+  resistGens[is.na(resistGens)] <- 999
+  
+  
+  return(resistGens)
+  
+}
+
+```
+
+```{r,echo=FALSE,results='hide'}
+#To mirror the inputs for Curtis Figure 2.
+
+
+exp1 = NULL
+exp2 = NULL
+max_gen = 500
+P_1 = 0.01
+P_2 = 0.01
+recomb_rate = 0.5
+exposure = 0.9
+phi.SS1_a0 = 0
+phi.SS1_A0 = 0.73
+phi.SS2_0b = 0
+phi.SS2_0B = 1
+W.SS1_00 = 1 
+W.SS2_00 = 1
+h.RS1_00 = 0
+h.RS1_a0 = 0
+h.RS1_A0 = 0.17
+h.RS2_00 = 0
+h.RS2_0b = 0
+h.RS2_0B = 0.0016
+s.RR1_a0 = 0 
+s.RR1_A0 = NULL
+s.RR2_0b = 0
+s.RR2_0B = NULL
+rr_restoration_ins1 = 0.23/0.73
+rr_restoration_ins2 = 0.43/1
+z.RR1_00 = 0
+z.RR2_00 = 0
+sexLinked = 0
+male_exposure_prop = 1
+correct_mix_deploy = 1
+
+
+#Set exposure and inputs for insecticide 1
+a <- setExposure(exposure = exposure, exp1 = exp1, exp2 = exp2, 
+                 insecticideUsed = "insecticide1", male_exposure_prop = male_exposure_prop, 
+                 correct_mix_deploy = correct_mix_deploy)
+
+inputI1 <- setInputOneScenario(a = a, max_gen = max_gen, 
+                               P_1 = P_1, P_2 = P_2, recomb_rate = recomb_rate, phi.SS1_a0 = phi.SS1_a0, 
+                               phi.SS1_A0 = phi.SS1_A0, phi.SS2_0b = phi.SS2_0b, phi.SS2_0B = phi.SS2_0B, 
+                               W.SS1_00 = W.SS1_00, W.SS2_00 = W.SS2_00, h.RS1_00 = h.RS1_00, 
+                               h.RS1_a0 = h.RS1_a0, h.RS1_A0 = h.RS1_A0, h.RS2_00 = h.RS2_00, 
+                               h.RS2_0b = h.RS2_0b, h.RS2_0B = h.RS2_0B, s.RR1_a0 = s.RR1_a0, 
+                               s.RR1_A0 = s.RR1_A0, s.RR2_0b = s.RR2_0b, s.RR2_0B = s.RR2_0B, 
+                               rr_restoration_ins1 = rr_restoration_ins1, rr_restoration_ins2 = rr_restoration_ins2, 
+                               z.RR1_00 = z.RR1_00, z.RR2_00 = z.RR2_00, sexLinked = sexLinked, 
+                               male_exposure_prop = male_exposure_prop, correct_mix_deploy = correct_mix_deploy)
+
+
+#Set exposure and inputs for insecticide 1
+
+a <- setExposure(exposure = exposure, exp1 = exp1, exp2 = exp2, 
+                 insecticideUsed = "insecticide2", male_exposure_prop = male_exposure_prop, 
+                 correct_mix_deploy = correct_mix_deploy)
+
+
+
+inputI2 <- setInputOneScenario(a = a, max_gen = max_gen, 
+                               P_1 = P_1, P_2 = P_2, recomb_rate = recomb_rate, phi.SS1_a0 = phi.SS1_a0, 
+                               phi.SS1_A0 = phi.SS1_A0, phi.SS2_0b = phi.SS2_0b, phi.SS2_0B = phi.SS2_0B, 
+                               W.SS1_00 = W.SS1_00, W.SS2_00 = W.SS2_00, h.RS1_00 = h.RS1_00, 
+                               h.RS1_a0 = h.RS1_a0, h.RS1_A0 = h.RS1_A0, h.RS2_00 = h.RS2_00, 
+                               h.RS2_0b = h.RS2_0b, h.RS2_0B = h.RS2_0B, s.RR1_a0 = s.RR1_a0, 
+                               s.RR1_A0 = s.RR1_A0, s.RR2_0b = s.RR2_0b, s.RR2_0B = s.RR2_0B, 
+                               rr_restoration_ins1 = rr_restoration_ins1, rr_restoration_ins2 = rr_restoration_ins2, 
+                               z.RR1_00 = z.RR1_00, z.RR2_00 = z.RR2_00, sexLinked = sexLinked, 
+                               male_exposure_prop = male_exposure_prop, correct_mix_deploy = correct_mix_deploy)
+
+```
+
+```{r,echo=FALSE,results='hide'}
+input <- cbind(inputI1, inputI2)
+
+#Run the code for sequential inputs as the population dynamics are required to calculate the rotation resistance levels.
+listOut <- runModel2(input = input, produce.plots = FALSE)
+
+#Set the critical point 0.5.
+criticalPoint=0.5
+
+#Come back to these for test runs
+#listOutCurtI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment='curtis')
+#listOutCurtI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment='curtis')
+
+#listOutCurtI1 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide1', experiment='curtis')
+#listOutCurtI2 <- sensiAnPaperPart( nScenarios, insecticideUsed = 'insecticide2', experiment='curtis')
+#resultsI1 <- listOutCurtI1$results[[1]]
+#resultsI2 <- listOutCurtI2$results[[1]]
+
+
+
+#Extract the results for insecticides 1 and 2.
+resultsI1 <- listOut$results[[1]]
+resultsI2 <- listOut$results[[2]]
+
+
+
+
+#extracting the resistances for insecticides 1 and 2
+resistancesI1 <-    rowMeans(cbind(resultsI1[,'m.R1'],
+                                   resultsI1[,'f.R1'] ))
+resistancesI2 <-    rowMeans(cbind(resultsI2[,'m.R2'],
+                                   resultsI2[,'f.R2'] ))
+
+
+
+
+#Isolating generations where resistance hasn't been met for I1 and I2.
+gensI1 <- which( resistancesI1 < criticalPoint)
+gensI2 <- which( resistancesI2 < criticalPoint)
+
+gensI1=c(gensI1,max(gensI1)+1)
+gensI2=c(gensI2,max(gensI2)+1)
+
+ins1=resistancesI1[gensI1]
+ins2=resistancesI2[gensI2]
+
+ins1
+ins2
+
+#Come back to the following to generate a function
+
+#m=2
+
+#rotation_generations=5
+
+#for(i in 1:m){
+
+#for (k in 1:rotation_generations)
+  
+#{
+#fl[(2*(i-1)*rotation_generations)+k]=ins1[k]
+
+#fl[rotation_generations*i+k]=ins1[rotation_generations*i]
+  
+  
+  
+  
+#}
+#}
+
+
+#fl=rep(0,)
+
+
+gens=seq(1,65, by=1)
+
+
+
+i1fiverot=c(ins1[1:5],rep(ins1[6],5),ins1[7:11],rep(ins1[11],5),ins1[12:16],rep(ins1[16],5),ins1[17:21],rep(ins1[21],5),ins1[22:26],rep(ins1[26],5),ins1[27:31],rep(ins1[31],5),ins1[32:36])
+
+i2fiverot=c(rep(ins2[1],5),ins2[2:6],rep(ins2[6],5),ins2[7:11],rep(ins2[11],5),ins2[12:16],rep(ins2[16],5),ins2[17:21],rep(ins2[21],5),ins2[22:26],rep(ins2[26],5),ins2[27:30],rep(ins2[30],6))
+
+i1tenrot=c(ins1[1:10],rep(ins1[11],10),ins1[12:21],rep(ins1[21],10),ins1[22:31],rep(ins1[31],10),ins1[32:36])
+
+i2tenrot=c(rep(ins2[1],10),ins2[2:11],rep(ins2[11],10),ins2[12:21],rep(ins2[21],10),ins2[22:30],rep(ins2[30],6))
+
+i1twentyrot=c(ins1[1:20],rep(ins1[21],20),ins1[22:36],rep(ins1[36],10))
+
+i2twentyrot=c(rep(ins2[1],20),ins2[2:21],rep(ins2[21],16),ins2[22:30])
+
+```
+
+## The following code makes a plot of the Curtis resistances along with rotations.
+
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=8} 
+
+#Use the run Curtis function to generate the plots for mixtures and sequential strategies.
+
+runcurtis_f2()
+
+#The following code crudely generates the resistance levels for rotations required for the ASTMH presentation dependent on the resistance_generations. IMPROVE THIS.
+
+#For 5 generation rotations
+lines( gens, log10(i1fiverot*100), col=adjustcolor("red"), lty=4,lwd=3 )
+lines( gens, log10(i2fiverot*100), col=adjustcolor("blue"), lty=4,lwd=3 )
+
+#For 10 generation rotations
+lines( gens, log10(i1tenrot*100), col=adjustcolor("red"), lty=4, lwd=3 )
+lines( gens, log10(i2tenrot*100), col=adjustcolor("blue"), lty=4, lwd=3 )
+
+#For 20 generation rotations
+lines( gens, log10(i1twentyrot*100), col=adjustcolor("red"), lty=4, lwd=3 )
+lines( gens, log10(i2twentyrot*100), col=adjustcolor("blue"), lty=4, lwd=3 )
+
+
+```
