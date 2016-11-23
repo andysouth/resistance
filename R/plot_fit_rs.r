@@ -93,7 +93,7 @@ plot_fit_rs <- function ( df_fit, column, column_facet = NULL, title = NULL, yli
    
   print(gg)
   
-  return(df_fit)
+  #return(df_fit)
   
   # ggplot(df_fit, aes_(x=1, y=column, label=rownames(df_fit) )) +
   #   ylim(0,1) +
