@@ -35,3 +35,8 @@ git push
 
 6) To submit changes to Andys repo
 From Github, create Pull request
+
+7) from R to install the most recent version of the package direct from Github
+install_github('AndySouth/resistance') 
+library(resistance)
+
