@@ -11,9 +11,9 @@
 
 
 #' @examples 
-#' input <- setInputSensiScenarios( nScenarios=3, h.RS1_A0=c(0,1) )
-#' listOut <- runModel2(input)
-#' findResistancePoints(listOut$results, locus='both')
+#' listOutI1 <- sensiAnPaperPart( 50, insecticideUsed = 'insecticide1', experiment="extended" )
+#' listOutI2 <- sensiAnPaperPart( 50, insecticideUsed = 'insecticide2', experiment="extended" )
+#' findResistancePointsRotation(rotation_generations=10,listOutI1,listOutI2, locus='both')
 #' @return matrix with a column for each scenario, giving the generation number at which frequency of R is first greater than critical points
 #' @export
 
