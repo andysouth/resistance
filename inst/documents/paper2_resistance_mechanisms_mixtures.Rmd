@@ -2,7 +2,7 @@
 title: "paper2_resistance_mechanisms_mixtures"
 output: pdf_document
 #output: word_document
-author: "Andy South, Ian Hastings and Bethany Levick"
+author: "Andy South and Ian Hastings"
 date: "`r Sys.Date()`"
 ---
 
@@ -11,7 +11,7 @@ date: "`r Sys.Date()`"
   library(ggplot2)
 ```
 
-### version 6
+### version 7
  
 # Mechanisms by which insecticide resistance can be influenced by strategies of insecticide use : exploring by simulation. 
 
