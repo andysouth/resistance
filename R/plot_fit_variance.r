@@ -29,9 +29,8 @@ plot_fit_variance <- function ( listOut ){
   df_var <- gather(df_tmp, key=sex, value=fitness_variance, gather_cols=f,m)
   
   # jittered m&f
-  gg <- ggplot(df_var, aes(x=generation, y=fitness_variance, colour=sex)) +
-    #geom_point(alpha=0.5)
-    geom_jitter(alpha=0.5, shape=21) 
+  # gg <- ggplot(df_var, aes(x=generation, y=fitness_variance, colour=sex)) +
+  #   geom_jitter(alpha=0.5, shape=21) 
   
   #removing the colour, & putting m&f on top of each other
   gg <- ggplot(df_var, aes(x=generation, y=fitness_variance, colour=sex)) +
