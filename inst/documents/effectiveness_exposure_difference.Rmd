@@ -133,7 +133,7 @@ In a mixture, increasing the exposure to one insecticide has very little effect 
 
 
 
-```{r, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=5, fig.show='hold', fig.align='left', fig.cap="test A.  B. C. D."}
+```{r, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="test A.  B. C. D."}
 
 #todo to get grid fig working.
 #think about implementing in ggplot2 to make my life easier later ?
