@@ -6637,7 +6637,6 @@ modifying fig2 again for Ian. He wants in the LD plot
   #both the ld and the rfreq plots (ld on its own means little with the way axes are labelled)
   f1png <- readPNG(system.file("documents","pap1_curtis1_both.png", package="resistance"))
  
- 
 recheck figures through PACE : http://pace.apexcovantage.com/ 
 couldn't remember passwd : w77  
  
@@ -6651,7 +6650,7 @@ Here is your username and confidential password, which you will need to access t
 
 I logged in and it didn't seem to have any record of resubmission needed.
 
-14/11/16
+*14/11/16*
 
 problem with fitvis :
 Warning: Error in : 'as_tibble' is not an exported object from 'namespace:tibble'
@@ -6659,6 +6658,9 @@ Stack trace (innermost first):
 
 online it said this should work :
 install.packages("tibble")
+
+I think stopping return of an object somewhere fixed it. 
+
  
 # ASTMH
 Disease outbreak library for disease categorisation in social media posts.
@@ -6690,8 +6692,6 @@ So I think Ians suggestion is that poor application leads to higher dominance of
 
 But we don't look at it this way in the model ...
 So if it is this important perhaps we could change how we present dominance ?
-
-
 
 *16/11/16*
 systematic review of 21 vector control tools (VCTs)
@@ -6748,15 +6748,66 @@ https://help.github.com/articles/about-pull-request-reviews/
 
 Yes after I accepted in review, then I got option to merge.
 
+I emailed Matt to ask him to fix the example.
 
+Ian asked me to check the exact numbers for the caption to fig 11. I did this by putting a breakpoint towards the end of plotcurtis_f2_generic() and using the Rstudio viewer to look at combmat, amat & bmat to find when f.R1 or 2 exceeds 0.5.
+Make these changes (from -> to) : 
+98 -> 100
+51 -> 53
+71 -> 75
+53+75 =128
+100
+
+~ emailed copyright form to publisher
+
+*25/11/16* 
+
+~ looking at question about variance calc from Matt
+ 
+fitness variance :
+This is where I got to in Liverpool a few weeks back : results stored in listOut$fit_time_genotype
+
+called from runModel2() :
+listOut$fit_time_genotype <- fit_time_genotype(genotype, a_fitgen)
+
+input <- setInputOneScenario(max_gen=200)
+listOut <- runModel2(input)
+layout(matrix(c(1:2),2,1))
+plot(listOut$fit_time_genotype[,'f','variance'])
+
+Good skype chat with Ian
+
+~ I suggested Matt create a doc for the initial variance results, if they cahnge it will be easy for him to rerun
+~ good to work on paper2 for Malaria journal over next few weeks
+~ claim all the time on my contract because Ian thinks he won't be able to claim more after year end on ISSF (although I think my money was coming out of Gates)
+~ meet with Ian on Moday after work after his meeting with IVCC, he will be telling them that they risk losing me 
+ 
  
  
 ### TO DO  
 
-~ email copyright form to publisher
+~ calc Toggl time
+~ invoice LSTM
+
+
+~~ PAPER2
+~ finalise 4 figure format in effectiveness_exposure_difference.Rmd
+~ copy figure across
+~ include cost of resistance ?
+~ think about a diagram to explain the different inputs
+~ don't get too sucked into explaining mechanisms precisely
+~ discuss the 50% threshold and how it is quicker to get from 50 to 100 than to reach 50
+
+~ ? should there be a dominance associated with the cost of resistance ? see 498 of revised MS
+~ note that dominance is more relevant at low frequencies where much of the resistance is present in heterozygotes. Once much of the resistance is in homozygotes dominance is less relevant. (our LD output may be related to the proportion of R genotypes that are homozygous ...)
+
+~ key point in our Fig1B and from conventional wisdom is that poor insecticide application can promote rise in resistance. But I don't think we really cover this in how we run the model. E.g. increasing effectiveness and exposure (which one would expect to be related to insecticide application) all result in more rapid resistance. Are we saying that the insecticide application effect occurs purely because poor application results in higher dominance ? I should discuss this in paper2. Can link it to specific statements in GPIRM about poor application promoting resistance (if there are any). Could we add an insecticide application param ? 
 
 
 ~ after ASTMH
+
+~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
+
 ~~ think how we can address Justins question
 ~~ What does it mean if there is LLIN use and IRS deployment ?
 
@@ -6766,22 +6817,8 @@ Yes after I accepted in review, then I got option to merge.
 
 ~ do some more stuff on paper2 text so it has clearer structure
 
-~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
-
 ~ before ASTMH improve my understanding of LD. E.g. looking at GPIRM figure. maybe see Charelsworth 2012 p 422. Ian may have said that LD can lead to higher than expected frequencies of RR & SS whih may lead to less variance in fitness because most of the gametes are in the middle. [I may have got this wrong].
 
-
-create slides for ASTMH : 10 mins
-keep the messages simple
-introduce the basics. Ian will cover Curtis.
-include my yellow/green slide about non-adaptive mixtures vs sequential ? 
-
-add an adaptive mixture strategy to my slide ?
-
-
-Maybe I should look back at Justins email of 14 September which contains a couple of trickyish scenarios we coud try to represent.
-
-I'd like to do graphic of mixture/seq/mosaic, should I do in R or powerpoint ? ppt would be quicker and more flexible.
 
 Tangent : check whether I have power of attorney for M&D
 
@@ -6990,10 +7027,6 @@ I suggested that best to get the basic code streamlined before trying to add the
 check out the github thing I saw on twitter about keeping uptodate with an upstream repository.
 
 
-ASTMH : American Society for Tropical Medicine and Hygiene
-Annual meeting 13-17 November 2016, Atlanta.
-
-
 ~ i could try to create a graphical model of how effectiveness, exposure, resistance restoration and dominance effect the development of resistance.
 
 ~ we could eventually create a game of it ...
@@ -7137,6 +7170,14 @@ Days (/7.5)			22.00
 Pay (217 per day)			4774
 Prev days remaining			47.75
 Days remaining (from 85)			25.75
+
+193.125 to use up
+
+Sep - Nov 25 2016
+168/7.5 = 22.4
+add some of Bayer time in to use up.
+
+
 
 # to fix git problem (if I amend a commit I've already pushed)
 git reset HEAD@{1}
