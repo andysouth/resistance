@@ -4,7 +4,7 @@
 #' 
 #' @param listOut list of results matrices, including results including matrix of fitness and variance in fitness over generaions
 #' 
-#' @return 
+#' @return the ggplot object of the plot
 #' @export
 
 plot_fit_variance <- function ( listOut ){
