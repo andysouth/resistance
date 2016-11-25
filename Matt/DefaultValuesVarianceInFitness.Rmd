@@ -1,0 +1,84 @@
+---
+title: "DefaultValuesVarianceInFitness"
+output: pdf_document
+author: "Matt Powney"
+date: "`r Sys.Date()`"
+---
+  
+#The code for the Variance in Fitness when LD does not equal zero for the default inputs of linkage disequilibrium. These are for low, medium and high levels of "insect killing" using both mosaic and mixture strategies.
+
+```{r} 
+
+#The code for setting the default inputs of low, medium and high insecticide killing.
+male_exposure_prop=0.5
+exposure=0.8
+strategy="mixture"
+
+a <- setExposure(exposure=exposure, insecticideUsed=strategy,
+                 male_exposure_prop=male_exposure_prop, correct_mix_deploy=1) 
+
+defaultlowmix=setInputOneScenario(P_1=0.001, P_2=0.01, a=a, exposure = 0.8, male_exposure_prop=1, phi.SS1_A0=0.3, phi.SS2_0B=0.5, h.RS1_A0	=0.4, h.RS2_0B = 0.8,rr_restoration_ins1 = 0.3, rr_restoration_ins2=0.5,correct_mix_deploy = 0)
+
+a <- setExposure(exposure=exposure, insecticideUsed=strategy,
+                 male_exposure_prop=male_exposure_prop, correct_mix_deploy=1) 
+
+defaultmediummix=setInputOneScenario(P_1=0.001, P_2=0.01,a=a,  exposure = 0.8, male_exposure_prop=1, phi.SS1_A0=0.6, phi.SS2_0B=0.8, h.RS1_A0	=0.4, h.RS2_0B = 0.8, rr_restoration_ins1 = 0.6, rr_restoration_ins2=0.8,correct_mix_deploy = 0)
+
+a <- setExposure(exposure=exposure, insecticideUsed=strategy,
+                 male_exposure_prop=male_exposure_prop, correct_mix_deploy=1) 
+
+defaulthighmix=setInputOneScenario(P_1=0.001, P_2=0.01,a=a,  exposure = 0.8, male_exposure_prop=1, phi.SS1_A0=1, phi.SS2_0B=1, h.RS1_A0	=0.4, h.RS2_0B = 0.8, rr_restoration_ins1 = 1, rr_restoration_ins2=1,correct_mix_deploy = 1)
+
+a <- setExposure(exposure=exposure, insecticideUsed=strategy,
+                 male_exposure_prop=male_exposure_prop, correct_mix_deploy=0) 
+
+
+defaultlowmos=setInputOneScenario(P_1=0.001, P_2=0.01,a=a,  exposure = 0.8, male_exposure_prop=1, phi.SS1_A0=0.3, phi.SS2_0B=0.5, h.RS1_A0	=0.4, h.RS2_0B = 0.8,rr_restoration_ins1 = 0.3, rr_restoration_ins2=0.5,correct_mix_deploy = 0)
+
+a <- setExposure(exposure=exposure, insecticideUsed=strategy,
+                 male_exposure_prop=male_exposure_prop, correct_mix_deploy=0) 
+
+
+defaultmediummos=setInputOneScenario(P_1=0.001, P_2=0.01,a=a,  exposure = 0.8, male_exposure_prop=1, phi.SS1_A0=0.6, phi.SS2_0B=0.8, h.RS1_A0	=0.4, h.RS2_0B = 0.8, rr_restoration_ins1 = 0.6, rr_restoration_ins2=0.8,correct_mix_deploy = 0)
+
+a <- setExposure(exposure=exposure, insecticideUsed=strategy,
+                 male_exposure_prop=male_exposure_prop, correct_mix_deploy=0) 
+
+
+defaulthighmos=setInputOneScenario(P_1=0.001, P_2=0.01,a=a,  exposure = 0.8, male_exposure_prop=1, phi.SS1_A0=1, phi.SS2_0B=1, h.RS1_A0	=0.4, h.RS2_0B = 0.8, rr_restoration_ins1 = 1, rr_restoration_ins2=1,correct_mix_deploy = 0)
+
+
+
+
+#The following code generates the resistance for each scenario.
+
+listOutLMix <- runModel2(defaultlowmix, produce.plots = FALSE)
+
+
+listOutLMos <- runModel2(defaultlowmos, produce.plots = FALSE)
+
+listOutMMix <- runModel2(defaultmediummix, produce.plots = FALSE)
+
+listOutMMos <- runModel2(defaultmediummos, produce.plots = FALSE)
+
+listOutHMix <- runModel2(defaulthighmix, produce.plots = FALSE)
+
+listOutHMos <- runModel2(defaulthighmos, produce.plots = FALSE)
+```
+
+
+```{r, eval=TRUE} 
+#To plot the variance in fitness of LOW killing for a MIXTURE
+plot_fit_variance(listOutLMix)
+#To plot the variance in fitness of LOW killing for a MOSAIC
+plot_fit_variance(listOutLMos)
+#To plot the variance in fitness of MEDIUm killing for a MIXTURE
+plot_fit_variance(listOutMMix)
+#To plot the variance in fitness of MEDIUM killing for a MOSAIC
+plot_fit_variance(listOutMMos)
+#To plot the variance in fitness of HIGH killing for a MIXTURE
+plot_fit_variance(listOutHMix)
+#To plot the variance in fitness of HIGH killing for a MOSAIC
+plot_fit_variance(listOutHMos)
+```
+
