@@ -7,7 +7,11 @@ date: "`r Sys.Date()`"
   
 #The code for the Variance in Fitness when LD does not equal zero for the default inputs of linkage disequilibrium. These are for low, medium and high levels of "insect killing" using both mosaic and mixture strategies.
 
-```{r} 
+```{r, eval=TRUE, echo=FALSE} 
+library(resistance)
+```
+
+```{r, eval=TRUE, echo=FALSE} 
 
 #The code for setting the default inputs of low, medium and high insecticide killing.
 male_exposure_prop=0.5

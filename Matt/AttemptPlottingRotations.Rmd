@@ -5,8 +5,11 @@ author: "Matt Powney"
 date: "`r Sys.Date()`"
 ---
 
-
 #The following code generates and plots the rotation resistances for Curtis figure 2.
+ 
+```{r, eval=TRUE, echo=FALSE} 
+library(resistance)
+``` 
   
 ```{r,echo=FALSE,results='hide'}
 findResistancePointsRotation <- function( rotation_generations = 10,
