@@ -6782,13 +6782,17 @@ Good skype chat with Ian
 ~ claim all the time on my contract because Ian thinks he won't be able to claim more after year end on ISSF (although I think my money was coming out of Gates)
 ~ meet with Ian on Moday after work after his meeting with IVCC, he will be telling them that they risk losing me 
  
- 
+*28/11/16* on train to liverpool to meet Ian in eve (then for zikaGIS)
+
+~ added optional resistance plot to plot_fit_variance(), plots don't line up exactly due to dof lengths of y-axis labels & the point legends, but pretty close.
+
+
+
  
 ### TO DO  
 
-~ calc Toggl time
-~ invoice LSTM
-
+~ calc Toggl time for Bayer
+~ check plot_fit_variance() & what it would do if multiple scenarios
 
 ~~ PAPER2
 ~ finalise 4 figure format in effectiveness_exposure_difference.Rmd
