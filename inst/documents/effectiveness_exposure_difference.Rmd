@@ -138,9 +138,7 @@ In a mixture, increasing the exposure to one insecticide has very little effect 
 #todo to get grid fig working.
 #think about implementing in ggplot2 to make my life easier later ?
 #although I'm not sure it would ?
-#allow x axis labels and title to be removed
-#add axis titles outside of the plot region
-#remove curve legend on plots and put it somewhere else maybe on bottom
+
 #? allow curves to be thicker
 
 
@@ -151,21 +149,18 @@ In a mixture, increasing the exposure to one insecticide has very little effect 
 #0.8    3   4
 
 #layout(matrix(1:4,2,2, byrow = TRUE))
+
 #add lower panel for legend
 #layout(matrix(c(1,2,3,4,5,5),3,2, byrow = TRUE), heights=c(1,1,0.5), respect=FALSE)
 
-# layout( matrix(c(1,2,3,4,5,5),3,2, byrow = TRUE), heights=c(1,1,0.2), 
+#layout( matrix(c(1,2,3,4,5,5),3,2, byrow = TRUE), heights=c(1,1,0.2), 
 # respect=matrix(c(1,1,1,1,0,0),3,2, byrow = TRUE) )
-
 #layout.show(n=5)
 
-# layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.2,0.2), 
-# respect=matrix(c(1,1,1,1,0,0),3,2, byrow = TRUE) )
-
+# add side panels for labels
 layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
 
 #effectiveness on mixture
-
 
 #testing
 # plot(1)
@@ -186,11 +181,15 @@ par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), xlabs = FALSE, cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
 
+mtext('A)',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
 #plot margins
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #effectiveness1 0.8
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
+
+mtext('B)',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
@@ -203,12 +202,16 @@ par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 #exposure 0.8
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
 
+mtext('C)',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
 #plot margins
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 & expos 0.8
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.6, addLegend=FALSE, main='', maxX = 120 )
 
+mtext('D)',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
 
 #adding legend in lower panel
