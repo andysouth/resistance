@@ -2509,8 +2509,7 @@ Chatting to Joe Lines at OpenMalaria TAG
 Pre-existing resistance to one insecticide in the mixture could accelerate the development of double resistant vector populations because of linkage disequilibrium (Figure A9.1). 
  
  
-GPIRM p121 "theoretical models suggest that mixtures might delay resistance longer than rotations
-or broad mosaics (1)."
+GPIRM p121 "theoretical models suggest that mixtures might delay resistance longer than rotations or broad mosaics (1)."
 
 p122
 "there is general agreement that LLIN mixture products, when developed, could
@@ -3871,8 +3870,7 @@ pressure than their use as larvicides.
 
 Reasons for relatively low selection pressure by adulticides
 (i) males are not affected by the ITNs
-(ii) insecticides are also repellents, keeping mosquitoes at bay from contacting the insecticide but also driving
-them to bite either people who do not use the insecticide or alternative hosts.
+(ii) insecticides are also repellents, keeping mosquitoes at bay from contacting the insecticide but also driving them to bite either people who do not use the insecticide or alternative hosts.
 
 Barbosa and Hastings [12] use a more complex formulation
 by including the proportion of houses that are covered by the bed nets. However, models
@@ -6786,26 +6784,299 @@ Good skype chat with Ian
 
 ~ added optional resistance plot to plot_fit_variance(), plots don't line up exactly due to dof lengths of y-axis labels & the point legends, but pretty close.
 
+*1/12/16*
+~ catchup call with Justin
+~ I am ~ half way through writing a simpler paper for the Malaria journal about the modelling work. 
+~ development of the 'public health' paper could proceed in tandem, and ideally could refer to the malaria journal paper
+~ i think we should explore the 'poor application promotes resistance' angle. If it does that exclusively through dominance we need to show it.
+
+~ applying for LSTM gaming job
+
+*9/12/16*
+
+~ trying to make some progress on paper2
+
+# fighting with fig legends
+
+pty = 's' in the fail version even though I tried to set it to 'm' ??
+
+seems that setting pty='m' in the par statement before plot fixed it
+
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+
+done ~ finalise 4 figure format in effectiveness_exposure_difference.Rmd
+done ~ copy figure across
+
+Ive now done this :
+eff1  0.5  0.8
+exp
+0.5    1   2
+0.8    3   4
+ 
+What other 4 panel figs do I want ?
+
+*12/12/16*
+
+paper2
+~ reading '10 simple rules for structuring papers' by Kording
+~ the title is the most important bit
+
+Thinking of some good potential titles :
+#More effective insecticides predicted to speed evolution of resistance when used alone but can delay it when use in a mixture.
+
+#Insecticide effectiveness predicted to be most important factor determining whether insecticide mixtures can slow evolution of resistance.
+
+#Speed of evolution of Insecticide resistance ...
+
+But also I don't want to spend too long delaying. Might be good to try to get a more straightforwrad general paper out quickly and have paper3 be the really killer one ?
+
+~ rewriting abstract
+
+GPIRM notes 
+
+p36 
+Most cases of resistance in the field are attributable to a few genes
+of major effect. Therefore, the spread of resistance throughout
+mosquito populations requires understanding of the evolution of
+those genes. A resistance gene starts as a rare gene, but, with
+further exposure to the same insecticide, the frequency of the
+gene increases until it becomes common in a population (Figure
+12). Other factors being equal, resistance is likely to evolve more
+quickly if it is functionally dominant in field exposures.
+
+p38 about fitness costs
+Example in Colombia: resistance genes disappeared
+from the vector population when selection pressure was
+removed.
+A report submitted by WHO AMRO regional entomologists
+showed that, in 2005–2006, resistance to pyrethroids and
+DDT was identified in An. darlingi. A decision was quickly made
+to change to fenitrothion, an organophosphate with a different
+mode of action, for IRS. Rapid implementation of this alternative,
+which thereby removed the selection pressure, reduced the
+frequency of resistance. In 2010, susceptibility tests showed
+that the frequency of resistance genes in the vector population
+had dropped below the level of detection, and pyrethroids were
+once again introduced into the IRS programme, albeit on a
+more limited scale.
+
+p45
+IRM strategies can have different effects on resistant vector populations.
+
+*Reduce the proportion of resistance (or delay the emergence of resistance) by removing selection pressure.*
+This strategy is based on the assumption that owing to the ‘fitness
+cost’ (see section 1.2), resistance genes will recede from a vector
+population if selection pressure is removed. The strategy involves
+reducing the selection pressure, for example by rotations of
+different classes of insecticide and mosaic applications (the spatial
+reduction of use). These strategies aim to encourage or preserve
+susceptibility.
+
+*Continue to kill resistant vectors.* 
+This strategy is based on the assumption that if vectors are exposed simultaneously to multiple
+insecticides and are not killed by the insecticide to which they are
+resistant, they will be killed by the alternative insecticide. Currently,
+combination strategies use this approach, as will mixtures once
+they become available. This strategy aims to manage resistance
+by killing or reducing the proportion of resistance carriers by the
+simultaneous or near simultaneous use of alternative classes of
+insecticides.
+See Annex 9 for more detailed descriptions of each IRM strategy, including considerations for implementation and associated costs.
+
+p49
+The long-term goal of the malaria community is to maintain
+the effectiveness of malaria vector control. The susceptibility of
+malaria vectors to the insecticides used in vector control is a
+global public health good which must be preserved and which is
+essential for reaching the targets for reducing the malaria burden.1
+It is our collective responsibility to act immediately in a coordinated
+manner against insecticide resistance in order to maximize the
+effective lifespan of current and future malaria control tools.
+
+*Near-term objective.*
+Given the limited number of alternatives to pyrethroids and the
+current situation of resistance, it will not be possible to maintain
+susceptibility to pyrethroids forever; therefore, in the near term, all
+efforts should be focused on preserving the susceptibility of major
+malaria vectors to pyrethroids and other classes of insecticides, at
+least until new insecticides have become available for wide-scale
+vector control.
+
+Achieving this near-term objective will be subject to several
+requirements. Firstly, IRM strategies should not prevent the
+implementation and scaling up of vector control; instead, they
+should support plans for increasing coverage with vector control.
+Secondly, resistance must be integrated into the cost-effectiveness
+equation that forms the basis for deciding on vector control
+interventions at all levels. Thirdly, sustaining the susceptibility
+of vectors to insecticides will require routine monitoring of the
+effectiveness of IRM and vector control programmes. It will also
+be important to monitor potential threats and consider ways to
+mitigate them. Fourth, success will depend on securing sufficient
+funding for capacity-building and implementation of IRM strategies.
+Finally, developing an adequate range of new insecticide classes
+will require accelerating the research and development of new
+products and active ingredients.
+
+_[note no mention of poor application promotes resistance]_
+
+p68
+Pillar IV. Fill gaps in knowledge on mechanisms of insecticide resistance and
+on the impact of current IRM STRATEGIES
+...
+Research agenda: Many questions remain on the efficacy,
+feasibility and applicability of different strategies for managing
+insecticide resistance under different circumstances.
+
+p69
+Genetics.
+Background: With limited genetic information on resistance
+genes, it is difficult to track and anticipate the course of resistance,
+and understand which IRM strategies would be most effective.
+The evolution of resistance and the possibility of reducing and
+even reversing resistance cannot be predicted because of limited
+information on factors such as baseline frequency (mutation
+rates), fitness cost, genetic mode of inheritance and the selection
+pressure due to different uses of insecticides in agriculture and
+public health. Inability to track resistance genetically makes the
+consequences of insecticide resistance more difficult to anticipate;
+it is also difficult to measure the efficacy of IRM strategies.
+Research agenda: The genes that confer metabolic resistance
+must be identified in order to answer several important research
+questions. Outputs from this research agenda would have
+immediate practical implications for decisions on resistance
+management taken in national malaria control programmes. The
+topics for research should include genetic dominance, fitness
+cost, cross-resistance, linkage disequilibrium, drivers of selection
+pressure and behavioural resistance. See Annex 10 for more
+details of the genetic research agenda.
+
+p111
+Possible reasons for widespread insecticide resistance with no obvious impact on the effectiveness of vector control.
+• The effect of resistance may be visible only when
+combined with poor implementation, gaps in coverage
+and aging insecticide deposits. IRS and LLINs are useful in
+vector control not only because they have a powerful immediate
+impact on transmission, but also because they are often found to
+be still effective even when they are not implemented perfectly,
+when coverage is incomplete or when the spray deposits/nets
+are old in relation to their expected lifespan. In other words, they
+are robust and long-lived and tolerant of imperfect conditions,
+and for programmatic purposes this is as important as their
+immediate impact on transmission. This points to the hypothesis
+that resistance may erode the robustness of an intervention, so
+that its impact on vector control may be seen most clearly when
+implementation is poor, when there are gaps in coverage, or
+when the intervention gets older. In other words, in the presence
+of resistance, previously robust interventions may require perfect
+implementation and complete coverage in order to be effective,
+and the duration of effective control may be reduced.
+...
+
+Annex 9 Use of insecticide resistance management STRATEGIES (rotations, combinations, mosaics
+and mixtures)
+
+Annex 10 Genetic research agenda, includes some good stuff.
+
+No mention of poor implementation promoting evolution of resistance.
+
+
+*13/12/16*
+
+Looking at Ians original figure of change in dominance with insecticide concentration from:
+Barbosa S, Black WC IV, Hastings I (2011) Challenges in Estimating Insecticide Selection Pressures from Mosquito Field Data. PLoS Negl Trop Dis 5(11):
+e1387. doi:10.1371/journal.pntd.0001387
+
+It cites an earlier paper related to drug resistance:
+
+Hastings I, Watkins W (2006) Tolerance is the key to understanding antimalarial
+drug resistance. Trends Parasitol 22: 71–77.
+
+Abstract
+The evolution of antimalarial drug resistance is often considered to be a single-stage process in which parasites are either fully resistant or completely sensitive to a drug. However, this does not take into account the important intermediate stage of drug tolerance. Drug-tolerant parasites are killed by the high serum concentrations of drugs that occur during direct treatment of the human host. However, these parasites can spread in the human population because many drugs persist long after treatment, and the tolerant parasites can infect people in which there are residual levels of the drugs. This intermediate stage between fully sensitive and fully resistant parasites has far-reaching implications for the evolution of drug-resistant malaria.
+
+From Churcher 2016
+For simplicity and following (Griffin et al., 2010) it is assumed that the killing activity of pyrethroid over time (the half-life in years, denoted Hy) is proportional to the loss of morbidity caused by washing (the half-life in washes, Hw). A prior estimate of the half-life in
+years (Mahama et al., 2007) from a durability study of a non-PBO LLIN with susceptible mosquitoes(Hs y) is then used to reflect changes caused by pyrethroid resistance ... 
+Following Griffin et al., 2010 it is assumed that the activity of the insecticide decays at a constant rate according to a decay parameter gp, which is related to the half-life.
 
 
  
+ 
 ### TO DO  
 
-~ calc Toggl time for Bayer
-~ check plot_fit_variance() & what it would do if multiple scenarios
-
 ~~ PAPER2
-~ finalise 4 figure format in effectiveness_exposure_difference.Rmd
-~ copy figure across
+
+~ find a quote that poor implementation of insecticide interventions promotes resistance ...
+~ gpirm ? no
+
+
+~ look at questions from Ian & Justin
+
+~ Justin 1/12/16 said that they hear the msg that sub-lethal dosing accelerates resistance
+
+~ what do I want the main msgs to be ?
+
+~ potential strategies all need to work by managing selection pressure.
+~~ selection pressure is created by more resistants surviving than susceptibles
+~~ therefore can either :
+~~~ increase resistants killed (e.g. as in mixtures)
+~~~ reduce susceptibles killed (e.g. as in rotation)
+
+~ rewrite text that refers to the first 4 panel fig
+~ 
 ~ include cost of resistance ?
 ~ think about a diagram to explain the different inputs
 ~ don't get too sucked into explaining mechanisms precisely
 ~ discuss the 50% threshold and how it is quicker to get from 50 to 100 than to reach 50
 
+~ key point in our Fig1B and from conventional wisdom is that poor insecticide application can promote rise in resistance. But I don't think we really cover this in how we run the model. E.g. increasing effectiveness and exposure (which one would expect to be related to insecticide application) all result in more rapid resistance. Are we saying that the insecticide application effect occurs purely because poor application results in higher dominance ? I should discuss this in paper2. Can link it to specific statements in GPIRM about poor application promoting resistance (if there are any). Could we add an insecticide application param ? 
+
+#Malaria journal research article submission guidelines :
+
+https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
+
+#Abstract 
+~ not exceed 350 words
+~ must include separate sections:
+Background: the context and purpose of the study
+Results: the main findings
+Conclusions: a brief summary and potential implications
+
+#References
+
+All references, including URLs, must be numbered consecutively, in square brackets, in the order in which they are cited in the text, followed by any in tables or legends. The reference numbers must be finalized and the reference list fully formatted before submission.
+
+BioMed Central reference style :
+Article within a journal
+Smith JJ. The world of science. Am J Sci. 1999;36:234-5.
+
+Article within a journal (no page numbers)
+Rohrmann S, Overvad K, Bueno-de-Mesquita HB, Jakobsen MU, Egeberg R, Tjønneland A, et al. Meat consumption and mortality - results from the European Prospective Investigation into Cancer and Nutrition. BMC Med. 2013;11:63.
+
+Article within a journal by DOI
+Slifka MK, Whitton JL. Clinical implications of dysregulated cytokine production. Dig J Mol Med. 2000; doi:10.1007/s801090000086.
+
+# how to deal with references in RMD, need a .bib file 
+http://stackoverflow.com/questions/32946203/including-bibliography-in-rmarkdown-document-with-use-of-the-knitcitations
+
+maybe ask Ian to send me a bibtex output from endnote
+
+Simple advice for using rmarkdown with mendeley.
+https://rosannavanhespenresearch.wordpress.com/2016/02/17/writing-your-thesis-with-rmarkdown-2-making-a-chapter/
+
+
+
+
+
+~ calc Toggl time for Bayer
+~ check plot_fit_variance() & what it would do if multiple scenarios
+
+
 ~ ? should there be a dominance associated with the cost of resistance ? see 498 of revised MS
 ~ note that dominance is more relevant at low frequencies where much of the resistance is present in heterozygotes. Once much of the resistance is in homozygotes dominance is less relevant. (our LD output may be related to the proportion of R genotypes that are homozygous ...)
 
-~ key point in our Fig1B and from conventional wisdom is that poor insecticide application can promote rise in resistance. But I don't think we really cover this in how we run the model. E.g. increasing effectiveness and exposure (which one would expect to be related to insecticide application) all result in more rapid resistance. Are we saying that the insecticide application effect occurs purely because poor application results in higher dominance ? I should discuss this in paper2. Can link it to specific statements in GPIRM about poor application promoting resistance (if there are any). Could we add an insecticide application param ? 
 
 
 ~ after ASTMH
@@ -6819,7 +7090,6 @@ Good skype chat with Ian
 
 ~ I think I should probably change the model to be able to represent sequences directly rather than through post-processing. Quite a big job, maybe a week or more.
 
-~ do some more stuff on paper2 text so it has clearer structure
 
 ~ before ASTMH improve my understanding of LD. E.g. looking at GPIRM figure. maybe see Charelsworth 2012 p 422. Ian may have said that LD can lead to higher than expected frequencies of RR & SS whih may lead to less variance in fitness because most of the gametes are in the middle. [I may have got this wrong].
 
@@ -6875,9 +7145,6 @@ although I think this just calculates fitness by M&F.
 
 
 
-              
-
-
 Could I test this SR mean fitness difference as a predictor of time-to-resistance in the full simulation results ? I can probably calculate it for the 10,000 runs with a little work.
 WOuld probably just need to write a short script that queries ggSubset or similar to get input values and creates a new filed to store the new potential predictor.
 
@@ -6893,9 +7160,6 @@ In paper2 setting the x-axis constant would help with interpretation. Could set 
 ~ can I allow lable of just m & s horizontally for mix & seq in plotcurtis_f2_generic ?
 ~ can I create the plot grid that I drew out on paper for paper2. Will the plots show up when made smaller ? Do I need to fiddle with plot boundaries ? Might be able to remove x labels from all but the lower row.
 
-~ more unit-tests
-
-
 
 
 ~ might I want to combine fitvis & expovis ?
@@ -6906,11 +7170,8 @@ In paper2 setting the x-axis constant would help with interpretation. Could set 
 ~ ask him to work out the arithmetic about effectiveness & exposure that Ian started when we were in liverpool.
 
 
-
-   
    
 ~ I could use plot_fit_rs() to produce some figs for paper2 on how inputs influence fitness maybe initially for single locus ? then to include exposure need to show genotype popn fitness.   
-
 
 ~ do I completely have it straight in my head what the model is doing re niches ? Yes I think I do now.
 
@@ -6928,10 +7189,6 @@ Allele fitness : 	SS1SS2 = SS * SS
 		RR1RR2 = RR * RR
 
 Genotype fitness = Allele fitness * exposure to insecticide
-
-
-
-
 
 
 List of other tidying things todo if/when I get proper time (oct 2016)
@@ -6993,23 +7250,17 @@ locusNum=c(1,2,3), exposure=c('no','lo','hi')
 ~ I want to put the input reading into a function
 ~ trickines is that inputs are mostly read into single named variables so can't all be returned from a single function unless I return them as a list ? Maybe do that as in_ or something similar
         
-
 ~ think about whether adding additional plotting options to plotcurtis_f2_generic() and or the UIs (as an optional tab?) could be useful ?
 
 ~ can I create a plot of frequency of SS,SR,RR ? see Beths plothaplotype().
 
-~ claim for train 15/9/16
-
-~ write down terminology on fitnessNiche etc. ideally within the documentation.
 ~ create a vignette explaining how fitness is calculated, so that it can be stored in the package in future, it can access my new fitness functions.
-
 
 Set up more ability to be able to see what is going on with fitnesses from the code.
 Maybe I could even add this to one of my UIs. The inputs will be the same.
 Could put the new outputs in together or in a separate UI.
 
 set up some unit tests for the fitness functions
-
 
 
 https://www.software.ac.uk/software-evaluation-guide
@@ -7026,9 +7277,6 @@ not yet
 
 I suggested that best to get the basic code streamlined before trying to add the other stuff on top of it.
 ~ split up runModel2() e.g. have functions to fill arrays from the input matrix
-
-
-check out the github thing I saw on twitter about keeping uptodate with an upstream repository.
 
 
 ~ i could try to create a graphical model of how effectiveness, exposure, resistance restoration and dominance effect the development of resistance.
@@ -7060,7 +7308,6 @@ Does dominance effect the relative performance of the 2 insecticides where mosqu
 Potential for me to look at in a later paper :
 Differential exposure of males & females. (I have shown exposure is important so this could have a big effect).
 
-
 Long Names (in text where space not an issue)
 Mixture (either insecticide)   
 Mixture (both insecticides)
@@ -7086,7 +7333,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 effectI2 from 1 to 0.5, & resistance arises faster for mix2 than seq
 runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
 
-
 ~ check code in findResistancePointsMixResponsive()
 
 1. create a vignette that shows how best to run current model
@@ -7095,14 +7341,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 Remember.
 It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
 
-
-Files :
-listOut* I1,I2, Mix : raw results for insecticide1,2 & mixture
-                    : results are in $results[[scenarioNum]]
-                    : e.g. listOutI1$results[[1]] has columns
-                    : colnames(listOutI1$results[[1]])
-                    : "Gen" "m.R1" "m.R2"  "m.LD" "f.R1"  "f.R2" "f.LD" "M"  "F"  "dprime" "r2"
-treeInput : a matrix with scenarios in columns, inputs & outputs in rows  
 
 Good simple test
 ```
