@@ -4,6 +4,8 @@ output: pdf_document
 #output: word_document
 author: "Andy South and Ian Hastings"
 date: "`r Sys.Date()`"
+bibliography: library_ir.bib
+csl: biomed-central.csl
 ---
 
 ```{r,echo=FALSE,results='hide'}
@@ -13,11 +15,12 @@ date: "`r Sys.Date()`"
 
 ### version 7
  
-# Mechanisms by which insecticide resistance can be influenced by strategies of insecticide use : exploring by simulation. 
+#Insecticide effectiveness predicted to be most important factor determining whether insecticide mixtures can slow evolution of resistance. 
 
-or
+Then I can focus on how effectiveness, unlike other parameters has a different effect on mixtures & sequences.
+(I can refer to the poor application, dominance as a side issue)
 
-#Insecticide effectiveness predicted to be most important factor determining whether insecticide mixtures can slow evolution of resistance.
+
 
 Target : Malaria journal
 
@@ -41,7 +44,7 @@ THIS IS A CONFIDENTIAL COPY OF THE MS. Please do not circulate without the expre
 
 ## Abstract
 
-Insecticide resistance has been identified as a major problem for the control of malarial mosquitoes. To address this problem effort is being made to develop new insecticide tools including new active ingredients and combinations with existing ones. There are different potential strategies for using new insecticides and some recomendations for which may be best. There is however limited recent, accessible modelling work to support suggestions of which strategies may be best in different situations. Previous work suggests that preferred strategies will be situation specific. This points to a need for an accessible, mechanistic understanding of how the evolution of insecticide resistance is likely to respond to potential intervention strategies to help guide both management and policy. Such a mechanistic understanding would be more robust to uncertainty in parameter values in field situations.    
+Insecticide resistance has been identified as a major problem for the control of malarial mosquitoes with potential huge consequences for malaria burden. To address this problem effort is being made to develop new insecticide tools including new active ingredients and combinations with existing ones. There are different potential strategies for using new insecticides and recomendations for how best to preserve their utility for controlling mosquitoes and malaria. There is however limited recent, accessible modelling work to support suggestions of which strategies may be best in different situations. Previous work suggests that preferred strategies will be situation specific. This points to a need for an accessible, mechanistic understanding of how the evolution of insecticide resistance is likely to respond to potential intervention strategies to help guide both management and policy. Such a mechanistic understanding would be more robust to uncertainty in parameter values in field situations.    
 
 Here we use a relatively simple model to develop a mechanistic understanding of how insecticide resistance is expected to increase under different intervention strategies, namely the use of insecticides in isolation, sequence and mixtures. We target a readership with limited experience of population genetics and resistance. The model flexibly represents two independent genes coding for resistance to two insecticides allowing us to represent the different intervention strategies. We look principally at the ability of the insecticides to kill susceptible mosquitoes, the proportion of mosquitoes that come into contact with the insecticide,  and how much the resistance counteracts the effect of the insecticide.  
 
@@ -49,18 +52,16 @@ We show firstly that using a second insecticide, at the same time as a first, al
 
 We describe an R package and user-interface that allows further exploration of the development of resistance. The user-interface (https://andysouth.shinyapps.io/MixSeqResist1) allows replication of our results and exploration of what happens when inputs are changed outside of the ranges we have used. 
 
-## Introduction
+## Background
 
-http://www.sciencemag.org/news/2016/10/after-40-years-most-important-weapon-against-mosquitoes-may-be-failing
-
-Insecticide resistance is a problem for malaria (GPIRM), other vector borne diseases and agriculture.
+Insecticide resistance is a problem for malaria (GPIRM)[@Who2012][@Ranson2016] other vector borne diseases and agriculture.
 
 Insecticide resistance becomes a problem when genes coding for resistance firstly arise in a population and secondly increase in frequency. We concern ourselves with this second process of how insecticide resistance increases in frequency within a population. _is their research indicating that mnost mutations already there? something from ASTMH?_
 
 The changing frequency of insecticide resistance is a population genetic process that can be influenced by the parameters outlined in Table 1.
 
 
-We use a 2-locus population genetic model of insecticide resistance (Levick et al. in press) to illustrate the mechanisms by which these parameters are expected to influence the development of insectide resistance under alternative insecticide use strategies. Levick et al. (in press) describe the technical details of the model and explore large parameter ranges. We provide an accessible summary of the model and use selected parameter values to develop a mechanistic understanding of how inputs influence the development of resistance. This mechanistic understanding can provide a more robust framework for the debate on the relative merits of different insecticide use strategies. 
+We use a 2-locus population genetic model of insecticide resistance [@Levick2017] to illustrate the mechanisms by which these parameters are expected to influence the development of insectide resistance under alternative insecticide use strategies. Levick et al. (in press) describe the technical details of the model and explore large parameter ranges. We provide an accessible summary of the model and use selected parameter values to develop a mechanistic understanding of how inputs influence the development of resistance. This mechanistic understanding can provide a more robust framework for the debate on the relative merits of different insecticide use strategies. 
 
 
 **Table 1. Parameters inflencing the development of insecticide resistance**
@@ -160,7 +161,7 @@ The response of resistance to insecticide use in the model can be explained by a
 When single insecticide use was represented (Figs 3-5) in all cases the initial increase in resistance was most rapid with straight lines on the log plots up to around 50% followed by a slowing rate of increase up to 100%. Higher values of the five inputs investigated all led to more rapid increases in resistance. 
 
 
-For single insecticide use resistance responded identically to changing exposure and effectiveness (compare Fig 3A to 3B). This makes sense as vector kill is effectively a product of exposure times effectiveness. For example exposing 50% of a  population to an insecticide which is 75% effective would be expecetd to have the same result as exposing 75% of the population to one which is 50% effective. This observation points to the mechanism by which increasing both exposure and effectiveness lead to a faster increase in resistance. In both cases the increased deaths of susceptible vectors cause a higher selection pressure that can explain the faster increase.
+For single insecticide use resistance responded identically to changing exposure and effectiveness (compare Fig 3A to 3B). This makes sense as vector kill is effectively a product of exposure times effectiveness. For example exposing 50% of a  population to an insecticide which is 75% effective would be expected to have the same result as exposing 75% of the population to one which is 50% effective. This observation points to the mechanism by which increasing both exposure and effectiveness lead to a faster increase in resistance. In both cases the increased deaths of susceptible vectors cause a higher selection pressure that can explain the faster increase.
 
 
 The pattern of more rapid increase in resistance at higher dominance levels (Fig 4A) can be explained by increased survival of heterozygotes in the presence of the insecticide. Higher dominance of the resistant allele causes it to contribute more to the phenotype of the heterozygotes leading to higher survival. Thus selection pressure for the resistance allele will be increased because it confers more of an advantage when only present on one chromosome.  
@@ -259,23 +260,6 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 5. Frequency  | neither | As for dominance and resistance restoration. Higher starting frequencies give faster resistance in both sequences and mixtures such that the difference between them is not changed.
 
 
-
-
-
-
-
-
-## References
-1. GPIRM
-1. Curtis 
-1. Mani GS. Evolution of resistance in the presence of two insecticides. Genetics 1985;109(4):761–83.
-1. Birget 2015
-1. Curtis et al 1993, 
-1. Georghiou 1983 Management of resistance in Arthropods.
-potential IRM strategies :
-~ moderation : preserve susceptible genes by limiting selection pressure
-~ saturation : high dose so that heterozygous resistants are killed
-~ multiple attack : independently acting pressures neither of which is strong enough to lead to resistance
 
 
 \pagebreak
@@ -759,9 +743,44 @@ par(oldpar)
 ![Summarising mechanisms of single insecticide effects.](paper2_input_effects_single.png)
 
 
+\pagebreak
 
 
+## ReferencesOld
 
+1. Barbosa S, Black WC IV, Hastings I (2011) Challenges in Estimating Insecticide Selection Pressures from Mosquito Field Data. PLoS Negl Trop Dis 5(11):
+e1387. doi:10.1371/journal.pntd.0001387
+_suggests incomplete dominance in the field_
+
+1. Birget PLG, Koella JC. 2015 A genetic model of the effects of insecticide-treated bed nets on the evolution of insecticide-resistance. Evol Med Public Health. (1):205-15. doi: 10.1093/emph/eov019.
+
+1. Churcher et al. 2016 The impact of pyrethroid resistance on the efficacy and effectiveness of bednets for malaria control in Africa. eLife
+_Transmission dynamics models indicate that even low levels of resistance would increase the incidence of malaria due to reduced mosquito mortality and lower overall community protection over the life-time of the net._
+_+ may have some useful stuff about expected degradation of nets over time_
+
+1. Curtis CF. 1985 Theoretical models of the use of insecticide mixtures for the management of resistance. Bull Entomol Res. 75: 259-65.
+
+1. Curtis et al 1993, 
+
+1. Georghiou 1983 Management of resistance in Arthropods.
+potential IRM strategies :
+~ moderation : preserve susceptible genes by limiting selection pressure
+~ saturation : high dose so that heterozygous resistants are killed
+~ multiple attack : independently acting pressures neither of which is strong enough to lead to resistance
+
+1. Levick et al (in press) A two-locus model of the evolution of insecticide resistance to inform and optimise public health insecticide deployment strategies. PLOS Computational Biology.
+
+1. Mani GS. Evolution of resistance in the presence of two insecticides. Genetics 1985;109(4):761–83.
+
+1. R Core Team. 2016 R: A language and environment for statistical computing.
+
+1. Ranson, H. and Lissenden, N. 2016 Insecticide resistance in African anopheles mosquitoes: A worsening situation that needs urgent action to maintain malaria control. Trends in Parasitology, 32, 187-196, http://dx.doi.org/10.1016/j.pt.2015.11.010.
+
+1. Roush RT. 1993 Occurrence, Genetics and Management of Insecticide Resistance. Parasitol Today. 9: 174-9.
+
+1. World Health Organization. 2012. Global plan for insecticide resistance management in malaria vectors (GPIRM). Geneva.
+
+## References
 
 
 
