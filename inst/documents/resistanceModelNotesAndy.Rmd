@@ -7001,6 +7001,73 @@ For simplicity and following (Griffin et al., 2010) it is assumed that the killi
 years (Mahama et al., 2007) from a durability study of a non-PBO LLIN with susceptible mosquitoes(Hs y) is then used to reflect changes caused by pyrethroid resistance ... 
 Following Griffin et al., 2010 it is assumed that the activity of the insecticide decays at a constant rate according to a decay parameter gp, which is related to the half-life.
 
+*14/12/16*
+~ working on paper2
+
+*15/12/16*
+~ working on paper2
+
+From IRAC IRM manual (2011)
+http://www.irac-online.org/documents/irm-vector-manual/?ext=pdf
+
+3.5.1 Fitness cost
+Populations of insects that have never been exposed to insecticides are
+usually fully susceptible, and resistance genes within those populations are
+very rare. This is usually due to a “fitness cost”, which means that insects
+possessing the resistance gene lack some other attribute or quality such
+that it gives an advantage to the susceptible insects in the absence of the
+insecticide. Differences in the number of offspring, longevity or overall
+robustness are often found in resistant insects. There is good laboratory
+and field evidence to suggest that the absence of selection pressure, in the
+form of insecticide treatment, in most cases, selects for susceptible insects.
+Resistant colonies in the laboratory often revert to susceptibility if the
+insecticide selection pressure is not maintained. Similarly once resistance
+in the field has been selected it often rapidly reverts once the insecticide
+treatment regime is changed. A good example of this occurred in
+Anopheles arabiensis in Sudan, where malathion specific insecticide
+resistance was selected in the early 1980s through antimalarial house
+spraying. The development of resistance prompted a switch of insecticide
+treatment to fenitrothion and the malathion resistance rapidly reverted in
+the following years.
+
+It is this reversion to susceptibility which is the underlying assumption
+behind any effective resistance management strategy. However, reversion
+rates are variable and may be very slow, particularly when an insecticide
+has been used for many years. If there is no fitness cost for the resistance mechanism there is no reason for the resistance genes to be lost in the
+population and for resistance to fully revert. For example, DDT was used
+extensively for malaria control over a 20 year period up to the 1960s in Sri
+Lanka to control Anopheles culicifacies and Anopheles subpictus. DDT was
+replaced by malathion in Sri Lanka in the early 1970s when a total and
+effective ban on DDT use was implemented. Subsequent regular
+monitoring has shown that DDT resistance has reverted very slowly
+towards susceptibility. Around 80% of the adult mosquito population was
+resistant in the 1970s compared to about 50% in the 1990s. This rate of
+reversion is clearly too slow to establish any effective resistance
+management strategy involving the reintroduction of DDT.
+ 
+3.6 Major factors that influence resistance development
+
+3.6.1 Frequency of application
+More frequent = faster resistance
+
+3.6.2 Dosage and persistence of effect
+More persistent = faster resistance
+
+3.6.3 Rate of reproduction
+Faster reproduction = faster resistance
+
+3.6.4 Population isolation
+More isolated (i.e. fewer susceptible immigrants) = faster resistance
+ 
+So no mention of poor application promoting resistance.  
+ 
+Aha! but end of p22.
+Insecticide resistance develops in an insect population when individuals carrying genes that allow them to survive exposure to the insecticide pass these genes on. Thus, any activities that control the individuals with the resistance trait will delay the spread of the resistance genes in the population. IRM in the context of IVM therefore also includes activities such
+as habitat management, community education and mosquito larviciding.
+
+*Mosquitoes with reduced susceptibility to an insecticide may still be controlled at the recommended label rate. However, exposure to sub-label rate applications may allow these individuals to survive and pass on the resistance genes. Sub-lethal exposure may arise in IRS due to poor choice of product, under dosing during application or poor application technique.* In each case the residuality of the product may not be sufficient, delivering a sub-lethal dose before the next scheduled spray round. LNs may also deliver sub-lethal doses within their expected lifetime due to poor product choice, inappropriate storage, use or washing. *These factors which reduce the efficacy of a vector control programme, can lead to a shift in the susceptibility status of the mosquito population, and should be avoided* through informed product choice, effective IRS application and LN distribution, and education. 
+ 
+
 
  
  
@@ -7010,6 +7077,7 @@ Following Griffin et al., 2010 it is assumed that the activity of the insecticid
 
 ~ find a quote that poor implementation of insecticide interventions promotes resistance ...
 ~ gpirm ? no
+~ iarc2011 - yes
 
 
 ~ look at questions from Ian & Justin
