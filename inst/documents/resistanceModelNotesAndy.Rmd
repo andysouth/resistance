@@ -3861,12 +3861,10 @@ Matt based in Rotherham
 
 Birget 2015
 
-Methods: population-genetic model of the spread of insecticide resistance in response to insecticides used either
-as adulticides (ITNs) or as larvicides (malaria control or agriculture).
+Methods: population-genetic model of the spread of insecticide resistance in response to insecticides used either as adulticides (ITNs) or as larvicides (malaria control or agriculture).
 
 Results: 
-We show that indoor use of insecticides leads to less selection
-pressure than their use as larvicides. 
+We show that indoor use of insecticides leads to less selection pressure than their use as larvicides. 
 
 Reasons for relatively low selection pressure by adulticides
 (i) males are not affected by the ITNs
@@ -7067,7 +7065,10 @@ as habitat management, community education and mosquito larviciding.
 
 *Mosquitoes with reduced susceptibility to an insecticide may still be controlled at the recommended label rate. However, exposure to sub-label rate applications may allow these individuals to survive and pass on the resistance genes. Sub-lethal exposure may arise in IRS due to poor choice of product, under dosing during application or poor application technique.* In each case the residuality of the product may not be sufficient, delivering a sub-lethal dose before the next scheduled spray round. LNs may also deliver sub-lethal doses within their expected lifetime due to poor product choice, inappropriate storage, use or washing. *These factors which reduce the efficacy of a vector control programme, can lead to a shift in the susceptibility status of the mosquito population, and should be avoided* through informed product choice, effective IRS application and LN distribution, and education. 
  
-
+* 16/12/2016 *
+From Liu(2012)
+Insecticide resistance has been proposed to be a preadaptive phenomenon in the sense that,
+prior to an organism’s exposure to a stressor (in this case, a mosquito’s exposure to an insecticide), there already exist rare individuals who carry one or more resistance alleles (such as polymorphisms in the resistance allele sequence or increased expression of the resistance allele) that allow them to survive exposure to that stressor (139, 149).
 
  
  
