@@ -5,6 +5,7 @@
 
 #' @param genotype genotype frequencies by generation
 #' @param gen_num which generation to plot for
+#' @param labgen whether to add label for generation number
 #' 
 #' @examples 
 #' input <- setInputOneScenario()
@@ -22,8 +23,22 @@
 #' @return dataframe of plotted fitness values and colours
 #' @export
 
-plot_ld_gpirm <- function ( genotype, gen = 1  ){
+plot_ld_gpirm <- function ( genotype = NULL, 
+                            gen = NULL,
+                            labgen = TRUE){
  
+  # so that it will run with default inputs
+  if (is.null(genotype))
+  {
+    input <- setInputOneScenario()
+    listOut <- runModel2(input)
+    genotype <- listOut$genotype[[1]]
+  }
+  if (is.null(gen))
+  {
+    gen <- c(7:12)
+  }
+    
   num_panels <- length(gen)
   
   #remove blank borders
@@ -79,6 +94,9 @@ plot_ld_gpirm <- function ( genotype, gen = 1  ){
     text(x=0.9, y=0.1, expression(A^SB^S))
     text(x=0.1, y=0.9, expression(A^RB^R))   
     
+    #add optional generation num label
+    if (labgen)
+       mtext(paste0('gen',gen_num), line=-2, cex=0.8)
   }
   
 
