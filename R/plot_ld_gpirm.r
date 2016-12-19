@@ -20,6 +20,27 @@
 #' listOut <- runModel2(input)
 #' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=c(2:9))
 #' 
+#' #for mixture & modifying main params
+#' #exposure 0.5, effectiveness 0.8, dominances 1
+#' a <- setExposure( exposure=0.5,  insecticideUsed = 'mixture' )
+#' input <- setInputOneScenario( a=a, phi.SS1_A0=0.8, phi.SS2_0B=0.8, h.RS1_A0=1, h.RS2_0B=1)
+#' listOut <- runModel2(input)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from = 5, to = 50, by =5))
+#' 
+#' TODO this seems to expose an error in my plotting routine
+#' OR can this plot idea not cope with our data
+#' SEE whitespace between generations 20 & 40
+#' #exposure 0.5, eff1 0.8, eff2 0.5, dominances 1
+#' a <- setExposure( exposure=0.5,  insecticideUsed = 'mixture' )
+#' input <- setInputOneScenario( a=a, phi.SS1_A0=0.8, phi.SS2_0B=0.5, h.RS1_A0=1, h.RS2_0B=1)
+#' listOut <- runModel2(input)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from=5, to=50, by=5))
+#' 
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from=20, to=40, by=4))
+#' 
+#' #i think this is the equiv resistance freq plot for comparison
+#' runcurtis_f2( exposure=0.5, phi.SS1_A0=0.8, phi.SS2_0B=0.5, h.RS1_A0=1, h.RS2_0B=1)
+#' 
 #' @return dataframe of plotted fitness values and colours
 #' @export
 
@@ -49,7 +70,7 @@ plot_ld_gpirm <- function ( genotype = NULL,
   # if odd add 1
   if (num_panels %% 2 != 0) num_panels=num_panels+1
   layout( matrix(c(1:num_panels), 2, byrow = TRUE))
-  layout.show(num_panels)
+  #layout.show(num_panels)
   
   #could use listOut$genotype but it has cis & trans in ...
   #AHA 2nd problem was that genotype includes cis & trans
