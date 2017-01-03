@@ -50,7 +50,9 @@ We describe an R package and user-interface that allows further exploration of t
 
 ## Background
 
-Insecticide resistance is a problem for malaria [@Who2012][@Ranson2016] other vector borne diseases and agriculture.
+Insecticide resistance is a problem for malaria [@Who2012][@Ranson2016] other vector borne diseases [@IRAC2011] and agriculture [@FAO2012].
+
+TODO add more stuff here or after following para about protocols for resistance management.
 
 Insecticide resistance becomes a problem when genes coding for resistance firstly arise in a population and secondly increase in frequency. We concern ourselves with this second process of how insecticide resistance increases in frequency within a population. There are suggestions [e.g. ref from ASTMH] that mutations are present in populations even prior to exposure to a novel insecticide thus leading to the potential for selection. 
 
