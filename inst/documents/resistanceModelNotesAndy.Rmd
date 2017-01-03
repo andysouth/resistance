@@ -6814,6 +6814,37 @@ exp
  
 What other 4 panel figs do I want ?
 
+#Malaria journal research article submission guidelines :
+
+https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
+
+#Abstract 
+~ not exceed 350 words
+~ must include separate sections:
+Background: the context and purpose of the study
+Results: the main findings
+Conclusions: a brief summary and potential implications
+
+#References
+
+All references, including URLs, must be numbered consecutively, in square brackets, in the order in which they are cited in the text, followed by any in tables or legends. The reference numbers must be finalized and the reference list fully formatted before submission.
+
+BioMed Central reference style :
+Article within a journal
+Smith JJ. The world of science. Am J Sci. 1999;36:234-5.
+
+Article within a journal (no page numbers)
+Rohrmann S, Overvad K, Bueno-de-Mesquita HB, Jakobsen MU, Egeberg R, Tjønneland A, et al. Meat consumption and mortality - results from the European Prospective Investigation into Cancer and Nutrition. BMC Med. 2013;11:63.
+
+Article within a journal by DOI
+Slifka MK, Whitton JL. Clinical implications of dysregulated cytokine production. Dig J Mol Med. 2000; doi:10.1007/s801090000086.
+
+# how to deal with references in RMD, need a .bib file 
+http://stackoverflow.com/questions/32946203/including-bibliography-in-rmarkdown-document-with-use-of-the-knitcitations
+
+Simple advice for using rmarkdown with mendeley.
+https://rosannavanhespenresearch.wordpress.com/2016/02/17/writing-your-thesis-with-rmarkdown-2-making-a-chapter/
+
 *12/12/16*
 
 paper2
@@ -7070,16 +7101,167 @@ From Liu(2012)
 Insecticide resistance has been proposed to be a preadaptive phenomenon in the sense that,
 prior to an organism’s exposure to a stressor (in this case, a mosquito’s exposure to an insecticide), there already exist rare individuals who carry one or more resistance alleles (such as polymorphisms in the resistance allele sequence or increased expression of the resistance allele) that allow them to survive exposure to that stressor (139, 149).
 
+*19/12/16* on train home for xmas
+looking at plot_ld_gpirm(), with dominance may not be quite as straightforward as I thought.
+
+TODO this seems to expose an error in my plotting routine
+OR can this plot idea not cope with our data
+SEE whitespace between generations 20 & 40
+#exposure 0.5, eff1 0.8, eff2 0.5, dominances 1
+a <- setExposure( exposure=0.5,  insecticideUsed = 'mixture' )
+input <- setInputOneScenario( a=a, phi.SS1_A0=0.8, phi.SS2_0B=0.5, h.RS1_A0=1, h.RS2_0B=1)
+listOut <- runModel2(input)
+plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from=5, to=50, by=5))
+
+plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from=20, to=40, by=4))
+ 
+#i think this is the equiv resistance freq plot for comparison
+runcurtis_f2( exposure=0.5, phi.SS1_A0=0.8, phi.SS2_0B=0.5, h.RS1_A0=1, h.RS2_0B=1)
+
+
+#Responses to my email does poor application promote resistance :
+
+Ian and I are working on a simpler IR modelling paper to follow up on our first one. The idea is to target this at non-modellers probably in the malaria journal. 
+
+As a part of that I want to address the question that came from the audience in my talk at ASTMH and I've come across before.
+
+There appears to be a general perception that poor implementation of an intervention is likely to promote resistance. Is this written down anywhere ?
+
+Our model can (if we don't consider dominance effects), suggest the opposite, that poor implementation should reduce the selection pressure for resistance by reducing exposure to or effectiveness of the insecticide. 
+
+I have just been through GPIRM and it is not mentioned.
+
+Can anyone point me to any references suggesting that 'poor' interventions promote resistance ? 
+
+#Sarah Rees, IVCC
+Good question, and an important one. I assume by ‘poor’ intervention you mean insufficient exposure, i.e. the a.i. is not encountered by the insect at an effective dose rate.  It is a ‘universal truth’ that if an organism is exposed to a sub-lethal dose of a killing agent it will more easily be able to develop resistance mechanisms, I assume because it can remain alive and the necessary mutations can be selected and survive.  So if either an insufficient dose is applied, eg. through prior dilution or uneven application of an IRS, equally the levels of an a.i. may decrease before the following treatment.  The logic of always finish a course of antibiotics is the same, if the a.i. reduces below the effective dose at any point then insects are going to be able to more easily develop resistance.  I can’t give you a ready to hand reference, but I imagine there will be something somewhere on the IRAC website  http://www.irac-online.org/teams/public-health/, or you might call up Mark Hoppe who is the lead of the public health IRAC group, his email is mark.hoppe@syngenta.com (you can say I suggested him).
+
+#Nick Hamon, IVCC
+A lot of work was done in the 1990s in ag….looking at sub-lethal doses of pesticides on resistance development.  Sub-lethal can come from poor application, poor formulations (cheap generics perhaps), under-application/dosing (to save money)….. and from everything I have read this leads to an acceleration of the development of resistance.  I suspect a quick literature search will pull out everything you need here, and more.  I believe this has been demonstrated with insecticides, fungicides and herbicides
+
+#Justin
+http://www.fao.org/fileadmin/templates/agphome/documents/Pests_Pesticides/Code/FAO_RMG_Sept_12.pdf
+ 
+See page 12.
+ 
+I have never been particularly convinced about this topic – if you apply a less effective intervention then the selection pressure declines, meaning you have the potential for more diversity to remain in the gene pool (right?). I guess the line about only leaving heterozygous resistance genes at lower dose rates makes sense but then no VC interventions target 100% of the population anyway because male mosquitoes don’t seek blood meals and therefore shouldn’t be exposed to the same selection pressures... Which, to my mind points more and more to environmental exposure (eg. role of agricultural insecticide usage) in certain situations.
+
+
+From FAO2012 : Guidelines on Prevention and Management of Pesticide Resistance
+
+A good accessible report, which has nice entry level descriptions of resistance that I might like to use.
+
+p5-6
+Certain pest control practices have consistently been shown to exacerbate the loss of
+susceptible pest populations and the development of resistance.
+
+These include:
+• continued and frequent use of a single pesticide or closely related pesticides on a pest
+population;
+• the use of application rates that are below or above those recommended on the label;
+• poor coverage of the area being treated;
+...
+
+The objective of resistance management is to prevent or at least slow the accumulation of
+resistant individuals in pest populations, so as to preserve the effectiveness of available
+pesticides. Resistance management can also be thought of as susceptibility management, as
+the aim is to maintain a high percentage of susceptible genes within the pest population while
+keeping genes for resistance at a minimum. The challenge is to reduce the selection pressure
+for resistance while providing the necessary level of crop protection.
+
+If the principle of resistance management is relatively simple, putting it into practice for a
+given crop or pest is often not. There is unfortunately no single resistance management
+prescription that can be applied globally to all pesticides, pests, and crops. Nor is resistance solely a technical problem that can be readily overcome with the right new pesticide with a new mode of action, or an adjustment in the way conventional pesticides are used.
+
+p8
+Resistance alleles can range from dominant through semi-dominant to recessive. If dominant or semi-dominant, only one parent need possess the characteristic for it to be fully or partially expressed in the offspring. If recessive, both parents must possess the trait. Fortunately, most resistance mechanisms are controlled by recessive or semi-dominant alleles, which slows their spread within the population.
+
+The genetic trait that allows the organism to survive exposure to the pesticide will be found in one or both of the gene’s alleles. When the trait is in both alleles (written RR), the pest is homozygous resistant; the pest will likely be highly resistant to the pesticide and will pass on one resistant allele (R) to its offspring. If the offspring also receive an R from their other parent, they too will be RR. If the trait for resistance is found in just one of the gene’s alleles (RS), the pest is heterozygous resistant; the pest will be less resistant to the pesticide, and may or may not pass on the gene for resistance to its offspring. Individuals that are homozygous susceptible, SS, are susceptible to the pesticide.
+
+p11
+The factors that affect resistance development can be grouped into three categories: the pest’s genetic make-up, the pest’s biology, and “operational factors” including cropping practices and the pesticide characteristics and application (see Table 1). While it is not possible to precisely predict the development of resistance to a particular compound, it is possible to assess the risk generally by evaluating these factors for each pesticide-pest-crop situation.
+
+p12 table of potential for resistance development
+
+Pesticide application rate
+Lower potential for resistance
+Label rate; heterozygotes killed
+(If R gene is incompletely dominant)
+
+Higher potential for resistance
+Less than label rate: heterozygotes survive
+More than label rate: Only some homozygous resistant individuals survive and reproduce (especially if there is little immigration)
+
+Application coverage [but there is no justification for why ...]
+Lower potential for resistance
+Good coverage
+Higher potential for resistance
+Poor coverage
+
+p14
+In situations where resistance is operationally recessive only a few homozygous resistant (RR) individuals will survive after treatment with an insecticide. As homozygous susceptible (SS) individuals move into the area and mate with the survivors many offspring will be heterozygotes (RS) or (SS) susceptible individuals. If a treatment is made and the proper dose is used and good application coverage is achieved, the SS and most if not all of the RS individuals will be killed. However, if a reduced rate is used and/or coverage is poor, subsequent applications can result in the survival of many RS individuals and result in faster selection of a resistant population.
+
+p16 dominance 
+In insects, incompletely recessive or dominant genes can be made functionally dominant when the individuals carrying those genes are exposed to reduced rates of the pesticide. This lower dose can result from the deliberate use of a low rate, inadequate coverage of the plant or area being treated, or exposure to pesticide residues that are degrading on the treated surface. When this occurs, heterozygote individuals survive and pass on the resistant gene ...
+
+p17
+Protection provided by the “R” gene [this is our resistance restoration]
+If the resistance gene provides a high degree of protection from the pesticide, then individuals carrying that gene have a very high probability of surviving a pesticide application and passing the resistance gene on to the next generation. However, if the resistance gene provides only a moderate level of protection, then the individuals carrying the resistant gene will be protected from lower doses of the pesticide but not high doses. This is another reason to ensure that full label rates of a pesticide are used and that the best coverage possible is achieved. Lower doses and poor coverage permit the accumulation of the resistance genes in the population.
+
+p18
+Application rate
+Although pesticide application rates are not set with regard to resistance, it is important to apply the recommended rate and not underdose. Ideally this rate should eliminate all susceptible and essentially all heterozygous resistant individuals from the pest population while reducing pest numbers below the economic threshold. If the dose is too low, the susceptible individuals will be eliminated but the partially resistant heterozygotes will survive. A dose that is too low will also have the effect of making the resistance gene functionally dominant and resistance may develop rather quickly. However, attempting to eliminate heterozygote individuals is most effective if the population is not extremely large, consists mostly of susceptible individuals, and is subject to immigration by susceptible individuals; then highly resistant homozygous resistant individuals should be rare and will likely suffer from reduced fitness because of the resistance genes.
+
+The use of higher than recommended application rates is not recommended either. This is because if there are any survivors from a high rate, these are likely to be mainly homozygous resistant. In particular when there is no immigration of susceptible individuals, high dose rates are then very likely to increase the development of resistance.
+
+[ 
+??? p18 seems to have contradictory logic
+underdosing leads RS to survive so is bad
+overdosing just leaves RR so is bad
+]
+
+[coverage bit also doesn't make complete sense to me ...]
+Coverage
+If coverage is good, with the correct amount of pesticide applied to the entire area, the pests will more likely encounter the desired, lethal rate. If coverage is poor, with some areas receiving more pesticide and others less or none at all, the result will be similar to what happens when below-label rates are used. Homozygous [RR] individuals will be selected and the development of resistance will be promoted.
+
+p27 Table 8 Factors affecting resistance development in insects
+lower than label use rate & inadequate coverage
+both increase survival of RS and thus frequency of R.
+
+
+
+
+ 
  
  
 ### TO DO  
+
+check out :
+Whalon, M.E., Mota-Sanchez, D & Hollingworth, R.M. (eds.) 2008. Global pesticide resistance in arthropods. CABI, Wallingford. )
+
+
+get my thinking straight on poor application, sub-lethal doses ...
+related to RS survival, if RS survive resistance will be faster ...
+will depend on dominance ...
+and on resistance restoration see FAO p17.
+can I make this clearer ?
+
+
+My thinking (and seems to be Justins too) is that insecticide treatments will always be imperfect, so there are always going to be resistants that survive.
+
+Poor application seems likely to reduce the selection pressure on resistance by reducing the number of susceptibles that are killed.
+
 
 ~~ PAPER2
 
 ~ find a quote that poor implementation of insecticide interventions promotes resistance ...
 ~ gpirm ? no
 ~ iarc2011 - yes
+~ FAO2012 - yes
 
+~ add early in paper that we are only modelling development of resistance and not the control of mosquitoes or malaria. Say that best option in purely resistance terms is not to use insecticide at all, but there would be be vector and malaria consequences.
+
+~ in discussion mention migration, if susceptible individuals are migrating in this will reduce rate of resistance development.
 
 ~ look at questions from Ian & Justin
 
@@ -7102,38 +7284,6 @@ prior to an organism’s exposure to a stressor (in this case, a mosquito’s ex
 
 ~ key point in our Fig1B and from conventional wisdom is that poor insecticide application can promote rise in resistance. But I don't think we really cover this in how we run the model. E.g. increasing effectiveness and exposure (which one would expect to be related to insecticide application) all result in more rapid resistance. Are we saying that the insecticide application effect occurs purely because poor application results in higher dominance ? I should discuss this in paper2. Can link it to specific statements in GPIRM about poor application promoting resistance (if there are any). Could we add an insecticide application param ? 
 
-#Malaria journal research article submission guidelines :
-
-https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
-
-#Abstract 
-~ not exceed 350 words
-~ must include separate sections:
-Background: the context and purpose of the study
-Results: the main findings
-Conclusions: a brief summary and potential implications
-
-#References
-
-All references, including URLs, must be numbered consecutively, in square brackets, in the order in which they are cited in the text, followed by any in tables or legends. The reference numbers must be finalized and the reference list fully formatted before submission.
-
-BioMed Central reference style :
-Article within a journal
-Smith JJ. The world of science. Am J Sci. 1999;36:234-5.
-
-Article within a journal (no page numbers)
-Rohrmann S, Overvad K, Bueno-de-Mesquita HB, Jakobsen MU, Egeberg R, Tjønneland A, et al. Meat consumption and mortality - results from the European Prospective Investigation into Cancer and Nutrition. BMC Med. 2013;11:63.
-
-Article within a journal by DOI
-Slifka MK, Whitton JL. Clinical implications of dysregulated cytokine production. Dig J Mol Med. 2000; doi:10.1007/s801090000086.
-
-# how to deal with references in RMD, need a .bib file 
-http://stackoverflow.com/questions/32946203/including-bibliography-in-rmarkdown-document-with-use-of-the-knitcitations
-
-maybe ask Ian to send me a bibtex output from endnote
-
-Simple advice for using rmarkdown with mendeley.
-https://rosannavanhespenresearch.wordpress.com/2016/02/17/writing-your-thesis-with-rmarkdown-2-making-a-chapter/
 
 
 
