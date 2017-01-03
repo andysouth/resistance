@@ -1110,11 +1110,12 @@ Red triangles are those runs in which resistance reached the threshold at the sa
     else  main <- "B)"
 
     #adds in no. scenarios correctly and incorrectly classified
-    #cex to set textsize (0.7 all text doesn't quite fit in), good that A&B are now same size
+    #cex to set textsize, good that A&B are now same size
     #round=0 to make boxes square
     #split.font=1 to stop bold text in labels
     prp(tree, extra=1, varlen = 0, main=main, box.col=cols, under=TRUE, 
-        cex=0.4, round=0, split.font=1, ycompress = TRUE )
+        cex=0.6, round=0, split.font=1, ycompress = TRUE,
+        eq="\n= ", lt="\n< ", ge="\n>= " )
   }
   
 
