@@ -3825,6 +3825,7 @@ Curtis et al 1993, potential IRM strategies :
 ~ moderation : preserve susceptible genes by limiting selection pressure
 ~ saturation : high dose so that heterozygous resistants are killed
 ~ multiple attack : independently acting pressures neither of which is strong enough to lead to resistance
+Georghiou1994 
  
 Mani GS. Evolution of resistance in the presence of two insecticides. Genetics 1985;109(4):761–83.
  
@@ -3856,7 +3857,6 @@ at 5 days a week 70/5 = 14 weeks
 4 days per week
 
 ISSF : institutional strengthening fund, Matt Powney.
-Matt based in Rotherham
 
 
 Birget 2015
@@ -6817,6 +6817,9 @@ What other 4 panel figs do I want ?
 #Malaria journal research article submission guidelines :
 
 https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
+https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript
+
+
 
 #Abstract 
 ~ not exceed 350 words
@@ -7229,12 +7232,74 @@ lower than label use rate & inadequate coverage
 both increase survival of RS and thus frequency of R.
 
 
+Looking at Fig8 for paper1 for Ian, PLOS want font size increasing, try upping cex from 0.4 in final prp() to 0.6 ... and forced \n into the split labels
 
+*4/1/17*
+Looking at formatting for Malaria journal :
+https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript
 
+Preparing main manuscript text
+
+Use double line spacing
+Include line and page numbering
+Do not use page breaks in your manuscript
+File formats
+Microsoft word (DOC, DOCX)
+Rich text format (RTF)
+TeX/LaTeX (use BioMed Central's TeX template)
+
+editable files are required for processing in production. If your manuscript contains any non-editable files (such as PDFs) you will be required to re-submit an editable file if your manuscript is accepted.
+
+Note that figures must be submitted as separate image files, not as part of the submitted manuscript file. For more information, see Preparing figures below.
  
+So my option is to try to get working with their tex template (I'm not sure how I would do), or to try to get Rmarkdown to output a doc or rtf. 
+
+For the next stage of submitting to people maybe keep going with the pdf. OR maybe switch to google docs now for the manuscript with the tables & figures generated from RMarkdown ? 
+
+Knitting to word works OK except the Figure legends not quite right, they don't get the Figx bit of label.
+
+Figure rules 
+~ separate files, not embedded in the main manuscript file.
+~ each a single file that fits on 1 page in portrait format.
+~ Tables should NOT be submitted as figures but should be included in the main manuscript.
+~ Multi-panel figures should be submitted as a single composite file.
+~ titles (max 15 words) and legends (max 300 words) should be provided in the main manuscript.
+~ keys should be incorporated into the graphic, not into the legend of the figure.
+~ closely cropped to minimize the amount of white space surrounding the illustration. 
+~ Individual figure files should not exceed 10 MB. 
+
+Figure file types
+EPS (suitable for diagrams and/or images)
+PDF (suitable for diagrams and/or images)
+TIFF (suitable for images)
+PNG (suitable for images)
+
+So can I get Rmarkdown to generate a doc for the text and tiffs for each figure, as I did for paper1. 
+
+seems I can add this to the YAML for doublespace & linenums
+header-includes:
+    - \usepackage{setspace}
+    - \doublespacing
+    - \usepackage{lineno}
+    - \linenumbers
+    
+But didn't work when I knitted to Word.
+
+# Possible paper2 protocol
+~ keeping knitting to pdf to send final drafts to Ian & collaborators
+~ for submission MS knit to word & delete the figs from the docx
+~ for submission figs knit with the first chunk in the Rmd uncommented 
+ 
+~ get early figs into composite ... pobably need cowplot & maybe put Fig 2 & 3 in together
  
  
 ### TO DO  
+
+actually do a bit of writing in discussion and or results (leave technical stuff for a while)
+~ my poor application thoughts
+~ relation to other studies
+~ conclusion flexible model for looking at future strategies for going beyond plausibile rules
+
 
 check out :
 Whalon, M.E., Mota-Sanchez, D & Hollingworth, R.M. (eds.) 2008. Global pesticide resistance in arthropods. CABI, Wallingford. )
@@ -7257,7 +7322,7 @@ Poor application seems likely to reduce the selection pressure on resistance by 
 ~ find a quote that poor implementation of insecticide interventions promotes resistance ...
 ~ gpirm ? no
 ~ iarc2011 - yes
-~ FAO2012 - yes
+~ FAO2012 - yes, good
 
 ~ add early in paper that we are only modelling development of resistance and not the control of mosquitoes or malaria. Say that best option in purely resistance terms is not to use insecticide at all, but there would be be vector and malaria consequences.
 
