@@ -28,7 +28,8 @@
 #' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from = 5, to = 50, by =5))
 #' 
 #' TODO this seems to expose an error in my plotting routine
-#' OR can this plot idea not cope with our data
+#' OR can this plot idea not cope with our data ?
+#' is this caused by having different effectivenesses for each insecticide ?
 #' SEE whitespace between generations 20 & 40
 #' #exposure 0.5, eff1 0.8, eff2 0.5, dominances 1
 #' a <- setExposure( exposure=0.5,  insecticideUsed = 'mixture' )
@@ -40,6 +41,17 @@
 #' 
 #' #i think this is the equiv resistance freq plot for comparison
 #' runcurtis_f2( exposure=0.5, phi.SS1_A0=0.8, phi.SS2_0B=0.5, h.RS1_A0=1, h.RS2_0B=1)
+#' 
+#' #try to set effectivenesses equal to see if white space disapears ?
+#' #it does but still something maybe wrong ~gen28
+#' #I need to think properly about what its doing, maybe will help by outputting allele freqs
+#' #exposure 0.5, eff1 0.7, eff2 0.7, dominances 1
+#' a <- setExposure( exposure=0.5,  insecticideUsed = 'mixture' )
+#' input <- setInputOneScenario( a=a, phi.SS1_A0=0.7, phi.SS2_0B=0.7, h.RS1_A0=1, h.RS2_0B=1)
+#' listOut <- runModel2(input)
+#' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from=20, to=40, by=4)) 
+#' 
+#' #try looking at the LD calculations see if that helps
 #' 
 #' @return dataframe of plotted fitness values and colours
 #' @export
@@ -88,12 +100,18 @@ plot_ld_gpirm <- function ( genotype = NULL,
     
     #rectangle  boundaries (see notebook)
     #first assuming complete dominance
-    #TODO see notebook for way of including dominance 
+    #TODO see yellow leon notebook for way of including dominance 
     p1 <- tp['RR1SS2'] + tp['RS1SS2']
     p2 <- tp['RR1RR2'] + tp['RS1RR2'] +
       tp['RR1RS2'] + tp['RS1RS2']
     p3 <- tp['SS1RR2'] + tp['SS1RS2']
     p4 <- p2
+    
+    #remember GPIRM diagram only has R & S for each insecticide
+    #so my calculation above tries to work out whether R or S for each
+    #when dominance is 1 this is straightforward because R = RR + SR
+    #testing
+    cat("gen",gen_num," AR:",signif(p1,2), "  ARBR:",signif(p2,2), "  BR:",signif(p3,2),"\n")
     
     
     #create blank plot
@@ -101,20 +119,24 @@ plot_ld_gpirm <- function ( genotype = NULL,
     plot(c(-0.2,1.25),c(0,1), type='n', axes=FALSE, xlab='', ylab='', asp=1)
     
     #rectangles
-    # b first so a goes on top
+    # b S1S2 first so a goes on top
     rect(xleft = p1, xright = 1, ybottom = 0, ytop = 1-p3, col='yellow')
-    # a
+    # a R1R2
     rect(xleft = 0,  xright = p2, ybottom = 1-p4, ytop = 1, col='purple') 
-    # c
+    # c S1R2
     rect(xleft = p2,  xright = 1, ybottom = 1-p3, ytop = 1, col='blue')  
-    # d
+    # d R1S2
     rect(xleft = 0,  xright = p1, ybottom = 0, ytop = 1-p4, col='red')  
     
     #text labels
     #text(x=p1+0.5*(1-p1), y=1.1, "ASBS")
-    text(x=0.9, y=0.1, expression(A^SB^S))
-    text(x=0.1, y=0.9, expression(A^RB^R))   
+    #text(x=0.9, y=0.1, expression(A^S B^S))
+    text(x=0.85, y=0.1, "ASBS")
+    text(x=0.15, y=0.9, "ARBR")   
     
+    text(x=0.1, y=0, "AR",cex=0.8)
+    text(x=0.8, y=0, "AS",cex=0.8) 
+  
     #add optional generation num label
     if (labgen)
        mtext(paste0('gen',gen_num), line=-2, cex=0.8)
