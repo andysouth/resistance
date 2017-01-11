@@ -7290,10 +7290,39 @@ But didn't work when I knitted to Word.
 ~ for submission MS knit to word & delete the figs from the docx
 ~ for submission figs knit with the first chunk in the Rmd uncommented 
  
-~ get early figs into composite ... pobably need cowplot & maybe put Fig 2 & 3 in together
+
+*10/1/17*
+paper2
+
+~ had a quick look at tweaking recombination param from 0.5 to effect linkage ? e.g. see Roush(1998) p1782 (also Mani 1985 covers recombination)
+If genes were close together on chromosome then recombination would be expected to be below 0.5. But what are the chances of that by chance ?
+recomb_rate
+
+#base scenario with effectiveness I1 0.8
+#mixture best
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+#as above but lower recomb_rate from 0.5 to 0.1
+## NO NOTICEABLE DIFFERENCE
+runcurtis_f2( recomb_rate=0.1, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+#as above but lower recomb_rate from 0.5 to 0.01
+# MIXTURE STILL BEST but does get a bit faster as curve for 2nd insecticide gets steeper, closer to steepness for 2nd use in sequence
+runcurtis_f2( recomb_rate=0.01, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+# MIXTURE STILL BEST 
+runcurtis_f2( recomb_rate=0.001, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+ 
+So even at very low recombination mixtures can be better. Maybe come back to this in a follow-up LD paper.
+ 
+From Liu 2015
+Insecticide resistance has been proposed to be a preadaptive phenomenon in the sense that,
+prior to an organism’s exposure to a stressor (in this case, a mosquito’s exposure to an insecticide),
+there already exist rare individuals who carry one or more resistance alleles (such as polymorphisms
+in the resistance allele sequence or increased expression of the resistance allele) that allow
+them to survive exposure to that stressor (139, 149).
+
  
  
 ### TO DO  
+
 
 actually do a bit of writing in discussion and or results (leave technical stuff for a while)
 ~ my poor application thoughts
@@ -7304,6 +7333,9 @@ actually do a bit of writing in discussion and or results (leave technical stuff
 check out :
 Whalon, M.E., Mota-Sanchez, D & Hollingworth, R.M. (eds.) 2008. Global pesticide resistance in arthropods. CABI, Wallingford. )
 
+Zhao JZ, Cao J, Li YX, Collins HL, Roush RT, Earle ED and Seltion AM, Transgenic
+plants expressing two Bacillus thuringiensis toxins delay insect resistance evolution.
+Nature Biotech 21:1493-1497 (2003). 
 
 get my thinking straight on poor application, sub-lethal doses ...
 related to RS survival, if RS survive resistance will be faster ...
