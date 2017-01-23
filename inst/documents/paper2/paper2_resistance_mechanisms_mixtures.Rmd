@@ -36,7 +36,11 @@ opts_chunk$set(dev="tiff",
   library(ggplot2)
 ```
 
-### version 8
+### version 9
+
+#An accessible model to help understand the evolution of insecticide resistance : insecticide effectiveness predicted to be key to the relative performance of mixtures.
+
+#A tutorial, primer ...
  
 #Insecticide effectiveness predicted to be most important factor determining whether insecticide mixtures can slow evolution of resistance. 
 
@@ -261,6 +265,9 @@ can anything be done to maintain effectiveness of nets ?
 
 [@Kliot2012]
 fitness costs associated with insecticide resistance
+
+Good review of tactics for IRM inlcuding mention of mixtures and new AIs [@Denholm1992]
+"Once developed and marketed, new products introduce a fresh challenge how to exploit their characteristics while restricting exposure to preserve their effectiveness." 
 
 
 ### Discussion some summary points probably already covered ...
@@ -623,7 +630,7 @@ layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), w
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('exposure: 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('exposure = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #base scenario
 
@@ -644,7 +651,7 @@ mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('exposure: 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('exposure = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #plot margins
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
@@ -678,12 +685,12 @@ legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "in
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
 
@@ -706,7 +713,7 @@ layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), w
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness2: 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness2 = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #base scenario
 
@@ -728,7 +735,7 @@ mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness2: 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness2 = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #plot margins
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
@@ -762,12 +769,12 @@ legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "in
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 1', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 1', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
 
@@ -796,7 +803,7 @@ layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), w
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('dominance1: 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('dominance1 = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #base scenario
 
@@ -817,7 +824,7 @@ mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('dominance1: 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('dominance1 = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #plot margins
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
@@ -851,12 +858,12 @@ legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "in
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('resistance restoration1: 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('resistance restoration1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('resistance restoration1: 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('resistance restoration1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
 
@@ -877,7 +884,7 @@ layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), w
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('frequency1: 1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('frequency1 = 1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #base scenario
 
@@ -898,7 +905,7 @@ mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('frequency1: 0.1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('frequency1 = 0.1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #plot margins
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
@@ -932,12 +939,12 @@ legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "in
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
 
@@ -959,7 +966,7 @@ layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), w
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('male exposure: 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('male exposure = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #base scenario
 
@@ -980,7 +987,7 @@ mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('male exposure:0.2', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+mtext('male exposure =0.2', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 #plot margins
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
@@ -1014,12 +1021,12 @@ legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "in
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 #label
 par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
 plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
-mtext('effectiveness1: 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
 
