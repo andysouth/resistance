@@ -23,6 +23,7 @@
 #' @param addLegend whether to add a legend inside plot
 #' @param vlines colour of vertical lines to add to plot, NULL for none
 #' @param maxX optional max x value for the plot to facilitate comparison with other plots
+#' @param labelMixSeqRatio how many dp in label of the ratio of mix/seq, NULL for no label, only option compatible with addLegend
 #' 
 #' @examples
 #' listOutMix <- sensiAnPaperPart( 2, insecticideUsed = 'mixture' )
@@ -48,7 +49,8 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
                                    cex.axis = 0.8,
                                    addLegend = TRUE,
                                    vlines = 'grey95',
-                                   maxX = NULL
+                                   maxX = NULL,
+                                   labelMixSeqRatio = NULL
                                    
                                    ){
   
@@ -119,7 +121,6 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   abline( h=(log10(100*max(criticalPoints)) ), col='grey' )
   
   
-  
   #allows ylabs to be set to FALSE for no labels
   logylabs <- log10( yticks )
   if (ylabs)  ylabs <- yticks
@@ -165,7 +166,6 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   #andy added
   if( addCombinedStrategy )
   {
-    
     #trying to add a dotted line for the combined strategy
     #it should start at the point that the resistance to the first insecticide is reached
     #and go parallel to the other individual insecticide after
@@ -216,11 +216,7 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
         
         lines( gens, comb, col=adjustcolor("red", alpha.f = 0.5), lty=3 )        
       }
-
-      
     }
-    
-
   }  
   
   
@@ -245,24 +241,31 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
     }    
   }
 
- 
+ #recording generations for seq, mix & adaptive mix for labelling
+  x_seq <- max(maxGensI1) + max(maxGensI2)
+  
+  x_mix2 <- max(gens) #adaptive mix
+  
+  if ( cutoff_i1_mix < cutoff_i2_mix )
+  {
+    x_mix1 <- cutoff_i1_mix
+    x_mix3 <- cutoff_i2_mix
+  } else
+  {
+    x_mix1 <- cutoff_i2_mix
+    x_mix3 <- cutoff_i1_mix
+  }  
+  
+  #add a label of ratio mix to seq, BEWARE will conflict with other legend
+  if( !is.null(labelMixSeqRatio) )
+  {
+    legend( 'bottomright', legend=paste0("mix/seq=",round(x_mix3/x_seq,labelMixSeqRatio)), pch=NA, bty="n", cex=1 ) 
+  }
 
- #andy added
+
  if( addStrategyLabels )
    {
     y <- log10(max(criticalPoints)*100)
-   
-    x_seq <- max(maxGensI1) + max(maxGensI2)
-
-    if ( cutoff_i1_mix < cutoff_i2_mix )
-       {
-         x_mix1 <- cutoff_i1_mix
-         x_mix3 <- cutoff_i2_mix
-       } else
-       {
-         x_mix1 <- cutoff_i2_mix
-         x_mix3 <- cutoff_i1_mix
-       }
 
     #text(x_seq, y, strategyLabels[1])
     #text(x_mix1, y, strategyLabels[2])
@@ -271,7 +274,6 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
   
     if( addCombinedStrategy )
       {
-        x_mix2 <- max(gens)
         #text(x_mix2, y, strategyLabels[3])
         at <- c(x_seq,x_mix1,x_mix2,x_mix3)
        } else
@@ -279,6 +281,14 @@ plotcurtis_f2_generic <- function( combmat, bmat, amat, gencol=1, r1col=2, r2col
          strategyLabels <- strategyLabels[-3] 
        }
   
+    #a fudge to take out any labels that are ''
+    if( length(which(strategyLabels=='')) > 0 )
+    {
+      at <- at[ - which(strategyLabels=='')]    
+      strategyLabels <- strategyLabels[ - which(strategyLabels=='')]      
+    }
+
+    
     #or can I add these as an axis above
     #horizontal labels if max of 2 chars in label
     if (max(nchar(strategyLabels)<3))

@@ -46,7 +46,8 @@
 #' @param main title for the plot
 #' @param vlines colour of vertical lines to add to plot, NULL for none
 #' @param maxX optional max x value for the plot to facilitate comparison with other plots
-#'  
+#' @param labelMixSeqRatio how many dp in label of the ratio of mix/seq, NULL for no label, only option compatible with addLegend
+#'
 #' @return list of plot components
 #' @export
 
@@ -94,7 +95,8 @@ runcurtis_f2 <- function( max_gen = 500,
                           addLegend = TRUE,
                           main = "",
                           vlines = 'grey95',
-                          maxX = NULL
+                          maxX = NULL,
+                          labelMixSeqRatio = FALSE
                           )
 {
   
@@ -233,7 +235,8 @@ runcurtis_f2 <- function( max_gen = 500,
                          addLegend = addLegend,
                          main = main,
                          vlines = vlines,
-                         maxX = maxX
+                         maxX = maxX,
+                         labelMixSeqRatio = labelMixSeqRatio
                          )  
   
   #add returning the results
