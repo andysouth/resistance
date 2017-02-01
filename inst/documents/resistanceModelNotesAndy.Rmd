@@ -7319,15 +7319,18 @@ there already exist rare individuals who carry one or more resistance alleles (s
 in the resistance allele sequence or increased expression of the resistance allele) that allow
 them to survive exposure to that stressor (139, 149).
 
+*23/1/17*
+paper2
+done ~ added ratio mix/seq to plots
+done ~ sort s,m labels on plots 
+ 
  
  
 ### TO DO  
 
-
-actually do a bit of writing in discussion and or results (leave technical stuff for a while)
-~ my poor application thoughts
-~ relation to other studies
-~ conclusion flexible model for looking at future strategies for going beyond plausibile rules
+paper2
+~ replace model outline fig with one about how effectiveness etc. influence fitness
+~ improve figure legends
 
 
 check out :
@@ -7341,8 +7344,6 @@ get my thinking straight on poor application, sub-lethal doses ...
 related to RS survival, if RS survive resistance will be faster ...
 will depend on dominance ...
 and on resistance restoration see FAO p17.
-can I make this clearer ?
-
 
 My thinking (and seems to be Justins too) is that insecticide treatments will always be imperfect, so there are always going to be resistants that survive.
 
@@ -7360,8 +7361,6 @@ Poor application seems likely to reduce the selection pressure on resistance by 
 
 ~ in discussion mention migration, if susceptible individuals are migrating in this will reduce rate of resistance development.
 
-~ look at questions from Ian & Justin
-
 ~ Justin 1/12/16 said that they hear the msg that sub-lethal dosing accelerates resistance
 
 ~ what do I want the main msgs to be ?
@@ -7373,7 +7372,6 @@ Poor application seems likely to reduce the selection pressure on resistance by 
 ~~~ reduce susceptibles killed (e.g. as in rotation)
 
 ~ rewrite text that refers to the first 4 panel fig
-~ 
 ~ include cost of resistance ?
 ~ think about a diagram to explain the different inputs
 ~ don't get too sucked into explaining mechanisms precisely
@@ -7382,17 +7380,12 @@ Poor application seems likely to reduce the selection pressure on resistance by 
 ~ key point in our Fig1B and from conventional wisdom is that poor insecticide application can promote rise in resistance. But I don't think we really cover this in how we run the model. E.g. increasing effectiveness and exposure (which one would expect to be related to insecticide application) all result in more rapid resistance. Are we saying that the insecticide application effect occurs purely because poor application results in higher dominance ? I should discuss this in paper2. Can link it to specific statements in GPIRM about poor application promoting resistance (if there are any). Could we add an insecticide application param ? 
 
 
-
-
-
-
 ~ calc Toggl time for Bayer
 ~ check plot_fit_variance() & what it would do if multiple scenarios
 
 
 ~ ? should there be a dominance associated with the cost of resistance ? see 498 of revised MS
 ~ note that dominance is more relevant at low frequencies where much of the resistance is present in heterozygotes. Once much of the resistance is in homozygotes dominance is less relevant. (our LD output may be related to the proportion of R genotypes that are homozygous ...)
-
 
 
 ~ after ASTMH
