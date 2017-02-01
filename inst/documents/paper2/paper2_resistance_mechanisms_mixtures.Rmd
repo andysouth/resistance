@@ -53,12 +53,12 @@ THIS IS A CONFIDENTIAL COPY OF THE MS. Please do not circulate without the expre
 _must be 350 words, currently 375 with subheadings Background, Results & Conclusions_
 
 ##### Background
-Insecticide resistance has been identified as a major problem for the control of malarial mosquitoes with potentially huge consequences for malaria burden. To address this problem effort is being made to develop new insecticide tools including new active ingredients and combinations with existing ones. There are different potential strategies for using new insecticides and recomendations for how best to preserve their utility for controlling mosquitoes and malaria. There is however limited recent, accessible modelling work to support suggestions of which strategies may be best in different situations. Previous work suggests that preferred strategies will be situation specific. This points to a need for an accessible, mechanistic understanding of how the evolution of insecticide resistance is likely to respond to potential intervention strategies to help guide both management and policy. Such a mechanistic understanding would be more robust to uncertainty in parameter values in field situations.    
+Insecticide resistance has been identified as a major problem for the control of malarial mosquitoes with potentially huge consequences for malaria burden. To address this problem effort is being made to develop new insecticide tools including new active ingredients and combinations with existing ones. There are different potential strategies for using new insecticides and recomendations for how best to preserve their utility for controlling mosquitoes and malaria. There is however limited recent, accessible modelling work to support suggestions of which strategies may be best in different situations. Previous work suggests that preferred strategies will be situation specific. This points to a need for an accessible, mechanistic understanding of how the evolution of insecticide resistance is likely to respond to potential intervention strategies to help guide both management and policy. Such a mechanistic understanding could allow a more robust response to uncertainty in parameter values in field situations.*finesse that sentence or move to discussion*    
 
-Here we use a relatively simple model to develop a mechanistic understanding of how insecticide resistance is expected to increase under different intervention strategies, namely the use of insecticides in isolation, sequence and mixtures. The model flexibly represents two independent genes coding for resistance to two insecticides allowing us to represent the different intervention strategies. We look principally at the ability of the insecticides to kill susceptible mosquitoes, the proportion of mosquitoes that come into contact with the insecticide,  and how much the resistance counteracts the effect of the insecticide.  
+Here we use a relatively simple model to develop a mechanistic understanding of how insecticide resistance is expected to increase under different intervention strategies, namely the use of insecticides in isolation, sequence and mixtures. The model flexibly represents two independent genes coding for resistance to two insecticides allowing us to represent the different intervention strategies. We look principally at the ability of the insecticides to kill susceptible mosquitoes, the proportion of mosquitoes that come into contact with the insecticide, and how much the resistance alleles counteract the effect of the insecticide.  
 
 ##### Results
-We show firstly that using a second insecticide, at the same time as a first, always slows evolution of resistance to the first. Secondly we show that the ability of an insecticide to kill the susceptible mosquitoes (effectiveness), is the most important factor influencing whether using insecticides in a sequence or a mixture is likely to lead to faster resistance to both of them. These results are explained in terms of the mechanisms that cause them. We discuss how these results can inform intervention strategies in the field. 
+We show firstly that using a second insecticide, in a mixture with a first, always slows evolution of resistance to the first. Secondly we show that the ability of an insecticide to kill the susceptible mosquitoes (effectiveness), is the most important factor influencing whether using insecticides in a sequence or a mixture is likely to lead to faster resistance to both of them. The mechanisms behind these results are explained. We discuss how these results can inform intervention strategies in the field. 
 
 ##### Conclusions
 We describe an R package and user-interface that allows further exploration of the development of resistance. The user-interface (https://andysouth.shinyapps.io/MixSeqResist1) allows replication of our results and exploration of what happens when inputs are changed outside of the ranges we have used. 
@@ -98,7 +98,7 @@ Parameter  | Description
 
 ## Methods
 
-The simulation represents a population of randomly mixing individuals using standard population genetic approaches to avoid the need to follow every individual. One locus is represented for each insecticide. There are two potential alleles per locus. Each allele confers either resistance or susceptibility to the insecticide. Fitness is the main currency of the model, representing how much each genotype survives and reproduces, with a maximum value of 1. The fitness of an individual depends on it's alleles, exposure to the insecticide and other inputs that can be set in the model. These inputs include the effectiveness of the insecticide, the dominance of the resistance allele and the ability of resistance to restore fitness in the presence of the insecticide (see Table 1). Each of these inputs can be varied as a proportion between 0 and 1. We use 'Resistance restoration' to represent how much the RR genotype restores fitness in the presence of the insecticide. The more conventional 'selection coefficient' is calculated by multiplying Resistance restoration by insecticide effectiveness. Doing it this way allows us to vary all inputs between 0 and 1 without fitness going above 1 in the model.
+The simulation represents a population of randomly mixing individuals using standard population genetic approaches to avoid the need to follow every individual. One locus is represented for each insecticide. There are two potential alleles per locus. Each allele confers either resistance or susceptibility to the insecticide. Fitness is the main currency of the model, representing how much each genotype survives and reproduces, with a maximum value of 1 defined as the fitness of the SS genotype in absence of the insecticide. The fitness of an individual depends on it's alleles, exposure to the insecticide and other inputs that can be set in the model. These inputs include the effectiveness of the insecticide, the dominance of the resistance allele and the ability of resistance to restore fitness in the presence of the insecticide (see Table 1). Each of these inputs can be varied as a proportion between 0 and 1. We use 'Resistance restoration' to represent how much the RR genotype restores fitness in the presence of the insecticide. The more conventional 'selection coefficient' is calculated by multiplying Resistance restoration by insecticide effectiveness. Doing it this way allows us to vary all inputs between 0 and 1 without fitness going above 1 in the model.
 
 The simulation proceeds through generations. In each generation selection is represented by multiplying genotype frequencies in the population by their relative fitness. This acts to make the fitter alleles more common over time. Thus a summary of the selection stage is :
 
@@ -109,13 +109,13 @@ The simulation proceeds through generations. In each generation selection is rep
 > RS = 1-effectiveness + (dominance*selection coeff.)  
 > RR = 1-effectiveness + selection coeff.  
 > 
-> Allele fitness :   
+> Genotype fitness :   
 > SS1SS2 = SS * SS  
 > SS1RS2 = SS * RS  
 > … and for other combinations  
 > RR1RR2 = RR * RR  
 > 
-> Population fitness = Allele fitness * exposure to insecticide  
+> Population fitness = Genotype fitness * exposure to insecticide  
 > 
 > In each generation :   
 > Allele frequency[t+1] = Allele frequency[t] * Population fitness  
@@ -127,7 +127,7 @@ So far this description just considers a single insecticide and associated resis
 
 Here we principally look at model outputs of the change in resistance allele frequencies over time (generations). Resistance allele frequencies are calculated from the frequencies of each genotype as follows.
 
-> Resistance allele frequency = 2*RR + RS
+> Resistance allele frequency = (2*RR + RS) / 2
 
 We investigate three insecticide use strategies.
 
@@ -148,11 +148,11 @@ Similarly, higher values of starting resistance frequency also resulted in faste
 
 
 ### Two insecticides
-When two insecticides are used the relative performance of a mixture strategy compared to sequential use changes dependent on input values. To help us understand the mechanisms influencing this relative performance we started with a single base scenario and investigated changing inputs individually. The base scenario was similar to that used for the single insecticide. Values for the first four inputs in Table 1 were set to 0.5 and the starting frequencies of resistance to 0.01. For this base scenario resistance arises slower for sequential than mixture (Fig 5A). This plot, and those that follow, compares mixture and sequence for a single combination of inputs. Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time (as would be expected given that they have identical input parameters). When used in sequence the curve (dashed) for each insecticide individually is steeper than in the mixture but, because they happen one after the other, it takes longer for both to reach the resistance threshold of 50%.
+When two insecticides are used the relative performance of a mixture strategy compared to sequential use changes dependent on input values. To help understand the mechanisms influencing this relative performance we started with a single base scenario and investigated changing inputs individually. The base scenario was similar to that used for the single insecticide. Values for the first four inputs in Table 1 were set to 0.5 and the starting frequencies of resistance to 0.01. For this base scenario resistance arises slower for sequential than mixture (Fig 5A). This plot, and those that follow, compares mixture and sequence for a single combination of inputs. Resistance to both insecticides in the mixture follow the same path and reach the threshold at the same time (as would be expected given that they have identical input parameters). When used in sequence the curve (dashed) for each insecticide individually is steeper than in the mixture but, because they happen one after the other, it takes longer for both to reach the resistance threshold of 50%.
 
 #### results: Insecticide exposure and effectiveness
 
-Increasing exposure to the insecticides (the proportion of insects that come into contact) from 0.5 to 0.8 (Fig 5C) decreases the time-to-resistance for both the sequential and mixture strategy and so does not change their relative performance; time-to-resistance remains longer for the sequence. In contrast keeping the exposure constant at 0.5 and increasing effectiveness (the proportion of SS insects that are killed by contact) of one of the insecticides to 0.8 (Fig 5D) results in a longer time-to-resistance for the mixture relative to the sequence. Resistance for the more effective insecticide (in red) increases faster than the lesser. Resistance to the less effective insecticide in the mixture increases slowly initially and then speeds up after the more effecttive insecticide has reached the resistance threshold (~50 generations).  
+Increasing exposure to the insecticides (the proportion of insects that come into contact) from 0.5 to 0.8 (Fig 5C) decreases the time-to-resistance for both the sequential and mixture strategy and so does not change their relative performance; time-to-resistance remains longer for the sequence. In contrast keeping the exposure constant at 0.5 and increasing effectiveness (the proportion of SS insects that are killed by contact) of one of the insecticides to 0.8 (Fig 5D) results in a longer time-to-resistance for the mixture relative to the sequence. Resistance for the more effective insecticide (in red) increases faster than the less effective. Resistance to the less effective insecticide in the mixture increases slowly initially and then speeds up after the more effecttive insecticide has reached the resistance threshold (~50 generations).  
 
 
 Thus a more effective insecticide increases time-to-resistance when used in a mixture (compare the solid lines in Fig 5A & B). This is opposite to what happens when used in sequence (compare the red dashed line in Fig 5A & B) and in isolation (Fig 2A), when more effective insecticides shortened times-to-resistance. Figure 5D has the same inputs as Fig 5B except that the exposure is increased from 0.5 to 0.8. The increase in exposure reduces time-to-resistance more for the mixture relative to the sequence. The result is that the advantage of mixtures over sequence is removed by the increase in exposure, leading to approximately equal times-to-resistance for the two strategies (Fig 5D). 
@@ -170,6 +170,9 @@ Increasing dominance or resistance restoration decreases time-to-resistance for 
 
 #### results: Starting frequencies of resistance
 Changing the starting frequency of resistance had a similar effect on time to resistance for both sequences and mixtures and thus had little effect on their relative performance. For example taking the base scenario and reducing the starting frequency of one resistance allele did not change from sequence being favoured (compare Fig 8C to 8A). Similarly taking a scenario in which time-to-resistance is longer for a mixture (Fig 8B) and decreasing the starting frequency of that resistance allele did not change the fact that the mixture was favoured (Fig 8D). 
+
+
+It has previously been suggested [@Curtis1985][@WHO2012] that using an insecticide to which there was existing resistance in a mixture with a new insecticide with little resistance could lead to more rapid evolution of resistance to the latter through a process termed linkage disequilibrium. Figure 8 C&D show how our model predicts that linkage disequilibrium does not lead to more rapid evolution of resistance to the newer insecticide. In Figures 8 C&D the newer insecticide with lower starting resistance (in red) leads to faster resistance when used alone (red dotted) than when used in a mixture (red solid).
 
 
 ## Discussion
@@ -203,14 +206,14 @@ Fig 5B also demonstrates that when two insecticides have a different effectivene
 
 
 #### discussion: Exposure vs effectiveness
-It seems initially counter-intuitive that whereas increasing effectiveness slows the development of resistance for mixtures, increasing exposure speeds it up. Increasing the exposure to both insecticides results in a decrease in time-to-resistance (from 90 in Fig 5A to 40 in Fig 5C) where increasing the effectiveness of both insecticides by the same amount results in a slight increase (from 90 in Fig 5A to 110 in Fig 5B). This contrasts with the identical effects that exposure and effectiveness have on a single insecticide (Figs 3 A,B) and on insecticides in sequence (the red dashed lines are the same in Figs 5B & 5C). This difference between effectiveness and exposure was unexpected for us. 
+It seems initially counter-intuitive that whereas increasing effectiveness slows the development of resistance for mixtures, increasing exposure speeds it up. Increasing the exposure to both insecticides results in a decrease in time-to-resistance (from 90 generations in Fig 5A to 40 generations in Fig 5C) where increasing the effectiveness of both insecticides by the same amount results in a slight increase (from 90 in Fig 5A to 110 in Fig 5B). This contrasts with the identical effects that exposure and effectiveness have on a single insecticide (Figs 3 A,B) and on insecticides in sequence (the red dashed lines are the same in Figs 5B & 5C). This difference between effectiveness and exposure was unexpected for us. 
 _todo could this be because exposure results doesn't alter the relative fitness of genotypes because all genotypes are exposed equally ? doesn't quite make sense to me_
 
 The mechanisms involved in the response of resistance in mixtures are summarised in Table3. Whether a mixture or sequence is favoured for reducing the spread of resistance will depend on these mechanisms and is summarised in Table 4.
 
 
 #### discussion: caveats
-It is worth re-iterating that we are looking solely at the evolution of resistance and not at the control of mosquitoes or malaria. As such our model would predict that the best strategy for limiting the development of resistance in the short term would be to use no insecticide. Using no insecticide could have serious consequences for mosquito and malaria abundance. The challenge is to develop good strategies for delivering mosquito and malaria control in the short term while and sustaining that in the longer term by restricting the development of resistance. Others are looking at combining models of population genetics and population dynamics to investigate these trade-offs [@Barbosa2017].
+It is worth re-iterating that we are looking solely at the evolution of resistance and not at the control of mosquitoes or malaria. As such our model would predict that the best strategy for limiting the development of resistance in the short term would be to use no insecticide. Using no insecticide could have serious consequences for mosquito and malaria abundance. The challenge is to develop good strategies for delivering mosquito and malaria control in the short term while sustaining that in the longer term by restricting the development of resistance. Others are looking at combining models of population genetics and population dynamics to investigate these trade-offs [@Barbosa2017].
 
 
 The development of insecticide resistance in operational field settings is subject to considerable uncertainty [@Ransom2016]. The model we present here is able to cover the range of that uncertainty, yet in this paper, to develop an understanding of the key mechanisms we restrict our explorations to a limited region of paramter space (e.g. holding most inputs constant at intermediate values while modifying single inputs in isolation). Thus there is the potential that the system may behave differently in the field than we describe here. However, the results presented here are supported by an earlier analysis where we ran 10,000 unique scenarios varying more inputs [@Levick2017]. In addition we provide an online user interface to the model [@South2017a] and enabling readers to investigate model behaviour in areas of parameter space we have not shown here.
@@ -221,7 +224,7 @@ The development of insecticide resistance in operational field settings is subje
 I will now put these predicted responses of resistance into the context of previous work and recomendations. Earlier modelling work has made sometimes contrasting predictions and these can be explained by the details of their structure and the particular situations they represent. One model predicted that "the use of mixtures is always more effective in delaying the onset of resistance often by many orders of magnitude"[@Mani1985]. That model assumed that SS genotypes were always killed, RR always survived, and that a constant 10% of mosquitoes escaped the insecticide. This would be represented in our model by a very high 'insecticide effectiveness' of 1, a 'resistance restoration' of 1 and an 'exposure' of 0.9. This result is consistent with our prediction that the very high effectiveness is likely to favour mixtures over sequences (e.g. see Fig 6D).
 
 
-A more recent model [@Roush1998] lead to the following more pessimistic conclusion about the potential of mixtures : “As a result of incomplete coverage and residue decay, the mortality of susceptible homozygotes is rarely consistently high enough for pesticide mixtures to be effective” [@Roush1998]. This "mortality of susceptible homozygotes" is equivalent to the parameter we have termed insecticide effectiveness, so lends further support to our main conclusion of the importance of effectiveness. It's also shown [@Roush1998 Fig 3] that decreasing exposure from 90% to 80% also increases the benefit of mixtures over sequences in the same way that we have shown.
+A subsequent model [@Roush1998] lead to the following more pessimistic conclusion about the potential of mixtures : “As a result of incomplete coverage and residue decay, the mortality of susceptible homozygotes is rarely consistently high enough for pesticide mixtures to be effective” [@Roush1998]. This "mortality of susceptible homozygotes" is equivalent to the parameter we have termed insecticide effectiveness, so lends further support to our main conclusion of the importance of effectiveness. It's also shown [@Roush1998 Fig 3] that decreasing exposure from 90% to 80% also increases the benefit of mixtures over sequences in the same way that we have shown.
 
 
 Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. _todo expand this paragraph_ 
@@ -316,9 +319,13 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 
 
 ## ANDY TO DO
+1. remove first person for Malaria journal
+1. explain resistance thresholds and time-to-resistance in methods
+1. refer to ratios of mix:seq in plots
+1. refer to PRCC from pap1 in ref. to Table4
 1. mention single gene vs additive effects (with ref.)
 1. can I add a diagram to help with methods, e.g. perhaps fitness under difference inputs, similar to fitnessvis ?
-1. ? briefly refer to linkage disequilibrium and say we are investigating OR include a figure OR refer to one of my existing figures
+1. in discussion refer to linkage disequilibrium about Fig 8D
 1. is there a reference to say that the effectiveness of insecticides can be modified at the design stage, or by the dose ?
 1. mention other potential effects e.g. costs of resistance, sex linkage, ..._
 1. cite in press Killeen about combining interventions
@@ -327,11 +334,12 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 
 ## Figures
 
-![Building up the model structure.](paper2_mod_graphic_a_to_c.png)
+![New figure showing how fitness determined by inputs](paper2_mod_graphic_a_to_c.png)
 
-![Screenshot of one online model user interface, accessible at : https://andysouth.shinyapps.io/resistmob2/](paper2_UI1.png)
 
-```{r Fig2, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Effect of inputs on changing resistance frequency over time with single insecticide use. A. Effectiveness, B. Exposure, C. Dominance, D. Resistance restoration. For each panel the chosen input was varied in isolation with the remaining inputs set to 0.5, except for starting frequency of resistance which was set to 0.01). "}
+![Screenshot of one online model user interface, accessible at : https://andysouth.shinyapps.io/resistmob2/. The user can modify values of the input parameters considered in this paper using simple sliders and run the model to get graphs of resulting resistance frequency over time. Two scenarios (A&B) can be run and the results viewed side by side. This makes it easy to explore the effect of changing individual inputs.](paper2_UI1.png)
+
+```{r Fig3, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of inputs on changing resistance frequency over time. A. Effectiveness, B. Exposure, C. Dominance, D. Resistance restoration. Increasing any of the inputs (going from red to blue) results in shorter times-to-resistance. For each panel the chosen input was varied in isolation with the remaining inputs set to 0.5, except for starting frequency of resistance which was set to 0.01). "}
 
   library(cowplot)
   
@@ -539,7 +547,7 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
   
 ```
 
-```{r Fig3, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Effect of changing resistance starting frequency on changing resistance frequency over time with single insecticide use."}
+```{r Fig4, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of the starting frequency of resistance on how resistance frequency changes over time. Increasing the starting frequency decreases the number of generations taken to reach resistance thresholds."}
 
   #single insecticide frequency fig
 
@@ -594,7 +602,7 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 
 
 
-```{r Fig4, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="*KEY FIG OF PAPER* Influence of insecticide effectiveness and exposure on time-to-resistance for mixtures and sequences. A. All control inputs equal at 0.5 : time-to-resistance is longer for sequential use, B. Effectiveness of insecticide1 increased from 0.5 to 0.8 : time-to-resistance is longer for the mixture, C. Exposure increased to 0.8 : time-to-resistance is longer for sequential use, D. Effectiveness of insecticide1 and exposure increased to 0.8 : time-to-resistance equal for mixture and sequence"}
+```{r Fig5, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of insecticide effectiveness and exposure on time-to-resistance for mixtures and sequences. Exposure to the insecticides is increased from row 1 (A&B) to row 2 (C&D). The effectiveness of one insecticide is increased from column 1 (A&C) to column2 (B&D). On the upper X axis s&m indicate where the 50% resistance threshold is reached for the sequence and the mixture. In the lower right of each panel the the ratio of time-to-resistance for mixture/sequence is shown rounded to 1 decimal place to give an indication of the relative performance of mixtures and sequences.  A. All control inputs equal at 0.5 : time-to-resistance is longer for sequential use, B. Effectiveness of insecticide1 increased from 0.5 to 0.8 : time-to-resistance is longer for the mixture, C. Exposure increased to 0.8 : time-to-resistance is longer for sequential use, D. Effectiveness of insecticide1 and exposure increased to 0.8 : time-to-resistance equal for mixture and sequence. Increasing effectiveness increases times-to-resistance for mixtures and improves their performance relative to sequences. Increasing exposure decreases times-to-resistance for mixtures and reduces their performance relative to sequences. "}
 
 #4 panel figure looking at effectiveness and exposure
 
@@ -636,7 +644,7 @@ mtext('exposure = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -644,7 +652,7 @@ mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #effectiveness1 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -657,7 +665,7 @@ mtext('exposure = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #exposure 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -666,7 +674,7 @@ mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 & expos 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.8 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -694,7 +702,7 @@ mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
 
-```{r Fig5, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Higher effectivenesses for both insecticides, times-to-resistance longer for the mixture in all scenarios. A. Effectiveness of insecticide1 increased from 0.5 to 0.8, B. Effectiveness of insecticide1 increased from 0.5 to 1, C. Effectiveness of insecticides 1 and 2 increased to 0.8, D. Effectiveness of insecticide2 0.8 and of insecticide1 1"}
+```{r Fig6, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of the effectiveness of both insecticides on time-to-resistance for mixtures and sequences. Effectiveness of insecticide 2 is increased from row 1 (A&B) to row 2 (C&D). The effectiveness of insecticide 1 is increased from column 1 (A&C) to column2 (B&D). s&m on the upper X axis and mix/seq in th lower right of each panel are explained in the legend to Fig 5. A. Effectiveness of insecticide1 increased from 0.5 to 0.8, B. Effectiveness of insecticide1 increased from 0.5 to 1, C. Effectiveness of insecticides 1 and 2 increased to 0.8, D. Effectiveness of insecticide2 0.8 and of insecticide1 1. With the effectiveness of at least one insecticide greater than or equal to 0.8, times-to-resistance are longer for the mixture in all scenarios."}
 
 #4 panel figure looking at effectiveness changes alone
 
@@ -720,7 +728,7 @@ mtext('effectiveness2 = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -728,7 +736,7 @@ mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 1 eff2 0.5
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -741,7 +749,7 @@ mtext('effectiveness2 = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 0.8 eff2 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -750,7 +758,7 @@ mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 1 eff2 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -780,7 +788,7 @@ mtext('effectiveness1 = 1', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 
 
-```{r Fig6, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="A. All control inputs equal at 0.5, B. Resistance restoration for insecticide1 increased from 0.5 to 0.8, C. Dominance for insecticide1 increased to 0.8, D. Resistance restoration and dominance for insecticide1 increased to 0.8"}
+```{r Fig7, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of dominance and resistance restoration on time-to-resistance for mixtures and sequences. Dominance of the allele coding for resistance to insecticide 1 is increased from row 1 (A&B) to row 2 (C&D). Resistance restoration for the allele coding for resistance to insecticide 1 is increased from column 1 (A&C) to column2 (B&D). s&m on the upper X axis and mix/seq in th lower right of each panel are explained in the legend to Fig 5. A. All control inputs equal at 0.5, B. Resistance restoration for insecticide1 increased from 0.5 to 0.8, C. Dominance for insecticide1 increased to 0.8, D. Resistance restoration and dominance for insecticide1 increased to 0.8. Changing dominance and resistance restoration does not change the relative ordering of mixtures and sequences, time-to-resistance remains longest for sequences in all 4 scenarios."}
 
 #4 panel figure looking at dominance and resistance restoration
 
@@ -809,7 +817,7 @@ mtext('dominance1 = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -817,7 +825,7 @@ mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #rr1 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -830,7 +838,7 @@ mtext('dominance1 = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #dominance1 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -839,7 +847,7 @@ mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #dom1 & rr1 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
 
 mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -868,7 +876,7 @@ mtext('resistance restoration1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t
 ```
 
 
-```{r Fig7, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="A. All control inputs equal at 0.5, starting frequencies of resistance at 0.01, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Starting frequency of resistance for insecticide1 decreased from 0.01 to 0.001, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and starting frequency for insecticide1 decreased from 0.001 to 0.0001"}
+```{r Fig8, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of starting frequencies of resistance on time-to-resistance for mixtures and sequences. Starting frequency of the gene conferring resistance to insecticide 1 is decreased from row 1 (A&B) to row 2 (C&D). Effectiveness of insecticide 1 is increased from column 1 (A&C) to column2 (B&D). s&m on the upper X axis and mix/seq in th lower right of each panel are explained in the legend to Fig 5. A. All control inputs equal at 0.5, starting frequencies of resistance at 0.01, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Starting frequency of resistance for insecticide1 decreased from 0.01 to 0.001, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and starting frequency for insecticide1 decreased from 0.01 to 0.001. In these scenarios the starting frequencies do not change better performance of sequences at low effectiveness and mixtures at high effectiveness."}
 
 #4 panel figure looking at effectiveness and starting freq.
 
@@ -890,7 +898,7 @@ mtext('frequency1 = 1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -898,7 +906,7 @@ mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -911,7 +919,7 @@ mtext('frequency1 = 0.1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #freq1 0.001
-runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -920,7 +928,7 @@ mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #freq1 0.001, eff1 0.8
-runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150 )
+runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
 
 mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -972,7 +980,7 @@ mtext('male exposure = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( male_exposure_prop=0.8, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200 )
+runcurtis_f2( male_exposure_prop=0.8, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
 
 mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -980,7 +988,7 @@ mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #eff1 0.8
-runcurtis_f2( male_exposure_prop=0.8, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200 )
+runcurtis_f2( male_exposure_prop=0.8, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
 
 mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -993,7 +1001,7 @@ mtext('male exposure =0.2', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #freq1 0.001
-runcurtis_f2( male_exposure_prop=0.2, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200 )
+runcurtis_f2( male_exposure_prop=0.2, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
 
 mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
@@ -1002,7 +1010,7 @@ mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
 #freq1 0.001, eff1 0.8
-runcurtis_f2( male_exposure_prop=0.2, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','m','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200 )
+runcurtis_f2( male_exposure_prop=0.2, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
 
 mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
 
