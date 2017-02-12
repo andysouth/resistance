@@ -38,7 +38,9 @@ opts_chunk$set(dev="tiff",
 
 ### version 9
 
-#An accessible model to help understand the evolution of insecticide resistance : insecticide effectiveness predicted to be key to the relative performance of mixtures.
+#Evolution of insecticide resistance with insecticide mixtures and sequences : an accessible model to promote understanding.
+
+#An accessible model to promote understanding of the evolution of insecticide resistance : insecticide effectiveness predicted to be key to the relative performance of mixtures.
 
 #A tutorial, primer ...
  
@@ -284,6 +286,24 @@ Good review of tactics for IRM inlcuding mention of mixtures and new AIs [@Denho
 (@) exposure ...
 
 
+### Declarations
+TODO see https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
+
+##### Ethics approval and consent to participate
+Not applicable
+##### Consent for publication
+Not applicable
+##### Availability of data and material
+
+##### Competing interests
+
+##### Funding
+
+##### Authors' contributions
+AS conceived the paper, re-factored the model code, performed the analyses and wrote the first and subsequent versions of the paper. IH conceived the modelling approach, developed the first version of the model in collaboration with Bethany Levick, explained concepts to AS and reviewed and commented on all manuscript versions.
+
+##### Acknowledgements
+Thankyou to Bethany Levick who developed the first version of the model code.
 
 
 
