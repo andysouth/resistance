@@ -7323,15 +7323,58 @@ them to survive exposure to that stressor (139, 149).
 paper2
 done ~ added ratio mix/seq to plots
 done ~ sort s,m labels on plots 
+done ~ improve figure legends
  
+*1/2/17* 
+
+
+Martin Donnelly lecture
+
+~ LSTM strategy translational research
+~ Most of known resistance markers have proceeded to fixation and are therefore of limited predictive value.
+~ Found that a small number of genes are consistently over-expressed in insecticide resistant insects.
+~ Now they have 6 good markers associated with insecticide resistance. 
+~ 1000 anopheles gambiae genomes project (Ag1000G)
+~ Huge variation in mosquito genomes
+~ Likely that any insecticide resistance mechanism is already out there and doesn't need mutation to arise.
+~ are resistance associated variants common across all areas or specific to particular locations
+~ selective swept regions (selection sweeps out genetic variance)
+~ soft versus hard selective sweeps
+~ 10 independent mutations of kdr resistance to DDT & PYR
+~ now have ~25 markers of resistance
+~ moving towards creating risk maps for resistance, based upon genotypes
+~ emebedding genomics into intervention programs to see if can detect evolution of resistance happening
+~ he talked about using genomics to detect how resistance is evolving and use this to suggest how that rise in resistance can be mitigated
+~ Mark Paine asked about new insecticides entering the market with naive populations, Martin said they are involved with sumishield trials and they should be able to make suggestions about how resistance is likely to evolve
+~ Martin said likely that we need to be more creative with mosaics and combinations rather than just using mono-therapies
+~ in Uganda cotton growing areas, agriculture may be important in driving emergent resistance
+
+pre-print of ag1000G results
+biorxiv.org/content/early/2016/12/22/096289
+ 
+*7/2/17*
+editing Ians draft plan for IVCC
+file:///C:/Dropbox/resistance LSTM/ivcc2017/Plan of work andy.docx
+
+I want to move up the priority list developing and maintaining the code.
+
+To get total lines in a git repo (excludes binaries but includes blanks)
+
+git diff --shortstat 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+ 162 files changed, 51032 insertions(+)
+ 
+so c 50k lines of code
+on the github resistance repo page, go to contributors and can see for me 85k additions and 35k deletions
+
  
  
 ### TO DO  
 
 paper2
+~ check mal journ, then remove any use of 1st person for malaria journal
 ~ replace model outline fig with one about how effectiveness etc. influence fitness
-~ improve figure legends
 
+~ maybe I need to specify what I mean by 'mechanisms' in contrast e.g. to resistance mechanisms
 
 check out :
 Whalon, M.E., Mota-Sanchez, D & Hollingworth, R.M. (eds.) 2008. Global pesticide resistance in arthropods. CABI, Wallingford. )
