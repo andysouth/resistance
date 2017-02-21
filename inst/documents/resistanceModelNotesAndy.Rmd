@@ -7366,13 +7366,19 @@ git diff --shortstat 4b825dc642cb6eb9a060e54bf8d69288fbee4904
 so c 50k lines of code
 on the github resistance repo page, go to contributors and can see for me 85k additions and 35k deletions
 
+*21/2/17* 
+working on fig1 for paper2 (plot_fit_calc()), getting there. 
+ 
  
  
 ### TO DO  
 
 paper2
-~ check mal journ, then remove any use of 1st person for malaria journal
+~ check that cost of resistance is calculated the way I indicate with dominance
 ~ replace model outline fig with one about how effectiveness etc. influence fitness
+~ do I want to add cost of resistance to the paper ?
+~ check mal journ, then remove any use of 1st person for malaria journal
+
 
 ~ maybe I need to specify what I mean by 'mechanisms' in contrast e.g. to resistance mechanisms
 
