@@ -354,8 +354,12 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 
 ## Figures
 
-![New figure showing how fitness determined by inputs](paper2_mod_graphic_a_to_c.png)
+```{r Fig1, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Diagrammatic representation of the effect of model inputs on the fitness of genotypes for a single insecticide. Fitness is shown on the y-axis and the different genotypes (SS, SR, RR) on the x axis. Firstly the exposure input determines the proportion of the population in the left and right panels (exposed and not exposed). For those that are exposed (left panel) insecticide effectiveness sets the fitness for SS, resistance restoration 'restores' a portion of the fitness for RR and dominance determines how the fitness for SR sits between that of SS and RR. For those that are not exposed, fitness of SS is set to 1 by definition, resistance cost determines the fitness of RR and again dominance determines how the fitness for SR sits between that of SS and RR. In this example effectiveness=0.8, dominance=0.5, resistance restoration=0.5 and resistance cost=0.3."}
+  
+plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance=0.5, cost=0.3 )
 
+
+```
 
 ![Screenshot of one online model user interface, accessible at : https://andysouth.shinyapps.io/resistmob2/. The user can modify values of the input parameters considered in this paper using simple sliders and run the model to get graphs of resulting resistance frequency over time. Two scenarios (A&B) can be run and the results viewed side by side. This makes it easy to explore the effect of changing individual inputs.](paper2_UI1.png)
 
@@ -977,7 +981,7 @@ mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 ```
 
 
-```{r Fig8, eval=FALSE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="A. All control inputs equal at 0.5, male exposure 0.8, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Male exposure decreased from 0.8 to 0.2, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and Male exposure decreased from 0.8 to 0.2"}
+```{r Fig9, eval=FALSE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="A. All control inputs equal at 0.5, male exposure 0.8, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Male exposure decreased from 0.8 to 0.2, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and Male exposure decreased from 0.8 to 0.2"}
 
 # not evaluated at the moment
 #4 panel figure looking at male exposure prop and starting freq.
