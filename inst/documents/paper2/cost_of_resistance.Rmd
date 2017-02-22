@@ -1,0 +1,708 @@
+---
+title: "coct_of_resistance"
+output: pdf_document
+#output: word_document
+author: "Andy South and Ian Hastings"
+date: "`r Sys.Date()`"
+---
+
+```{r,echo=FALSE,results='hide',warning=FALSE}
+  library(resistance)
+  library(ggplot2)
+```
+
+
+
+```{r Fig cost, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of resistance cost."}
+
+  #resistance cost
+
+  a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0,
+                      h.RS1_00 = 0.1)
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.25,
+                      h.RS1_00 = 0.1 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.75,
+                      h.RS1_00 = 0.1 )
+  
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(z.RR1_00))) + 
+         theme_bw() +
+         theme(legend.position = "bottom", legend.key = element_blank()) + 
+         guides(colour = guide_legend(reverse=TRUE)) + 
+         labs(colour = "cost of\nresistance") +
+         coord_trans(y = "log10") + 
+         geom_line()   
+       )
+  
+```
+
+Oooo cost-of-resistance stops resistance reaching fixation, I hadn't expected that !
+e.g. even with cost set fairly low at 0.25 and other params at 0.5 the resistance frequency stabilises at 50%. This is with dominance at 0.1. Seems like low dominance around 0.1 or lower may be necessary to maintain the resistance frequency below 1. So this might be quite an unusual result.
+
+What happens if I modify dominance ?
+
+```{r Fig dominance of cost, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of resistance cost."}
+
+  #dominance cost
+
+  a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.25,
+                      h.RS1_00 = 0)
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.25,
+                      h.RS1_00 = 0.5 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.25,
+                      h.RS1_00 = 1 )
+  
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(h.RS1_00))) + 
+         theme_bw() +
+         theme(legend.position = "bottom", legend.key = element_blank()) + 
+         guides(colour = guide_legend(reverse=TRUE)) + 
+         labs(colour = "dominance\nof cost") +
+         coord_trans(y = "log10") + 
+         geom_line()   
+       )
+  
+```
+
+If dominance of cost is set > 0.5 with cost at 0.25 then the frequency of resistance declines.
+
+Try changing dominance when cost is lower :
+
+```{r Fig dominance of cost at low cost, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of resistance cost."}
+
+  #dominance cost at low cost
+
+  a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.1,
+                      h.RS1_00 = 0)
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.1,
+                      h.RS1_00 = 0.5 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.1,
+                      h.RS1_00 = 1 )
+  
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(h.RS1_00))) + 
+         theme_bw() +
+         theme(legend.position = "bottom", legend.key = element_blank()) + 
+         guides(colour = guide_legend(reverse=TRUE)) + 
+         labs(colour = "dominance\nof cost") +
+         coord_trans(y = "log10") + 
+         geom_line()   
+       )
+  
+```
+
+Ah good, this now does what I would expect. So maybe it was working correctly before too. Here higher dominance of cost gives longer times-to-resistance. Higher dominance of cost makes the resistance costlier therefore reducing the selection pressure for it and increasing time-to-resistance.
+
+And in all these with cost set to 0.1, resistance does proceed to fixation, where when set to 0.25 resistance equilibriated at 50%.
+
+What happens if I fix dominance of cost at 0.5 and try costs of 0, 0.1, 0.2
+
+```{r Fig low costs of resistance, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of resistance cost."}
+
+  #low costs at dominance 0.5
+
+  a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0,
+                      h.RS1_00 = 0.5)
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.2,
+                      h.RS1_00 = 0.5 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.25,
+                      h.RS1_00 = 0.5 )
+  
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(z.RR1_00))) + 
+         theme_bw() +
+         theme(legend.position = "bottom", legend.key = element_blank()) + 
+         guides(colour = guide_legend(reverse=TRUE)) + 
+         labs(colour = "cost of\nresistance") +
+         coord_trans(y = "log10") + 
+         geom_line()   
+       )
+  
+```
+
+
+
+```{r Fig cost on effectiveness, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="look at cost & see if it disrupts effect of effectiveness, keep A & B same as before, copy to C&D and add cost"}
+
+#4 panel figure looking at effectiveness and exposure
+
+
+#test of rearranging figures on a grid
+#eff1  0.5  0.8
+#exp
+#0.5    1   2
+#0.8    3   4
+
+#layout(matrix(1:4,2,2, byrow = TRUE))
+
+#add lower panel for legend
+#layout(matrix(c(1,2,3,4,5,5),3,2, byrow = TRUE), heights=c(1,1,0.5), respect=FALSE)
+
+#layout( matrix(c(1,2,3,4,5,5),3,2, byrow = TRUE), heights=c(1,1,0.2), 
+# respect=matrix(c(1,1,1,1,0,0),3,2, byrow = TRUE) )
+#layout.show(n=5)
+
+# add side panels for labels
+layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+
+#effectiveness on mixture
+
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('cost 1 = 0', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#base scenario
+
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
+
+mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#effectiveness1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
+
+mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('cost 1 = 0.1', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#exposure 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = TRUE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1, z.RR1_00 = 0.15 )
+
+mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1  and  expos 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = TRUE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1, z.RR1_00 = 0.15  )
+
+mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#adding legend in lower panel
+#plot margins
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+
+# legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide1 in mix   ", "insecticide2 alone   ", "insecticide2 in mix   "), col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#add for when insecticides same
+legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "insecticide1 in mix   ", "insecticide2 in mix   ", "insecticides1&2 in mix   "), col=c("red","blue","red","blue","purple"), lty=c(2,2,1,1,1), pch=c(NA,NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+```
+
+Aha! note here how cost of just 0.15 nullifies the benefit of the mixture in C.
+
+Note that cost effects happen later when the frequency of resistance has built up.
+
+
+```{r Fig6, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of the effectiveness of both insecticides on time-to-resistance for mixtures and sequences. Effectiveness of insecticide 2 is increased from row 1 (A and B) to row 2 (C and D). The effectiveness of insecticide 1 is increased from column 1 (A and C) to column2 (B and D). The 's' and 'm' on the upper X axis and 'mix/seq' in the lower right of each panel stand for sequence and mixture and are explained in the legend to Fig 5. A. Effectiveness of insecticide1 increased from 0.5 to 0.8, B. Effectiveness of insecticide1 increased from 0.5 to 1, C. Effectiveness of insecticides 1 and 2 increased to 0.8, D. Effectiveness of insecticide2 0.8 and of insecticide1 1. With the effectiveness of at least one insecticide greater than or equal to 0.8, times-to-resistance are longer for the mixture in all scenarios."}
+
+#4 panel figure looking at effectiveness changes alone
+
+
+#test of rearranging figures on a grid
+#eff1  0.8  1
+#eff2
+#0.5    1   2
+#0.8    3   4
+
+
+# add side panels for labels
+layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness2 = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#base scenario
+
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 1 eff2 0.5
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness2 = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 0.8 eff2 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 1 eff2 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 0.8 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#adding legend in lower panel
+#plot margins
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+
+# legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide1 in mix   ", "insecticide2 alone   ", "insecticide2 in mix   "), col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#add for when insecticides same
+legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "insecticide1 in mix   ", "insecticide2 in mix   ", "insecticides1&2 in mix   "), col=c("red","blue","red","blue","purple"), lty=c(2,2,1,1,1), pch=c(NA,NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 1', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+```
+
+
+
+```{r Fig7, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of dominance and resistance restoration on time-to-resistance for mixtures and sequences. Dominance of the allele coding for resistance to insecticide 1 is increased from row 1 (A and B) to row 2 (C and D). Resistance restoration for the allele coding for resistance to insecticide 1 is increased from column 1 (A and C) to column2 (B and D). The 's' and 'm' on the upper X axis and mix/seq in the lower right of each panel stand for sequence and mixture and are explained in the legend to Fig 5. A. All control inputs equal at 0.5, B. Resistance restoration for insecticide1 increased from 0.5 to 0.8, C. Dominance for insecticide1 increased to 0.8, D. Resistance restoration and dominance for insecticide1 increased to 0.8. Changing dominance and resistance restoration does not change the relative ordering of mixtures and sequences, time-to-resistance remains longest for sequences in all 4 scenarios."}
+
+#4 panel figure looking at dominance and resistance restoration
+
+#rr1  0.5  0.8
+#dom1
+#0.5    1   2
+#0.8    3   4
+
+# add side panels for labels
+layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+
+
+#testing
+# plot(1)
+# plot(1)
+# plot(1)
+# plot(1)
+
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('dominance1 = 0.5', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#base scenario
+
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
+
+mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#rr1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
+
+mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('dominance1 = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#dominance1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
+
+mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#dom1 & rr1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.8 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.8 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 120, labelMixSeqRatio = 1 )
+
+mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#adding legend in lower panel
+#plot margins
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+
+# legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide1 in mix   ", "insecticide2 alone   ", "insecticide2 in mix   "), col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#add for when insecticides same
+legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "insecticide1 in mix   ", "insecticide2 in mix   ", "insecticides1&2 in mix   "), col=c("red","blue","red","blue","purple"), lty=c(2,2,1,1,1), pch=c(NA,NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('resistance restoration1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('resistance restoration1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+```
+
+
+```{r Fig8, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of starting frequencies of resistance on time-to-resistance for mixtures and sequences. Starting frequency of the gene conferring resistance to insecticide 1 is decreased from row 1 (A and B) to row 2 (C and D). Effectiveness of insecticide 1 is increased from column 1 (A and C) to column2 (B and D). The 's' and 'm' on the upper X axis and mix/seq in the lower right of each panel stand for sequence and mixture and are explained in the legend to Fig 5. A. All control inputs equal at 0.5, starting frequencies of resistance at 0.01, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Starting frequency of resistance for insecticide1 decreased from 0.01 to 0.001, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and starting frequency for insecticide1 decreased from 0.01 to 0.001. In these scenarios the starting frequencies do not change better performance of sequences at low effectiveness and mixtures at high effectiveness."}
+
+#4 panel figure looking at effectiveness and starting freq.
+
+#eff1  0.5  0.8
+#strt freq1
+#0.01    1   2
+#0.001    3   4
+
+# add side panels for labels
+layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('frequency1 = 1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#base scenario
+
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('frequency1 = 0.1%', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#freq1 0.001
+runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#freq1 0.001, eff1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#adding legend in lower panel
+#plot margins
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+
+# legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide1 in mix   ", "insecticide2 alone   ", "insecticide2 in mix   "), col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#add for when insecticides same
+legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "insecticide1 in mix   ", "insecticide2 in mix   ", "insecticides1&2 in mix   "), col=c("red","blue","red","blue","purple"), lty=c(2,2,1,1,1), pch=c(NA,NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+```
+
+
+```{r Fig9, eval=FALSE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="A. All control inputs equal at 0.5, male exposure 0.8, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Male exposure decreased from 0.8 to 0.2, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and Male exposure decreased from 0.8 to 0.2"}
+
+# not evaluated at the moment
+#4 panel figure looking at male exposure prop and starting freq.
+
+#eff1  0.5  0.8
+#maleprop
+#0.8    1   2
+#0.2    3   4
+
+# add side panels for labels
+layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('male exposure = 0.8', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#base scenario
+
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+runcurtis_f2( male_exposure_prop=0.8, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
+
+mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 0.8
+runcurtis_f2( male_exposure_prop=0.8, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
+
+mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('male exposure =0.2', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#freq1 0.001
+runcurtis_f2( male_exposure_prop=0.2, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
+
+mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#freq1 0.001, eff1 0.8
+runcurtis_f2( male_exposure_prop=0.2, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 200, labelMixSeqRatio = 1 )
+
+mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#adding legend in lower panel
+#plot margins
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+
+# legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide1 in mix   ", "insecticide2 alone   ", "insecticide2 in mix   "), col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#add for when insecticides same
+legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "insecticide1 in mix   ", "insecticide2 in mix   ", "insecticides1&2 in mix   "), col=c("red","blue","red","blue","purple"), lty=c(2,2,1,1,1), pch=c(NA,NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+```
+
+\pagebreak
+
+## References
+<!-- now auto created here-->
+
+
