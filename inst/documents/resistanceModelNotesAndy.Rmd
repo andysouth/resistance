@@ -7369,15 +7369,82 @@ on the github resistance repo page, go to contributors and can see for me 85k ad
 *21/2/17* 
 working on fig1 for paper2 (plot_fit_calc()), getting there. 
  
+*22/2/17*
+~ check that cost of resistance is calculated the way I indicate with dominance
+~ first in the code then see what we said in paper1 
+
+Ian said that the two dominances should be different and can be called dominance of resistance and dominance of cost. 
+
+fixed weird fig thing due to a single % within a figure legend ? 
+ 
+checking on dominance in the model, its within fitnessSingleLocus() 
+
+    #exposure 0 'no'
+    a_fitloc[ paste0('RS',locusNum), 'no'] <- 1 - (a_dom[locusNum, 'no'] * a_cost[locusNum])
+    a_fitloc[ paste0('RR',locusNum), 'no'] <- 1 - a_cost[locusNum]
+    
+    for( exposID in c('lo','hi') )
+    {
+      a_fitloc[ paste0('SS',locusNum), exposID] <-  1 - a_effect[locusNum, exposID] 
+      
+      a_fitloc[ paste0('RS',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
+        (a_dom[locusNum, exposID] * a_sel[locusNum, exposID])
+      
+      a_fitloc[ paste0('RR',locusNum), exposID] <- (1 - a_effect[locusNum, exposID]) + 
+        (a_sel[locusNum, exposID])
+ 
+so it seems it can cope with these being different :
+dominance_restoration : a_dom[locusNum, exposID]
+dominance_cost : a_dom[locusNum, 'no']
+
+where are they set ? in runModel2()
+    a_dom[1,'no'] <- input[32,scen_num]
+    a_dom[1,'lo'] <- input[33,scen_num]
+    a_dom[1,'hi'] <- input[34,scen_num]
+    a_dom[2,'no'] <- input[35,scen_num]
+    a_dom[2,'lo'] <- input[36,scen_num]
+    a_dom[2,'hi'] <- input[37,scen_num] 
+    
+and from setInputOneScenario()
+  input[	32	] <-	h.RS1_00
+  input[	33	] <-	h.RS1_a0
+  input[	34	] <-	h.RS1_A0
+  input[	35	] <-	h.RS2_00
+  input[	36	] <-	h.RS2_0b
+  input[	37	] <-	h.RS2_0B
+  
+so also there is the potential for dominance to be different in 'lo'  
+
+cost:
+    # a_cost = fitness cost of resistance allele in insecticide free environment
+    a_cost[1] <- input[42,scen_num]
+    a_cost[2] <- input[43,scen_num] 
+ 
+  input[	42	] <-	z.RR1_00
+  input[	43	] <-	z.RR2_00
+  
+  
+Oooo cost-of-resistance stops resistance reaching fixation, I hadn't expected that !
+e.g. even with cost set fairly low at 0.25 and other params at 0.5 the resistance frequency stabilises at 50%.
+
+What happens if I modify dominance ?
+  
+Cost is interesting and seems to nullify the benefit of mixtures, even with a relatively small cost to just 1 of the insecticides.  
  
  
 ### TO DO  
 
 paper2
-~ check that cost of resistance is calculated the way I indicate with dominance
-~ replace model outline fig with one about how effectiveness etc. influence fitness
-~ do I want to add cost of resistance to the paper ?
-~ check mal journ, then remove any use of 1st person for malaria journal
+
+add description in the text of fig 1.
+
+ideally I don't want to put cost in.
+
+but do my current cost things work properly for mix & sequences ? i.e. with cost you would expect freq. to decline in the sequence when first insecticide not being used.
+
+~ ask Ian why he thought cost not important. Can I use this as a reason for not including cost in paper2 ?
+
+~ ? setup a UI with cost
 
 
 ~ maybe I need to specify what I mean by 'mechanisms' in contrast e.g. to resistance mechanisms
