@@ -93,9 +93,11 @@ Parameter  | Description
 ------------------- | -------------------------------------------------------
 1. Effectiveness | proportion of susceptible (SS) insects killed by exposure to insecticide
 2. Exposure | proportion of insects exposed to the insecticide
-3. Dominance | resistance of an insect with only 1 resistance allele (SR)
-4. Resistance restoration  | ability of resistance (RR) to restore fitness when insect exposed to the insecticide
+3. Resistance restoration  | ability of resistance (RR) to restore fitness when insect exposed to the insecticide
+4. Dominance of resistance | multiplier of resistance restoratio for heterozygous (SR) insects
 5. Frequency  | frequency of resistance alleles within the population
+6. Cost of resistance  |  fitness of resistant (RR) insects in absence of insecticide
+7. Dominance of cost  | multiplier of cost for heterozygous (SR) insects in absence of insecticide
 
 
 ## Methods
@@ -219,7 +221,8 @@ The mechanisms involved in the response of resistance in mixtures are summarised
 
 
 #### discussion: caveats
-It is worth re-iterating that we are looking solely at the evolution of resistance and not at the control of mosquitoes or malaria. As such our model would predict that the best strategy for limiting the development of resistance in the short term would be to use no insecticide. Using no insecticide could have serious consequences for mosquito and malaria abundance. The challenge is to develop good strategies for delivering mosquito and malaria control in the short term while sustaining that in the longer term by restricting the development of resistance. Others are looking at combining models of population genetics and population dynamics to investigate these trade-offs [@Barbosa2017].
+It is worth re-iterating that we are looking solely at the evolution of resistance and not at the control of mosquitoes or malaria. Different insecticide use strategies, as well as effecting the evolution of resistance, are also likely to influence both the numbers of vectors and their propensity to transmit the disease [@Rivero2010]. Insecticide resistance could reduce vector transmission of disease (e.g. by reduced lifespan of the vector) or increase transmission (e.g. by reduced immunity of the vector to the disease) [@Rivero2010]. Our model would predict that the best strategy for limiting the development of resistance in the short term would be to use no insecticide. Of course, using no insecticide could have serious consequences for mosquito and malaria abundance. The challenge is to develop good strategies for delivering mosquito and malaria control in the short term while sustaining that in the longer term by restricting the development of resistance. Others are looking at combining models of population genetics and population dynamics to investigate these trade-offs [@Barbosa2017].
+
 
 
 The development of insecticide resistance in operational field settings is subject to considerable uncertainty [@Ranson2016]. The model we present here is able to cover the range of that uncertainty, yet in this paper, to develop an understanding of the key mechanisms we restrict our explorations to a limited region of paramter space (e.g. holding most inputs constant at intermediate values while modifying single inputs in isolation). Thus there is the potential that the system may behave differently in the field than we describe here. However, the results presented here are supported by an earlier analysis where we ran 10,000 unique scenarios varying more inputs [@Levick2017]. In addition we provide an online user interface to the model [@South2017a] and enabling readers to investigate model behaviour in areas of parameter space we have not shown here.
@@ -246,7 +249,7 @@ Experience from agriculture where single interventions have been associated with
 
 ~ Effectiveness and exposure are key and can be modified.
 ~ The model we describe is flexible and as such can reproduce similar results to earlier models and be used to represent more detailed, operationally relevant strategies. 
-
+~ This model can explore when a mixture strategy may be favoured over a sequence purely for the evolution of resistance. Other factors also need to be considered. On the positive side a mixture is likely to kill more vectors and may also limit their ability to transmit the disease. On the negative side a mixture is more expensive.
 
 ### other papers to incorporate into discussion above
 
@@ -368,7 +371,7 @@ plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restorat
 ![Screenshot of one online model user interface, accessible at : <https://andysouth.shinyapps.io/resistmob2/>. The user can modify values of the input parameters considered in this paper using simple sliders and run the model to get graphs of resulting resistance frequency over time. Two scenarios (A and B) can be run and the results viewed side by side. This makes it easy to explore the effect of changing individual inputs.](paper2_UI1.png)
 
 
-```{r Fig3, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of inputs on changing resistance frequency over time. A. Effectiveness, B. Exposure, C. Dominance, D. Resistance restoration. Increasing any of the inputs (going from red to blue) results in shorter times-to-resistance. For each panel the chosen input was varied in isolation with the remaining inputs set to 0.5, except for starting frequency of resistance which was set to 0.01). "}
+```{r Fig3, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of inputs on changing resistance frequency over time. A. Effectiveness, B. Exposure, C. Dominance of resistance, D. Resistance restoration. Increasing any of the inputs (going from red to blue) results in shorter times-to-resistance. For each panel the chosen input was varied in isolation with the remaining inputs set to 0.5, except for starting frequency of resistance which was set to 0.01). "}
 
   library(cowplot)
   
@@ -576,10 +579,11 @@ plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restorat
   
 ```
 
-```{r Fig4, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=3, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of the starting frequency of resistance on how resistance frequency changes over time. Increasing the starting frequency decreases the number of generations taken to reach resistance thresholds."}
+```{r Fig4, eval=TRUE, echo=FALSE, fig.height=3.7, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of inputs on changing resistance frequency over time. A. Starting frequency, B. Cost of resistance. Increasing the starting frequency decreases the number of generations taken to reach resistance thresholds. Increasing costs of resistance increases time-to-resistance."}
 
   #single insecticide frequency fig
 
+  #A starting frequency
   a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
 
   i1 <- setInputOneScenario( max_gen = 500,
@@ -618,14 +622,72 @@ plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restorat
   
   df_resist <- get_resistance(locus=1, listOut)
 
-  print( ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(P_1))) + 
+  #A  
+  plotlist[[1]] <-  ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(P_1))) + 
          theme_bw() +
          theme(legend.position = "bottom", legend.key = element_blank()) + 
          guides(colour = guide_legend(reverse=TRUE)) + 
          labs(colour = "start\nfrequency") +
          coord_trans(y = "log10") + 
          geom_line()   
-       )
+  
+  #B changing costs at dominance 0.5
+
+  a <- setExposure(exposure=0.5, insecticideUsed='insecticide1')
+
+  i1 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0,
+                      h.RS1_00 = 0.5)
+
+  i2 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.1,
+                      h.RS1_00 = 0.5 )
+
+  i3 <- setInputOneScenario( max_gen = 500,
+                      P_1 = 0.01,       
+                      h.RS1_A0 = 0.5, 
+                      h.RS2_0B = 0.5,
+                      a = a,
+                      phi.SS1_A0 = 0.5,
+                      phi.SS2_0B = 0.5,
+                      rr_restoration_ins1 = 0.5,
+                      rr_restoration_ins2 = 0.5,
+                      z.RR1_00 = 0.2,
+                      h.RS1_00 = 0.5 )
+  
+  input <- cbind(i1,i2,i3)
+  
+  listOut <- runModel2( input )
+  
+  df_resist <- get_resistance(locus=1, listOut)
+
+  #B  
+  plotlist[[2]] <- ggplot(df_resist, aes(x=generation, y=resistance, colour=factor(z.RR1_00))) + 
+         theme_bw() +
+         theme(legend.position = "bottom", legend.key = element_blank()) + 
+         guides(colour = guide_legend(reverse=TRUE)) + 
+         labs(colour = "cost of\nresistance") +
+         coord_trans(y = "log10") + 
+         geom_line()   
+  
+  cowplot::plot_grid( plotlist[[1]],plotlist[[2]], ncol=2, rel_widths=c(1,1), labels='AUTO')  
+  #cowplot::plot_grid( plotlist[[1]],plotlist[[2]],plotlist[[3]],plotlist[[4]], ncol=2, rel_widths=c(1,1), labels='AUTO')  
   
 ```
 

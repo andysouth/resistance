@@ -2,10 +2,10 @@
 #' 
 #' accepts inputs
 
-#' @param effectiveness insecticide effectiveness
-#' @param resistance_restoration
-#' @param dominance_restoration
-#' @param dominance_cost
+#' @param effectiveness insecticide effectiveness 0-1
+#' @param resistance_restoration resistance restoration 0-1
+#' @param dominance_restoration dominance of resistance restoration 0-1
+#' @param dominance_cost dominance of resistance cost 0-1
 #' @param cost cost of resistance
 #' @param title optional title for the plot
 # @param yblank whether to remove y axis title & labels
@@ -50,6 +50,7 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
         annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
         annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
         ylab('fitness') +
+        xlab('genotype') +
         #theme(axis.title.y = element_text(size = rel(3))) +
         ggtitle("exposed to insecticide") +
         #to set ordering of x axis
@@ -59,14 +60,14 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
         # annotate("text", x = 'SR', y = sr+(rr-sr)/2, hjust=0, label = " dominance") + 
         # annotate("text", x = 'RR', y = ss+(rr-ss)/2, hjust=0, label = " resistance\n  restoration") + 
         annotate("label", x = 'SS', y = ss+(1-ss)/2, size=3, label = " effectiveness") +
-        annotate("label", x = 'SR', y = sr+(rr-sr)/2, size=3, label = " dominance of\n  restoration") + 
+        annotate("label", x = 'SR', y = sr+(rr-sr)/2, size=3, label = " 1-dominance of\n  restoration") + 
         annotate("label", x = 'RR', y = ss+(rr-ss)/2, size=3, label = " resistance\n  restoration") + 
     
         theme_bw() +
         theme(
               axis.title.y = element_text(size = rel(1.5)),
               axis.text.x = element_text(size = rel(1.5)),
-              axis.title.x = element_blank(),
+              #axis.title.x = element_blank(),
               #axis.line.x = element_blank(),
               #axis.ticks.x = element_blank(),
               #panel.grid.major.x = element_blank(),
@@ -97,18 +98,19 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
     annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
     annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
     #ylab('fitness') +
+    xlab('genotype') +
     ggtitle("not exposed to insecticide") + 
     #to set ordering of x axis
     scale_x_discrete(limits = c('SS',  'SR',  'RR')) +
     #text annotations "label" creates box "text"doesn't
     #annotate("text", x = 'SS', y = ss+(1-ss)/2, hjust=0, label = " effectiveness") +
-    annotate("label", x = 'SR', y = sr+(rr-sr)/2, size=3, label = " dominance\n  of cost") + 
+    annotate("label", x = 'SR', y = sr+(rr-sr)/2, size=3, label = " 1-dominance\n  of cost") + 
     annotate("label", x = 'RR', y = ss+(rr-ss)/2, size=3, label = " resistance\n  cost") + 
     
     theme_bw() +
     theme(
       axis.text.x = element_text(size = rel(1.5)),
-      axis.title.x = element_blank(),
+      #axis.title.x = element_blank(),
       axis.title.y = element_blank(),
       axis.text.y = element_blank(),
       #axis.line.x = element_blank(),
@@ -119,7 +121,7 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
     )  
   
   
-  grid.arrange(gg1, gg2, nrow=1)  
+  grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85))  
   #print(gg)
   
   
