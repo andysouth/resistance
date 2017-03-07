@@ -7431,14 +7431,142 @@ What happens if I modify dominance ?
   
 Cost is interesting and seems to nullify the benefit of mixtures, even with a relatively small cost to just 1 of the insecticides.  
  
+add description in the text of fig 1. 
+ 
+see paper2/cost_of_resistance.Rmd
+ 
+*23/02/17*
+
+considering fitness costs :
+
+Ian said :
+
+In paper 1 we said this, but then didn't explicitly mention that we kept fitness costs to 0 in the analyses.
+Fitness costs of resistance may arise in mosquitoes which do not make contact with the
+insecticide. This reflects the possibility that the metabolic changes that enable IR may have deleterious effects on their normal metabolic function (e.g. [25, 26]). We therefore allow the
+option of fitness costs i.e. by setting z>0 in column ª-ºof Table 2 and these costs may exhibit
+different levels of dominance quantified by the associated `h' parameter; fitness costs can be
+easily ignored (i.e. z = 0) if they are believed, or assumed, to be absent.
+
+These are the cost of resistance refs :
+Rivero A, VeÂ zilier J, Weill M, Read AF, Gandon S. Insecticide Control of Vector-Borne Diseases: When Is Insecticide Resistance a Problem? PLoS Path. 2010; 6(8):e1001000.
+
+Kliot A, Ghanim M. Fitness costs associated with insecticide resistance. Pest Manage Sci. 2012; 68:1431±7.
+ 
+Rivero 2010 is good : From the abstract. 
+Insecticide resistance is generally considered to undermine control of vector-transmitted diseases
+because it increases the number of vectors that survive the insecticide treatment. Disease control failure, however, need not follow from vector control failure. Here, we review evidence that insecticide resistance may have an impact on the quality of vectors and, specifically, on three
+key determinants of parasite transmission: vector longevity, competence, and behaviour. We argue that, in some instances, insecticide resistance is likely to result in a decrease in vector longevity, a decrease in infectiousness, or in a change in behaviour, all of which will reduce the
+vectorial capacity of the insect. If this effect is sufficiently large, the impact of insecticide resistance on disease management may not be as detrimental as previously thought. In other instances, however, insecticide resistance may have the opposite effect, increasing the insect’s
+vectorial capacity, which may lead to a dramatic increase in the transmission of the disease and even to a higher prevalence than in the absence of insecticides. Either way—and there may be no simple generality—the consequence of the evolution of insecticide resistance for disease ecology deserves additional attention. 
+ 
+In their toy model in the appendix they use a cost (c) of 0.2 :
+The insecticide is assumed to reduce the fecundity of susceptible vectors (larvicide) and   measures the coverage of insecticides (  varies between 0 and 1). In contrast, resistant vectors (denotes the density of resistant vectors) do not suffer from the effect of insecticides but pay a cost of resistance  on adult survival.
+ 
+Insecticide resistance could reduce vector transmission of disease (e.g. by reduced lifespan of the vector) or increase transmission (e.g. by reduced immunity of the vector to the disease) [@Rivero2010].
+ 
+Good concluding paragraph :
+In some instances, insecticide resistance may impair the ability of the vector to transmit diseases. If this effect is sufficiently large, the impact of insecticide resistance on disease management may not be as detrimental as previously thought. If so, current paradigms might be leading to a misallocation of research and control resources. We contend that there are surprisingly few well-documented cases of disease outbreaks in response to the evolution of insecticide resistance (in marked contrast to the well-documented public health problems caused by the evolution of drug resistance). Alternatively, insecticide resistance could improve the individual vectorial capacity of insects, further emphasising the urgent need for novel insecticides and resistance management strategies. Either way—and there may be no simple generality—the consequence of the evolution of insecticide resistance for disease ecology deserves
+additional attention.
+ 
+ 
+*6/3/17* back from Mexico
+put cost figs into paper2 and modify text
+
+*7/3/17*
+done ~ I probably need to change fig1 to 1-dominance because thats the way that it goes.
+
+stackoverflow question :
+
+A while ago I wanted a simpler way of creating multidimensional arrays with named dimensions.
+
+I ended up writing a function that has worked really well for me but I worry it may be somewhat of a hack and that there may be a better way of doing. So before passing this on to a colleague I'm seeking advice here.
+
+What I want to do is to be able to create multi-dimensional arrays where the name of a dimension is specified by the name of a vector and the names of the elements are specified by the contents of that vector. e.g.
+
+  sex <- c("F","M")
+  name2 <- c("a","b","c")
+
+
+This can be written out like so.
+
+  dimnames1 <- list( sex=sex, name2=name2 )
+  dim1 <- sapply(dimnames1, function(x) length(x))
+  a <- array(0,dim=dim1, dimnames=dimnames1)
+  a
+
+   name2
+sex a b c
+  F 0 0 0
+  M 0 0 0
+
+
+But I wanted to be able to keep this more compact :
+
+I wrote this function that enables that.
+
+  array_named <- function( ...)
+    {
+    
+    listArgs <- as.list(match.call()[-1])
+    
+    #works only if args are specified by actual ranges not by a varname
+    #dimnames1 <- lapply(listArgs,eval)
+    
+    #works, I'm not sure why n=3
+    dimnames1 <- lapply(listArgs,function(x){eval.parent(x, n=3)})
+    
+    #setting dimensions of array from dimnames1
+    dim1 <- sapply(dimnames1, function(x) length(x))
+    
+    #creating array and filling with fill value
+    a <- array(0, dim=dim1, dimnames=dimnames1)
+    
+    return(a)
+  }
+
+This allows passing vectors by name :
+    array_named( sex=sex, name2=name2 )
+
+   name2
+sex a b c
+  F 0 0 0
+  M 0 0 0
+
+and directly e.g.
+    array_named( a=c(1,2), b=c('x','y') )
+    
+   b
+a   x y
+  1 0 0
+  2 0 0
+
+Are there problems with this is there a more sensible way of doing ?
+
+submitted stackoverflow question about createArray2()
+ 
+looking at Ians rotation code 
+ 
+ 
  
 ### TO DO  
 
+~ add cost figs as 4B and 9
+~ for 4B I want cost 0,0.05,0.15
+
+done ~add cost to table of inputs
+~ add cost & dominance of cost to tables 2-4
+~ change order of resistance restoration and dominance of resistance in tables 2-4
+~ change dominance to dominance of resistance throughout paper
+
+*may be best to put cost in now, this is quite a nice result, and is something new not covered in paper1*
+
+*just include the extra figures, showing that cost increases time for a single insecticide and tends to increase time more for a mixture than a sequence. (Because slowing the resistance to one insecticide increases it's 'protection' of the other insecticide in a mixture.)*
+
 paper2
 
-add description in the text of fig 1.
+ideally I don't want to put cost into paper2. What justification can I have for that ? What justification did we use in paper1 ? Have other authors included costs in their models ?
 
-ideally I don't want to put cost in.
 
 but do my current cost things work properly for mix & sequences ? i.e. with cost you would expect freq. to decline in the sequence when first insecticide not being used.
 
@@ -7774,9 +7902,7 @@ tst2 <- runModel2(input)
 tst <- runModel(input)
 ```
 
-1. submit stackoverflow question about createArray2(), including about n=3 in eval.parent
-1. what to call createArray2() ? maybe namedArray, or arrayNamed() ? could even put back in the option to pass the fill value ? submit to stackoverflow 
-1. add some defensive checks, e.g. for sensible input variables
+
 
 
 #### inputs
@@ -7816,6 +7942,10 @@ git merge upstream/master
 left click wifi icon, Network settings
 Manage wifi settings
 scroll down to manage known networks and forget
+Phone
+EAP:PEAP
+Phase-2 auth:MSCHAPV2
+Scroll down to pswd.
 
 # time
 june :
@@ -7843,6 +7973,13 @@ Days remaining (from 85)			25.75
 Sep - Nov 25 2016
 168/7.5 = 22.4
 add some of Bayer time in to use up.
+
+# start a new project
+1. create new repo on github
+1. create RStudio project from github repo
++ To get ssh push working.
++ RStudio Tools, Shell
++ git remote set-url origin git@github.com:AndySouth/resistance.git
 
 
 
