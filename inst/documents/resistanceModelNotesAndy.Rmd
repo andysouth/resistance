@@ -7547,17 +7547,32 @@ submitted stackoverflow question about createArray2()
  
 looking at Ians rotation code 
  
+done ~ fig 4B I want cost 0,0.1,0.2 
+done ~ add cost to table of inputs 
+ 
+*8/3/17* 
+paper2 
+done ~ add cost fig 9 
+ 
+The dominance of cost thing confuses me and I don't want to confuse readers with something that is not the focus and perhaps we don't know very much about. Therefore I may want to take dominance of cost out of paper2.
+
+This used to be in **Table 2. Effect of inputs on resistance when insecticides used singly or in sequence**
+
+6. Cost of resistance | slower | reduced fitness of resistants in absence of insecticide 
+7. Dominance of cost | slower | increased fitness of heterozygotes in absence of insecticide
+ 
+I'm suggesting that Dominance of cost slows evolution of resistance by increased fitness of SR (whereas Cost of resistance slows resistance by decreased fitness of RR)
+ 
+ 
  
  
 ### TO DO  
 
-~ add cost figs as 4B and 9
-~ for 4B I want cost 0,0.05,0.15
-
-done ~add cost to table of inputs
 ~ add cost & dominance of cost to tables 2-4
 ~ change order of resistance restoration and dominance of resistance in tables 2-4
 ~ change dominance to dominance of resistance throughout paper
+
+~ have a quick look at new version barbosa paper
 
 *may be best to put cost in now, this is quite a nice result, and is something new not covered in paper1*
 

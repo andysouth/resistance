@@ -36,15 +36,17 @@ opts_chunk$set(dev="tiff",
   library(ggplot2)
 ```
 
-### version 9
+### version 10
 
-#Evolution of insecticide resistance with insecticide mixtures and sequences : an accessible model to promote understanding.
+#Insecticide resistance evolution with mixtures and sequences : a graphical primer.
 
-#An accessible model to promote understanding of the evolution of insecticide resistance : insecticide effectiveness predicted to be key to the relative performance of mixtures.
+###Evolution of insecticide resistance with insecticide mixtures and sequences : an accessible model to promote understanding.
 
-#A tutorial, primer ...
+###An accessible model to promote understanding of the evolution of insecticide resistance : insecticide effectiveness predicted to be key to the relative performance of mixtures.
+
+###A tutorial, primer ...
  
-#Insecticide effectiveness predicted to be most important factor determining whether insecticide mixtures can slow evolution of resistance. 
+###Insecticide effectiveness predicted to be most important factor determining whether insecticide mixtures can slow evolution of resistance. 
 
 Target : Malaria journal
 
@@ -90,11 +92,11 @@ We use a 2-locus population genetic model of insecticide resistance [@Levick2017
 **Table 1. Parameters inflencing the development of insecticide resistance**
 
 Parameter  | Description
-------------------- | -------------------------------------------------------
+---------------------- | ----------------------------------------------------
 1. Effectiveness | proportion of susceptible (SS) insects killed by exposure to insecticide
 2. Exposure | proportion of insects exposed to the insecticide
 3. Resistance restoration  | ability of resistance (RR) to restore fitness when insect exposed to the insecticide
-4. Dominance of resistance | multiplier of resistance restoratio for heterozygous (SR) insects
+4. Dominance of restoration | multiplier of resistance restoration for heterozygous (SR) insects
 5. Frequency  | frequency of resistance alleles within the population
 6. Cost of resistance  |  fitness of resistant (RR) insects in absence of insecticide
 7. Dominance of cost  | multiplier of cost for heterozygous (SR) insects in absence of insecticide
@@ -150,9 +152,9 @@ The model is implemented in R [@RCoreTeam2016], the code is hosted on Github [@S
 
 
 ### Single insecticide
-For single insecticide use, higher values of insecticide effectiveness, exposure, dominance or resistance restoration resulted in faster resistance spread (Fig 3 A-D) and thus fewer generations to reach the resistance threshold of either 0.5 or 0.75. 
+For single insecticide use, higher values of insecticide effectiveness, exposure, resistance restoration and its dominance all resulted in faster resistance spread (Fig 3 A-D) and thus fewer generations to reach a resistance threshold of 0.5. 
 
-Similarly, higher values of starting resistance frequency also resulted in faster spread of resistance (Fig 4) and shorter times to resistance thresholds.
+Similarly, higher values of starting resistance frequency also resulted in faster spread of resistance (Fig 4A) and shorter times to resistance thresholds. Cost of resistance (Fig 4B) and its dominance (not shown) had the opposite effect with higher values leading to a slower development of resistance.
 
 
 ### Two insecticides
@@ -179,6 +181,9 @@ Increasing dominance or resistance restoration decreases time-to-resistance for 
 #### results: Starting frequencies of resistance
 Changing the starting frequency of resistance had a similar effect on time to resistance for both sequences and mixtures and thus had little effect on their relative performance. For example taking the base scenario and reducing the starting frequency of one resistance allele did not change from sequence being favoured (compare Fig 8C to 8A). Similarly taking a scenario in which time-to-resistance is longer for a mixture (Fig 8B) and decreasing the starting frequency of that resistance allele did not change the fact that the mixture was favoured (Fig 8D). 
 
+#### results: Costs of resistance
+Increasing the cost of resistance to one insecticide in a mixture leads resistance to that insecticide to evolve more slowly (compare the solid red line to the solid blue line in Figure 9C, the red line is for the resistance with the higher cost). The resistance with the higher cost also increases more slowly in the mixture relative to when it is used in sequence (compare the solid red line to the dotted red line in Fig 9C). The greater effect of cost on mixtures means the advantage of sequences over mixtures in Fig 9A (and Fig 5A) is removed in Fig 9C. With costs set to 0 time-to-resistance for mixture divided by sequence is 0.8 in Fig 9A and 1 in Fig 9C. At higher insecticide effectiveness the benefit of mixture over sequence is improved as seen by comparing Fig 9D to 9B. 
+
 
 It has previously been suggested [@Curtis1985][@WHO2012] that using an insecticide to which there was existing resistance in a mixture with a new insecticide with little resistance could lead to more rapid evolution of resistance to the latter through a process termed linkage disequilibrium. Figure 8 C&D show how our model predicts that linkage disequilibrium does not lead to more rapid evolution of resistance to the newer insecticide. In Figures 8 C&D the newer insecticide with lower starting resistance (in red) leads to faster resistance when used alone (red dotted) than when used in a mixture (red solid).
 
@@ -191,10 +196,10 @@ The response of resistance to insecticide use in the model can be explained by m
 When single insecticide use was represented (Figs 3-4) in all cases the initial increase in resistance was most rapid with straight lines on the log plots up to around 50% followed by a slowing rate of increase up to 100%. Higher values of the five inputs investigated all led to more rapid increases in resistance. For single insecticide use resistance responded identically to changing exposure and effectiveness (compare Fig 3A to 3B). This makes sense as vector kill is effectively a product of exposure times effectiveness. For example exposing 50% of a  population to an insecticide which is 75% effective would be expected to have the same result as exposing 75% of the population to one which is 50% effective. This observation points to the mechanism by which increasing both exposure and effectiveness lead to a faster increase in resistance. In both cases the increased deaths of susceptible vectors cause a higher selection pressure that can explain the faster increase.
 
 
-The pattern of more rapid increase in resistance at higher dominance levels (Fig 3C) can be explained by increased survival of heterozygotes in the presence of the insecticide. Higher dominance of the resistant allele causes it to contribute more to the phenotype of the heterozygotes leading to higher survival. Thus selection pressure for the resistance allele will be increased because it confers more of an advantage when only present on one chromosome. The faster development of resistance under higher resistance-restoration (Fig 3D) can be explained by it's effect on the survival of the resistant genotypes. Resistance-restoration restores the survival of resistant genotypes in the presence of the insecticide back towards what it would be in the absence of the insecticide, thus increasing the selection pressure of the resistance allele. The effect of the starting frequency of resistance (Fig 4) is the most different from the other inputs. Simply, when starting from a higher frequency of resistance there is a smaller change to make to reach the higher resistance thresholds.
+The pattern of more rapid increase in resistance at higher dominance of restoration levels (Fig 3C) can be explained by increased survival of heterozygotes in the presence of the insecticide. Higher dominance of the resistant allele causes it to contribute more to the phenotype of the heterozygotes leading to higher survival. Thus selection pressure for the resistance allele will be increased because it confers more of an advantage when only present on one chromosome. The faster development of resistance under higher resistance-restoration (Fig 3D) can be explained by it's effect on the survival of the resistant genotypes. Resistance-restoration restores the survival of resistant genotypes in the presence of the insecticide back towards what it would be in the absence of the insecticide, thus increasing the selection pressure of the resistance allele. The effect of the starting frequency of resistance (Fig 4) is the most different from the other inputs. Simply, when starting from a higher frequency of resistance there is a smaller change to make to reach the higher resistance thresholds.
 
 
-These mechanisms, explaining the response of resistance to single insecticide use under different input values, are summarised in Table 2. Exposure and effectiveness act by decreasing the survival of all genotypes, dominance acts by increasing survival of RS and resistance-restoration acts by increasing survival of RR & RS. 
+These mechanisms, explaining the response of resistance to single insecticide use under different input values, are summarised in Table 2. Exposure and effectiveness act by decreasing the survival of all genotypes, dominance of restoration acts by increasing survival of RS and resistance-restoration acts by increasing survival of RR & RS. 
 
 
 #### discussion: Two insecticides
@@ -219,6 +224,11 @@ _todo could this be because exposure results doesn't alter the relative fitness 
 
 The mechanisms involved in the response of resistance in mixtures are summarised in Table3. Whether a mixture or sequence is favoured for reducing the spread of resistance will depend on these mechanisms and is summarised in Table 4.
 
+#### discussion costs of resistance
+Costs of resistance favour mixtures in these analyses. This is because the evolution of a resistance with an associated cost is slowed more in a mixture than in a sequence (compare the red solid lines for a mixture to the red dotted line for a sequence in Fig 9C and D). Cost of resistance to one insecticide reduces selection pressure for that gene and this effect becomes more as the frequency of resistance increases. Thus differences due to cost are less noticeable at low resistance frequencies and become more noticeable at higher resistance frequencies. Thus if a lower resistance threshold was used cost would have less of an effect and if a higher resistance threshold was used cost would have more of an effect. Also note that if the costs are set even higher than we set them here (e.g. above 0.2) they can maintain resistance frequencies below 1 or lead to their decline. We do not expect such high costs to occur in operational settings.  
+
+However, also be aware that in our analyses we have used a single resistance threshold. When there are costs of resistance, the frequency of resistance for insectides that are not being used is likely to decline. Thus the frequency of resistance for the first insecticide in a sequence may decline to a level where it becomes operationally useful again. As such a repeated sequential strategy could offer benefits over mixtures.
+
 
 #### discussion: caveats
 It is worth re-iterating that we are looking solely at the evolution of resistance and not at the control of mosquitoes or malaria. Different insecticide use strategies, as well as effecting the evolution of resistance, are also likely to influence both the numbers of vectors and their propensity to transmit the disease [@Rivero2010]. Insecticide resistance could reduce vector transmission of disease (e.g. by reduced lifespan of the vector) or increase transmission (e.g. by reduced immunity of the vector to the disease) [@Rivero2010]. Our model would predict that the best strategy for limiting the development of resistance in the short term would be to use no insecticide. Of course, using no insecticide could have serious consequences for mosquito and malaria abundance. The challenge is to develop good strategies for delivering mosquito and malaria control in the short term while sustaining that in the longer term by restricting the development of resistance. Others are looking at combining models of population genetics and population dynamics to investigate these trade-offs [@Barbosa2017].
@@ -239,7 +249,7 @@ A subsequent model [@Roush1998] lead to the following more pessimistic conclusio
 Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. _todo expand this paragraph_ 
 
 
-One consistent aspect of the results presented here can at first seem to go against current advice on good practice. We show that lower insecticide effectiveness or exposure are expected to lead to slower spread of resistance in sole use and sequences (Figs 3 & 5). This is consistent with expectations that lower effectiveness and exposure would lead to lower mortality of susceptibles and thus lower selection pressure for resistance [e.g. @Roush1998]. In contrast the widely held view seems to be that low effectiveness or exposure associated with poor implementation can promote the development of resistance. e.g. from [@FAO2012] "Certain pest control practices have consistently been shown to exacerbate the loss of susceptible pest populations and the development of resistance. These include: ... - the use of application rates that are below or above those recommended on the label; - poor coverage of the area being treated ...". The explanation for this apparent difference is in the effect of dominance. Poor application can reduce the mortality of heterozygotes (RS) thus effectively increasing the dominance of the resistant allele and increasing its rate of spread in the population [?ref]. Our model does show that increasing dominance leads to faster spread of resaistance (Fig 3C, 7). So, the effect of poor implementation of an insecticide intervention on resistance could be either positive and negative depending on the relative effects on dominance of the resistance gene, insecticide effectiveness and exposure. Our model cobined with laboratory and field results could help to assess these trade-offs.
+One consistent aspect of the results presented here can at first seem to go against current advice on good practice. We show that lower insecticide effectiveness or exposure are expected to lead to slower spread of resistance in sole use and sequences (Figs 3 & 5). This is consistent with expectations that lower effectiveness and exposure would lead to lower mortality of susceptibles and thus lower selection pressure for resistance [e.g. @Roush1998]. In contrast the widely held view seems to be that low effectiveness or exposure associated with poor implementation can promote the development of resistance. e.g. from [@FAO2012] "Certain pest control practices have consistently been shown to exacerbate the loss of susceptible pest populations and the development of resistance. These include: ... - the use of application rates that are below or above those recommended on the label; - poor coverage of the area being treated ...". The explanation for this apparent difference is in the effect of dominance. Poor application can reduce the mortality of heterozygotes (RS) thus effectively increasing the dominance of the resistant allele and increasing its rate of spread in the population [?ref]. Our model does show that increasing dominance of restoration leads to faster spread of resistance (Fig 3C, 7). So, the effect of poor implementation of an insecticide intervention on resistance could be either positive and negative depending on the relative effects on dominance of the resistance gene, insecticide effectiveness and exposure. Our model combined with laboratory and field results could help to assess these trade-offs.
 
 
 Experience from agriculture where single interventions have been associated with a rapid development of resistance have led for calls for a more Integrated Vector Management composed of a series of partially effective tools [@Thomas2012]. It is suggested that such an integrated approach is more sustainable and 'evolution-proof' [@Thomas2012]. A similar combining of interventions has been advocated to cover mosquitoes exhibiting different behaviours [@Killeen2017]. Mosquitoes with different behaviours e.g. feeding outdoors and/or on animals are likely to result in lower exposures to insecticides in nets or sprayed on walls. This lower exposure could favour mixtures over sequences as we have indicated. In both cases our modelling approach could be used to investigate implications for the devlopment of resistance.
@@ -247,7 +257,7 @@ Experience from agriculture where single interventions have been associated with
 
 ## FINAL CONCLUDING PARAGRAPH
 
-~ Effectiveness and exposure are key and can be modified.
+~ Effectiveness and exposure (and cost?) are key and can be modified.
 ~ The model we describe is flexible and as such can reproduce similar results to earlier models and be used to represent more detailed, operationally relevant strategies. 
 ~ This model can explore when a mixture strategy may be favoured over a sequence purely for the evolution of resistance. Other factors also need to be considered. On the positive side a mixture is likely to kill more vectors and may also limit their ability to transmit the disease. On the negative side a mixture is more expensive.
 
@@ -316,23 +326,26 @@ Thankyou to Bethany Levick who developed the first version of the model code.
 
 **Table 2. Effect of inputs on resistance when insecticides used singly or in sequence**
 
-Parameter to increase  | effect on resistance | Mechanism
------------------- | ------- | ---------------------------------------------------
-1. Effectiveness | faster | increased deaths of susceptibles
-2. Exposure | faster | increased deaths of susceptibles
-3. Dominance | faster | increased survival of heterozygotes
-4. Resistance restoration | faster | increased survival of resistants
+Parameter to increase  | effect on resistance evolution | Mechanism
+------------------ | -------- | --------------------------------------------------
+1. Effectiveness | faster | reduced fitness of SS in presence of insecticide
+2. Exposure | faster | reduced fitness of SS overall
+3. Dominance of restoration | faster | increased fitness of SR in presence of insecticide
+4. Resistance restoration | faster | increased fitness of RR in presence of insecticide
 5. Frequency  | faster | less change needed to reach resistance threshold
+6. Cost of resistance | slower | reduced fitness of RR in absence of insecticide 
 
 **Table 3. Effect of inputs on resistance when insecticides used in a mixture**
 
-Parameter to increase  | effect on resistance | Mechanism
------------------- | --------- | ---------------------------------------------------
-1. Effectiveness | **slower** | increased deaths of individuals resistant to the other insecticide
-2. Exposure | faster (but less than for single) | increased deaths of individuals susceptible to one insecticide increases selection pressure for that resistance. However at the same time selection pressure is reduced by higher deaths of resistant individuals caused by the other insecticide.
-3. Dominance | faster | increased survival of resistants
-4. Resistance restoration | faster | increased survival of resistants
+Parameter to increase  | effect on resistance evolution | Mechanism
+------------------ | ---------- | --------------------------------------------------
+1. Effectiveness | **slower** | reduced fitness of individuals resistant to the other insecticide
+2. Exposure | faster (but less than for single) | reduced fitness of individuals susceptible to one insecticide increases selection pressure for that resistance. However at the same time selection pressure is reduced by reduced fitness of resistant individuals caused by the other insecticide.
+3. Dominance of restoration | faster | increased fitness of heterozygotes
+4. Resistance restoration | faster | increased fitness of resistants
 5. Frequency  | faster | less change needed to reach resistance threshold
+6. Cost of resistance | slower | reduced fitness of resistants in absence of insecticide 
+
 
 **Table 4. Effect of inputs on the difference between mixture and sequential use**
 
@@ -340,21 +353,20 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 ------------------ | ------- | ---------------------------------------------------
 1. Effectiveness | mixture | Higher effectiveness gives faster resistance for sequence and slower resistance in mixture
 2. Exposure | sequence | Higher exposure gives faster resistance for sequence and mixture but the greater effect on mixture favours sequence.
-3. Dominance | neither | Higher dominance gives faster resistance in both sequences and mixtures such that the difference between them is not changed. 
-4. Resistance restoration | neither | As for dominance. Higher resistance restoration gives faster resistance in both sequences and mixtures such that the difference between them is not changed.
+3. Dominance of restoration | neither | Higher dominance gives faster resistance in both sequences and mixtures such that the difference between them is not changed. 
+4. Resistance restoration | neither | As for dominance of restoration. Higher resistance restoration gives faster resistance in both sequences and mixtures such that the difference between them is not changed.
 5. Frequency  | neither | As for dominance and resistance restoration. Higher starting frequencies give faster resistance in both sequences and mixtures such that the difference between them is not changed.
+6. Cost of resistance | mixture | Higher costs slow the evolution of resistance more in a mixture than when used in sequence (but with higher costs in a sequence there is a greater chance for resistance levels to decline for the insecticide not being used). 
 
 
 ## ANDY TO DO
-1. remove first person for Malaria journal
 1. explain resistance thresholds and time-to-resistance in methods
 1. refer to ratios of mix:seq in plots
 1. refer to PRCC from pap1 in ref. to Table4
 1. mention single gene vs additive effects (with ref.)
-1. can I add a diagram to help with methods, e.g. perhaps fitness under difference inputs, similar to fitnessvis ?
 1. in discussion refer to linkage disequilibrium about Fig 8D
 1. is there a reference to say that the effectiveness of insecticides can be modified at the design stage, or by the dose ?
-1. mention other potential effects e.g. costs of resistance, sex linkage, ..._
+1. mention other potential effects e.g. sex linkage
 1. cite in press Killeen about combining interventions
 
 \pagebreak
@@ -371,7 +383,7 @@ plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restorat
 ![Screenshot of one online model user interface, accessible at : <https://andysouth.shinyapps.io/resistmob2/>. The user can modify values of the input parameters considered in this paper using simple sliders and run the model to get graphs of resulting resistance frequency over time. Two scenarios (A and B) can be run and the results viewed side by side. This makes it easy to explore the effect of changing individual inputs.](paper2_UI1.png)
 
 
-```{r Fig3, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of inputs on changing resistance frequency over time. A. Effectiveness, B. Exposure, C. Dominance of resistance, D. Resistance restoration. Increasing any of the inputs (going from red to blue) results in shorter times-to-resistance. For each panel the chosen input was varied in isolation with the remaining inputs set to 0.5, except for starting frequency of resistance which was set to 0.01). "}
+```{r Fig3, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Single insecticide use and the effect of inputs on changing resistance frequency over time. A. Effectiveness, B. Exposure, C. Dominance of restoration, D. Resistance restoration. Increasing any of the inputs (going from red to blue) results in shorter times-to-resistance. For each panel the chosen input was varied in isolation with the remaining inputs set to 0.5, except for starting frequency of resistance which was set to 0.01). "}
 
   library(cowplot)
   
@@ -524,7 +536,7 @@ plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restorat
          theme_bw() +
          theme(legend.position = "bottom", legend.key = element_blank()) + 
          guides(colour = guide_legend(reverse=TRUE)) + 
-         labs(colour = "dominance") +
+         labs(colour = "dominance of restoration") +
          coord_trans(y = "log10") + 
          geom_line()   
          
@@ -1041,8 +1053,100 @@ mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
 
+```{r Fig 9 cost of 1 resistance, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Influence of cost of resistance on time-to-resistance for mixtures and sequences. Row 1 (A and B) same as Fig. 5 with no cost of resistance, row 2 (C and D) cost of resistance set to 0.15 with dominance of cost set to 0.5. The 's' and 'm' on the upper X axis and mix/seq in the lower right of each panel stand for sequence and mixture and are explained in the legend to Fig 5. The increase in cost of resistance from A. to C. removes the advantage of sequence relative to mixture. The ratio of time-to-resistance for the mixture divided by that for the sequence goes from 0. to 1. Costs seem to favour mixtures in these plots. Also be aware that costs would lead to a decline in the frequency of resistance for the first insecticide in a sequence when it stops being used."}
 
-```{r Fig9, eval=FALSE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="A. All control inputs equal at 0.5, male exposure 0.8, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Male exposure decreased from 0.8 to 0.2, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and Male exposure decreased from 0.8 to 0.2"}
+#4 panel figure looking at effectiveness and exposure
+
+
+#test of rearranging figures on a grid
+#eff1  0.5  0.8
+#exp
+#0.5    1   2
+#0.8    3   4
+
+#layout(matrix(1:4,2,2, byrow = TRUE))
+
+#add lower panel for legend
+#layout(matrix(c(1,2,3,4,5,5),3,2, byrow = TRUE), heights=c(1,1,0.5), respect=FALSE)
+
+#layout( matrix(c(1,2,3,4,5,5),3,2, byrow = TRUE), heights=c(1,1,0.2), 
+# respect=matrix(c(1,1,1,1,0,0),3,2, byrow = TRUE) )
+#layout.show(n=5)
+
+# add side panels for labels
+layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+
+#effectiveness on mixture
+
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('cost 1 = 0', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#base scenario
+
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#effectiveness1 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('cost 1 = 0.15', line= -2, side=2, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#exposure 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), xlabs = TRUE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1, z.RR1_00 = 0.15 )
+
+mtext('C.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#plot margins
+par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1  and  expos 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, xlabs = TRUE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1, z.RR1_00 = 0.15  )
+
+mtext('D.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#adding legend in lower panel
+#plot margins
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+
+# legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide1 in mix   ", "insecticide2 alone   ", "insecticide2 in mix   "), col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#add for when insecticides same
+legend( 'bottom', legend=c("insecticide1 alone   ", "insecticide2 alone   ", "insecticide1 in mix   ", "insecticide2 in mix   ", "insecticides1&2 in mix   "), col=c("red","blue","red","blue","purple"), lty=c(2,2,1,1,1), pch=c(NA,NA,NA,NA,NA), bty="n", cex=0.7, horiz =TRUE )
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.5', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+#label
+par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
+mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
+
+```
+
+```{r Figxx not eval, eval=FALSE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="A. All control inputs equal at 0.5, male exposure 0.8, B. Effectiveness for insecticide1 increased from 0.5 to 0.8, C. Male exposure decreased from 0.8 to 0.2, D. Effectiveness for insecticide1 increased from 0.5 to 0.8 and Male exposure decreased from 0.8 to 0.2"}
 
 # not evaluated at the moment
 #4 panel figure looking at male exposure prop and starting freq.
@@ -1122,6 +1226,9 @@ plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m')
 mtext('effectiveness1 = 0.8', line= -2, side=1, cex=0.9) #side=1b,2l,3t,4r
 
 ```
+
+
+
 
 \pagebreak
 

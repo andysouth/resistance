@@ -17,7 +17,7 @@
 #' plot_fit_calc(effectiveness=0.5, resistance_restoration=0.5, dominance=0.5)
 #' 
 #' 
-#' @return 
+#' @return gtable plot object
 #' @export
 
 plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, dominance_restoration=0.5, dominance_cost=0.5, cost=0.3 ){
