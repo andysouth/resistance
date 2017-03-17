@@ -20,8 +20,9 @@
 #' @return gtable plot object
 #' @export
 
-plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, dominance_restoration=0.5, dominance_cost=0.5, cost=0.3 ){
- 
+#plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.6, dominance_restoration=0.6, dominance_cost=0.5, cost=0.3 ){
+plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dominance_restoration=0.75, dominance_cost=0.75, cost=0.2 ){
+    
   
   #library(gridExtra)
   #library(grid)
@@ -49,6 +50,8 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
         #dotted horizontal lines showing calculations
         annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
         annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
+        #dotted vertical for dominance
+        annotate("segment", x='SR', xend='SR', y=sr, yend=ss, linetype="dotted", colour = "blue") +    
         ylab('fitness') +
         xlab('genotype') +
         #theme(axis.title.y = element_text(size = rel(3))) +
@@ -60,8 +63,15 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
         # annotate("text", x = 'SR', y = sr+(rr-sr)/2, hjust=0, label = " dominance") + 
         # annotate("text", x = 'RR', y = ss+(rr-ss)/2, hjust=0, label = " resistance\n  restoration") + 
         annotate("label", x = 'SS', y = ss+(1-ss)/2, size=3, label = " effectiveness") +
-        annotate("label", x = 'SR', y = sr+(rr-sr)/2, size=3, label = " 1-dominance of\n  restoration") + 
+        annotate("label", x = 'SR', y = ss+(sr-ss)/2, size=3, label = " dominance of\n  restoration") + 
         annotate("label", x = 'RR', y = ss+(rr-ss)/2, size=3, label = " resistance\n  restoration") + 
+        # add 0,1 labels for dominance and resistance restoration
+        annotate("text", x = 'SS', y = 1, hjust=0, label = " 0", colour="purple") +
+        annotate("text", x = 'SS', y = 0, hjust=0, label = " 1", colour="purple") +    
+        annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
+        annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
+        annotate("text", x = 'RR', y = ss, hjust=0, label = " 0", colour="purple") +
+        annotate("text", x = 'RR', y = 1, hjust=0, label = " 1", colour="purple") +        
     
         theme_bw() +
         theme(
@@ -97,6 +107,8 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
     #dotted horizontal lines showing calculations
     annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
     annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
+    #dotted vertical for dominance
+    annotate("segment", x='SR', xend='SR', y=sr, yend=ss, linetype="dotted", colour = "blue") +    
     #ylab('fitness') +
     xlab('genotype') +
     ggtitle("not exposed to insecticide") + 
@@ -104,8 +116,13 @@ plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.5, domin
     scale_x_discrete(limits = c('SS',  'SR',  'RR')) +
     #text annotations "label" creates box "text"doesn't
     #annotate("text", x = 'SS', y = ss+(1-ss)/2, hjust=0, label = " effectiveness") +
-    annotate("label", x = 'SR', y = sr+(rr-sr)/2, size=3, label = " 1-dominance\n  of cost") + 
-    annotate("label", x = 'RR', y = ss+(rr-ss)/2, size=3, label = " resistance\n  cost") + 
+    annotate("label", x = 'SR', y = sr+(ss-sr)/2, size=3, label = " dominance\n  of cost") + 
+    annotate("label", x = 'RR', y = ss-(ss-rr)/2, size=3, label = " resistance\n  cost") + 
+    # add 0,1 labels for dominance and cost
+    annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
+    annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
+    annotate("text", x = 'RR', y = 1, hjust=0, label = " 0", colour="purple") +
+    annotate("text", x = 'RR', y = 0, hjust=0, label = " 1", colour="purple") + 
     
     theme_bw() +
     theme(
