@@ -36,9 +36,9 @@ opts_chunk$set(dev="tiff",
   library(ggplot2)
 ```
 
-### version 10
+### version 11
 
-#Insecticide resistance evolution with mixtures and sequences : a graphical primer.
+#Insecticide resistance evolution with mixtures and sequences : a graphical introduction.
 
 ###Evolution of insecticide resistance with insecticide mixtures and sequences : an accessible model to promote understanding.
 
@@ -94,12 +94,12 @@ We use a 2-locus population genetic model of insecticide resistance [@Levick2017
 Parameter  | Description
 ---------------------- | ----------------------------------------------------
 1. Effectiveness | proportion of susceptible (SS) insects killed by exposure to insecticide
-2. Exposure | proportion of insects exposed to the insecticide
-3. Resistance restoration  | ability of resistance (RR) to restore fitness when insect exposed to the insecticide
-4. Dominance of restoration | multiplier of resistance restoration for heterozygous (SR) insects
+2. Exposure | proportion of insects exposed to insecticide
+3. Resistance restoration  | ability of resistance (RR) to restore fitness of insects exposed to insecticide
+4. Dominance of restoration | sets fitness of heterozygous (SR) insects between that of SS & RR in presence of insecticide
 5. Frequency  | frequency of resistance alleles within the population
 6. Cost of resistance  |  fitness of resistant (RR) insects in absence of insecticide
-7. Dominance of cost  | multiplier of cost for heterozygous (SR) insects in absence of insecticide
+7. Dominance of cost  | sets fitness of heterozygous (SR) insects between that of SS & RR in absence of insecticide
 
 
 ## Methods
@@ -108,36 +108,13 @@ The simulation represents a population of randomly mixing individuals using stan
 
 The calculation of fitness for each genotype when considering just a single insecticide is illustrated in Figure 1. In the model itself this is repeated for both insecticides and the fitnesses multiplied. Firstly the exposure input determines the proportion of the population in the left and right panels (exposed and not exposed). For those that are exposed (left panel) insecticide effectiveness sets the fitness for SS and resistance restoration 'restores' a portion of the fitness for RR. A value of 1 for resistance restoration would bring the fitness of RR back to 1 (equivalent to the unexposed SS), a value of 0 for resistance restoration would lead to the RR having the same fitness as SS in the presence of the insecticide and effectively there would be no resistance. Dominance of restoration determines how the fitness for SR sits between that of SS and RR for those that are exposed to the insecticide. For those that are not exposed, fitness of SS is set to 1 by definition and resistance cost determines the fitness of RR. Dominance of cost determines how the fitness for SR sits between that of SS and RR in the absence of the insecticide (Figure 1).
 
-Each of these inputs can be varied as a proportion between 0 and 1. We use 'Resistance restoration' to represent how much the RR genotype restores fitness in the presence of the insecticide. The more conventional 'selection coefficient' is calculated by multiplying resistance restoration by insecticide effectiveness.
+Each of these inputs can be varied as a proportion between 0 and 1. We use 'Resistance restoration' to represent how much the RR genotype restores fitness in the presence of the insecticide. The more 'selection coefficient' can be calculated by multiplying resistance restoration by insecticide effectiveness.
 
-The simulation proceeds through generations. In each generation selection is represented by multiplying genotype frequencies in the population by their relative fitness. This acts to make the fitter alleles more common over time. Thus a summary of the selection stage is as follows with 1 & 2 representing the two insecticides :
+The simulation proceeds through generations. In each generation selection is represented by multiplying genotype frequencies in the population by their relative fitness. This acts to make the fitter alleles more common over time. Separate sexes and standard sexual reproduction with recombination is included. There is also the potential to set exposure rates to be different for males and females to represent their different behaviours but we do not explore that here.   
 
-> selection coefficient = resistance restoration * effectiveness  
->
-> Single gene, insecticide fitness : 	
-> SS = 1-effectiveness  
-> RS = 1-effectiveness + (dominance*selection coeff.)  
-> RR = 1-effectiveness + selection coeff.  
-> 
-> Double gene, insecticide fitness :   
-> SS1SS2 = SS1 * SS2  
-> SS1RS2 = SS1 * RS2  
-> … and for other combinations  
-> RR1RR2 = RR1 * RR2  
-> 
-> Population fitness = Double fitness * exposure to insecticides  
-> 
-> In each generation :   
-> Allele frequency[t+1] = Allele frequency[t] * Population fitness  
+So far this description just considers a single insecticide and associated resistance allele. In the model itself a second insecticide and resistance allele are included and overall fitness is calculated by multiplying the two results. This allows the model to represent populations exposed to two insecticides together in a mixture.
 
-
-Sexual reproduction is represented first by creating gametes by splitting the adult genomes in two with recombination, and second by forming offspring genotypes by adding gametes.
-
-So far this description just considers a single insecticide and associated resistance allele, with equal behaviour for males and females (Fig 1A). To allow males and females to be exposed differently separate genders are also represented (Fig 1B). In addition a second insecticide and resistance allele are included and fitness is calculated by multiplying these with those for the first insecticide described above (Fig 1C). Thus the simulation can represent populations exposed to two insecticides together in a mixture. 
-
-Here we principally look at model outputs of the change in resistance allele frequencies over time (generations). Resistance allele frequencies are calculated from the frequencies of each genotype as follows.
-
-> Resistance allele frequency = (2*RR + RS) / 2
+Here we principally look at model outputs of the change in resistance allele frequencies over time (generations). 
 
 We investigate three insecticide use strategies.
 
