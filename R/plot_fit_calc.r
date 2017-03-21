@@ -21,7 +21,7 @@
 #' @export
 
 #plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.6, dominance_restoration=0.6, dominance_cost=0.5, cost=0.3 ){
-plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dominance_restoration=0.75, dominance_cost=0.75, cost=0.2 ){
+plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dominance_restoration=0.4, dominance_cost=0.6, cost=0.2 ){
     
   
   #library(gridExtra)
@@ -38,7 +38,7 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
   
   dfg <- data.frame(x1 = c('SS',  'SR',  'RR'), 
                     x2 = c('SS',  'SR',  'RR'),                    
-                    y1 = c(1,  rr, ss), 
+                    y1 = c(1,  ss, ss), 
                     y2 = c(ss, sr, rr))
 
   gg1 <- ggplot(dfg, aes(x = x2, y = y2)) +    
@@ -51,7 +51,7 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
         annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
         annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
         #dotted vertical for dominance
-        annotate("segment", x='SR', xend='SR', y=sr, yend=ss, linetype="dotted", colour = "blue") +    
+        annotate("segment", x='SR', xend='SR', y=sr, yend=rr, linetype="dotted", colour = "blue") +    
         ylab('fitness') +
         xlab('genotype') +
         #theme(axis.title.y = element_text(size = rel(3))) +
@@ -92,7 +92,7 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
 
   dfg <- data.frame(x1 = c('SS',  'SR',  'RR'), 
                     x2 = c('SS',  'SR',  'RR'),                    
-                    y1 = c(1,  rr, ss), 
+                    y1 = c(1,  ss, ss), 
                     y2 = c(ss, sr, rr))
     
   gg2 <- ggplot(dfg, aes(x = x2, y = y2)) +    
@@ -102,13 +102,13 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
     #arrows
     #geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2),size=1, arrow = arrow(length = unit(3,"mm"))) +
     #because I don't want an arrow for SS, easier to do with annotate
-    annotate("segment", x='SR', xend='SR', y=rr, yend=sr, size=0.9, arrow=arrow(length = unit(3,"mm"))) +
+    annotate("segment", x='SR', xend='SR', y=ss, yend=sr, size=0.9, arrow=arrow(length = unit(3,"mm"))) +
     annotate("segment", x='RR', xend='RR', y=ss, yend=rr, size=0.9, arrow=arrow(length = unit(3,"mm"))) +
     #dotted horizontal lines showing calculations
     annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
     annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
     #dotted vertical for dominance
-    annotate("segment", x='SR', xend='SR', y=sr, yend=ss, linetype="dotted", colour = "blue") +    
+    annotate("segment", x='SR', xend='SR', y=sr, yend=rr, linetype="dotted", colour = "blue") +    
     #ylab('fitness') +
     xlab('genotype') +
     ggtitle("not exposed to insecticide") + 

@@ -7563,14 +7563,50 @@ This used to be in **Table 2. Effect of inputs on resistance when insecticides u
  
 I'm suggesting that Dominance of cost slows evolution of resistance by increased fitness of SR (whereas Cost of resistance slows resistance by decreased fitness of RR)
  
+~ add cost & dominance of cost to tables 2-4
+~ change order of resistance restoration and dominance of resistance in tables 2-4
+~ change dominance to dominance of resistance throughout paper
+
+Gave Ian draft to review.
  
+*15/3/17*
+
+Ian suggested Parasites and Vectors as a potential journal for paper2
+Impact Factor: 3.234
+Impact Factor: 3.079 malaria journal
+ 
+submission guidelines : 
+https://parasitesandvectors.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research 
+ 
+seems like submission guidelines are similar to malaria journal. 
+similar 350 word limit for abstract.
+ 
+*21/3/17* 
+~ addressing Ians comments on paper2
+
+~ re-red '10 simple rules for structuring papers' by Kording 
+ 
+~ tweaked abstract to get under 350 
  
  
 ### TO DO  
 
-~ add cost & dominance of cost to tables 2-4
-~ change order of resistance restoration and dominance of resistance in tables 2-4
-~ change dominance to dominance of resistance throughout paper
+~ tweak start of intro to make the justification stronger ...
+
+
+~ get a version of the paper ready to send to IVCC and Justin before thursday
+~ remove speculative & extra refs material put it in this doc
+
+
+
+~ I need to be clear about the justification & target audience for paper2 early in the intro
+~~ the abstract already does a pretty good job of that.
+
+~ have a look at the malaria journal UI paper Katherine was involved with
+~ keep it simple, don't get too carried away explaining intricacies of results
+~ mention how this model is consistent with previous (more technical & less accessible) modelling results
+
+
 
 ~ have a quick look at new version barbosa paper
 
@@ -7578,17 +7614,9 @@ I'm suggesting that Dominance of cost slows evolution of resistance by increased
 
 *just include the extra figures, showing that cost increases time for a single insecticide and tends to increase time more for a mixture than a sequence. (Because slowing the resistance to one insecticide increases it's 'protection' of the other insecticide in a mixture.)*
 
+~~ replace createArray2 with array_named() throughout resistance code
+
 paper2
-
-ideally I don't want to put cost into paper2. What justification can I have for that ? What justification did we use in paper1 ? Have other authors included costs in their models ?
-
-
-but do my current cost things work properly for mix & sequences ? i.e. with cost you would expect freq. to decline in the sequence when first insecticide not being used.
-
-~ ask Ian why he thought cost not important. Can I use this as a reason for not including cost in paper2 ?
-
-~ ? setup a UI with cost
-
 
 ~ maybe I need to specify what I mean by 'mechanisms' in contrast e.g. to resistance mechanisms
 
@@ -7639,15 +7667,10 @@ Poor application seems likely to reduce the selection pressure on resistance by 
 ~ key point in our Fig1B and from conventional wisdom is that poor insecticide application can promote rise in resistance. But I don't think we really cover this in how we run the model. E.g. increasing effectiveness and exposure (which one would expect to be related to insecticide application) all result in more rapid resistance. Are we saying that the insecticide application effect occurs purely because poor application results in higher dominance ? I should discuss this in paper2. Can link it to specific statements in GPIRM about poor application promoting resistance (if there are any). Could we add an insecticide application param ? 
 
 
-~ calc Toggl time for Bayer
 ~ check plot_fit_variance() & what it would do if multiple scenarios
-
 
 ~ ? should there be a dominance associated with the cost of resistance ? see 498 of revised MS
 ~ note that dominance is more relevant at low frequencies where much of the resistance is present in heterozygotes. Once much of the resistance is in homozygotes dominance is less relevant. (our LD output may be related to the proportion of R genotypes that are homozygous ...)
-
-
-~ after ASTMH
 
 ~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
 
@@ -8007,3 +8030,11 @@ this takes git back to before the last commit (from ohshitgit.com)
 1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
 1. runModel2.r          : runs model for the passed scenarios
 1. paper1_results_figs_slimmed_50_rr.Rmd : final figures for paper
+
+_CUT bits from paper2 to go somewhere else :_
+_For those who distrust models, work in a moth and genetically modified brocolli system has shown that toxins used in combination can delay the onset of resistance in a way that is consistent with theoretical models [@Zhao2003]._
+
+_Insecticide resistance becomes a problem when genes coding for resistance firstly arise in a population and secondly increase in frequency. We concern ourselves with this second process of how insecticide resistance increases in frequency within a population. It is likely that genes conferring resistance are present in populations even prior to exposure to novel insecticides thus leading to the potential for selection [@Liu2015]. The changing frequency of insecticide resistance is a population genetic process that can be influenced by (among others) the parameters outlined in Table 1._
+
+
+
