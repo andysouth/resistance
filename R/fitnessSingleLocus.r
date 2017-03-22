@@ -48,7 +48,7 @@ fitnessSingleLocus <- function ( eff1 = 0.5,
   
   if ( is.null(a_fitloc) )
   {
-    a_fitloc   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+    a_fitloc   <- array_named( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
     #set from input file in runModel2()
     a_fitloc['SS1','no'] <- fitSS1 #input[30,i]
     a_fitloc['SS2','no'] <- fitSS2 #input[31,i] 
@@ -57,28 +57,28 @@ fitnessSingleLocus <- function ( eff1 = 0.5,
   if ( is.null(a_dom) )  
   {
     # dominance coefficient
-    a_dom       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi')) 
+    a_dom       <- array_named(locusNum=c(1,2), exposure=c('no','lo','hi')) 
     a_dom[1, 'hi'] <- dom1
     a_dom[2, 'hi'] <- dom2
   }
   if ( is.null(a_sel) )  
   {
     # selection coefficient
-    a_sel       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
+    a_sel       <- array_named(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
     a_sel[1, 'hi'] <- rr_1 * eff1
     a_sel[2, 'hi'] <- rr_2 * eff2    
   }  
   if ( is.null(a_effect) )  
   {
     # fitness of one locus (baseline), effectiveness
-    a_effect     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    a_effect     <- array_named(locusNum=c(1,2), exposure=c('no','lo','hi'))
     a_effect[1, 'hi'] <- eff1
     a_effect[2, 'hi'] <- eff2    
   }  
   if ( is.null(a_cost) )  
   {
     # fitness cost of resistance allele in no insecticide
-    a_cost       <- createArray2(locusNum=c(1,2))
+    a_cost       <- array_named(locusNum=c(1,2))
     a_cost[1] <- cost1
     a_cost[2] <- cost2
   } 

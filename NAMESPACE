@@ -3,7 +3,6 @@
 export(HW)
 export(array_named)
 export(calc_fit_rs)
-export(createArray)
 export(createArray2)
 export(createGametes)
 export(createInputMatrix)

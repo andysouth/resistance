@@ -29,7 +29,7 @@ selection <- function( a_gtypes, a_fitgen, calibration)
     #Ian said thi is necessary at this stage to ensure that the gamete frequencies in each sex sum to 1
     
     # W bar - Sum of numerators
-    W.bar <- createArray2(sex=c('m','f'))
+    W.bar <- array_named(sex=c('m','f'))
     
     for( sex in dimnames(a_fitgen)$sex)
     {

@@ -31,7 +31,7 @@ fitnessNiche <- function ( a_fitloc = NULL,
   if ( is.null(a_nichetog) )
   {
     # insecticide niche toggle
-    a_nichetog   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
+    a_nichetog   <- array_named( niche1=c('0','a','A'), niche2=c('0','b','B') )
     #a_nichetog['0','0'] <- 1
     #a_nichetog['A','B'] <- 1
     # set all toggles on if nothing has been passed
@@ -42,7 +42,7 @@ fitnessNiche <- function ( a_fitloc = NULL,
   
   if ( is.null(a_fitnic) )
   {
-    a_fitnic  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    a_fitnic  <- array_named( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
   }
   
   ##################################################

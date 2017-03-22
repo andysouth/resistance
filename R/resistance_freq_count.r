@@ -8,7 +8,7 @@
 #' 
 #' @examples 
 #' genotype.freq <- make.genotypemat ( 0.5, 0.5 )
-#' a_gtypes <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
+#' a_gtypes <- array_named( sex=c("m","f"), loci=rownames( genotype.freq ) )
 #' a_gtypes['m', ] <- a_gtypes['f', ] <- genotype.freq[]
 #' resistance_freq_count(a_gtypes)
 
@@ -21,7 +21,7 @@ resistance_freq_count <- function ( a_gtypes,
 
   
   #this could be extended to have >2 loci
-  arr_freq <- createArray2( sex=c('m','f'), locus = c('R1','R2') ) 
+  arr_freq <- array_named( sex=c('m','f'), locus = c('R1','R2') ) 
    
   ## frequency of resistance alleles
   # SS1SS2,SS1RS2,SS1RR2,RS1SS2,RS1RS2_cis,RS1RS2_trans,RS1RR2,RR1SS2,RR1RS2,RR1RR2

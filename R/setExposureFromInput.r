@@ -17,7 +17,7 @@ setExposureFromInput <- function( input, scen_num )
 
   # exposure to insecticides
   # exposure array initialise with 0s 
-  a <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+  a <- array_named( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
 
   ## Exposure levels of males and females to each insecticide niche
   # lower case = low concentration, upper case = high, 0 = absence   

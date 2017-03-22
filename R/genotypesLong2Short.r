@@ -15,14 +15,14 @@ genotypesLong2Short <- function( aLong )
 {
   
   #to convert from this
-  #fGenotypeExpanded <- createArray2(l1a1=c('S1','R1'),l1a2=c('S1','R1'),l2a1=c('S2','R2'),l2a2=c('S2','R2'))  
+  #fGenotypeExpanded <- array_named(l1a1=c('S1','R1'),l1a2=c('S1','R1'),l2a1=c('S2','R2'),l2a2=c('S2','R2'))  
 
   #to this
   genotypes <- c( "SS1SS2", "SS1RS2", "SS1RR2", 
                     "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
                     "RR1SS2", "RR1RS2", "RR1RR2")
   
-  aShort <- createArray2( genotypes=genotypes )
+  aShort <- array_named( genotypes=genotypes )
   
   
   aShort["SS1SS2"] <- aLong['S1','S1','S2','S2']

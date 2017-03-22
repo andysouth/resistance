@@ -33,7 +33,7 @@ fit_time_genotype <- function ( genotype = NULL,
   if ( is.null(a_fitgen) )
   {
     # empty array to fill
-    a_fitgen  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+    a_fitgen  <- array_named( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
   }
 
   #what format do I want the output to be in ?
@@ -51,7 +51,7 @@ fit_time_genotype <- function ( genotype = NULL,
   
   max_gen <- nrow(genotype) 
   
-  a_fit_time_gen  <- createArray2( gen = c(1:max_gen), 
+  a_fit_time_gen  <- array_named( gen = c(1:max_gen), 
                                    sex=c('m','f'), 
                                    genotype = c("SS1SS2", "SS1RS2", "SS1RR2", 
                                                 "RS1SS2", "RS1RS2", "RS1RR2",

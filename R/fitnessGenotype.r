@@ -76,7 +76,7 @@ fitnessGenotype <- function ( a_fitnic = NULL,
   if ( is.null(a_fitgen) )
   {
     # empty array to fill
-    a_fitgen  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+    a_fitgen  <- array_named( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
   }
 
   #testing

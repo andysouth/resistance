@@ -36,7 +36,7 @@ setExposure <- function( exposure = 0.9,
 
   #exposure to insecticide
   #exposure array initialise with 0s 
-  a <- createArray2( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+  a <- array_named( sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B') )
 
   #option to set exposure differently for the 2 insecticides
   #BEWARE of what the defaults are

@@ -10,7 +10,7 @@
 #' @examples 
 #' results <- matrix ( nrow = 1, ncol = 12 )
 #' genotype.freq <- make.genotypemat ( 0.1, 0.5 )
-#' a_gtypes <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
+#' a_gtypes <- array_named( sex=c("m","f"), loci=rownames( genotype.freq ) )
 #' linkage_calc(a_gtypes, 0.5, 1, results)
 
 #' @return results matrix with values for this generation added

@@ -16,7 +16,7 @@
 #'                 "RS1SS2", "RS1RS2_cis", "RS1RS2_trans", "RS1RR2",
 #'                 "RR1SS2", "RR1RS2", "RR1RR2")
 #' sex2 <- c("m","f")
-#' a_gtypes <- createArray2( sex=sex2, loci=namesLoci )
+#' a_gtypes <- array_named( sex=sex2, loci=namesLoci )
 #' #assign all of both parents to one genotype for convenience
 #' a_gtypes['m','RS1RS2_trans'] <- 1
 #' a_gtypes['f','RS1RS2_trans'] <- 1
@@ -37,7 +37,7 @@ randomMating <- function( G,
   #l1a2 : locus1 allele2
   #l2a1 : locus2 allele1
   #l2a2 : locus2 allele2
-  fGenotypeExpanded <- createArray2(l1a1=c('S1','R1'),l1a2=c('S1','R1'),l2a1=c('S2','R2'),l2a2=c('S2','R2'))
+  fGenotypeExpanded <- array_named(l1a1=c('S1','R1'),l1a2=c('S1','R1'),l2a1=c('S2','R2'),l2a2=c('S2','R2'))
   
   
   #created genotype frequencies

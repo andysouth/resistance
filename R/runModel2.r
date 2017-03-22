@@ -53,22 +53,22 @@ runModel2 <- function(input = NULL,
     
     ## named arrays to store model components
     # fitness by locus
-    a_fitloc   <- createArray2( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+    a_fitloc   <- array_named( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
     # fitness by niche    
-    a_fitnic  <- createArray2( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
+    a_fitnic  <- array_named( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )    
     # fitness by genotype
-    a_fitgen  <- createArray2( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
+    a_fitgen  <- array_named( sex=c('m','f'), locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2') )
     # insecticide niche toggle
-    a_nichetog   <- createArray2( niche1=c('0','a','A'), niche2=c('0','b','B') )
+    a_nichetog   <- array_named( niche1=c('0','a','A'), niche2=c('0','b','B') )
     
     # selection coefficient
-    a_sel       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
+    a_sel       <- array_named(locusNum=c(1,2), exposure=c('no','lo','hi') ) #or just lo hi
     # fitness of one locus (baseline)
-    a_effect     <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    a_effect     <- array_named(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # dominance coefficient
-    a_dom       <- createArray2(locusNum=c(1,2), exposure=c('no','lo','hi'))
+    a_dom       <- array_named(locusNum=c(1,2), exposure=c('no','lo','hi'))
     # fitness cost of resistance allele in no insecticide
-    a_cost       <- createArray2(locusNum=c(1,2))
+    a_cost       <- array_named(locusNum=c(1,2))
     
     # exposure to insecticides
     a_expos <- setExposureFromInput( input, scen_num=scen_num )    
@@ -145,7 +145,7 @@ runModel2 <- function(input = NULL,
     
     # HW equilibrium 
     genotype.freq <- make.genotypemat ( P_1, P_2 )
-    a_gtypes <- createArray2( sex=c("m","f"), loci=rownames( genotype.freq ) )
+    a_gtypes <- array_named( sex=c("m","f"), loci=rownames( genotype.freq ) )
     
     #setting genotype freq at start to same for m & f 
     a_gtypes['m', ] <- a_gtypes['f', ] <- genotype.freq[]

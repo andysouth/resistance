@@ -21,7 +21,7 @@ createGametes <- function( a_gtypes, recomb_rate)
 
 
   #!r can probably refactor further later, keep it close to original to start
-  G <- createArray2( sex=c('m','f'), locus1 = c('S1','R1'), locus2 = c('S2','R2') )
+  G <- array_named( sex=c('m','f'), locus1 = c('S1','R1'), locus2 = c('S2','R2') )
     
     
   #!r initially assume same for m & f (i think it is same in Beths code)
