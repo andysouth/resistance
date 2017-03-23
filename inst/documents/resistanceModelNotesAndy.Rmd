@@ -7593,6 +7593,7 @@ similar 350 word limit for abstract.
 
 ~ tweak start of intro to make the justification stronger ...
 
+~ do I need to add cost to the UI ?
 
 ~ get a version of the paper ready to send to IVCC and Justin before thursday
 ~ remove speculative & extra refs material put it in this doc
@@ -8036,5 +8037,24 @@ _For those who distrust models, work in a moth and genetically modified brocolli
 
 _Insecticide resistance becomes a problem when genes coding for resistance firstly arise in a population and secondly increase in frequency. We concern ourselves with this second process of how insecticide resistance increases in frequency within a population. It is likely that genes conferring resistance are present in populations even prior to exposure to novel insecticides thus leading to the potential for selection [@Liu2015]. The changing frequency of insecticide resistance is a population genetic process that can be influenced by (among others) the parameters outlined in Table 1._
 
+_The mechanisms involved in the response of resistance in mixtures are summarised in Table3. Whether a mixture or sequence is favoured for reducing the spread of resistance will depend on these mechanisms and is summarised in Table 4._
 
+_Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. todo expand this paragraph_ 
+
+How do the rest of our results relate to recommendations that have been produced by WHO[@WHO2012], IRAC[@IRAC2011] and FAO[@FAO2012] ?
+
+[@Birget2015] 
+We show that indoor use of insecticides leads to less selection pressure than their use as larvicides.
+Reasons for relatively low selection pressure by adulticides
+(i) males are not affected by the ITNs
+(ii) insecticides are also repellents, keeping mosquitoes at bay from contacting the insecticide but also driving them to bite either people who do not use the insecticide or alternative hosts.
+
+Relevance of these mechanisms in the field e.g. exposure can be reduced if either insecticide has a repellent effect, which can be set in formulation. [@Birget2015a] mention this not for resistance but for ITNs with repellency requiring higher coverage for elimination)
+
+[@Kliot2012]
+fitness costs associated with insecticide resistance
+mini-review, not very good. No mention of the magnitude of costs.
+
+Good review of tactics for IRM including mention of mixtures and new AIs [@Denholm1992]
+"Once developed and marketed, new products introduce a fresh challenge how to exploit their characteristics while restricting exposure to preserve their effectiveness." 
 
