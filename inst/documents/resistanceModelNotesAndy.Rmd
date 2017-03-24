@@ -6657,6 +6657,7 @@ install.packages("tibble")
 
 I think stopping return of an object somewhere fixed it. 
 
+~ before ASTMH improve my understanding of LD. E.g. looking at GPIRM figure. maybe see Charelsworth 2012 p 422. Ian may have said that LD can lead to higher than expected frequencies of RR & SS whih may lead to less variance in fitness because most of the gametes are in the middle. [I may have got this wrong].
  
 # ASTMH
 Disease outbreak library for disease categorisation in social media posts.
@@ -7581,77 +7582,29 @@ https://parasitesandvectors.biomedcentral.com/submission-guidelines/preparing-yo
 seems like submission guidelines are similar to malaria journal. 
 similar 350 word limit for abstract.
  
+from a while ago 
+~ find a quote that poor implementation of insecticide interventions promotes resistance ...
+~ gpirm ? no
+~ iarc2011 - yes
+~ FAO2012 - yes, good 
+ 
 *21/3/17* 
 ~ addressing Ians comments on paper2
-
 ~ re-red '10 simple rules for structuring papers' by Kording 
- 
 ~ tweaked abstract to get under 350 
+ 
+*24/3/17*
+~ getting draft of paper2 ready to send to external people
+
  
  
 ### TO DO  
 
-~ tweak start of intro to make the justification stronger ...
+~ VERSION by end today
 
-~ do I need to add cost to the UI ?
+priority1
 
-~ get a version of the paper ready to send to IVCC and Justin before thursday
-~ remove speculative & extra refs material put it in this doc
-
-
-
-~ I need to be clear about the justification & target audience for paper2 early in the intro
-~~ the abstract already does a pretty good job of that.
-
-~ have a look at the malaria journal UI paper Katherine was involved with
-~ keep it simple, don't get too carried away explaining intricacies of results
-~ mention how this model is consistent with previous (more technical & less accessible) modelling results
-
-
-
-~ have a quick look at new version barbosa paper
-
-*may be best to put cost in now, this is quite a nice result, and is something new not covered in paper1*
-
-*just include the extra figures, showing that cost increases time for a single insecticide and tends to increase time more for a mixture than a sequence. (Because slowing the resistance to one insecticide increases it's 'protection' of the other insecticide in a mixture.)*
-
-~~ replace createArray2 with array_named() throughout resistance code
-
-paper2
-
-~ maybe I need to specify what I mean by 'mechanisms' in contrast e.g. to resistance mechanisms
-
-check out :
-Whalon, M.E., Mota-Sanchez, D & Hollingworth, R.M. (eds.) 2008. Global pesticide resistance in arthropods. CABI, Wallingford. )
-
-Zhao JZ, Cao J, Li YX, Collins HL, Roush RT, Earle ED and Seltion AM, Transgenic
-plants expressing two Bacillus thuringiensis toxins delay insect resistance evolution.
-Nature Biotech 21:1493-1497 (2003). 
-
-get my thinking straight on poor application, sub-lethal doses ...
-related to RS survival, if RS survive resistance will be faster ...
-will depend on dominance ...
-and on resistance restoration see FAO p17.
-
-My thinking (and seems to be Justins too) is that insecticide treatments will always be imperfect, so there are always going to be resistants that survive.
-
-Poor application seems likely to reduce the selection pressure on resistance by reducing the number of susceptibles that are killed.
-
-
-~~ PAPER2
-
-~ find a quote that poor implementation of insecticide interventions promotes resistance ...
-~ gpirm ? no
-~ iarc2011 - yes
-~ FAO2012 - yes, good
-
-~ add early in paper that we are only modelling development of resistance and not the control of mosquitoes or malaria. Say that best option in purely resistance terms is not to use insecticide at all, but there would be be vector and malaria consequences.
-
-~ in discussion mention migration, if susceptible individuals are migrating in this will reduce rate of resistance development.
-
-~ Justin 1/12/16 said that they hear the msg that sub-lethal dosing accelerates resistance
-
-~ what do I want the main msgs to be ?
+~ get some more general stuff into conclusion &/or intro e.g. referring to Birget, Roush
 
 ~ potential strategies all need to work by managing selection pressure.
 ~~ selection pressure is created by more resistants surviving than susceptibles
@@ -7659,34 +7612,48 @@ Poor application seems likely to reduce the selection pressure on resistance by 
 ~~~ increase resistants killed (e.g. as in mixtures)
 ~~~ reduce susceptibles killed (e.g. as in rotation)
 
-~ rewrite text that refers to the first 4 panel fig
-~ include cost of resistance ?
-~ think about a diagram to explain the different inputs
-~ don't get too sucked into explaining mechanisms precisely
-~ discuss the 50% threshold and how it is quicker to get from 50 to 100 than to reach 50
+Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. todo expand this paragraph_ 
 
-~ key point in our Fig1B and from conventional wisdom is that poor insecticide application can promote rise in resistance. But I don't think we really cover this in how we run the model. E.g. increasing effectiveness and exposure (which one would expect to be related to insecticide application) all result in more rapid resistance. Are we saying that the insecticide application effect occurs purely because poor application results in higher dominance ? I should discuss this in paper2. Can link it to specific statements in GPIRM about poor application promoting resistance (if there are any). Could we add an insecticide application param ? 
+
+
+~ tweak start of intro to make the justification stronger ...
+~ add cost to the UI ?
+
+
+
+
+My thinking (and seems to be Justins too) is that insecticide treatments will always be imperfect, so there are always going to be resistants that survive.
+
+Poor application seems likely to reduce the selection pressure on resistance by reducing the number of susceptibles that are killed.
+
+~ link to Roush 1
+
+
+~ have another quick look at new version barbosa paper
+
+~ in discussion mention migration, if susceptible individuals are migrating in this will reduce rate of resistance development.
+
+~ Justin 1/12/16 said that they hear the msg that sub-lethal dosing accelerates resistance
+
+
+
+~ ? rewrite text that refers to the first 4 panel fig
+
+
+END of paper2 stuff
 
 
 ~ check plot_fit_variance() & what it would do if multiple scenarios
 
-~ ? should there be a dominance associated with the cost of resistance ? see 498 of revised MS
-~ note that dominance is more relevant at low frequencies where much of the resistance is present in heterozygotes. Once much of the resistance is in homozygotes dominance is less relevant. (our LD output may be related to the proportion of R genotypes that are homozygous ...)
 
 ~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
 
-~~ think how we can address Justins question
-~~ What does it mean if there is LLIN use and IRS deployment ?
 
 ~~ for linkage disequilibrium it will be cool to be able to put the gpirm LD figures (from plot_ld_gpirm) on a common scale for mixtures & sequences
 
 ~ I think I should probably change the model to be able to represent sequences directly rather than through post-processing. Quite a big job, maybe a week or more.
 
 
-~ before ASTMH improve my understanding of LD. E.g. looking at GPIRM figure. maybe see Charelsworth 2012 p 422. Ian may have said that LD can lead to higher than expected frequencies of RR & SS whih may lead to less variance in fitness because most of the gametes are in the middle. [I may have got this wrong].
-
-
-Tangent : check whether I have power of attorney for M&D
 
 Fitness calc.
 I need to work out how to multiply these together.
@@ -7729,11 +7696,6 @@ although I think this just calculates fitness by M&F.
 
 
 ~ check whether my R-S calc in calc_fit_rs() is similar to what happens in selection()
-~ think of a good way to present R-S calc
-
-# now paper1 is nearly accepted I need to get a move on with paper2
-# get to bottom of the different effects of effectiveness & exposure
-
 
 
 
@@ -7857,7 +7819,6 @@ set up some unit tests for the fitness functions
 
 https://www.software.ac.uk/software-evaluation-guide
 
-~ look at colin gillespies efficient R prog book on github
 
 
 Scope out
@@ -8039,7 +8000,6 @@ _Insecticide resistance becomes a problem when genes coding for resistance first
 
 _The mechanisms involved in the response of resistance in mixtures are summarised in Table3. Whether a mixture or sequence is favoured for reducing the spread of resistance will depend on these mechanisms and is summarised in Table 4._
 
-_Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. todo expand this paragraph_ 
 
 How do the rest of our results relate to recommendations that have been produced by WHO[@WHO2012], IRAC[@IRAC2011] and FAO[@FAO2012] ?
 
@@ -8058,3 +8018,26 @@ mini-review, not very good. No mention of the magnitude of costs.
 Good review of tactics for IRM including mention of mixtures and new AIs [@Denholm1992]
 "Once developed and marketed, new products introduce a fresh challenge how to exploit their characteristics while restricting exposure to preserve their effectiveness." 
 
+(@) In a mixture each insecticide reduces the rate of increase in resistance to the other by killing individuals that are resistant to the other.
+
+(@) In a mixture higher effectiveness of either insecticide kills more individuals resistant to the other and thus increases time-to-resistance for the other. Thus although increasing effectiveness of an insecticide decreases time-to-resistance when used alone, when used in a mixture time-to-resistance for both insecticides is increased.
+
+(@) For a mixture of 2 insecticides with differing effectiveness. Resistance to the insecticide with a greater effectiveness increases faster. The less effective insecticide is 'protected' by the more effective. Resistance to the less effective insecticide increases slowly until resistance to the more effective insecticide reaches a high level.
+
+The latter is as expected because it reduces the selective advantage of resistance. 
+
+For single insecticide use resistance responded identically to changing exposure and effectiveness (compare Fig 3A to 3B). This makes sense as vector kill is effectively a product of exposure times effectiveness. For example exposing 50% of a  population to an insecticide which is 75% effective would be expected to have the same result as exposing 75% of the population to one which is 50% effective. This observation points to the mechanism by which increasing both exposure and effectiveness lead to a faster increase in resistance. In both cases the increased deaths of susceptible vectors cause a higher selection pressure that can explain the faster increase.
+
+The pattern of more rapid increase in resistance at higher dominance of restoration levels (Fig 3C) can be explained by increased survival of heterozygotes in the presence of the insecticide. Higher dominance of the resistant allele causes it to contribute more to the phenotype of the heterozygotes leading to higher survival. Thus selection pressure for the resistance allele will be increased because it confers more of an advantage when only present on one chromosome. The faster development of resistance under higher resistance-restoration (Fig 3D) can be explained by it's effect on the survival of the resistant genotypes. Resistance-restoration restores the survival of resistant genotypes in the presence of the insecticide back towards what it would be in the absence of the insecticide, thus increasing the selective advantage of the resistance allele. The effect of the starting frequency of resistance (Fig 4) is the most different from the other inputs. Simply, when starting from a higher frequency of resistance there is a smaller change to make to reach the higher resistance thresholds.
+
+[@Roush1989] 
+Predicting the time to resistance or accurately simulating its development requires very detailed information on initial gene frequencies, genotypic fitnesses, and many other factors that are difficult to measure. However, choosing between options requires far less information. The primary
+purposes of this paper are to demonstrate that choosing the correct resistance
+management tactics can be a straightforward process and to suggest how such
+choices can be made on the basis of current information, or when current
+information is inadequate, how the necessary data might be gathered. In particular,
+it will be questioned whether species-specific simulation models and information on
+the number of genes controlling resistance or fitness disadvantages caused by
+resistance are necessary.
+
+                              
