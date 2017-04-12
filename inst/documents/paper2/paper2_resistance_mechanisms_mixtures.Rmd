@@ -1,16 +1,25 @@
 ---
-title: "paper2_resistance_mechanisms_mixtures"
-output: pdf_document
+title: "Insecticide resistance evolution with mixtures and sequences : a model-based graphical introduction and summary"
+output: 
+  pdf_document:
+    #citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+
 #output: word_document
 author: "Andy South and Ian Hastings"
 date: "`r Sys.Date()`"
 bibliography: library.bib
 csl: biomed-central.csl
-#header-includes:
-#    - \usepackage{setspace}
-#    - \doublespacing
-#    - \usepackage{lineno}
-#    - \linenumbers
+fontsize: 11pt
+spacing: double
+# below worked in test_linenumbers.Rmd
+header-includes:
+   - \usepackage{setspace}
+   - \doublespacing
+   - \usepackage{lineno}
+   - \linenumbers
 ---
 
 ```{r, eval=FALSE, include=FALSE}
@@ -36,9 +45,7 @@ opts_chunk$set(dev="tiff",
   library(ggplot2)
 ```
 
-### version 11
-
-#Insecticide resistance evolution with mixtures and sequences : a model-based graphical introduction and summary.
+### version 12
 
 ###alternative titles:
 ###Evolution of insecticide resistance with insecticide mixtures and sequences : an accessible model to promote understanding.
@@ -46,9 +53,9 @@ opts_chunk$set(dev="tiff",
 ###A tutorial, primer ...
 ###Insecticide effectiveness predicted to be most important factor determining whether insecticide mixtures can slow evolution of resistance. 
 
-Target : Malaria journal
+Target : Malaria journal (other suggestions welcome)
 
-THIS IS A CONFIDENTIAL COPY OF THE MS. Please do not circulate without the express permission of one of the authors. Comments and suggestions welcome
+THIS IS A CONFIDENTIAL COPY OF THE MS. Please do not circulate without the permission of one of the authors. Comments and suggestions welcome
 
 ## Abstract
 
@@ -212,28 +219,26 @@ Poor implementation would likely cause lower effectiveness of and exposure to in
 
 
 #### Implications
-_todo get more of [@Roush1989] in here_
-
 
 Experience from agriculture where single interventions have been associated with a rapid development of resistance have led for calls for a more Integrated Vector Management composed of a series of partially effective tools [@Thomas2012]. It is suggested that such an integrated approach is more sustainable and 'evolution-proof' [@Thomas2012]. A similar combining of interventions has been advocated to cover mosquitoes exhibiting different behaviours [@Killeen2017]. Mosquitoes with different behaviours e.g. feeding outdoors and/or on animals are likely to result in lower exposures to insecticides in nets or sprayed on walls. This lower exposure could favour mixtures over sequences as we have indicated. In both cases our modelling approach could be used to investigate implications for the development of resistance.
 
-_low exposure could be achieved by having active ingredients with some repellency._
-
-_todo get Birget and Koella in & link to exposure_
-'whereas repellency is beneficial to delay the evolution of resistance, other models have shown that it decreases the population-level protection of the insecticide.'
 
 
-_todo, where to put this, earlier ?_
-This model can explore when a mixture strategy may be favoured over a sequence purely for the evolution of resistance. Other factors also need to be considered. On the positive side a mixture is likely to kill more vectors and may also limit their ability to transmit the disease. On the negative side a mixture is more expensive.
+_TODO bits to incorporate into discussion :_
+
+_todo more reference to [@Roush1989] who made many of these points 25 years ago_
+
+_Insecticides with some repellency will reduce exposure to the insecticide and thus, as shown here, are likely to slow the evolution of resistance and favour mictures over sequences. This would need to be balanced with a likely loss in protection to the population as a whole provided by the insecticide [@Birget2015]._ 
+
+_This model can explore when a mixture strategy may be favoured over a sequence purely for the evolution of resistance. Other factors also need to be considered. On the positive side a mixture is likely to kill more vectors and may also limit their ability to transmit the disease. On the negative side a mixture is more expensive._
 
 _todo, somewhere earlier say good thing about effectiveness & exposure is that they can be modified_
 
 
 
-
 #### Conclusions
 
-We have developed flexible, modern model that can replicate previous modelling work and outputs that help us understand the mechanisms by which different insecticide application strategies may be favoured. For assessing the relative benefits of mixtures and sequences we have demonstrated the likely importance of insecticide effectiveness and exposure and costs of resistance. High insecticide effectiveness favours mixtures through the protective effect of one insecticide on the other. High exposure favours sequences through reducing the otherwise high selection pressures on both resistances together. High costs of resistance can favour mixtures because the selection pressures on both resistances are reduced. Similar processes will occur in other strategies such as rotations and mosaics and we are starting to investigate them. Predictions from the model can be tested against data from trials of new insectides to help advance guidelines on good practice.
+We have developed flexible, modern model that can replicate previous modelling work and outputs that help us understand the mechanisms by which different insecticide application strategies may be favoured. For assessing the relative benefits of mixtures and sequences we have demonstrated the likely importance of insecticide effectiveness and exposure and costs of resistance. High insecticide effectiveness favours mixtures through the protective effect of one insecticide on the other. High exposure favours sequences because of the higher selection pressures on both resistances together in a mixture. High costs of resistance can favour mixtures because the selection pressures on both resistances are reduced. Similar processes will occur in other strategies such as rotations and mosaics and we are starting to investigate them. Predictions from the model can be tested against data from trials of new insectides to help advance guidelines on good practice.
 
 
 
@@ -248,8 +253,10 @@ TODO see https://malariajournal.biomedcentral.com/submission-guidelines/preparin
 
 ##### Ethics approval and consent to participate
 Not applicable
+
 ##### Consent for publication
 Not applicable
+
 ##### Availability of data and material
 
 ##### Competing interests

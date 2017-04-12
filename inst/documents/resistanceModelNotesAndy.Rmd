@@ -7596,13 +7596,74 @@ from a while ago
 *24/3/17*
 ~ getting draft of paper2 ready to send to external people
 
+
+*11/4/17*
+~ trying to get line numbers into manuscript before sending to people
+~ advice on writing manuscripts from rmarkdown
+http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
+
+output: 
+  pdf_document:
+    citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+    template: ~/Dropbox/miscelanea/svm-r-markdown-templates/svm-latex-ms.tex
+title: "A Pandoc Markdown Article Starter and Template"
+thanks: "Replication files are available on the author's Github account..."
+author:
+- name: Steven V. Miller
+  affiliation: Clemson University
+- name: Mary Margaret Albright
+  affiliation: Pendelton State University
+- name: Rembrandt Q. Einstein
+  affiliation: Springfield University
+abstract: "This document provides an introduction to R Markdown, argues for its..."
+keywords: "pandoc, r markdown, knitr"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+bibliography: ~/Dropbox/master.bib
+biblio-style: apsr
+
+BUT when I looked at the tex file it is designed to be copied and then edited rather than being specified as a template from my file as I expected
+ 
+In test_linenumbers.Rmd this does work to make double spaced and add line numbers :
+header-includes:
+   - \usepackage{setspace}
+   - \doublespacing
+   - \usepackage{lineno}
+   - \linenumbers
+   
+Hello All,
+
+Ian and I would be grateful if you have time to look at the attached draft manuscript.
+
+This is intended to be an accessible account of the evolution of insecticide resistance aimed at those with little knowledge of population genetics or modelling.
+
+It follows from our recent longer paper in PLOS Computational Biology and the presentation we gave at ASTMH. It focuses on developing a mechanistic explanation of why mixtures or sequences are likely to be favoured in different situations. We add consideration of resistance cost that was not included in the previous paper.
+
+We plan to submit to the Malaria Journal but other suggestions are welcome where we might access those outside of the malaria community interested in resistance too. 
+
+Comments can be annotated on the pdf or referencing line numbers.
+
+If you could get these back to us in 2 weeks (by Wednesday April 26th) that would be appreciated. 
+
+Best wishes,
+Andy
+
+
+   
  
  
 ### TO DO  
 
+~ try to get line numbers working to make it easier for people to comment
 ~ VERSION by end today
 
-priority1
+
 
 ~ get some more general stuff into conclusion &/or intro e.g. referring to Birget, Roush
 
@@ -7613,7 +7674,6 @@ priority1
 ~~~ reduce susceptibles killed (e.g. as in rotation)
 
 Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. todo expand this paragraph_ 
-
 
 
 ~ tweak start of intro to make the justification stronger ...
