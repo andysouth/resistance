@@ -1,0 +1,205 @@
+\documentclass[11pt,]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={trying to get line numbers working},
+            pdfauthor={Andy South and Ian Hastings},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{trying to get line numbers working}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Andy South and Ian Hastings}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{2017-04-11}
+
+\usepackage{setspace}
+\doublespacing
+\usepackage{lineno}
+\linenumbers
+
+\begin{document}
+\maketitle
+
+\subparagraph{Background}\label{background}
+
+Insecticide resistance threatens the control of vectors and particularly
+malaria. New insecticides are being developed to address this. Potential
+strategies for using new insecticides include mixtures, sequences and
+rotations and there are recommendations for how best to implement these
+to manage resistance. There is, however, limited recent, accessible
+modelling work addressing the evolution of resistance under different
+operational strategies. Previous work concludes that preferred
+strategies will be situation specific. There is potential to improve the
+level of mechanistic understanding within the operational community of
+how insecticide resistance can be expected to evolve in response to
+different strategies.
+
+This paper develops an accessible, mechanistic picture of how the
+evolution of insecticide resistance is likely to respond to potential
+intervention strategies to help guide both management and policy. The
+aim is to reach an audience unlikely to read a more detailed modelling
+paper. We use our model to develop a mechanistic understanding of how
+insecticide resistance is expected to increase with the use of
+insecticides in isolation, sequence and mixtures. The model flexibly
+represents two independent genes coding for resistance to two
+insecticides. We look principally at the ability of the insecticides to
+kill susceptible mosquitoes, how much resistance counteracts this, the
+proportion of mosquitoes that are exposed to insecticides and costs of
+resistance.
+
+\subparagraph{Results}\label{results}
+
+We use the model to demonstrate the evolution of resistance under
+different inputs and how this fits with intuitive reasoning about the
+selection pressure exerted by insecticides. We show that an insecticide
+used in a mixture, relative to alone, always prompts slower evolution of
+resistance, but resistance to the two insecticides may evolve more
+slowly when used in sequence. We show that the ability of insecticides
+to kill susceptible mosquitoes (effectiveness), has the most influence
+on whether resistance to two insecticides is likely to arise faster in a
+mixture or sequence.
+
+\subparagraph{Conclusions}\label{conclusions}
+
+Our model makes more open the process of insecticide resistance
+evolution and how it is likely to respond to insecticide use. We provide
+a simple user-interface allowing further exploration
+(\url{https://andysouth.shinyapps.io/MixSeqResist1}). These tools can
+contribute to operational decisions in insecticide resistance
+management.
+
+\subsection{Keywords}\label{keywords}
+
+insecticide resistance; public health; mosquitoes; vector-borne
+diseases; infectious diseases; malaria; population genetics
+
+\subsection{Background}\label{background-1}
+
+Insecticide resistance is a problem for malaria
+\citep{WHO2012}\citep{Ranson2016}\citep{Hemingway2016} other vector
+borne diseases \citep{IRAC2011} and agriculture \citep{FAO2012}. Malaria
+alone still results in hundreds of thousands of deaths per year. Recent
+malaria control efforts have centred on treated bed nets and indoor
+residual spraying, both reliant on insecticides. Treated nets were
+recently estimated to contribute 68\% and indoor residual spraying 13\%
+to averting more than 500 million falciparum malaria cases between 2000
+and 2015 \citep{Bhatt2015}. A recent malaria transmission model
+\citep{Churcher2016} predicts that even low pyrethroid resistance is
+likely to increase malaria incidence in Africa by reducing the
+performance of bed nets.
+
+The WHO produced a Global Plan for Insecticide Resistance Management in
+malaria vectors (GPIRM)\citep{WHO2012} which includes recommendations on
+operational strategies for managing resistance including the use of
+insecticide mixtures when they become available. Efforts are under way
+to develop new insecticides that will be effective in the light of
+existing resistance and allow additional options within insecticide
+resistance management. The Innovative Vector Control Consortium (IVCC)
+was set up in 2005 to develop new vector control tools and particularly
+new insecticides to address insecticide resistance in malaria
+transmitting mosquitoes \citep{Hemingway2006}\citep{IVCC2016}. Three new
+insecticides are now in development \citep{IVCC2016} and likely to be
+available around 2020 \citep{Ranson2016}. It is important that decisions
+about how best to use the new insecticides to delay the onset of
+resistance are made before insecticides are released
+\citep{Hemingway2016}.
+
+Modelling studies have investigated the evolution of insecticide
+resistance in insecticide mixtures including in a public health context
+e.g. \citep{Curtis1985}\citep{Mani1985}\citep{Roush1989} but much of the
+work was done more than 20 years ago and there remained some confusion
+about the results \citep{Levick2017}. In an earlier paper
+\citep{Levick2017} we described the technical details of a flexible
+model used to investigate the relative benefits of mixtures and
+sequences. Here we provide an accessible summary of the model and use
+selected parameter values to describe mechanistically how the evolution
+of resistance is influenced by different inputs. This mechanistic
+understanding can contribute to the debate on the relative merits of
+different insecticide strategies extending existing frameworks
+\citep{Roush1989}\citep{IRAC2011}\citep{FAO2012}\citep{WHO2012}.
+
+My working plot.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{test_linenumbers_files/figure-latex/unnamed-chunk-1-1.pdf}
+\caption{Figure 1: A smiley face because I work.}
+\end{figure}
+
+\bibliography{library}
+
+
+\end{document}

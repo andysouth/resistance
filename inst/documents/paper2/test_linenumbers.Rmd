@@ -1,0 +1,70 @@
+---
+title: "trying to get line numbers working"
+# output:
+#   pdf_document:
+#     fig_caption: yes
+#   graphics: yes
+#   keep_tex: yes  
+#   latex_engine: pdflatex
+#   template: bmc_template/bmc_article.tex
+
+output: 
+  pdf_document:
+    #citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+#output: word_document
+author: "Andy South and Ian Hastings"
+date: "`r Sys.Date()`"
+bibliography: library.bib
+csl: biomed-central.csl
+fontsize: 11pt
+spacing: double
+
+header-includes:
+   - \usepackage{setspace}
+   - \doublespacing
+   - \usepackage{lineno}
+   - \linenumbers
+
+---
+
+Seems that the header-includes bit above does work to add line numbers and double space (although it does generate a few warning messages)
+
+
+##### Background
+Insecticide resistance threatens the control of vectors and particularly malaria. New insecticides are being developed to address this. Potential strategies for using new insecticides include mixtures, sequences and rotations and there are recommendations for how best to implement these to manage resistance. There is, however, limited recent, accessible modelling work addressing the evolution of resistance under different operational strategies. Previous work concludes that preferred strategies will be situation specific. There is potential to improve the level of mechanistic understanding within the operational community of how insecticide resistance can be expected to evolve in response to different strategies. 
+
+This paper develops an accessible, mechanistic picture of how the evolution of insecticide resistance is likely to respond to potential intervention strategies to help guide both management and policy. The aim is to reach an audience unlikely to read a more detailed modelling paper. We use our model to develop a mechanistic understanding of how insecticide resistance is expected to increase with the use of insecticides in isolation, sequence and mixtures. The model flexibly represents two independent genes coding for resistance to two insecticides. We look principally at the ability of the insecticides to kill susceptible mosquitoes, how much resistance counteracts this, the proportion of mosquitoes that are exposed to insecticides and costs of resistance.  
+
+##### Results
+We use the model to demonstrate the evolution of resistance under different inputs and how this fits with intuitive reasoning about the selection pressure exerted by insecticides. We show that an insecticide used in a mixture, relative to alone, always prompts slower evolution of resistance, but resistance to the two insecticides may evolve more slowly when used in sequence. We show that the ability of insecticides to kill susceptible mosquitoes (effectiveness), has the most influence on whether resistance to two insecticides is likely to arise faster in a mixture or sequence.
+
+##### Conclusions
+Our model makes more open the process of insecticide resistance evolution and how it is likely to respond to insecticide use. We provide a simple user-interface allowing further exploration (https://andysouth.shinyapps.io/MixSeqResist1). These tools can contribute to operational decisions in insecticide resistance management.
+
+
+
+
+## Keywords
+insecticide resistance; public health; mosquitoes; vector-borne diseases; infectious diseases; malaria; population genetics
+
+
+## Background
+
+Insecticide resistance is a problem for malaria [@WHO2012][@Ranson2016][@Hemingway2016] other vector borne diseases [@IRAC2011] and agriculture [@FAO2012]. Malaria alone still results in hundreds of thousands of deaths per year. Recent malaria control efforts have centred on treated bed nets and indoor residual spraying, both reliant on insecticides. Treated nets were recently estimated to contribute 68% and indoor residual spraying 13% to averting more than 500 million falciparum malaria cases between 2000 and 2015 [@Bhatt2015]. A recent malaria transmission model [@Churcher2016] predicts that even low pyrethroid resistance is likely to increase malaria incidence in Africa by reducing the performance of bed nets.
+
+The WHO produced a Global Plan for Insecticide Resistance Management in malaria vectors (GPIRM)[@WHO2012] which includes recommendations on operational strategies for managing resistance including the use of insecticide mixtures when they become available.  Efforts are under way to develop new insecticides that will be effective in the light of existing resistance and allow additional options within insecticide resistance management. The Innovative Vector Control Consortium (IVCC) was set up in 2005 to develop new vector control tools and particularly new insecticides to address insecticide resistance in malaria transmitting mosquitoes [@Hemingway2006][@IVCC2016]. Three new insecticides are now in development [@IVCC2016] and likely to be available around 2020 [@Ranson2016]. It is important that decisions about how best to use the new insecticides to delay the onset of resistance are made before insecticides are released [@Hemingway2016]. 
+
+Modelling studies have investigated the evolution of insecticide resistance in insecticide mixtures including in a public health context e.g. [@Curtis1985][@Mani1985][@Roush1989] but much of the work was done more than 20 years ago and there remained some confusion about the results [@Levick2017]. In an earlier paper [@Levick2017] we described the technical details of a flexible model used to investigate the relative benefits of mixtures and sequences. Here we provide an accessible summary of the model and use selected parameter values to describe mechanistically how the evolution of resistance is influenced by different inputs. This mechanistic understanding can contribute to the debate on the relative merits of different insecticide strategies extending existing frameworks [@Roush1989][@IRAC2011][@FAO2012][@WHO2012]. 
+  
+My working plot.
+
+```{r, results = 'asis', echo=FALSE, fig.width=3, fig.height=3, fig.cap="Figure 1: A smiley face because I work."}
+plot(-5:5, (-5:5)^2)
+```
+
+
+
+
