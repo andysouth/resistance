@@ -7598,7 +7598,7 @@ from a while ago
 
 
 *11/4/17*
-~ trying to get line numbers into manuscript before sending to people
+~ got line numbers working to make it easier for people to comment
 ~ advice on writing manuscripts from rmarkdown
 http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
 
@@ -7655,13 +7655,21 @@ Best wishes,
 Andy
 
 
+*21/4/17*
+
+~ working on simpler version of plot_fit_calc() figure for the pubHealthJournal article.
+~ can I have as an arg to the function (e.g. simple) ?
+
+~1 y axis fitness low to high instead of numeric
+~2 x axis change SS & RR to susceptible & resistant
+~3 remove 0,1 labels on plot
+~4 change dominance of resistance and cost to just dominance
    
  
  
 ### TO DO  
 
-~ try to get line numbers working to make it easier for people to comment
-~ VERSION by end today
+
 
 
 
