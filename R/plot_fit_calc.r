@@ -8,6 +8,7 @@
 #' @param dominance_cost dominance of resistance cost 0-1
 #' @param cost cost of resistance
 #' @param title optional title for the plot
+#' @param simple default FALSE whether to create a simpler plot e.g. for public health journal
 # @param yblank whether to remove y axis title & labels
 # @param size text size for RS labels, default 4
 #' 
@@ -21,7 +22,12 @@
 #' @export
 
 #plot_fit_calc <- function ( effectiveness=0.8, resistance_restoration=0.6, dominance_restoration=0.6, dominance_cost=0.5, cost=0.3 ){
-plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dominance_restoration=0.4, dominance_cost=0.6, cost=0.2 ){
+plot_fit_calc <- function ( effectiveness=0.75, 
+                            resistance_restoration=0.75, 
+                            dominance_restoration=0.4, 
+                            dominance_cost=0.6, 
+                            cost=0.2,
+                            simple = FALSE){
     
   
   #library(gridExtra)
@@ -41,6 +47,12 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
                     y1 = c(1,  ss, ss), 
                     y2 = c(ss, sr, rr))
 
+  #set up different labels for dominance in simple & other plot
+  if (simple) {dom_rest_lab <- dom_cost_lab <- " dominance"} else {
+               dom_rest_lab <- " dominance of\n  restoration"
+               dom_cost_lab <- " dominance of\n  cost" }
+    
+  
   gg1 <- ggplot(dfg, aes(x = x2, y = y2)) +    
         ylim(0,1) +
         #points
@@ -63,15 +75,8 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
         # annotate("text", x = 'SR', y = sr+(rr-sr)/2, hjust=0, label = " dominance") + 
         # annotate("text", x = 'RR', y = ss+(rr-ss)/2, hjust=0, label = " resistance\n  restoration") + 
         annotate("label", x = 'SS', y = ss+(1-ss)/2, size=3, label = " effectiveness") +
-        annotate("label", x = 'SR', y = ss+(sr-ss)/2, size=3, label = " dominance of\n  restoration") + 
+        annotate("label", x = 'SR', y = ss+(sr-ss)/2, size=3, label = dom_rest_lab) + 
         annotate("label", x = 'RR', y = ss+(rr-ss)/2, size=3, label = " resistance\n  restoration") + 
-        # add 0,1 labels for dominance and resistance restoration
-        annotate("text", x = 'SS', y = 1, hjust=0, label = " 0", colour="purple") +
-        annotate("text", x = 'SS', y = 0, hjust=0, label = " 1", colour="purple") +    
-        annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
-        annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
-        annotate("text", x = 'RR', y = ss, hjust=0, label = " 0", colour="purple") +
-        annotate("text", x = 'RR', y = 1, hjust=0, label = " 1", colour="purple") +        
     
         theme_bw() +
         theme(
@@ -80,11 +85,30 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
               #axis.title.x = element_blank(),
               #axis.line.x = element_blank(),
               #axis.ticks.x = element_blank(),
-              #panel.grid.major.x = element_blank(),
+              panel.grid.minor.y = element_blank(),
               panel.grid.major.x = element_blank(),
               panel.grid.minor.x = element_blank()
         )
 
+  if (!simple){
+    gg1 <- gg1 +
+      # add 0,1 labels for dominance and resistance restoration
+      annotate("text", x = 'SS', y = 1, hjust=0, label = " 0", colour="purple") +
+      annotate("text", x = 'SS', y = 0, hjust=0, label = " 1", colour="purple") +   
+      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
+      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
+      annotate("text", x = 'RR', y = ss, hjust=0, label = " 0", colour="purple") +
+      annotate("text", x = 'RR', y = 1, hjust=0, label = " 1", colour="purple")             
+  }
+  
+  if (simple){
+    gg1 <- gg1 +    
+      scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1), labels=c('low','','high')) +
+      scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
+  }
+  
+  
+  
   # insecticide absent
   ss <- 1
   rr <- 1-cost
@@ -116,13 +140,8 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
     scale_x_discrete(limits = c('SS',  'SR',  'RR')) +
     #text annotations "label" creates box "text"doesn't
     #annotate("text", x = 'SS', y = ss+(1-ss)/2, hjust=0, label = " effectiveness") +
-    annotate("label", x = 'SR', y = sr+(ss-sr)/2, size=3, label = " dominance\n  of cost") + 
+    annotate("label", x = 'SR', y = sr+(ss-sr)/2, size=3, label = dom_cost_lab) + 
     annotate("label", x = 'RR', y = ss-(ss-rr)/2, size=3, label = " resistance\n  cost") + 
-    # add 0,1 labels for dominance and cost
-    annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
-    annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
-    annotate("text", x = 'RR', y = 1, hjust=0, label = " 0", colour="purple") +
-    annotate("text", x = 'RR', y = 0, hjust=0, label = " 1", colour="purple") + 
     
     theme_bw() +
     theme(
@@ -132,11 +151,25 @@ plot_fit_calc <- function ( effectiveness=0.75, resistance_restoration=0.75, dom
       axis.text.y = element_blank(),
       #axis.line.x = element_blank(),
       axis.ticks.y = element_blank(),
-      #panel.grid.major.x = element_blank(),
+      panel.grid.minor.y = element_blank(),
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank()
     )  
-  
+
+  if (!simple){
+    gg2 <- gg2 +
+      # add 0,1 labels for dominance and cost
+      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
+      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
+      annotate("text", x = 'RR', y = 1, hjust=0, label = " 0", colour="purple") +
+      annotate("text", x = 'RR', y = 0, hjust=0, label = " 1", colour="purple")           
+  }
+
+  if (simple){
+    gg2 <- gg2 +    
+      #scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1), labels=c('low','','high')) +
+      scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
+  }    
   
   grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85))  
   #print(gg)
