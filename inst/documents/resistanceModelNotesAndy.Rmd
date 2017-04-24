@@ -7660,17 +7660,18 @@ Andy
 ~ working on simpler version of plot_fit_calc() figure for the pubHealthJournal article.
 ~ can I have as an arg to the function (e.g. simple) ?
 
-~1 y axis fitness low to high instead of numeric
-~2 x axis change SS & RR to susceptible & resistant
-~3 remove 0,1 labels on plot
-~4 change dominance of resistance and cost to just dominance
+done ~1 y axis fitness low to high instead of numeric
+done ~2 x axis change SS & RR to susceptible & resistant
+done ~3 remove 0,1 labels on plot
+done ~4 change dominance of resistance and cost to just dominance
    
  
  
 ### TO DO  
 
 
-
+~ think about submitting insecticide resistance outline to wikipedia
+~~ https://en.wikipedia.org/wiki/Pesticide_resistance
 
 
 ~ get some more general stuff into conclusion &/or intro e.g. referring to Birget, Roush

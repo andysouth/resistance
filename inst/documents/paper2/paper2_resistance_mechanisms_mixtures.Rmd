@@ -234,6 +234,12 @@ _This model can explore when a mixture strategy may be favoured over a sequence 
 
 _todo, somewhere earlier say good thing about effectiveness & exposure is that they can be modified_
 
+_comments from Hilary_
+_This would seem to be a critical point to stress - with examples of how this might be acheived._
+
+_Limitations that haven't been addressed is the possiblility that resistance is poylgenic, and the possibility of cross resistance (e.g a P450 may cause partial resistance to both)._  
+
+_Something further to guide readers on how they might determine dominance would also be useful given how crucial this is._
 
 
 #### Conclusions
@@ -665,6 +671,7 @@ plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restorat
 
 # add side panels for labels
 layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+#layout.show(n=9)
 
 #effectiveness on mixture
 
