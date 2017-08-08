@@ -7666,12 +7666,25 @@ done ~3 remove 0,1 labels on plot
 done ~4 change dominance of resistance and cost to just dominance
    
  
+*8/8/17*
+remember that ians new rotation code is elsewhere in a different github repo called rotations
+we should make sure that this model and that one give same results for a simple 2 insecticide rotation.
+
+From ffrench-constant(2013)
+Thus the ability to amplify resistance-associated genes from historical
+pinned specimens of the Australian sheep blowfly allowed
+Hartley et al. (2006) to show that the mutations conferring
+resistance to malathion (but not to diazinon) were already
+present in 21 pinned specimens collected before the introduction
+of the organophosphorus insecticides themselves. 
+ 
+ 
  
 ### TO DO  
 
+~ get final draft of paper2 to Ian ready for submission
 
-~ think about submitting insecticide resistance outline to wikipedia
-~~ https://en.wikipedia.org/wiki/Pesticide_resistance
+~ add to intro couple of sentences about polygenic inheritance
 
 
 ~ get some more general stuff into conclusion &/or intro e.g. referring to Birget, Roush
@@ -7711,6 +7724,9 @@ Poor application seems likely to reduce the selection pressure on resistance by 
 
 END of paper2 stuff
 
+
+~ think about submitting insecticide resistance outline to wikipedia
+~~ https://en.wikipedia.org/wiki/Pesticide_resistance
 
 ~ check plot_fit_variance() & what it would do if multiple scenarios
 
@@ -7785,12 +7801,6 @@ In paper2 setting the x-axis constant would help with interpretation. Could set 
 
 
 
-~ might I want to combine fitvis & expovis ?
-
-
-
-~ can I setup something clear for Matt to do that will be useful for us ?
-~ ask him to work out the arithmetic about effectiveness & exposure that Ian started when we were in liverpool.
 
 
    
