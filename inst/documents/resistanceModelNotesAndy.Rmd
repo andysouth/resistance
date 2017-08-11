@@ -7678,9 +7678,38 @@ resistance to malathion (but not to diazinon) were already
 present in 21 pinned specimens collected before the introduction
 of the organophosphorus insecticides themselves. 
  
- 
+*9/8/17*
+Took out this sentence from abstarct of paper2 :
+We look principally at the ability of the insecticides to kill susceptible mosquitoes, how much resistance counteracts this, the proportion of mosquitoes that are exposed to insecticides and costs of resistance.  
+
+see
+paper2_abstract_reworking.doc
+
+*10/8/17*
+ffrench-constant 2017 paper on 'does resistance really carry a fitness cost'
+
+intro :
+Our ability to manage xenobiotic resistance (both to drugs and pesticides), relies on the ‘alternation’ (or ‘mixture’) of
+classes of compound with differing modes of action. Management strategies using such alternation of differing chemical classes assume that resistance to compound A will decline during the subsequent use of compound B. This assumption is based on the prediction that de novo resistance to compound A will carry a fitness cost and that the frequency of resistance to A will therefore decline while compound B (or no compound) is used instead. This assumption, that resistance carries a cost in the absence of the xenobiotic, is therefore central to current resistant management strategies in both agriculture (pesticide resistance) and medicine (antibiotic resistance and cancer tumour drug resistance). Despite the widespread reliance on such predicted fitness costs to decrease the frequency of xenobiotic resistance, and an ample literature on the subject, the documentation of such costs is in fact fraught with technical difficulty.
+
+Numerous case studies of fitness costs attributed toinsecticide resistance have been recently and comprehensively reviewed elsewhere [5]. A review of this review suggests to us several basic rules for experiments designed to study the fitness costs of resistance. First and foremost, if resistance is defined as a genetic change leading to control failure in the field, then resistant strains should be both field derived and the costs of resistance should be studied in the field. Experiments on chronically selected resistant laboratory strains or on field collected strains tested in the laboratory, cannot really tell us much about likely fitness costs in the field. Second, the field collected strains that are compared should be both of known resistance genotype (homozygous susceptible SS, homozygous resistant RR or heterozygous RS) and should be compared in a similar genetic background (usually achieved by back-crossing resistance into a known susceptible background). Finally, if an experiment is conducted in the field, then ideally the resistant and susceptible strains should be competed directly against one another. If we apply these simple genetic criteria to the plethora of studies on fitness costs in the literature then very few studies pass all three of these tests.
+
+end of discussion :
+However what is clear is that if the costs of resistance are small or non-existent then resistance management strategiesthat rely on alternations
+will not work in the longer term. Therefore in the absence of a cost, resistance can only be overcome by the introduction of a new class of chemistry to which no preexisting mechanisms confer cross-resistance. Thus, just as in the search for new antibiotics, the need for new classes of insecticide remains paramount.
+
+
+Meeting with Dave Malone & Graham Small, IVCC. see notebook notes.
+
+Interesting points :
+
+~ in new AIs they are aiming for high effectiveness from 95-100%
+~ one exception is Clor.. which consistently has mortalities of 60-70%
+
  
 ### TO DO  
+
+~ finish editing discussion within the word doc & copy back into Rmd
 
 ~ get final draft of paper2 to Ian ready for submission
 
