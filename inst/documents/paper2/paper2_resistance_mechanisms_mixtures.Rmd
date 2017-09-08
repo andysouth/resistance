@@ -1,5 +1,5 @@
 ---
-title: "Insecticide resistance evolution with mixtures and sequences : a model-based introduction."
+title: "Insecticide resistance evolution with mixtures and sequences : a model-based explanation."
 output: 
   pdf_document:
     #citation_package: natbib
@@ -45,12 +45,9 @@ opts_chunk$set(dev="tiff",
   library(ggplot2)
 ```
 
-### version 12
+### version 13
 
-###alternative titles:
-###Evolution of insecticide resistance with insecticide mixtures and sequences : an accessible model to promote understanding.
-###An accessible model to promote understanding of the evolution of insecticide resistance : insecticide effectiveness predicted to be key to the relative performance of mixtures.
-###A tutorial, primer ...
+
 
 
 Target : Malaria journal or Parasites & Vectors
@@ -84,7 +81,7 @@ Insecticide resistance is a problem for malaria [@WHO2012][@Ranson2016][@Hemingw
 
 The WHO produced a Global Plan for Insecticide Resistance Management in malaria vectors (GPIRM)[@WHO2012] which includes recommendations on operational strategies for managing resistance including the use of insecticide mixtures when they become available.  Efforts are under way to develop new insecticides that will be effective in the light of existing resistance and allow additional options within insecticide resistance management. The Innovative Vector Control Consortium (IVCC) was set up in 2005 to work with industry in the development of new vector control tools and particularly new insecticides with new modes of action to address insecticide resistance in malaria transmitting mosquitoes [@Hemingway2006][@IVCC2016]. Three new insecticides are now in development [@IVCC2016] and likely to be available after 2020 [@Ranson2016]. It is important that decisions about how best to use the new insecticides, with a clear mindset of delaying the evolution of resistance, are made before insecticides are released [@Hemingway2016]. 
 
-Modelling studies have investigated the evolution of insecticide resistance in insecticide mixtures including in a public health context e.g. [@Curtis1985][@Mani1985][@Roush1989] but much of the work was done more than 20 years ago and there remained some confusion about the results [@Levick2017]. In an earlier paper [@Levick2017] we described the technical details of a flexible model used to investigate the relative benefits of mixtures and sequences. Here we provide an accessible summary of the model and use selected parameter values to describe mechanistically how the evolution of resistance can be expected to change in different scenarios. This mechanistic understanding can contribute to the debate on the relative merits of different insecticide strategies extending existing frameworks [@Roush1989][@IRAC2011][@FAO2012][@WHO2012]. 
+A recent comprehensive review of strategies to avoid resistance evolution across pesticides and drugs [@Consortium2013] concluded that mixtures (combination of molecules) are usually the best resistance management strategy. This was based on both empirical and modelling work. Modelling studies have investigated the evolution of insecticide resistance in insecticide mixtures including in a public health context e.g. [@Curtis1985][@Mani1985][@Roush1989] but much of the work was done more than 20 years ago and there remained some confusion about the results [@Levick2017]. In an earlier paper [@Levick2017] we described the technical details of a flexible model used to investigate the relative benefits of mixtures and sequences. Here we provide an accessible summary of the model and use selected parameter values to describe mechanistically how the evolution of resistance can be expected to change in different scenarios. This mechanistic understanding can contribute to the debate on the relative merits of different insecticide strategies extending existing frameworks [@Roush1989][@IRAC2011][@FAO2012][@WHO2012][@Consortium2013]. 
 
 Our modelling approach focuses on the change in frequency of a single resistance gene for each insecticide. We assume both that genes conferring resistance are already present in the population and that resistance to each insecticide is coded by a single gene. These assumptions are consistent with previous modelling work. In support of the first assumption insecticide resistance has been termed 'pre-adaptive' meaning that resistance alleles are present in very low numbers even prior to exposure to novel insecticides [@Ffrench-Constant2013][@Liu2015] as has been documented in blowflies [Hartley2006]. In support of using a single gene representation of resistance evidence suggests that whilst polygenic resistance is common, control failures, particularly those due to target site resistance, are mostly due to single major genes [@Ffrench-Constant2013]. 
 
@@ -186,7 +183,6 @@ _add a paragraph, maybe not even in discussion, walking through how the online U
 
 _add para see notebook 11/8/17 saying about inputs that effect time-to-r, but don't effect whether mix or seq is preferred_
 
-_todo more reference to [@Roush1989] who made many of these points 25 years ago_
 
 _todo, somewhere earlier say good thing about effectiveness & exposure is that they can be modified_
 
