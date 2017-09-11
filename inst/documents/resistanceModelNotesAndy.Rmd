@@ -7698,7 +7698,6 @@ end of discussion :
 However what is clear is that if the costs of resistance are small or non-existent then resistance management strategiesthat rely on alternations
 will not work in the longer term. Therefore in the absence of a cost, resistance can only be overcome by the introduction of a new class of chemistry to which no preexisting mechanisms confer cross-resistance. Thus, just as in the search for new antibiotics, the need for new classes of insecticide remains paramount.
 
-
 Meeting with Dave Malone & Graham Small, IVCC. see notebook notes.
 
 Interesting points :
@@ -7706,15 +7705,57 @@ Interesting points :
 ~ in new AIs they are aiming for high effectiveness from 95-100%
 ~ one exception is Clor.. which consistently has mortalities of 60-70%
 
+
+*8/9/17*
+Last week came across REX consortium paper from 20013 'Hetrogeneity of selection and the evolution of resistance'. It's a good review of strategies to avoid resistance.
+
+Collates both modelling and empirical papers, for sequences, mixtures, rotations and mosaics.
+
+Will require me to rewrite one paragraph of intro.
+
+A recent comprehensive review of strategies to avoid resistance evolution across pesticides and drugs [@Consortium2013] concluded that mixtures (combination of molecules) are usually the best resistance management strategy.
+
+Of 14 modelling studies comparing mixtures and sequences, 11 favour mixtures and in 3 results depend on other inputs. Of 10 empirical studies, 8 favour mixtures and in 2 the results are the same.
+
+They suggest that mixtures are better in most models irrespective of the variation of other parameters.
+
+The conclude that the advantage of mixtures is greatest when :
+i)* resistance is initially rare
+ii) independent loci (i.e. no cross resistance)
+iii) high recombination between loci
+iv)** high mortality of homozygous susceptibles
+v)* resistance is recessive
+vi) similar persistence of insecticides
+vii)** some of population remains untreated (lower exposure)
+
+** consistent with our model (i.e. high effectiveness and low exposure favour mixtures)
+
+* our model did not indicate that these effected the difference between mixtures and sequences.
+
+
+
+
+
+Couple of sentences added to intro :
+A recent comprehensive review of strategies to avoid resistance evolution across pesticides and drugs [@Consortium2013] concluded that mixtures (combination of molecules) are usually the best resistance management strategy. This was based on both empirical and modelling work. Modelling studies have investigated the evolution of insecticide resistance in insecticide mixtures including in a public health context e.g. [@Curtis1985][@Mani1985][@Roush1989] but much of the work was done more than 20 years ago and there remained some confusion about the results [@Levick2017].
+
+
+eek seems I'va accidentally deleted most of discussion, get it back via github
+ah no remember I've copied into a word doc to allow Ian & myself to edit.
+
+
  
 ### TO DO  
 
-~ finish editing discussion within the word doc & copy back into Rmd
+*~ finish editing discussion within the word doc & copy back into Rmd *
+*~ work out whether to edit abstract in word or Rmd *
 
-~ get final draft of paper2 to Ian ready for submission
+~ see test_linenumbers.Rmd for how to get to word doc
 
 ~ add to intro couple of sentences about polygenic inheritance
 
+~ about field data. 
+We hope this can prompt more discussion about how best to combine empirical data and models of the evolution of insecticide resistance. 
 
 ~ get some more general stuff into conclusion &/or intro e.g. referring to Birget, Roush
 

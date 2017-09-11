@@ -1,13 +1,12 @@
 ---
 title: "Insecticide resistance evolution with mixtures and sequences : a model-based explanation."
-output: 
-  pdf_document:
-    #citation_package: natbib
-    keep_tex: true
-    fig_caption: true
-    latex_engine: pdflatex
+# output: 
+#   pdf_document:
+#     keep_tex: true
+#     fig_caption: true
+#     latex_engine: pdflatex
 
-#output: word_document
+output: word_document
 author: "Andy South and Ian Hastings"
 date: "`r Sys.Date()`"
 bibliography: library.bib
@@ -24,11 +23,10 @@ header-includes:
 
 ```{r, eval=FALSE, include=FALSE}
 #!!!! paper protocol
-#!!!! might be easier to put text and figs into separate Rmd files after draft stage
-#!!!! drafts knit to pdf with pdf_document in YAML and this chunk eval=FALSE
 #!!!! submission MS, knit to word_document, YAML, this chunk eval=FALSE, 
 #!!!!  in WORD: delete figs, add fig numbers to fig legends, set double space, add line numbers 
 #!!!! submission figs, set this chunk to eval=TRUE
+#!!!! previous drafts knitted to pdf with pdf_document in YAML and this chunk eval=FALSE
 
 # options to create final publication quality figures
 # causes the document to fail, but the figs do get stored in pap2figs/
