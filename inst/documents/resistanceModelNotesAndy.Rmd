@@ -7733,9 +7733,6 @@ vii)** some of population remains untreated (lower exposure)
 * our model did not indicate that these effected the difference between mixtures and sequences.
 
 
-
-
-
 Couple of sentences added to intro :
 A recent comprehensive review of strategies to avoid resistance evolution across pesticides and drugs [@Consortium2013] concluded that mixtures (combination of molecules) are usually the best resistance management strategy. This was based on both empirical and modelling work. Modelling studies have investigated the evolution of insecticide resistance in insecticide mixtures including in a public health context e.g. [@Curtis1985][@Mani1985][@Roush1989] but much of the work was done more than 20 years ago and there remained some confusion about the results [@Levick2017].
 
@@ -7743,21 +7740,98 @@ A recent comprehensive review of strategies to avoid resistance evolution across
 eek seems I'va accidentally deleted most of discussion, get it back via github
 ah no remember I've copied into a word doc to allow Ian & myself to edit.
 
+*11/9/2017*
 
+~ finished edits to abstract & discussion in word
+~ see test_linenumbers.Rmd for how to get to word doc
+
+https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
+
+Title page
+list the full names, institutional addresses and email addresses for all authors
+indicate the corresponding author
+
+Figures should be provided as separate files, not embedded in the main manuscript file.
+
+Each figure of a manuscript should be submitted as a single file that fits on a single page in portrait format.
+Tables should NOT be submitted as figures but should be included in the main manuscript file.
+
+Multi-panel figures (those with parts a, b, c, d etc.) should be submitted as a single composite file that contains all parts of the figure.
+
+Figures should be numbered in the order they are first mentioned in the text, and uploaded in this order.
+
+Figures should be uploaded in the correct orientation.
+
+Figure titles (max 15 words) and legends (max 300 words) should be provided in the main manuscript, not in the graphic file.
+
+Figure keys should be incorporated into the graphic, not into the legend of the figure.
+
+Each figure should be closely cropped to minimize the amount of white space surrounding the illustration. Cropping figures improves accuracy when placing the figure in combination with other elements when the accepted manuscript is prepared for publication on our site. For more information on individual figure file formats, see our detailed instructions.
+
+Individual figure files should not exceed 10 MB. If a suitable format is chosen, this file size is adequate for extremely high quality figures.
+
+Figure formats :
+PDF (suitable for diagrams and/or images)
+Microsoft Word (suitable for diagrams and/or images, figures must be a single page)
+TIFF (suitable for images)
+ 
+Are there recomendations for figure file nameing ?
+
+done - Figure titles (max 15 words) and legends (max 300 words) should be provided in the main manuscript, not in the graphic file.
+ 
+Tables should be in text because < A4.
+ 
+Referencing :
+Smith JJ. The world of science. Am J Sci. 1999;36:234-5.
+
+Article within a journal (no page numbers)
+
+Rohrmann S, Overvad K, Bueno-de-Mesquita HB, Jakobsen MU, Egeberg R, Tjønneland A, et al. Meat consumption and mortality - results from the European Prospective Investigation into Cancer and Nutrition. BMC Med. 2013;11:63.
+
+Article within a journal by DOI
+
+Slifka MK, Whitton JL. Clinical implications of dysregulated cytokine production. Dig J Mol Med. 2000; doi:10.1007/s801090000086.
+
+For software, this section should include:
+
+Project name: e.g. My bioinformatics project
+Project home page: e.g. http://sourceforge.net/projects/mged
+Archived version: 10.5281/zenodo.889012
+Operating system(s): e.g. Platform independent
+Programming language: e.g. Java
+Other requirements: e.g. Java 1.3.1 or higher, Tomcat 4.0 or higher
+License: e.g. GNU GPL, FreeBSD etc.
+ 
+Software and code
+
+Any previously unreported software application or custom code described in the manuscript should be available for testing by reviewers in a way that preserves their anonymity. The manuscript should include a description in the Availability of Data and Materials section of how the reviewers can access the unreported software application or custom code. This section should include a link to the most recent version of your software or code (e.g. GitHub or Sourceforge) as well as a link to the archived version referenced in the manuscript. The software or code should be archived in an appropriate repository with a DOI or other unique identifier. For software in GitHub, we recommend using Zenodo. If published, the software application/tool should be readily available to any scientist wishing to use it for non-commercial purposes, without restrictions (such as the need for a material transfer agreement).
+
+So I need to use Zenodo to set up a link to an archived version of the code.
+ 
+https://guides.github.com/activities/citable-code/ 
+https://zenodo.org/account/settings/github/ 
+ 
+ 
  
 ### TO DO  
 
-*~ finish editing discussion within the word doc & copy back into Rmd *
-*~ work out whether to edit abstract in word or Rmd *
+https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
 
-~ see test_linenumbers.Rmd for how to get to word doc
+Finish decalarations
 
-~ add to intro couple of sentences about polygenic inheritance
+I should submit figs as Tiff or Word (probably Tiff)
 
-~ about field data. 
-We hope this can prompt more discussion about how best to combine empirical data and models of the evolution of insecticide resistance. 
 
-~ get some more general stuff into conclusion &/or intro e.g. referring to Birget, Roush
+~ some refs seem not to have pagenums ?
+14 Levick
+23 Barbosa
+25 Killeen
+27 Rivero
+
+
+
+Todo after knit to word :
+~ Ctrl A, Page layout, line nums, double space.
 
 ~ potential strategies all need to work by managing selection pressure.
 ~~ selection pressure is created by more resistants surviving than susceptibles
