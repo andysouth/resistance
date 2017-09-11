@@ -8,13 +8,12 @@ title: "trying to get line numbers working"
 #   latex_engine: pdflatex
 #   template: bmc_template/bmc_article.tex
 
-output: 
-  pdf_document:
-    #citation_package: natbib
-    keep_tex: true
-    fig_caption: true
-    latex_engine: pdflatex
-#output: word_document
+# output: 
+#   pdf_document:
+#     keep_tex: true
+#     fig_caption: true
+#     latex_engine: pdflatex
+output: word_document
 author: "Andy South and Ian Hastings"
 date: "`r Sys.Date()`"
 bibliography: library.bib
@@ -30,7 +29,9 @@ header-includes:
 
 ---
 
-Seems that the header-includes bit above does work to add line numbers and double space (although it does generate a few warning messages)
+Seems that the header-includes bit above works to add line numbers and double space to pdf, but not to word doc.
+
+Tables, figs and ref list seem to work both for pdf & word doc.
 
 
 ##### Background
@@ -65,6 +66,40 @@ My working plot.
 plot(-5:5, (-5:5)^2)
 ```
 
+**Table 2. Effect of inputs on resistance when insecticides used singly or in sequence**
+
+Parameter to increase  | effect on resistance evolution | Mechanism
+----------------------- | -------- | ---------------------------------------------
+1. Effectiveness | faster | reduced fitness of SS in presence of insecticide
+2. Exposure | faster | reduced fitness of SS overall
+3. Dominance of restoration | faster | increased fitness of SR in presence of insecticide
+4. Resistance restoration | faster | increased fitness of RR in presence of insecticide
+5. Frequency  | faster | less change needed to reach resistance threshold
+6. Cost of resistance | slower | reduced fitness of RR in absence of insecticide 
+
+**Table 3. Effect of inputs on resistance when insecticides used in a mixture**
+
+Parameter to increase  | effect on resistance evolution | Mechanism
+----------------------- | ---------- | ---------------------------------------------
+1. Effectiveness | **slower** | one insecticide reduces the fitness of individuals resistant to the other thereby reducing selection pressure from the other
+2. Exposure | faster (but less than for single) | reduced fitness of individuals susceptible to one insecticide increases selection pressure for that resistance. However at the same time selection pressure is reduced by reduced fitness of resistant individuals caused by the other insecticide
+3. Dominance of restoration | faster | increased fitness of heterozygotes
+4. Resistance restoration | faster | increased fitness of resistants
+5. Frequency  | faster | less change needed to reach resistance threshold
+6. Cost of resistance | slower | reduced fitness of resistants in absence of insecticide 
+
+\pagebreak
+
+**Table 4. Effect of inputs on the difference between mixture and sequential use**
+
+Parameter to increase  | increase favours mix or sequence | Mechanism
+----------------------- | -------- | ---------------------------------------------
+1. Effectiveness | mixture | Higher effectiveness gives faster resistance for sequence and slower resistance in mixture
+2. Exposure | sequence | Higher exposure gives faster resistance for sequence and mixture but the greater effect on mixture favours sequence.
+3. Dominance of restoration | neither | Higher dominance gives faster resistance in both sequences and mixtures such that the difference between them is not changed. 
+4. Resistance restoration | neither | As for dominance of restoration. Higher resistance restoration gives faster resistance in both sequences and mixtures such that the difference between them is not changed.
+5. Frequency  | neither | As for dominance and resistance restoration. Higher starting frequencies give faster resistance in both sequences and mixtures such that the difference between them is not changed.
+6. Cost of resistance | mixture | Higher costs slow the evolution of resistance more in a mixture than when used in sequence (but with higher costs in a sequence there is a greater chance for resistance levels to decline for the insecticide not being used). 
 
 
 
