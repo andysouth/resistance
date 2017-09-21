@@ -7327,8 +7327,6 @@ done ~ sort s,m labels on plots
 done ~ improve figure legends
  
 *1/2/17* 
-
-
 Martin Donnelly lecture
 
 ~ LSTM strategy translational research
@@ -7811,27 +7809,75 @@ So I need to use Zenodo to set up a link to an archived version of the code.
 https://guides.github.com/activities/citable-code/ 
 https://zenodo.org/account/settings/github/ 
  
- 
+Created a github release, now any github release will create a zenodo doi. 
+
+*18/9/17*
+~ fixed all refs
+
+
+*20/9/17*
+~ at faculty forum, both Martin Donnelly and Dave Weetman suggested that resistance may be more likely to be polygenic. 
+
+Dave's points :
+~ whilst in the past it may have taken single mutations of large effect to provide resistance, now it seems that there is such genetic diversity in mutations that multiple ones can be selected for to provide resistance.
+~ new IVCC compounds have more complex binding to target sites so more likely that multiple genes will be required to disrupt this.
+
+
+
+*21/9/17*
+~ look to add in paragraph about Roush to discussion.
+
+Why does Roush opt for rotations and Rex for mixtures ?
+
+Also remember that Roush(1989) said in abstract : 'The number of genes involved in resistance and the fitness disadvanatges they may confer in the absence of use appear to be of relatively little significance in choosing management tactics'.
+
+How does he justify that number of genes is not important in choosing use strategy ?
+
+Main message from Roush(1989)
+~ choices about insecticide use strategies can be based on currently available modest amounts of information.
+~ 'of the three possoble ways that two or more non-cross-resistant compounds can be used, mixtures, alternations, or mosaics, most sitauations will be best served by the alternations of pesticides across generations.'
+~ concludes that single gene models are sufficient for evaluating use strategies (but has this been superceded since ?) because a single gene is usually responsible for control failures.
+~ 
+
+I cut this sentence and replaced with one talking about prelim ideas in Via 1986 :
+A quantitative genetic model would likely lead to a more rapid initial evolution of resistance, a slower middle phase and a continuing increase.
+
+
+
  
 ### TO DO  
 
+Todo to paper 2 MS doc post knitting before submission :
+
+~ Ctrl A, Page layout, line nums, double space.
+~ Insert, page number.
+~ check that tables and other sections don't cross pages but do not use page breaks in your manuscript
+~ modify any table column widths that need
+~ delete figures
+
+
+What did we say we would do for next meeting with IVCC ? Seems we didn't but we should prepare something.
+From last meeting IVCC talked about Clorphenapyr new AI mixed with Pyr in bednets. Always gets relatively low 60-70% effectiveness. We could look at implications of that ? 
+
+
+
+
 https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
 
-Finish decalarations
 
 I should submit figs as Tiff or Word (probably Tiff)
 
+Maybe try to add ref. to this in to discussion somewhere. (& what were Roushes main recomendations for IRM ?) 
+[@Roush1989] 
+Predicting the time to resistance or accurately simulating its development requires very detailed information on initial gene frequencies, genotypic fitnesses, and many other factors that are difficult to measure. However, choosing between options requires far less information. The primary
+purposes of this paper are to demonstrate that choosing the correct resistance
+management tactics can be a straightforward process and to suggest how such
+choices can be made on the basis of current information, or when current
+information is inadequate, how the necessary data might be gathered. In particular,
+it will be questioned whether species-specific simulation models and information on
+the number of genes controlling resistance or fitness disadvantages caused by
+resistance are necessary.
 
-~ some refs seem not to have pagenums ?
-14 Levick
-23 Barbosa
-25 Killeen
-27 Rivero
-
-
-
-Todo after knit to word :
-~ Ctrl A, Page layout, line nums, double space.
 
 ~ potential strategies all need to work by managing selection pressure.
 ~~ selection pressure is created by more resistants surviving than susceptibles
@@ -7841,27 +7887,19 @@ Todo after knit to word :
 
 Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. todo expand this paragraph_ 
 
-
 ~ tweak start of intro to make the justification stronger ...
 ~ add cost to the UI ?
 
-
+~ Ian said that he was unsure of the multiple intragenerational killing argument, because the 2nd insecticide would kill both S & R of the first & therefore wouldn't exert any selective pressure to reduce resistance to the first (i think that's what he said ...)
 
 
 My thinking (and seems to be Justins too) is that insecticide treatments will always be imperfect, so there are always going to be resistants that survive.
 
 Poor application seems likely to reduce the selection pressure on resistance by reducing the number of susceptibles that are killed.
 
-~ link to Roush 1
-
-
-~ have another quick look at new version barbosa paper
-
 ~ in discussion mention migration, if susceptible individuals are migrating in this will reduce rate of resistance development.
 
 ~ Justin 1/12/16 said that they hear the msg that sub-lethal dosing accelerates resistance
-
-
 
 ~ ? rewrite text that refers to the first 4 panel fig
 
