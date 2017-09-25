@@ -7818,11 +7818,9 @@ Created a github release, now any github release will create a zenodo doi.
 *20/9/17*
 ~ at faculty forum, both Martin Donnelly and Dave Weetman suggested that resistance may be more likely to be polygenic. 
 
-Dave's points :
+Dave Weetman's points :
 ~ whilst in the past it may have taken single mutations of large effect to provide resistance, now it seems that there is such genetic diversity in mutations that multiple ones can be selected for to provide resistance.
 ~ new IVCC compounds have more complex binding to target sites so more likely that multiple genes will be required to disrupt this.
-
-
 
 *21/9/17*
 ~ look to add in paragraph about Roush to discussion.
@@ -7842,10 +7840,40 @@ Main message from Roush(1989)
 I cut this sentence and replaced with one talking about prelim ideas in Via 1986 :
 A quantitative genetic model would likely lead to a more rapid initial evolution of resistance, a slower middle phase and a continuing increase.
 
+*22/9/17*
+From last meeting IVCC talked about Clorphenapyr new AI mixed with Pyr in bednets. Always gets relatively low 60-70% effectiveness. We could look at implications of that ? 
 
+Ian asked me to cut this sentence about selection coefficients from the paper. saying "Its not obvious to me that this is true because it has to be scaled against the SS genotype." However I'm pretty sure it is true remembering the process we went through to get to it - we used to use selection coeff in Beths code.
+The 'selection coefficient' of resistance, that may be seen referred to elsewhere [@Curtis1985], can be calculated by multiplying resistance restoration by insecticide effectiveness.
+ 
+*25/9/2017*
+last push to submission
+
+relooking at REX(2010) review of models paper :
+*quantitative multiple gene resistance has not been the subject of any modelling approach by the
+187 articles selected*
+
+A small number of models simulated quantitative resistance, recombination and cross-resistance between molecules.
+When more than one molecule was considered (35% of the models), the resistance mechanisms considered
+tended to be monogenic, independent and nonepistatic. This may be a reasonable assumption, because there is
+considerable evidence to suggest that resistance to pesticides and drugs mostly evolves through the selection
+of alleles with a major effect, and this view is supported by theoretical models (Roush and McKenzie 1987; Neve
+2007). However, in some cases, resistance is clearly because of genes located on several chromosomes (Denholm and
+Rowland 1992) or has emerged from the addition of several mechanisms of small effect such as limited detoxification,
+sequestration and/or translocation (Park and Brown 2002), thus evolving as a quantitative genetic trait.
+The assumption that resistance is monogenic may thus reflect a reluctance to increase model complexity.
+Whatever the reason, *quantitative multiple gene resistance has not been the subject of any modelling approach by the
+187 articles selected*. Furthermore, although multi-drug resistance is frequent and despite the fact that many
+pesticide programs use a combination of nonindependent chemicals, cross-resistance is seldom considered into the
+models.
+ 
+registered for malaria J. w77. 
 
  
+ 
 ### TO DO  
+
+paper2_resistance_mechanisms_mixtures_20170925_submission.docx
 
 Todo to paper 2 MS doc post knitting before submission :
 
@@ -7856,8 +7884,8 @@ Todo to paper 2 MS doc post knitting before submission :
 ~ delete figures
 
 
-What did we say we would do for next meeting with IVCC ? Seems we didn't but we should prepare something.
-From last meeting IVCC talked about Clorphenapyr new AI mixed with Pyr in bednets. Always gets relatively low 60-70% effectiveness. We could look at implications of that ? 
+
+
 
 
 
