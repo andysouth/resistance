@@ -7867,33 +7867,37 @@ Whatever the reason, *quantitative multiple gene resistance has not been the sub
 pesticide programs use a combination of nonindependent chemicals, cross-resistance is seldom considered into the
 models.
  
-registered for malaria J. w77. 
+registered for malaria journal w77. 
 
+http://www.editorialmanager.com/malj/default.aspx
+
+*27/9/2017*
+ 
+final edits to : paper2_resistance_mechanisms_mixtures_20170925_submission.docx
+
+Todo to paper 2 MS doc post knitting before submission :
+
+done ~ Ctrl A, Page layout, line nums, double space.
+done ~ Insert, page number.
+done ~ check that tables and other sections don't cross pages but do not use page breaks in your manuscript
+done ~ modify any table column widths that need
+done ~ delete figures
+ 
+reading section on competing interests :
+https://www.biomedcentral.com/getpublished/editorial-policies#competing+interests
+
+done ~ submission letter
+
+Suggested Jo Lines & Matt Thomas as referees.
  
  
 ### TO DO  
 
-paper2_resistance_mechanisms_mixtures_20170925_submission.docx
-
-Todo to paper 2 MS doc post knitting before submission :
-
-~ Ctrl A, Page layout, line nums, double space.
-~ Insert, page number.
-~ check that tables and other sections don't cross pages but do not use page breaks in your manuscript
-~ modify any table column widths that need
-~ delete figures
-
-
-
-
-
-
+~ final check that Tiffs are OK for submission
 
 
 https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
 
-
-I should submit figs as Tiff or Word (probably Tiff)
 
 Maybe try to add ref. to this in to discussion somewhere. (& what were Roushes main recomendations for IRM ?) 
 [@Roush1989] 
@@ -7915,11 +7919,9 @@ resistance are necessary.
 
 Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. todo expand this paragraph_ 
 
-~ tweak start of intro to make the justification stronger ...
 ~ add cost to the UI ?
 
 ~ Ian said that he was unsure of the multiple intragenerational killing argument, because the 2nd insecticide would kill both S & R of the first & therefore wouldn't exert any selective pressure to reduce resistance to the first (i think that's what he said ...)
-
 
 My thinking (and seems to be Justins too) is that insecticide treatments will always be imperfect, so there are always going to be resistants that survive.
 

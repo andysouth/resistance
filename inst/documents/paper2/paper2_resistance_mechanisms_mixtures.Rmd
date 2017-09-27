@@ -75,7 +75,7 @@ We provide a concise, accessible description of a flexible model of the evolutio
 We use the model to demonstrate the evolution of resistance under different scenarios and how this fits with intuitive reasoning about selection pressure. We show that using an insecticide in a mixture, relative to alone, always prompts slower evolution of resistance to that insecticide. However, when resistance to both insecticides is considered, resistance thresholds may be reached later for a sequence relative to a mixture. Increasing the ability of insecticides to kill susceptible mosquitoes (effectiveness), has the most influence on favouring a mixture over a sequence because one highly effective insecticide provides more protection to another in a mixture.
 
 ##### Conclusions
-Our model provides an accessible description of the process of insecticide resistance evolution and how it is likely to respond to insecticide use. We provide a simple user-interface allowing further exploration (https://andysouth.shinyapps.io/MixSeqResist1). These tools can contribute to an improved discussion about operational decisions in insecticide resistance management.
+Our model provides an accessible description of the process of insecticide resistance evolution and how it is likely to respond to insecticide use. We provide a simple user-interface allowing further exploration (https://andysouth.shinyapps.io/resistmob2). These tools can contribute to an improved discussion about operational decisions in insecticide resistance management.
 
 
 
@@ -188,8 +188,8 @@ Parameter to increase  | increase favours mix or sequence | Mechanism
 1. Effectiveness | mixture | Higher effectiveness gives faster resistance for sequence and slower resistance in mixture
 2. Exposure | sequence | Higher exposure gives faster resistance for sequence and mixture but the greater effect on mixture favours sequence.
 3. Dominance of restoration | neither | Higher dominance gives faster resistance in both sequences and mixtures such that the difference between them is not changed. 
-4. Resistance restoration | neither | As for dominance of restoration. Higher resistance restoration gives faster resistance in both sequences and mixtures such that the difference between them is not changed.
-5. Frequency  | neither | As for dominance and resistance restoration. Higher starting frequencies give faster resistance in both sequences and mixtures such that the difference between them is not changed.
+4. Resistance restoration | neither | As for dominance of restoration. 
+5. Frequency  | neither | As for dominance and resistance restoration. 
 6. Cost of resistance | mixture | Higher costs slow the evolution of resistance more in a mixture than when used in sequence (but with higher costs in a sequence there is a greater chance for resistance levels to decline for the insecticide not being used). 
 
 
@@ -295,7 +295,7 @@ plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restorat
 
 ```
 
-![Figure 2. Screenshot of one online model user interface, accessible at : <https://andysouth.shinyapps.io/resistmob2/>. The user can modify values of the input parameters considered in this paper using simple sliders and run the model to get graphs of resulting resistance frequency over time. Two scenarios (A and B) can be run and the results viewed side by side. This makes it easy to explore the effect of changing individual inputs.](paper2_UI1.png)
+![Figure 2. Screenshot of one online model user interface, accessible at : <https://andysouth.shinyapps.io/resistmob2>. The user can modify values of the input parameters considered in this paper using simple sliders and run the model to get graphs of resulting resistance frequency over time. Two scenarios (A and B) can be run and the results viewed side by side. This makes it easy to explore the effect of changing individual inputs.](paper2_UI1.png)
 
 
 ```{r Fig3, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=7.5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Figure 3. Single insecticide effects of effectiveness, exposure, dominance and resistance restoration on resistance frequency. A. Effectiveness, B. Exposure, C. Dominance of restoration, D. Resistance restoration. Increasing any of the inputs (going from red to blue) results in shorter times-to-resistance. For each panel the chosen input was varied in isolation with the remaining inputs set to 0.5, except for starting frequency of resistance which was set to 0.01). "}
