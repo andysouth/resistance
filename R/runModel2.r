@@ -187,10 +187,7 @@ runModel2 <- function(input = NULL,
       
       # save record of genotype proportions each generation
       genotype[gen_num,1] <- gen_num	
-      #genotype[gen_num,2:11] <- a_gtypes['m',]
-      # 27/9/16 changing this to output mean of m&f
-      #genotype[gen_num,2:11] <- sum( 0.5*(a_gtypes['f',] + a_gtypes['m',]))
-      # 24/10/16 correcting bug above sum()
+
       genotype[gen_num,2:11] <- 0.5*(a_gtypes['f',] + a_gtypes['m',])
       
       # saving results 
@@ -229,8 +226,7 @@ runModel2 <- function(input = NULL,
     # does this really output what we want ?
     listOut$fitness[[scen_num]] <- fitnessOutput( a_fitnic )    
     
-    #25/10/16 can I add output of fitness by genotype and generation
-    #BEWARE that this doesn't mess other stuff up
+    #25/10/16 adding output of fitness by genotype and generation
     listOut$fit_time_genotype <- fit_time_genotype(genotype, a_fitgen)
     
     ## Plots
