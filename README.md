@@ -1,11 +1,15 @@
 # resistance
 
-
-
-
 An insecticide resistance population genetics model with 2 loci and 2 insecticides.
 
-Development by Andy South, Beth Levick and Ian Hastings in 2015-6.
+Development by Andy South, Ian Hastings and Beth Levick, 2015-8.
+
+The model is described here :
+Levick, B., South, A., & Hastings, I. M. (2017). A two-locus model of the evolution of insecticide resistance to inform and optimise public health insecticide deployment strategies. PLoS Computational Biology, 13, e1005327. [https://doi.org/10.1371/journal.pcbi.1005327](https://doi.org/10.1371/journal.pcbi.1005327).
+
+The code is licensed GPL-3, please cite the paper above if you use it.
+
+Running the code is slightly involved, you may want to explore the user interfaces below first.
 
 
 ### Installation
@@ -37,11 +41,11 @@ Development by Andy South, Beth Levick and Ian Hastings in 2015-6.
 
     runUI4()   
     
-    
 ### Main functions to run the model
 
     # Run model scenarios specified in an input object
-    runModel2()
+    input <- setInputOneScenario(P_1=0.01)
+    listOut <- runModel2(input, produce.plots = TRUE)
   
     # Recreate figure 2 of Curtis(1985), allows inputs to be tweaked
     runcurtis_f2()
