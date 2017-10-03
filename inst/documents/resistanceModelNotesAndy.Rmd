@@ -7888,18 +7888,48 @@ https://www.biomedcentral.com/getpublished/editorial-policies#competing+interest
 
 done ~ submission letter
 
-Suggested Jo Lines & Matt Thomas as referees.
+Suggested Jo Lines & Matt Thomas & Denis Bourguet as referees.
  
+*2/10/2017*
+submitted paper2 
  
-### TO DO  
+Bits of text that didn't make it into final version :
+_For those who distrust models, work in a moth and genetically modified brocolli system has shown that toxins used in combination can delay the onset of resistance in a way that is consistent with theoretical models [@Zhao2003]._
 
-~ final check that Tiffs are OK for submission
+_Insecticide resistance becomes a problem when genes coding for resistance firstly arise in a population and secondly increase in frequency. We concern ourselves with this second process of how insecticide resistance increases in frequency within a population. It is likely that genes conferring resistance are present in populations even prior to exposure to novel insecticides thus leading to the potential for selection [@Liu2015]. The changing frequency of insecticide resistance is a population genetic process that can be influenced by (among others) the parameters outlined in Table 1._
+
+_The mechanisms involved in the response of resistance in mixtures are summarised in Table3. Whether a mixture or sequence is favoured for reducing the spread of resistance will depend on these mechanisms and is summarised in Table 4._
 
 
-https://malariajournal.biomedcentral.com/submission-guidelines/preparing-your-manuscript/research-article
+How do the rest of our results relate to recommendations that have been produced by WHO[@WHO2012], IRAC[@IRAC2011] and FAO[@FAO2012] ?
 
+[@Birget2015] 
+We show that indoor use of insecticides leads to less selection pressure than their use as larvicides.
+Reasons for relatively low selection pressure by adulticides
+(i) males are not affected by the ITNs
+(ii) insecticides are also repellents, keeping mosquitoes at bay from contacting the insecticide but also driving them to bite either people who do not use the insecticide or alternative hosts.
 
-Maybe try to add ref. to this in to discussion somewhere. (& what were Roushes main recomendations for IRM ?) 
+Relevance of these mechanisms in the field e.g. exposure can be reduced if either insecticide has a repellent effect, which can be set in formulation. [@Birget2015a] mention this not for resistance but for ITNs with repellency requiring higher coverage for elimination)
+
+[@Kliot2012]
+fitness costs associated with insecticide resistance
+mini-review, not very good. No mention of the magnitude of costs.
+
+Good review of tactics for IRM including mention of mixtures and new AIs [@Denholm1992]
+"Once developed and marketed, new products introduce a fresh challenge how to exploit their characteristics while restricting exposure to preserve their effectiveness." 
+
+(@) In a mixture each insecticide reduces the rate of increase in resistance to the other by killing individuals that are resistant to the other.
+
+(@) In a mixture higher effectiveness of either insecticide kills more individuals resistant to the other and thus increases time-to-resistance for the other. Thus although increasing effectiveness of an insecticide decreases time-to-resistance when used alone, when used in a mixture time-to-resistance for both insecticides is increased.
+
+(@) For a mixture of 2 insecticides with differing effectiveness. Resistance to the insecticide with a greater effectiveness increases faster. The less effective insecticide is 'protected' by the more effective. Resistance to the less effective insecticide increases slowly until resistance to the more effective insecticide reaches a high level.
+
+The latter is as expected because it reduces the selective advantage of resistance. 
+
+For single insecticide use resistance responded identically to changing exposure and effectiveness (compare Fig 3A to 3B). This makes sense as vector kill is effectively a product of exposure times effectiveness. For example exposing 50% of a  population to an insecticide which is 75% effective would be expected to have the same result as exposing 75% of the population to one which is 50% effective. This observation points to the mechanism by which increasing both exposure and effectiveness lead to a faster increase in resistance. In both cases the increased deaths of susceptible vectors cause a higher selection pressure that can explain the faster increase.
+
+The pattern of more rapid increase in resistance at higher dominance of restoration levels (Fig 3C) can be explained by increased survival of heterozygotes in the presence of the insecticide. Higher dominance of the resistant allele causes it to contribute more to the phenotype of the heterozygotes leading to higher survival. Thus selection pressure for the resistance allele will be increased because it confers more of an advantage when only present on one chromosome. The faster development of resistance under higher resistance-restoration (Fig 3D) can be explained by it's effect on the survival of the resistant genotypes. Resistance-restoration restores the survival of resistant genotypes in the presence of the insecticide back towards what it would be in the absence of the insecticide, thus increasing the selective advantage of the resistance allele. The effect of the starting frequency of resistance (Fig 4) is the most different from the other inputs. Simply, when starting from a higher frequency of resistance there is a smaller change to make to reach the higher resistance thresholds.
+
 [@Roush1989] 
 Predicting the time to resistance or accurately simulating its development requires very detailed information on initial gene frequencies, genotypic fitnesses, and many other factors that are difficult to measure. However, choosing between options requires far less information. The primary
 purposes of this paper are to demonstrate that choosing the correct resistance
@@ -7909,8 +7939,7 @@ information is inadequate, how the necessary data might be gathered. In particul
 it will be questioned whether species-specific simulation models and information on
 the number of genes controlling resistance or fitness disadvantages caused by
 resistance are necessary.
-
-
+ 
 ~ potential strategies all need to work by managing selection pressure.
 ~~ selection pressure is created by more resistants surviving than susceptibles
 ~~ therefore can either :
@@ -7918,39 +7947,150 @@ resistance are necessary.
 ~~~ reduce susceptibles killed (e.g. as in rotation)
 
 Modelling and theory have been used to generalise Insecticide Resistance Management into three potential strategies [@Georghiou1994]. These are A) moderation : preserving susceptible genes by limiting selection pressure, B) saturation : high dose so that heterozygous resistants are killed and C) multiple attack : independently acting pressures neither of which is strong enough to lead to resistance. Our work here principally focuses on multiple attack but the other strategies are relevant too. todo expand this paragraph_ 
-
-~ add cost to the UI ?
-
+ 
 ~ Ian said that he was unsure of the multiple intragenerational killing argument, because the 2nd insecticide would kill both S & R of the first & therefore wouldn't exert any selective pressure to reduce resistance to the first (i think that's what he said ...)
+ 
+# time 2015-16
+june :
+Hours			127:45:00
+Hours rounded			127.50
+Days (/7.5)			17.00
+Pay (217 per day)			3689
+Prev days remaining			47.75
+Days remaining (from 85)			30.75
 
-My thinking (and seems to be Justins too) is that insecticide treatments will always be imperfect, so there are always going to be resistants that survive.
+claimed June 10th :
+april, may :
+Days (/7.5)			12.00
+Prev days remaining			59.75
+Days remaining (from 85)			47.75
 
-Poor application seems likely to reduce the selection pressure on resistance by reducing the number of susceptibles that are killed.
+claim Aug 31
+Days (/7.5)			22.00
+Pay (217 per day)			4774
+Prev days remaining			47.75
+Days remaining (from 85)			25.75
 
-~ in discussion mention migration, if susceptible individuals are migrating in this will reduce rate of resistance development.
+193.125 to use up
 
-~ Justin 1/12/16 said that they hear the msg that sub-lethal dosing accelerates resistance
+Sep - Nov 25 2016
+168/7.5 = 22.4
+add some of Bayer time in to use up. 
 
-~ ? rewrite text that refers to the first 4 panel fig
+~~ for linkage disequilibrium it will be cool to be able to put the gpirm LD figures (from plot_ld_gpirm) on a common scale for mixtures & sequences 
+ 
+~ reaqainting myself with resistance code 
+ 
+~ thinking about SSI code review, I had a quick look, current call is not open, there is a self-evaluation but it is mostly focused on identifying whether the software is good for users. I would like to know how best to modify the software to make it more useable by us and potentially others in future.
+
+If we wanted to get it reviewed I would probably first need to improve the 'getting started' and 'explaining what it does' documentation first.
+
+Came across paper citing Levick paper : Huijben2017
+
+A greater understanding of the general evolutionary principles that are at the core of emerging resistance are urgently needed if we are to develop improved resistance management strategies with the ultimate goal to achieve a malaria-free world.
+
+In this review we discuss the evolutionary consequences of the way we currently implement antimalarial interventions and how evolutionary principles can be applied to extend the lifespan of current and novel interventions. The emergence and spread of resistant parasites and mosquitoes is a result of simple Darwinian principles of fitness costs/benefits in the presence/absence of the drug or insecticide. When the failure of malaria interventions is seen as an evolutionary process, i.e. the outcome of the competitive interactions between wildtype (susceptible) and mutant (resistant) organisms, resistance management strategies can be designed to minimize the fitness of mutants, hence slowing down the spread of resistance.
+...
+In other words, mutant parasites and mosquitoes only spread when there is sufficient chemical pressure and will reduce in frequency in the absence of this pressure if the associated fitness cost is sufficiently high. As this cost of resistance is the Achilles heel of resistant parasite and mosquito populations, for effective resistance management strategies we need to create an environmental context where the benefit of resistance is low and the fitness cost high.
+...
+While it is obvious that mono-application of insecticides will pave the path for rapid evolution of resistance, it is not at all clear which of the above resistance management strategies should be deployed to maximally deter resistance evolution. What is even less clear is how to determine the optimal deployment conditions (REX Consortium, 2013): How frequently should insecticides be rotated? What spatial scale is needed for mosaic application? The answer to these questions lies in understanding the ecology and evolution of resistant mosquitoes: what are the fitness costs/benefits in the presence/absence of insecticide exposure and what are the patterns of mosquito gene flow? These parameters are likely to differ between (classes of) insecticides, different environments and different vector species, meaning that one size does not fit all when it comes to resistance management. But the key requirement for any strategy to work is to select costly resistance mutations that have a selective disadvantage in absence the insecticide.
+
+Mathematical models will be of great value to predict the efficacy of the various resistance management strategies, especially as large-scale field trials whereby different strategies are evaluated will be expensive and require years of testing, a luxury we do not have. A recent model predicts that insecticide mixtures are a favoured resistance management strategy when insecticide effectiveness is high and insecticide exposure low. If the insecticides do not reliably kill sensitive vectors, sequential deployment appears to be a more robust strategy (Levick, South, & Hastings, 2017).
+ 
+A greater understanding of the general evolutionary principles that are at the core of emerging resistance are urgently needed, and will allow us to develop improved resistance management strategies for both drugs and insecticides, as has been argued in various other disciplines, including herbicide (Neve, 2007) and cancer resistance management (Enriquez-Navas, Wojtkowiak, & Gatenby, 2015). This involves a greater investment in modelling evolutionary dynamics and performing lab and (semi)field trials to develop and test novel resistance management strategies (which include techniques such as mosaics, rotations, mixtures, refugees, and/or the combination of various (non)chemical interventions).
+
+An additional obstacle is that when it comes to evolutionary principles, there is a general disconnect between the academic world and policy makers ...
+
+Therefore we should think ahead, assume evolution will happen, and wear our evolutionary hat at all times when rolling out existing and new interventions.
+
+Refs that look good :
+Ocampo, D., & Booth, M. (2016). The application of evolutionary medicine principles for sustainable malaria control: a scoping study. Malaria Journal, 15, 383. https://doi.org/10.1186/s12936-016-1446-8
+
+Volkman, S. K., Herman, J., Lukens, A. K., & Hartl, D. L. (2017). Genome-wide association studies of drug-resistance determinants. Trends in Parasitology, 33(3), 214–230. https://doi.org/10.1016/j.pt.2016.10.001
+ 
+Sternberg 2017 Insights from agriculture for the management of insecticide resistance in disease vectors.
+
+Moreover, we emphasize that the success of insecticide resistance management strategies is strongly dependent on the biological specifics of each system. We suggest that the biological, operational, and regulatory differences between agriculture and public health limit the wholesale transfer of knowledge and practices from one system to the other. Nonetheless, there are some valuable insights from agriculture that could assist in advancing the existing Global Plan for Insecticide Resistance Management framework.
+ 
+Ooo a newly accepted paper modelling IR strategies in Evolutionary Applications :
+
+Sudo M, Takahashi D, Andow DA, Suzuki Y, Yamanaka T (2017) Optimal management strategy of insecticide resistance under various insect life histories: heterogeneous timing of selection and inter-patch dispersal. Evolutionary Applications, online in advance of print. http://dx.doi.org/10.1111/eva.12550
+
+Accepted manuscript online: 10 September 2017
+DOI: 10.1111/eva.12550
+ 
+http://www.sudori.info/english.html 
+ 
+The simulations demonstrated the optimality of the mixture strategy either when insecticide efficacy was incomplete or when some part of the population disperses between patches before mating. The rotation strategy, which uses one insecticide on one pest generation and a different one on the next, did not differ from sequential usage in the time to resistance, except when dominance was low. It was the optimal strategy when insecticide efficacy was high and pre-mating selection and dispersal occur. 
+ 
+With this plethora of possible management strategies, a theory that integrates
+them would be beneficial for all stakeholders, including theoretical and empirical
+ecologists, field practitioners and farmers. Such a theory could allow ready comparison
+of the effectiveness of alternative strategies, facilitating the decision-making and the
+development of policy. With the acceleration of the rate of resistance evolution and the
+withdrawal of toxins, and the deceleration of discovery of new toxins (Bielza et al., 2008),
+it is urgent to improve resistance management and to know when and how we should
+use each strategy. Particularly we need to evaluate the relative advantage among the
+strategies for use of multiple toxins, i.e., rotation or mixture, to prolong their life spans.
+
+Recently the REX Consortium reviewed 16 published theoretical papers and found
+that the mixture strategy was superior to the rotation strategy in 14 cases, with one
+case the opposite and another indeterminant (REX Consortium, 2013). On the other
+hand, the majority of empirical researchers is still skeptical about the mixture strategy
+(IRAC, 2012). This is partly because rotation intuitively sounds better than mixture;
+mixture intensifies the selection pressure while rotation relaxes it (Denholm & Rowland,
+1992). We suspect that empirical researchers have a fundamental distrust of the simple
+assumptions in many theoretical models. 
+...
+Both delaying resistance evolution and suppressing pest populations are essential, while many models
+merely report the time to resistance (but see Peck & Ellner, 1997; Peck et al., 1999).
+...
+Though our model assumes more realistic life histories
+and insecticide applications, we made its structure minimally simple as the basic
+formulation in the Comins' model by having two-patches (Comins, 1977)
+...
+In this study, we apply the insecticides during
+the juvenile and/or adult stages in three different management strategies, sequential,
+rotation, and mixture.
+...
+In the general
+model, populations pass through eight events, sequentially, (I) juvenile selection, (II) densitydependent
+survival, (III) pre-mating dispersal, (IV) pre-mating selection, (V) mating, (VI) post-mating
+dispersal, (VII) post-mating selection, and (VIII) oviposition (Fig. 1).
+...
+
+All the simulations were executed using R!
+R source code used is from the Dryad Digital Repository:
+http://dx.doi.org/10.5061/dryad.4gv44
+
+It's written in Rcpp and is a little greek to me, source functions are here. I might be able to load package & call them without having to tinker with code.
+C:\Dropbox\resistance LSTM\Sudo2017\ResistanceDLDP\src\DLDP_source.cpp
+ 
+ 
+ 
+ 
+### TO DO  
+
+~ read Sudo 2017
+~ send Sudo2017 to Ian
+~ read Sternberg 2017
+~ read Ocampo 2016
+~ send Huijben2017 to IVCC including a quote saying how important this work is.
+
+~ reaqaint myself with resistance code and improve documentation and testing
+
+~ think about SSI code review grant, we could submit with what we want to change. While it's in review I could focus on rotations.
+
+~ how can we represent a rotation within the existing resistance code ?
+~ if it was sufficiently easy then maybe we should focus on that rather than the new method.
 
 
-END of paper2 stuff
-
-
-~ think about submitting insecticide resistance outline to wikipedia
-~~ https://en.wikipedia.org/wiki/Pesticide_resistance
 
 ~ check plot_fit_variance() & what it would do if multiple scenarios
 
-
 ~ rationalise what is happening with genotype freq calculations in runModel2 (e.g. think I may be able to remove the 'genotype' matrix). This should help me do the fitness variance calculations that Ian wants for both when LD=0 and LD is present.
 
-
-~~ for linkage disequilibrium it will be cool to be able to put the gpirm LD figures (from plot_ld_gpirm) on a common scale for mixtures & sequences
-
 ~ I think I should probably change the model to be able to represent sequences directly rather than through post-processing. Quite a big job, maybe a week or more.
-
-
 
 Fitness calc.
 I need to work out how to multiply these together.
@@ -7995,45 +8135,8 @@ although I think this just calculates fitness by M&F.
 ~ check whether my R-S calc in calc_fit_rs() is similar to what happens in selection()
 
 
-
 Could I test this SR mean fitness difference as a predictor of time-to-resistance in the full simulation results ? I can probably calculate it for the 10,000 runs with a little work.
-WOuld probably just need to write a short script that queries ggSubset or similar to get input values and creates a new filed to store the new potential predictor.
-
-~ 17/10/16 I had a slight concern that we might not normalise the fitness calcs where we should do, because of whats coming out in the effectiveness vs exposure investigation
-
-~ The main figures that I use in paper2 too. Could they be modified to work in black & white ? Curtis had I1 dashed, I2 dotted and arrows to which are a mixture.
-I might want to save this for paper2 ? Check what they look like in b&w.
-Indeed is there any other way that they could be improved too ? perhaps by putting them closer together & avoiding repetition of axis labels.
-
-In paper2 setting the x-axis constant would help with interpretation. Could set it to 100 for all except figs 11 A&B which I could set to 150.
-
-
-~ can I allow lable of just m & s horizontally for mix & seq in plotcurtis_f2_generic ?
-~ can I create the plot grid that I drew out on paper for paper2. Will the plots show up when made smaller ? Do I need to fiddle with plot boundaries ? Might be able to remove x labels from all but the lower row.
-
-
-
-
-
-   
-~ I could use plot_fit_rs() to produce some figs for paper2 on how inputs influence fitness maybe initially for single locus ? then to include exposure need to show genotype popn fitness.   
-
-~ do I completely have it straight in my head what the model is doing re niches ? Yes I think I do now.
-
-~ confirm best terminology for fitness calcs.
-
-~ in the code I use NicheFitness, then multiplied by exposure to give GenotypeFitness, I don't think either naming scheme is quite right yet ... locusFitness is calcualted for each niche too ...
-
-Locus fitness : 	SS = 1-effectiveness
-		RS = 1-effectiveness + (dominance*selection coeff.)
-		RR = 1-effectiveness + selection coeff.
-
-Allele fitness : 	SS1SS2 = SS * SS
-		SS1RS2 = SS * RS
-		…
-		RR1RR2 = RR * RR
-
-Genotype fitness = Allele fitness * exposure to insecticide
+Would probably just need to write a short script that queries ggSubset or similar to get input values and creates a new field to store the new potential predictor.
 
 
 List of other tidying things todo if/when I get proper time (oct 2016)
@@ -8108,7 +8211,6 @@ Could put the new outputs in together or in a separate UI.
 set up some unit tests for the fitness functions
 
 
-https://www.software.ac.uk/software-evaluation-guide
 
 
 
@@ -8144,10 +8246,6 @@ dominance (property of the gene)
 ~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ? Ian explained that this was as expected, but I need to confirm my understanding.
 
 
-~ **check this from above**
-~ I probably need to get straighter in my head how dominance works.
-Does dominance effect the relative performance of the 2 insecticides where mosquitos are exposed to both. i.e. Does high dominance of the new allele mean that a mosquito is more likely to survive the presence of the old insecticide ?
-
 
 Potential for me to look at in a later paper :
 Differential exposure of males & females. (I have shown exposure is important so this could have a big effect).
@@ -8182,9 +8280,6 @@ runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , ex
 1. create a vignette that shows how best to run current model
 1. fix the testthat tests to avoid new input addition
 
-Remember.
-It is a 2 locus model. One locus for each insecticide. At each locus there are 2 alleles. This gives a total of 9 genotypes if the position of the alleles is ignored. 
-
 
 Good simple test
 ```
@@ -8192,9 +8287,6 @@ input <- setInputOneScenario(max_gen=5)
 tst2 <- runModel2(input)
 tst <- runModel(input)
 ```
-
-
-
 
 #### inputs
 ** a ** exposure to insecticide
@@ -8204,7 +8296,6 @@ tst <- runModel(input)
 ** h ** dominance coefficient
 ** z ** fitness cost of resistance allele in no insecticide
 ** niche_ ** insecticide niche toggle
-
 
 
 ### outputs ###
@@ -8238,41 +8329,12 @@ EAP:PEAP
 Phase-2 auth:MSCHAPV2
 Scroll down to pswd.
 
-# time
-june :
-Hours			127:45:00
-Hours rounded			127.50
-Days (/7.5)			17.00
-Pay (217 per day)			3689
-Prev days remaining			47.75
-Days remaining (from 85)			30.75
-
-claimed June 10th :
-april, may :
-Days (/7.5)			12.00
-Prev days remaining			59.75
-Days remaining (from 85)			47.75
-
-claim Aug 31
-Days (/7.5)			22.00
-Pay (217 per day)			4774
-Prev days remaining			47.75
-Days remaining (from 85)			25.75
-
-193.125 to use up
-
-Sep - Nov 25 2016
-168/7.5 = 22.4
-add some of Bayer time in to use up.
-
 # start a new project
 1. create new repo on github
 1. create RStudio project from github repo
 + To get ssh push working.
 + RStudio Tools, Shell
 + git remote set-url origin git@github.com:AndySouth/resistance.git
-
-
 
 # to fix git problem (if I amend a commit I've already pushed)
 git reset HEAD@{1}
@@ -8284,51 +8346,6 @@ this takes git back to before the last commit (from ohshitgit.com)
 1. runModel2.r          : runs model for the passed scenarios
 1. paper1_results_figs_slimmed_50_rr.Rmd : final figures for paper
 
-_CUT bits from paper2 to go somewhere else :_
-_For those who distrust models, work in a moth and genetically modified brocolli system has shown that toxins used in combination can delay the onset of resistance in a way that is consistent with theoretical models [@Zhao2003]._
 
-_Insecticide resistance becomes a problem when genes coding for resistance firstly arise in a population and secondly increase in frequency. We concern ourselves with this second process of how insecticide resistance increases in frequency within a population. It is likely that genes conferring resistance are present in populations even prior to exposure to novel insecticides thus leading to the potential for selection [@Liu2015]. The changing frequency of insecticide resistance is a population genetic process that can be influenced by (among others) the parameters outlined in Table 1._
-
-_The mechanisms involved in the response of resistance in mixtures are summarised in Table3. Whether a mixture or sequence is favoured for reducing the spread of resistance will depend on these mechanisms and is summarised in Table 4._
-
-
-How do the rest of our results relate to recommendations that have been produced by WHO[@WHO2012], IRAC[@IRAC2011] and FAO[@FAO2012] ?
-
-[@Birget2015] 
-We show that indoor use of insecticides leads to less selection pressure than their use as larvicides.
-Reasons for relatively low selection pressure by adulticides
-(i) males are not affected by the ITNs
-(ii) insecticides are also repellents, keeping mosquitoes at bay from contacting the insecticide but also driving them to bite either people who do not use the insecticide or alternative hosts.
-
-Relevance of these mechanisms in the field e.g. exposure can be reduced if either insecticide has a repellent effect, which can be set in formulation. [@Birget2015a] mention this not for resistance but for ITNs with repellency requiring higher coverage for elimination)
-
-[@Kliot2012]
-fitness costs associated with insecticide resistance
-mini-review, not very good. No mention of the magnitude of costs.
-
-Good review of tactics for IRM including mention of mixtures and new AIs [@Denholm1992]
-"Once developed and marketed, new products introduce a fresh challenge how to exploit their characteristics while restricting exposure to preserve their effectiveness." 
-
-(@) In a mixture each insecticide reduces the rate of increase in resistance to the other by killing individuals that are resistant to the other.
-
-(@) In a mixture higher effectiveness of either insecticide kills more individuals resistant to the other and thus increases time-to-resistance for the other. Thus although increasing effectiveness of an insecticide decreases time-to-resistance when used alone, when used in a mixture time-to-resistance for both insecticides is increased.
-
-(@) For a mixture of 2 insecticides with differing effectiveness. Resistance to the insecticide with a greater effectiveness increases faster. The less effective insecticide is 'protected' by the more effective. Resistance to the less effective insecticide increases slowly until resistance to the more effective insecticide reaches a high level.
-
-The latter is as expected because it reduces the selective advantage of resistance. 
-
-For single insecticide use resistance responded identically to changing exposure and effectiveness (compare Fig 3A to 3B). This makes sense as vector kill is effectively a product of exposure times effectiveness. For example exposing 50% of a  population to an insecticide which is 75% effective would be expected to have the same result as exposing 75% of the population to one which is 50% effective. This observation points to the mechanism by which increasing both exposure and effectiveness lead to a faster increase in resistance. In both cases the increased deaths of susceptible vectors cause a higher selection pressure that can explain the faster increase.
-
-The pattern of more rapid increase in resistance at higher dominance of restoration levels (Fig 3C) can be explained by increased survival of heterozygotes in the presence of the insecticide. Higher dominance of the resistant allele causes it to contribute more to the phenotype of the heterozygotes leading to higher survival. Thus selection pressure for the resistance allele will be increased because it confers more of an advantage when only present on one chromosome. The faster development of resistance under higher resistance-restoration (Fig 3D) can be explained by it's effect on the survival of the resistant genotypes. Resistance-restoration restores the survival of resistant genotypes in the presence of the insecticide back towards what it would be in the absence of the insecticide, thus increasing the selective advantage of the resistance allele. The effect of the starting frequency of resistance (Fig 4) is the most different from the other inputs. Simply, when starting from a higher frequency of resistance there is a smaller change to make to reach the higher resistance thresholds.
-
-[@Roush1989] 
-Predicting the time to resistance or accurately simulating its development requires very detailed information on initial gene frequencies, genotypic fitnesses, and many other factors that are difficult to measure. However, choosing between options requires far less information. The primary
-purposes of this paper are to demonstrate that choosing the correct resistance
-management tactics can be a straightforward process and to suggest how such
-choices can be made on the basis of current information, or when current
-information is inadequate, how the necessary data might be gathered. In particular,
-it will be questioned whether species-specific simulation models and information on
-the number of genes controlling resistance or fitness disadvantages caused by
-resistance are necessary.
 
                               
