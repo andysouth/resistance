@@ -3,7 +3,8 @@ title: "sensiAnPaper1All"
 output: html_document
 ---
 
-### All code for the sensitivity analysis for the first paper
+### code to start the sensitivity analysis for the first paper
+### main analyses of results is in : paper1_results_figs_slimmed_50_rr
 
 The main question is under which scenarios are mixtures better than sequential ?
 
@@ -80,7 +81,6 @@ The main question is under which scenarios are mixtures better than sequential ?
   #inputs : inAndOutMix
   #find time to criticalPoint for EITHER insecticide in mixture  
   resistPointsMix_1 <- findResistancePoints(listOutMix, locus='either')  
-  #todo - to be comparable I think this should be for when resistance to BOTH insecticides is reached
   
   #3) mixture2 : when resistance to one insecticide in the mixture reached, switch to sole use of the 
   #   other until that too reaches the critical point. Record total time.
