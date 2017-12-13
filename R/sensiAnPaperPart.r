@@ -44,11 +44,7 @@ sensiAnPaperPart <- function( nScenarios = 10,
     
     max_gen <- 500
     
-    #insecticide2 is always rarer than insecticide1 (because P_2 is multiplied by P_1)
-    #P_1 <- runif(1, min=0.01, max=0.1)
-    #possible bug, i think this should be max=1 rather than max=100
-    #P_2 <- runif(1, min=0.01, max=100) * P_1
-    #now both set to be independent of each other
+    #independent
     #P_1 <- runif(1, min=0.0001, max=0.1)    
     #P_2 <- runif(1, min=0.0001, max=0.1)
     #now set to log-uniform 
