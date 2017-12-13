@@ -7313,6 +7313,19 @@ runcurtis_f2( recomb_rate=0.001, max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A
  
 So even at very low recombination mixtures can be better. Maybe come back to this in a follow-up LD paper.
  
+# 12/2017 after paper review : fig 8D in paper2 with a new & old insecticide, mix slower
+runcurtis_f2( recomb_rate=0.5, max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+# at recom rate 0.01 mixture still slower than sequence
+runcurtis_f2( recomb_rate=0.01, max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+# at recom rate 0.001 mixture sped up so its now same as sequence
+runcurtis_f2( recomb_rate=0.001, max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+ 
+Interestingly changing the recomb rate barely effects the difference between the rate of rise of the new insecticide in the presence and absence of the old one. Which is the part suggested in GPIRM. Instead lower recombination makes the curve for the old insecticide in a mixture steeper (closer to that when it is used alone), but only after the new insecticide has 'worn off'.
+
+Maybe I should setup a UI to show this before VCWG 2018.
+ 
 From Liu 2015
 Insecticide resistance has been proposed to be a preadaptive phenomenon in the sense that,
 prior to an organism’s exposure to a stressor (in this case, a mosquito’s exposure to an insecticide),
@@ -8065,17 +8078,442 @@ http://dx.doi.org/10.5061/dryad.4gv44
 
 It's written in Rcpp and is a little greek to me, source functions are here. I might be able to load package & call them without having to tinker with code.
 C:\Dropbox\resistance LSTM\Sudo2017\ResistanceDLDP\src\DLDP_source.cpp
+...
+The performance of the rotation strategy is always equal to or better than the sequential use of each insecticide, but it is optimal only under a few conditions. When systemic insecticides are used (s ≅ 0), the rotation strategy performs better than the mixture strategy when there is pre-mating dispersal combined with the pre-mating
+adult selection (Fig. 2, rows 2 and 4, columns 1, 2, 5, and 6). This advantage stems from the alternating selection in the rotation, which allows susceptible alleles of the unselected toxin to increase in alternating generations in the treated patch.
+...
+It has been a longstanding debate about whether the rotation or mixture strategy will be most effective for pesticide resistance management. Our results support the robustness of the mixture strategy for non-high-dose insecticides when insecticide application is
+imperfect or a refuge supplies susceptible insects to the mating pool and the initial resistance frequency is low. We showed this superiority using a mechanistic model applied to a variety of diploid insect life histories. Although the REX Consortium reported a similar conclusion, they merely counted the number of theoretical studies that compared the rotation and mixture strategies (REX Consortium, 2013). We found
+that the mixture strategy shares the same mechanism as the HDR strategy to delay resistance evolution as suggested by Ives et al. (2011).
+...
+
+
+Should I submit Malaria J. article to preprint ?
+https://en.wikipedia.org/wiki/Manuscript_(publishing)
+
+In January 2017, the Medical Research Council announced that they will now be actively supporting preprints with effect from April 2017.[8] Also in January 2017, Wellcome Trust stated that they will now accept preprints in grant applications.[9]
+
+PeerJ PrePrints is a free preprint server operated by PeerJ. Articles submitted undergo a basic screening process but are not peer-reviewed. Commenting is allowed by any registered user, and download and pageview data are supplied. All articles are published with a CC-BY license. As of September 2016, 2,439 articles have been made available.[20] Zenodo is a repository for research data that has been used also as preprint repository, because offers document preview and a DOI number for the submitted document. 
+ 
+The e-print archive arXiv (pronounced "archive") is one of the best-known preprint servers. It was created by Paul Ginsparg in 1991 at Los Alamos National Laboratory for the purpose of distributing theoretical high-energy physics preprints.[25] In 2001, arXiv.org moved to Cornell University and now encompasses the fields of physics, mathematics, computer science, quantitative biology, quantitative finance, statistics.
+
+*4/10/17*
+~ reviewing resistance code and thinking how it could be extended to 3+ insecticides 
+ 
+~ can I design more flexible arrays ?
+~ e.g. just this simple example, how could it be extended to 3+ niches
+a_nichetog   <- array_named( niche1=c('0','a','A'), niche2=c('0','b','B') )
+ 
+static way 
+array_named( niche1=c('0','a','A'), niche2=c('0','b','B'), niche3=c('0','c','C') ) 
+ 
+This sorts the problem with the names of the dimnames, but would still be tricky to get the c('0','c','C') in the example above. 
+ 
+array_named_flex <- function(namesdimnames, ...)
+{
+  a_ <- array(0, dim = lengths(list(...)), dimnames = list(...))
+  names(dimnames(a_)) <- namesdimnames
+  return(a_)
+} 
+
+Better to just be able to build up the list of args for the array_named function. Probably just put in a list & use do.call ?
+ 
+l_s <- list(sex=c("f","m")) 
+do.call(array_named,l_s) 
+ 
+nearly there but how to name the components of the list from a vector ? 
+names(l_s) <- "a1"
+
+l_s2 <- list(c("f","m"),c(1,2)) #note dimensions can be named with numbers too
+names(l_s2) <- c("a1","a2")
+do.call(array_named,l_s2) 
+ 
+Cool getting there !!
+One solution is to create an un-named list of the dimnames first.
+Then to name these dimnames from a vector (which can be flexibly created in the code)
+Then to call do.call(array_named,l_s2)
+
+so for the example above
+array_named( niche1=c('0','a','A'), niche2=c('0','b','B'), niche3=c('0','c','C') )
+instead :
+l_s2 <- list(c('0','a','A'), c('0','b','B'), c('0','c','C')) 
+names(l_s2) <- c("niche1","niche2","niche3")
+do.call(array_named,l_s2)
+
+Actually I probably wouldn't want to use the ABC notation because it is reduntant, the position in niche1 2 or 3 is indicated by the position in the array 
+ 
+So it could be :
+num_insecticides <- 4
+# list(c()) is important below to create one list for each dim
+l_dimnames <- rep(list(c('no','lo','hi')), num_insecticides)
+names(l_dimnames) <- paste0("niche", 1:num_insecticides)
+a_4 <- do.call(array_named,l_dimnames) 
+ 
+Hurrah ! this works.
+
+But I should just think for a minute. Why am I using arrays ? I think it's to make the indexing transparent and to make it easy to sum across dimensions. 
+But arrays are not common modern R practice. Could we do this with dataframes to be more conventional and take advantage of more recent R tools ?
+
+A dataframe for this could look like :
+
+insecticide niche toggle
+1           no    1
+1           lo    0
+1           hi    1
+2           no    1
+2           ..    ..
+..
+3
+
+For other arrays
+
+a_fitnic  <- array_named( locus1 = c('SS1','RS1','RR1'), locus2 = c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B') )
+
+Does this capture all of the dimensions ?
+insecticide niche haplotype fitness
+1           no    SS        1
+1           lo    RS        0.5
+1           hi    RR        1
+2           no    SS        1
+2           ..    ..
+..
+3
+
+Aha! this can reshape an array, and responseName determines the name of the column values are put into 
+
+a_fitnic <- fitnessNiche() 
+
+df_fitnic <- as.data.frame.table(a_fitnic, responseName = 'fitness', stringsAsFactors = FALSE)
+
+   locus1 locus2 niche1 niche2  fitness
+1     SS1    SS2      0      0 1.000000
+2     RS1    SS2      0      0 1.000000
+3     RR1    SS2      0      0 1.000000
+4     SS1    RS2      0      0 1.000000
+5     RS1    RS2      0      0 1.000000
+6     RR1    RS2      0      0 1.000000
+7     SS1    RR2      0      0 1.000000
+8     RS1    RR2      0      0 1.000000
+9     RR1    RR2      0      0 1.000000
+10    SS1    SS2      a      0 1.000000
+11    RS1    SS2      a      0 1.000000
+12    RR1    SS2      a      0 1.000000
+13    SS1    RS2      a      0 1.000000
+14    RS1    RS2      a      0 1.000000
+15    RR1    RS2      a      0 1.000000
+16    SS1    RR2      a      0 1.000000
+17    RS1    RR2      a      0 1.000000
+18    RR1    RR2      a      0 1.000000
+19    SS1    SS2      A      0 0.500000
+20    RS1    SS2      A      0 0.625000
+21    RR1    SS2      A      0 0.750000
+22    SS1    RS2      A      0 0.500000
+23    RS1    RS2      A      0 0.625000
+24    RR1    RS2      A      0 0.750000
+25    SS1    RR2      A      0 0.500000
+26    RS1    RR2      A      0 0.625000
+27    RR1    RR2      A      0 0.750000
+28    SS1    SS2      0      b 1.000000
+29    RS1    SS2      0      b 1.000000
+30    RR1    SS2      0      b 1.000000
+31    SS1    RS2      0      b 1.000000
+32    RS1    RS2      0      b 1.000000
+33    RR1    RS2      0      b 1.000000
+34    SS1    RR2      0      b 1.000000
+35    RS1    RR2      0      b 1.000000
+36    RR1    RR2      0      b 1.000000
+37    SS1    SS2      a      b 1.000000
+38    RS1    SS2      a      b 1.000000
+39    RR1    SS2      a      b 1.000000
+40    SS1    RS2      a      b 1.000000
+41    RS1    RS2      a      b 1.000000
+42    RR1    RS2      a      b 1.000000
+43    SS1    RR2      a      b 1.000000
+44    RS1    RR2      a      b 1.000000
+45    RR1    RR2      a      b 1.000000
+46    SS1    SS2      A      b 0.500000
+47    RS1    SS2      A      b 0.625000
+48    RR1    SS2      A      b 0.750000
+49    SS1    RS2      A      b 0.500000
+50    RS1    RS2      A      b 0.625000
+51    RR1    RS2      A      b 0.750000
+52    SS1    RR2      A      b 0.500000
+53    RS1    RR2      A      b 0.625000
+54    RR1    RR2      A      b 0.750000
+55    SS1    SS2      0      B 0.500000
+56    RS1    SS2      0      B 0.500000
+57    RR1    SS2      0      B 0.500000
+58    SS1    RS2      0      B 0.625000
+59    RS1    RS2      0      B 0.625000
+60    RR1    RS2      0      B 0.625000
+61    SS1    RR2      0      B 0.750000
+62    RS1    RR2      0      B 0.750000
+63    RR1    RR2      0      B 0.750000
+64    SS1    SS2      a      B 0.500000
+65    RS1    SS2      a      B 0.500000
+66    RR1    SS2      a      B 0.500000
+67    SS1    RS2      a      B 0.625000
+68    RS1    RS2      a      B 0.625000
+69    RR1    RS2      a      B 0.625000
+70    SS1    RR2      a      B 0.750000
+71    RS1    RR2      a      B 0.750000
+72    RR1    RR2      a      B 0.750000
+73    SS1    SS2      A      B 0.250000
+74    RS1    SS2      A      B 0.312500
+75    RR1    SS2      A      B 0.375000
+76    SS1    RS2      A      B 0.312500
+77    RS1    RS2      A      B 0.390625
+78    RR1    RS2      A      B 0.468750
+79    SS1    RR2      A      B 0.375000
+80    RS1    RR2      A      B 0.468750
+81    RR1    RR2      A      B 0.562500
+ 
+Can then filter using dplyr :
+library(dplyr)
+filter(df_fitnic, locus1=='RR1')
+ 
+But I don't think this is as compact as using the array dimension names for referencing.
+
+BUT then again a dataframe approach might be clearer for some things.
+I need to look into more.
+ 
+Starting with one of the earlier arrays, how could it cope with flexible number of insecticides ?
+
+a_fitloc works in a slightly different way and I think would be easier to make flexible. 
+
+a_fitloc   <- array_named( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+
+num_insecticides <- 4
+loci <- paste0(c('SS','RS','RR'),rep(1:num_insecticides,each=3))
+a_fitloc <- array_named( loci=loci, exposure=c('no','lo','hi') )
+ 
+OR as in rotations
+a_fitloc<- array_named(insecticide=1:n_insecticides, genotype=c('SS','RS', 'RR'), exposure=c('no','lo', 'hi')) 
+ 
+*11/12/2017*
+addressing referees comments (saved in word doc)
+
+First looking at linkage disequilibrium. It might be good to include a plot of LD.
+
+Perhaps just for mixture ? not sure that I can for sequence ?
+listOut <- resistSimple()
+plotlinkage(listOut$results[[1]])
+plotlinkage(listOut$results[[1]], plot_dprime = FALSE) # to show just d
+
+This is the scenario I want to look at. 
+# 12/2017 after paper review : fig 8D in paper2 with a new & old insecticide, mix slower
+listOut <- runcurtis_f2( recomb_rate=0.5, max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), ylab="", ylabs = FALSE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 150, labelMixSeqRatio = 1 )
+
+#in listOut from runcurtis_f2, 1=I1, 2=I2, 3=mix
+I want to compare the new insecticide on it's own listOut$results[[1]] i think, and in a mixture listOut$results[[3]] 
+
+plotlinkage(listOut$results[[1]], plot_dprime = FALSE)
+plotlinkage(listOut$results[[3]], plot_dprime = FALSE)
+
+these seem to show negative LD ?
+
+we are mostly interested in what happens in the first 80 generations, by that time the frequency of I1 has reached 0.5 both alone and in the mixture.
+
+par(mfrow=c(3,1))
+plotlinkage(listOut$results[[1]], plot_d = TRUE, max_gen_plot = 80, main = "insecticide1 alone")
+plotlinkage(listOut$results[[2]], plot_d = TRUE, max_gen_plot = 80, main = "insecticide2 alone")
+plotlinkage(listOut$results[[3]], plot_d = TRUE, max_gen_plot = 80, main = "mixture")
+
+It's not obvious to me what this shows. Seems that I1 ld negative, I2 ld positive, mix ld stays around 0.
+
+check that insecticide2 is the old one ? 
+hch is red, amat, & 3rd matrix passed. so is insecticide1.
+
+Good papers in PLOS on malaria elimination :
+
+combination interventions and modelling :
+http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1002453
+"The interface between modelling and implementation has not developed as was perhaps envisaged, in terms of appropriate portals to allow 'end users' access to relevant software and explore the effect of varying conditions on the ideal choice of control measures.""
+
+
+resistance : malERA2017_updated-research-agenda-resistance-in-malaria.pdf
+
+"What are the benefits of insecticide rotations, mixtures, or spatial mosaics of different compounds?
+What is the impact of adding nonpyrethroid IRS where LLINs are already deployed
+at high coverage and quality? When should new insecticides be adopted? What is the ideal
+rotation period or mosaic configuration? How many insecticide classes are needed for effective
+rotation or mosaic strategies? Despite the absence of data to answer these questions, some
+countries have already developed operational frameworks for resistance management that
+could be adopted by other programmes.""
+ 
+*12/12/17* 
+ 
+revisiting question of poor implementation following reviewers comment.
+
+#Nick Hamon, IVCC
+A lot of work was done in the 1990s in ag….looking at sub-lethal doses of pesticides on resistance development.  Sub-lethal can come from poor application, poor formulations (cheap generics perhaps), under-application/dosing (to save money)….. and from everything I have read this leads to an acceleration of the development of resistance.  I suspect a quick literature search will pull out everything you need here, and more.  I believe this has been demonstrated with insecticides, fungicides and herbicides
+
+#Justin
+http://www.fao.org/fileadmin/templates/agphome/documents/Pests_Pesticides/Code/FAO_RMG_Sept_12.pdf
+See page 12.
+ 
+I have never been particularly convinced about this topic – if you apply a less effective intervention then the selection pressure declines, meaning you have the potential for more diversity to remain in the gene pool (right?). I guess the line about only leaving heterozygous resistance genes at lower dose rates makes sense but then no VC interventions target 100% of the population anyway because male mosquitoes don’t seek blood meals and therefore shouldn’t be exposed to the same selection pressures... Which, to my mind points more and more to environmental exposure (eg. role of agricultural insecticide usage) in certain situations.
+ 
+From Guedes 2017 Sublethal exposure, insecticide resistance, and community stress 
+Doesn't seem to point to any concrete data that poor implementation promotes resistance.
+
+The role and potential consequences of sublethal insecticide exposure for insecticide resistance are frequently neglected, but their relevance may be recognized on three fronts. First, sublethal exposure may delay selection for major single gene resistance while favoring multifac- torial or polygenic resistance [14]. This is the likely consequence of the accumulation of low-level resistance genes and mechanisms (e.g., reduced penetration, behavioral avoidance, etc.) allowing small increases in the magnitude of insecticide resistance distinct from the selection of a major mutation (e.g., altered target site sensitivity)
+leading to a high resistance [14,15]. Furthermore, sublethal stress may also contribute to resistance by promoting increased mutation rates of genes involved in DNA repair, as observed in bacteria and weeds [14,16,17].
+ 
+GOOD PAPER with some good references 
+14. Gressel J: Low pesticide rates may hasten the evolution of resistance by increasing mutation frequencies. Pest Manage. Sci. 2011, 67:253-257. 
+
+The early models of evolution of insecticide,1 fungicide2 andherbicide3,4 resistance were based on the evolution of resistant populations from a fixed low mutation frequency while applying the high, overkill doses then used, which led to major-gene target site resistance. Those models suggested that lower pesticide rates, with their lower selection pressure, might delay the evolution of target site resistance. Indeed, field epidemiology did demonstrate that, within a chemical class, the compounds with less persistence, or used at lower rates did not engender the evolution of pesticide resistance as quickly as the higher selection pressure conditions, where target site resistance did evolve. Whereas the lower rates delayed the evolution of a major gene, target site resistance, a new type of resistance, began appearing when very low rates were used, often lower than the lowest recommended rates; a slow shift of whole populations to slightly higher mean resistance with each subsequent generation.5 This is probably caused by a slow accumulation of small resistance factors.
+
+1 is georghiou 1977
+ 
+The only way to stop  this slow accumulation of small resistance factors is to hit the population  of pests with a higher dose.6 Thus, there is a conundrum with  a no-win situation: low rates delay the evolution of major single  gene resistance, and high rates preclude the accumulation of the  multiplicity of factors leading to multifactorial resistance, whereas  high rates engender the evolution of major gene resistance, and low rates rapidly select for multifactorial resistance.7  
+
+6 Gardner SN,Gressel JandMangel M,A revolving dose strategy to delay the evolution of both quantitative vs.major monogene resistances to pesticides and drugs. Internat J PestManag 44:161–180 (1998).
+
+this gressel paper has an updated 2017 version, see lower.
+7 Gressel J, Catch 22 –mutually exclusive strategies for delaying/preventing polygenically vs. monogenically inherited resistances, in Options 2000, ed. by Ragsdale N. American Chemical Society, Washington, DC, pp. 330–349 (1995).
+ 
+ 
+From Shea 1999 : Strategies to Delay the Evolution of Resistance in Pests: Dose Rotations and Induced Plant Defenses.
+
+The genetic mechanism responsible for resistance implicates the dosage strategy most likely to delay  resistance. Resistance conferred by many incremental changes, each with a small effect, whether by  many different (poly)genes, by gene amplification, or by sequential mutations within a gene, each  increasing resistance (hereafter grouped under the term "quantitative resistance") appears gradually after  selection with low or incrementally increasing doses (Via, 1986, Shaw, 1989, Caretto et al. 1994). In contrast, high doses applied from the start prevent quantitative resistance from accumulating because of the improbability that a large number of resistant alleles required for resistance to the high dose will initially be found in a single individual. Major gene resistance, however, conferred by a single gene  having a large effect rises exponentially at a rate that depends on the dosage (i.e. selection pressure)  applied. Monogenically-resistant populations usually appear to burst forth suddenly after a number of  successive exposures to high doses, as predicted in models (Georghiou & Taylor 1977; Gressel &  Segel, 1978).  Some organisms have evolved resistance by both mono- and quantitative genetic mechanisms  (Raymond, et al. 1989; Devonshire & Field, 1991; Lande, 1983; Crow, 1957; Galun & Khush, 1980;  Putwain et al., 1982) and some organisms have evolved one or the other due to different pesticide or  drug regimes (Gressel, 1995a; McKenzie et al., 1992; Putwain et al., 1982). Major monogene  resistance had been the prevalent cause of pesticide resistance until farmers started reducing doses  (Gressel, 1995b; Gressel et al., 1996), a problem likely to escalate as a result of current environmental  and economic pressures to reduce pesticide use.  Ideally, one would opt to rotate crops or pesticides, and we advocate such rotations as better all around  management strategies. However, some crops cannot be easily rotated (e.g. wheat due to extreme climate  or soil conditions, or orchards) and no alternative pesticides exist to which there is no cross-resistance. In  these situations, we argue for a preventive tactic of rotating low and intermediate doses to delay the  appearance of resistance (Gressel et al., 1996). This strategy delays both types of resistance longer than  continuously applying either a series of only low doses or a series of only high doses. The key notion is  that when quantitative resistance begins to build up after the series of low doses, the intermediate dose  eliminates individuals with quantitative resistance before they accumulate enough of the small genetic  changes to resist that intermediate dose. This resets quantitative resistance back to near its original low  level, as the only survivors are the rare individuals with monogenic resistance. Monogenic resistance  emerges more slowly with the moderate selection pressure of rotating doses than if exclusively intermediate  or high doses were applied. The size of the pest population also affects the probability that there will be  individuals with sufficiently high quantitative resistance to survive the intermediate dosage, so even low  doses must be adequately high to keep pest populations in check. We developed a model to  mathematically test this proposal, incorporating quantitative evolution, major gene evolution, and pest  population dynamics, which was described in detail elsewhere (Gardner et al., 1998).   
+
+Duke 2017 Pesticide dose a parameter with many implications.
+(not very useful)
+The dose used can influence the mechanism of evolved resistance to the pesticide, with high doses favoring target site resistance and low doses favoring other mechanisms. 
+ 
+Lower than toxic doses of toxicants can result in stimulation of growth and other pest parameters such as fecundity or longevity, a phenomenon known as hormesis (40).
+ 
+Gressel 2017 Catch 22: All Doses Select for Resistance. When Will This Happen and How To Slow Evolution?
+
+My summary of Gressel 2017 :
+In agriculture a switch to lower pesticide doses, driven largely by economics, led to progressive selection for quantitative resistance caused by accumulation of numerous mutations of small effect. When doses had been higher these mutations of small effect were insufficient to give higher survival and did not accumulate.
+
+The evolution of quantitative resistance under low doses was promoted by relatively high pest population giving evolution more material to work on.
+
+Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance.
+
+Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
+
+There is also evidence that sublethal doses can increase mutation rates thus increasing the potential for the evolution of polygenic resistance [Gressel2017][Gressel2011].
+ 
+[Curtis1998] on poor implementation effects :
+"If there is any truth in the general belief that low doses select for resistance, this could be due to a failure of low doses to kill resistance heterozygotes." 
+ 
+[Gardner1998][Gardner1999] develop a mathematical model of a revolving dose strategy. Because low doses prompt evolution of polygenic resistance, and high doses prompt monogenic resistance they suggest using low doses for a few generations until quantitative resistance builds up and then applying a high dose that will be sufficient to kill the partially resistant individuals but because only used occasionally will not lead to an increase in the frequency of monogenic resistance.
+
+The model is unusual in that it represents both monogenic and polygenic resistance.
+
+This has yet to be applied in the field [Gressel2017]
+ 
+[Gardner1999] quote :
+"Ideally, one would opt to rotate crops or pesticides, and we advocate such rotations as better all around
+management strategies. However, some crops cannot be easily rotated (e.g. wheat due to extreme climate
+or soil conditions, or orchards) and no alternative pesticides exist to which there is no cross-resistance. In these situations, we argue for a preventive tactic of rotating low and intermediate doses to delay the
+appearance of resistance (Gressel et al., 1996). This strategy delays both types of resistance longer than
+continuously applying either a series of only low doses or a series of only high doses. The key notion is
+that when quantitative resistance begins to build up after the series of low doses, the intermediate dose
+eliminates individuals with quantitative resistance before they accumulate enough of the small genetic
+changes to resist that intermediate dose. This resets quantitative resistance back to near its original low
+level, as the only survivors are the rare individuals with monogenic resistance. Monogenic resistance
+emerges more slowly with the moderate selection pressure of rotating doses than if exclusively intermediate
+or high doses were applied."
+
+This describes the model from 1999 (more details in 98 but text not copy-pasteable)
+In the model, after the pesticide is applied, resistant individuals survive and mate, producing offspring with a Gaussian distribution of quantitative resistance. After each generation of toxin application, the mean quantitative resistance shifts to a higher level that depends on the dose of the pesticide applied. We model the evolution of quantitative resistance according to the standard methods of population genetics (Falconer,1989).
+The major gene conferring resistance (the allele R) also increases in frequency at a rate determined by the
+relative fitnesses of the genotypes RR, rR and rr under a given toxin dose according to standard Mendelian
+genetic models (Crow, 1986). Individuals may survive the toxin as a result of either quantitative or major
+monogene resistance, or both. Alternatively, they may survive because they receive a dose of toxin lower
+than that intended, due to a number of possible factors. For example, field sprays cannot be applied as
+evenly as in the laboratory, some individuals may be sheltered by leaves or clods of dirt, and pests of
+different ages may have different levels of natural resistance.
+ 
+It says to email Gardner for a copy of the code in true basic ... but she died a couple of years ago.
+
+~ downloaded this for possible help estimating model parameters :
+Shi M and Renton M, Numerical algorithms for estimation and calculation of parameters in modelling pest population dynamics and evolution of resistance. Math Biosci 233(2):77–89 (2011).
+
+Glunt2013 thesis UNDERSTANDING THE CONSEQUENCES OF SUB-LETHAL INSECTICIDE CONCENTRATIONS
+FOR INSECTICIDE RESISTANCE MANAGEMENT AND MALARIA CONTROL 
+not very useful for us i think
+
+*looking to find model params to be able to run the model*
+(it would be good to have even just one run where we use field derived parameters)
+
+looking at supplementary material from Rex consortium for empirical papers comparing mixtures and sequences : Of the 10 empirical papers using insecticides none of these use malaria vectors.
+Just one : Georghiou(1983)
+Culex quinquefasciatus (a vector of avian malaria and arboviruses)
+
+*potential sources of data*
+Curtis1985 (from Rawlings 1981) DDT & HCH (lindane an organochlorine )
+Curtis1989 from Kasumba lambda. RS & SS but not RR ?
+Guillet2001 combined nets, mortality & deterrency, not by genotype
+*Kolaczinski2000 pyr & non pyr mortalities for RR/RS/SS/ KDR Table3 & 4
+** best so far: only has one resistance (kdr)
+
+Can I combine data from Curtis1985 & Kolaczinski2000 
+
+In Levick SI we show how we derive inputs.
+Curtis1985
+DDT fitness SS 0.27 RS 0.31 RR 0.5
+HCH         SS 0    RS 0.07 RR 0.43
+
+check how I get effectiveness, dominance and resistance restoration from this in paper1 code.
+
+
+I1
+Parameter  | source  | value
+---------------------- | ----------------------------------------------------
+1. Effectiveness | 
+2. Exposure | 
+3. Resistance restoration  | 
+4. Dominance of restoration | 
+5. Frequency  | 
+6. Cost of resistance  |  
+7. Dominance of cost  | 
+
+I2
+Parameter  | source  | value
+---------------------- | ----------------------------------------------------
+1. Effectiveness | 
+2. Exposure | 
+3. Resistance restoration  | 
+4. Dominance of restoration | 
+5. Frequency  | 
+6. Cost of resistance  |  
+7. Dominance of cost  | 
  
  
  
- 
+# brief summary of my current understanding
+High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
+
+Low doses of insecticide are likely to lead to polygenic resistance because small genetic changes provide some advantage over the sublethal effects and accumulate over time. With polygenic resistance lower insecticide doses allow the accumulation of mutations and promote the evolution of resistance.
+
+Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance.
+
+Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
+
+
 ### TO DO  
 
-~ read Sudo 2017
+
+
+
+~ can I design data structures of resizeable arrays that could cope with changing number of insecticides ?
+
+~ set aside a day to go through resistance (& rotation) code with Ian
+~ I feel that we need to be able to reproduce rotation results withing the resistance model, if just for 2 insecticides
+~ do we definitely need the 3 niches ? we haven't really used yet.
+
+
+done ~ read Sudo 2017
 ~ send Sudo2017 to Ian
 ~ read Sternberg 2017
 ~ read Ocampo 2016
-~ send Huijben2017 to IVCC including a quote saying how important this work is.
+done ~ send Huijben2017 to IVCC including a quote saying how important this work is.
 
 ~ reaqaint myself with resistance code and improve documentation and testing
 
@@ -8176,7 +8614,12 @@ sex=c('m','f'), niche1=c('0','a','A'), niche2=c('0','b','B'), niche3=c('0','c','
 fitness by locus from :
 loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') 
 to :
-loci=c('SS1','RS1','RR1','SS2','RS2','RR2','SS3','RS3','RR3'), exposure=c('no','lo','hi')
+n_insecticides <- 4
+loci <- paste0(c('SS','RS','RR'),rep(1:n_insecticides,each=3))
+a_fitloc <- array_named( loci=loci, exposure=c('no','lo','hi') )
+OR as in rotations
+a_fitloc<- array_named(insecticide=1:n_insecticides, genotype=c('SS','RS', 'RR'), exposure=c('no','lo', 'hi'))
+
 
 fitness by niche from :    
 locus1=c('SS1','RS1','RR1'), locus2=c('SS2','RS2','RR2'), niche1=c('0','a','A'), niche2=c('0','b','B')   
@@ -8343,6 +8786,7 @@ this takes git back to before the last commit (from ohshitgit.com)
 # files to do runs
 1. sensiAnPaper1All.Rmd : code to run whole sensitivity analysis & produce plots 
 1. sensiAnPaperPart.r   : sets up param values and runs for one treatment (e.g. mixture, insecticide1)
+1. setInputOneScenario.r: creates input object for each run
 1. runModel2.r          : runs model for the passed scenarios
 1. paper1_results_figs_slimmed_50_rr.Rmd : final figures for paper
 
