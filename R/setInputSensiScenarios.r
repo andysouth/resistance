@@ -1,10 +1,10 @@
 #' set inputs for a sensitivity analysis of multiple scenarios
 #' 
+#' DEPRECATED not used in analysis for Levick et al 2017. sensiAnPaper1All.Rmd used instead
 #' creates a multi-column input matrix which can be passed to runModel() 
 #' You need to pass a range for which parameters you want, as c(min,max).
 #' Scenarios will be created by selecting from a uniform distribution specified by this range.
 #' Any parameters not specified will be set to their default values.
-#' TODO: I might be able to allow parameters to be set to non default values from here too.
 #' 
 #' @param nScenarios number of scenarios to generate 
 #' @param ... parameter ranges to run, passed as name=c(min,max)
