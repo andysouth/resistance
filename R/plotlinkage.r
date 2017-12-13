@@ -8,11 +8,13 @@
 #' @param ylab ylab
 #' @param addLegend whether to add a legend inside plot
 #' @param legpos legend position
+#' @param max_gen_plot optional maximum generation to include in the plot
 #' 
 #' @examples 
 #' #single scenario
 #' listOut <- resistSimple()
 #' plotlinkage(listOut$results[[1]])
+#' plotlinkage(listOut$results[[1]], plot_dprime = FALSE) # to show just d
 
 #' @return list of plot components
 #' @export
@@ -24,7 +26,15 @@ plotlinkage <- function ( mat,
                           xlab="Generation",
                           ylab="Linkage Disequilibrium",
                           addLegend=TRUE,
-                          legpos="topright"){	
+                          legpos="topright",
+                          max_gen_plot=NULL){	
+  
+  # allow just including first x generations
+  # useful when the indices go strange after higher frequencies reached
+  if (!is.null(max_gen_plot)) 
+    {
+     mat <- mat[c(1:max_gen_plot),]
+    }
   
   par(pty="s") #makes plot square	
   
@@ -37,12 +47,14 @@ plotlinkage <- function ( mat,
   
   if (plot_d) ld_concat <- c(ld_male, ld_female)
     
-  if (plot_dprime) ld_concat <- c(ld_concat, ld_prime_m)
+  if (plot_dprime) ld_concat <- c(ld_concat, ld_prime_m, ld_prime_f)
   
   gens <- mat[,1]	
   
+  max_x <- max(gens)
+  
   plot( gens, ld_male, type="n", axes=T,						## Blank square plot
-        xlim=c(1,(max(gens))), ylim=c(min(ld_concat),max(ld_concat)),
+        xlim=c(1,max_x), ylim=c(min(ld_concat),max(ld_concat)),
         xlab=xlab, ylab=ylab, main=main ) #"Linkage disequilibrium over generations.")	
   
   if (plot_d)
@@ -53,13 +65,13 @@ plotlinkage <- function ( mat,
 
   if (plot_dprime)
   {  
-    lines( gens, ld_prime_f, col=adjustcolor("red", alpha.f = 0.5), lty=15 )
-    lines( gens, ld_prime_m, col=adjustcolor("blue", alpha.f = 0.5), lty=16 )
+    lines( gens, ld_prime_f, col=adjustcolor("orange", alpha.f = 0.5), lty=15 )
+    lines( gens, ld_prime_m, col=adjustcolor("green4", alpha.f = 0.5), lty=16 )
   }
   
   if (plot_d & plot_dprime){
     legend( legpos, legend=c("female","male","prime_f","prime_m"), 
-            col=c("red", "blue", "red", "blue"), lty=c(13,14,15,16), bty="n", cex=0.7 )
+            col=c("red", "blue", "orange", "green4"), lty=c(13,14,15,16), bty="n", cex=0.7 )
     
   } else if (plot_d)
   {
@@ -68,7 +80,7 @@ plotlinkage <- function ( mat,
   } else if (plot_dprime)
   {
     legend( legpos, legend=c("prime_f","prime_m"), 
-            col=c("red","blue"), lty=c(15,16), bty="n", cex=0.7 )   
+            col=c("orange", "green4"), lty=c(15,16), bty="n", cex=0.7 )   
   }
   
 }	
