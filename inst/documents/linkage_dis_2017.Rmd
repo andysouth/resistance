@@ -1,0 +1,41 @@
+---
+  title: "linkage disequilibrium"
+  output: pdf_document
+  #output: word_document
+  author: "Andy South"
+  date: "`r Sys.Date()`"
+---
+
+### documenting whats happening with linkage disequilibrium  after review of paper2
+
+```{r,echo=FALSE,results='hide',warning=FALSE}
+  library(resistance)
+  library(ggplot2)
+```
+
+
+### fig 8D in paper2 with a new & old insecticide, mix slower
+
+```{r Fig8, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left'}
+
+listOut <- runcurtis_f2( recomb_rate=0.5, max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, maxX = 150, labelMixSeqRatio = 1 )
+```
+
+### now plot the LD for that scenario
+It's not obvious to me what this shows. 
+Possible that only the mixture one is meaningfull. In the sequential cases resistance to the other insecticide probably remains at 0 and therefore LD is not meaningfull.
+
+```{r, eval=TRUE, echo=FALSE, fig.height=8, fig.width=7, fig.show='hold', fig.align='left'}
+
+#we are mostly interested in what happens in the first 80 generations, by that time the frequency of I1 has reached 0.5 both alone and in the mixture.
+
+#in listOut from runcurtis_f2, 1=I1, 2=I2, 3=mix
+par(mar=c(1.5, 4, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
+par(mfrow=c(3,1))
+
+plotlinkage(listOut$results[[3]], plot_d = TRUE, max_gen_plot = 80, main = "mixture")
+plotlinkage(listOut$results[[1]], plot_d = TRUE, max_gen_plot = 80, main = "insecticide1 alone")
+plotlinkage(listOut$results[[2]], plot_d = TRUE, max_gen_plot = 80, main = "insecticide2 alone")
+
+```
+
