@@ -113,7 +113,6 @@ createInputMatrix <- function(params.csv,
     #	print( paste("Error in female exposures: must total one: ", a.f) )
     #	}
     
-    #todo check setting of all scenario2 params to scenario1
     input[,2] <- input[,1]
   }
   
@@ -140,10 +139,6 @@ createInputMatrix <- function(params.csv,
     ## User enters value of P - frequency of resistance allele at locus 1&2 respectively
     input[5,1] <- 0.01	# locus 1
     input[6,1] <- 0.01	# locus 2
-    
-    ## From this, the function HW will find the proportions of each genotype
-    ## RR = p, RS = pq, SS = q
-    ## P = p = R
     
     ## Recombination ##
     input[7,1] <- 0.5		# recombination rate
