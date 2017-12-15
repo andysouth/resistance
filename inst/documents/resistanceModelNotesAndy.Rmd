@@ -8439,6 +8439,14 @@ Glunt2013 thesis UNDERSTANDING THE CONSEQUENCES OF SUB-LETHAL INSECTICIDE CONCEN
 FOR INSECTICIDE RESISTANCE MANAGEMENT AND MALARIA CONTROL 
 not very useful for us i think
 
+I found this text about costs in a doc in Beths old folder :
+Although the persistence and high prevalence of the DDTR gene suggest that it does not carry a fitness cost (Abdalla, 2008)(Daborn 2002), laboratory studies have demonstrated that there is a noticeable reduction in fecundity and negative alteration of behaviour in Anopheles mosquitoes carrying the Dieldrin resistance gene (Rowland 1991(1), Rowland 1991(2)). 
+
+As it is unlikely that there is a fitness cost associated with possession of the DDTR allele in the absence of insecticide, this was omitted from our version of the model as in the Curtis model. However, the considerable fitness costs associated with dieldrin resistance genes mean that this could make a significant impact in the growth of the R allele in the population, especially when the lower exposure of males to the insecticide is considered. 
+
+Laboratory studies indicate that homozygote resistant mosquitos are 22% less fecund than their susceptible counterparts (Rowlings 1991), with additional fitness costs created by behavioural change caused by the nervous inhibition in the resistant phenotype. From the evidence presented in both Rowlings papers of the fecundity and behavioural costs, we estimated fitness cost of the resistant form in absence of insecticide to be around 40% (-0.4).
+
+
 *looking to find model params to be able to run the model*
 (it would be good to have even just one run where we use field derived parameters)
 
@@ -8447,43 +8455,105 @@ Just one : Georghiou(1983)
 Culex quinquefasciatus (a vector of avian malaria and arboviruses)
 
 *potential sources of data*
-Curtis1985 (from Rawlings 1981) DDT & HCH (lindane an organochlorine )
+Curtis1985 DDT & HCH (lindane an organochlorine )
 Curtis1989 from Kasumba lambda. RS & SS but not RR ?
 Guillet2001 combined nets, mortality & deterrency, not by genotype
-*Kolaczinski2000 pyr & non pyr mortalities for RR/RS/SS/ KDR Table3 & 4
-** best so far: only has one resistance (kdr)
+*Kolaczinski2000 pyr & non pyr mortalities for RR/RS/SS KDR Table3 & 4
+Asidi2004
+Asidi2005 some genotype data for Ace1 but vlow numbers of RR
+*Chandre2000 pyr on kdr RR/RS/SS diff doses 
+*Assogba2014 2 genes together, pyr and ddt, Table 3 %KD
+*Edi2012 pyr & ddt on kdr genotypes, some low sample sizes
+*Essandoh2013 carbamate & fenitrothion(op), see in supp. material
 
-Can I combine data from Curtis1985 & Kolaczinski2000 
 
-In Levick SI we show how we derive inputs.
-Curtis1985
-DDT fitness SS 0.27 RS 0.31 RR 0.5
-HCH         SS 0    RS 0.07 RR 0.43
+see survival_from_genotype_livedead.xls ?
+
+maybe I can produce a table of resultant eff/rr_/dom even if not for this
+
+Can I combine data from Curtis1985 & Kolaczinski2000 ?
+ooo does Kolaczinski2000 give any info on cost ? kind of but alas RS mort in unexposed is lower than SS.
+But combining pyr & ddt is not good because of cross-resistance
+
+In Levick SI we show how we derive inputs (but the exact algebra is not given).
+Curtis1985 (in legend to Fig. 2)
+fitness in presence of insecticide
+DDT SS 0.27 RS 0.31 RR 0.5
+HCH SS 0    RS 0.0007 RR 0.43
 
 check how I get effectiveness, dominance and resistance restoration from this in paper1 code.
+in createInputMatrix() callibration = 1012
+"B (HCH)", "A (DDT)"
+Effectiveness (1-fitness of SS in insecticide)
+    input[27,1] <- 0.73	#Phi SS1 in A
+    input[29,1] <- 1	#Phi SS2 in B
+Exposure 0.9
+Selection coefficient (fitness RR-SS in insecticide)
+    input[39,1] <- 0.23	#in A
+    input[41,1] <- 0.43	#in B
+Resistance restoration = selection coefficient / effectiveness
+A(DDT) 0.23/0.73 = 0.315
+B(HCH) 0.43/1 = 0.43
+
+Dominance of restoration, fitnesses in insecticide (RS-SS)/(RR-SS)
+A(DDT)  (0.31-0.27)/(0.5-0.27) = 0.17
+B(HCH)  (0.0007-0)/(0.43-0) = 0.0016
+
+I had a little panic that HCH value should be 0.16 rather than 0.0016 from Levick et al. Because I copied 0.07% as 0.07 when should be 0.0007.
+
+If I set dominance of restoration to 0.16 the plot becomes very different from Curtis Fig. 2.
+
+    input[34,1] <- 0.17	#Dominance coefficient in A
+    input[37,1] <- 0.0016	#Dominance coefficient in B
+
+Sent email to Ian & Beth.
+
+Solved,  apologies, my mistake.
+The equation is correct, but I mistyped the raw value for RS survival from Curtis. It is 0.07% so should be 0.0007 :
+
+0.0007 is 1 mosquito surviving from 1500, seems a bit odd too (looking up original paper it was 2/7392)
+
+Rawlings1981 that the data came from, good paper, may have other stuff we can use :
+There was no heterozygote survival at the former dose, and only 2 out of 7392 survived on exposure to the lower dose of HCH-0.027% or 0.07% when corrected for the survival of the heterozygote unsprayed controls. This estimate has an extremely high standard error, since it is based on only two survivors.
+
+Note that this was for different anopheles in Pakistan.
+
+inputs_from_gen_fit() function to calc inputs from these data :
 
 
-I1
-Parameter  | source  | value
----------------------- | ----------------------------------------------------
-1. Effectiveness | 
-2. Exposure | 
-3. Resistance restoration  | 
-4. Dominance of restoration | 
-5. Frequency  | 
-6. Cost of resistance  |  
-7. Dominance of cost  | 
+*15/12/17*
+Kolaczinski2000 pyr & non pyr mortalities for RR/RS/SS/ KDR Table3 & 4
 
-I2
-Parameter  | source  | value
----------------------- | ----------------------------------------------------
-1. Effectiveness | 
-2. Exposure | 
-3. Resistance restoration  | 
-4. Dominance of restoration | 
-5. Frequency  | 
-6. Cost of resistance  |  
-7. Dominance of cost  | 
+saved table as csv in extdata
+
+Chandre2000 I can use % knockdown
+
+Could combine these 2
+Kolaczinski2000 pyr & ddt
+Essandoh2013 carbamate & Ace1
+
+#1 Kolaczinski2000 etofenprox (pyr) kdr       eff 0.43, rr_ 0.63, dom 0.30
+#2 Essandoh2013 An. gambiae	bendiocarb	Ace1, eff 0.98, rr_ 0.84, dom 0.66
+
+thought I coukd take frequency from the field data but it's already v high, e.g. 0.8 for pyr & 0.2 for carb
+
+I'm tempted just to put 2 plots in, or maybe just one.
+
+#I1 pyr red
+#I2 car blue
+
+#same starting frequencies, resistance to CAR rises quickly because it has high effectiveness and dominance, mixture better than the sequence because car provides high protection to the pyr
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.3 , h.RS2_0B = 0.66 , exposure = 0.5 , phi.SS1_A0 = 0.43 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 0.63 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 ) 
+ 
+#start pyr same and car lower
+#mixture still slower
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.001 , h.RS1_A0 = 0.3 , h.RS2_0B = 0.66 , exposure = 0.5 , phi.SS1_A0 = 0.43 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 0.63 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 )
+
+# exposure 0.8
+# mix & seq now the same
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.3 , h.RS2_0B = 0.66 , exposure = 0.8 , phi.SS1_A0 = 0.43 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 0.63 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 )
  
  
  
@@ -8499,8 +8569,8 @@ Similarly, low insecticide doses led to polygenic resistance in the Australian s
 
 ### TO DO  
 
-
-
+~ Put the new input field data & runs into an Rmd on it's own to send to Ian.
+~ Sort Fig  to go before fig1
 
 ~ can I design data structures of resizeable arrays that could cope with changing number of insecticides ?
 

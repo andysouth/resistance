@@ -1,0 +1,7 @@
+Treatment,Dose,liveRR,liveRS,liveSS,deadRR,deadRS,deadSS,totalRR,totalRS,totalSS,survivalRR,survivalRS,survivalSS
+Etofenprox,200,92,13,4,17,7,3,109,20,7,0.844036697,0.65,0.571428571
+Alpha-cypermethrin,20,245,28,10,49,11,7,294,39,17,0.833333333,0.717948718,0.588235294
+Carbosulfan,200,6,0,1,19,4,2,25,4,3,0.24,0,0.333333333
+Control,untreated,105,17,10,52,17,2,157,34,12,0.668789809,0.5,0.833333333
+,,,,,,,,,,,,,
+Kolaczinski2000,,,,,,,,,,,,,
