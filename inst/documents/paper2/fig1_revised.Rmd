@@ -1,0 +1,47 @@
+---
+title: "getting field data into insecticide resistance model"
+# output: 
+#   pdf_document:
+#     keep_tex: true
+#     fig_caption: true
+#     latex_engine: pdflatex
+
+output: word_document
+#author: "Andy South and Ian Hastings"
+#date: "`r Sys.Date()`"
+bibliography: library.bib
+csl: biomed-central.csl
+fontsize: 11pt
+spacing: double
+# below worked in test_linenumbers.Rmd
+header-includes:
+   - \usepackage{setspace}
+   - \doublespacing
+   - \usepackage{lineno}
+   - \linenumbers
+---
+
+
+```{r, eval=TRUE, include=FALSE}
+
+# options to create final publication quality figures stored in pap2figs/
+library(knitr)
+opts_chunk$set(dev="tiff",
+               dev.args=list(compression="lzw"),
+               dpi=300,
+               cache=FALSE,
+               fig.path='pap2figs/')
+```
+
+```{r,echo=FALSE,results='hide',warning=FALSE}
+  library(resistance)
+  #library(ggplot2)
+```
+
+```{r Fig1, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE, fig.height=5, fig.width=7.5, fig.show='hold', fig.align='left', fig.cap="Figure 1. The effect of model inputs on the fitness of genotypes for a single insecticide. Fitness is shown on the y-axis and the different genotypes (SS, SR, RR) on the x axis. Firstly the exposure input determines the proportion of the population in the left and right panels (exposed and not exposed). For those that are exposed (left panel) insecticide effectiveness sets the fitness for SS, resistance restoration 'restores' a portion of the fitness for RR and dominance of restoration determines how the fitness for SR lies between that of SS and RR. For those that are not exposed, fitness of SS is set to 1 by definition, resistance cost determines the fitness of RR and again dominance of cost determines how the fitness for SR sits between that of SS and RR. In this example effectiveness=0.8, resistance restoration=0.5 which 'restores' half of the fitness lost due to the insecticide, dominance of restoration=0.7 which sets the fitness of the SR closer to RR than SS. Resistance cost=0.3 which reduces fitness in the absence of the insecticide from 1 to 0.7, and dominance of cost=0.8 which sets fitness of SR close to RR."}
+  
+plot_fit_calc( effectiveness=0.8, resistance_restoration=0.5, dominance_restoration=0.7, dominance_cost=0.8, cost=0.3 )
+
+
+```
+

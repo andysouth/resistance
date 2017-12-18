@@ -7,12 +7,13 @@
 #' @param dominance_restoration dominance of resistance restoration 0-1
 #' @param dominance_cost dominance of resistance cost 0-1
 #' @param cost cost of resistance
-#' @param title optional title for the plot
 #' @param simple default FALSE whether to create a simpler plot e.g. for public health journal
+#' @param title optional title for the plot
 # @param yblank whether to remove y axis title & labels
 # @param size text size for RS labels, default 4
 #' 
-#' @import ggplot2 gridExtra
+#' #grid needed for title
+#' @import ggplot2 gridExtra grid
 #' 
 #' @examples 
 #' plot_fit_calc(effectiveness=0.5, resistance_restoration=0.5, dominance=0.5)
@@ -27,7 +28,8 @@ plot_fit_calc <- function ( effectiveness=0.75,
                             dominance_restoration=0.4, 
                             dominance_cost=0.6, 
                             cost=0.2,
-                            simple = FALSE){
+                            simple = FALSE,
+                            title = "Fitness calculation for each genotype in each generation for one insecticide"){
     
   
   #library(gridExtra)
@@ -56,18 +58,17 @@ plot_fit_calc <- function ( effectiveness=0.75,
   gg1 <- ggplot(dfg, aes(x = x2, y = y2)) +    
         ylim(0,1) +
         #points
-        geom_point(size=3, colour='blue') +
+        geom_point(size=3, colour='red4') +
         #arrows
-        geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2),size=0.9, arrow = arrow(length = unit(3,"mm"))) +
+        geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2),size=0.9, arrow = arrow(length = unit(3,"mm")), colour="grey40") +
         #dotted horizontal lines showing calculations
-        annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
-        annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
+        annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "red4") +
+        annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "red4") +
         #dotted vertical for dominance
-        annotate("segment", x='SR', xend='SR', y=sr, yend=rr, linetype="dotted", colour = "blue") +    
+        annotate("segment", x='SR', xend='SR', y=sr, yend=rr, linetype="dotted", colour = "red4") +    
         ylab('fitness') +
         xlab('genotype') +
-        #theme(axis.title.y = element_text(size = rel(3))) +
-        ggtitle("exposed to insecticide") +
+        ggtitle("exposed to insecticide") + #colour set in theme below
         #to set ordering of x axis
         scale_x_discrete(limits = c('SS',  'SR',  'RR')) +
         #text annotations
@@ -85,6 +86,7 @@ plot_fit_calc <- function ( effectiveness=0.75,
               #axis.title.x = element_blank(),
               #axis.line.x = element_blank(),
               #axis.ticks.x = element_blank(),
+              plot.title = element_text(colour = "red4"), #size = 40, face = "bold"),
               panel.grid.minor.y = element_blank(),
               panel.grid.major.x = element_blank(),
               panel.grid.minor.x = element_blank()
@@ -92,16 +94,17 @@ plot_fit_calc <- function ( effectiveness=0.75,
 
   if (!simple){
     gg1 <- gg1 +
+      scale_y_continuous(breaks=c(0,0.2,0.4,0.6,0.8,1), limits=c(0,1)) +
       # add 0,1 labels for dominance and resistance restoration
-      annotate("text", x = 'SS', y = 1, hjust=0, label = " 0", colour="purple") +
-      annotate("text", x = 'SS', y = 0, hjust=0, label = " 1", colour="purple") +   
-      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
-      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
-      annotate("text", x = 'RR', y = ss, hjust=0, label = " 0", colour="purple") +
-      annotate("text", x = 'RR', y = 1, hjust=0, label = " 1", colour="purple")             
-  }
-  
-  if (simple){
+      annotate("text", x = 'SS', y = 1, hjust=0, label = " 0", colour="grey40") +
+      annotate("text", x = 'SS', y = 0, hjust=0, label = " 1", colour="grey40") +   
+      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="grey40") +
+      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="grey40") +
+      annotate("text", x = 'RR', y = ss, hjust=0, label = " 0", colour="grey40") +
+      annotate("text", x = 'RR', y = 1, hjust=0, label = " 1", colour="grey40") 
+    
+  } else if (simple){
+    
     gg1 <- gg1 +    
       scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1), labels=c('low','','high')) +
       scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
@@ -122,17 +125,17 @@ plot_fit_calc <- function ( effectiveness=0.75,
   gg2 <- ggplot(dfg, aes(x = x2, y = y2)) +    
     ylim(0,1) +
     #points
-    geom_point(size=3, colour='blue') +
+    geom_point(size=3, colour='navy') +
     #arrows
     #geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2),size=1, arrow = arrow(length = unit(3,"mm"))) +
     #because I don't want an arrow for SS, easier to do with annotate
-    annotate("segment", x='SR', xend='SR', y=ss, yend=sr, size=0.9, arrow=arrow(length = unit(3,"mm"))) +
-    annotate("segment", x='RR', xend='RR', y=ss, yend=rr, size=0.9, arrow=arrow(length = unit(3,"mm"))) +
+    annotate("segment", x='SR', xend='SR', y=ss, yend=sr, size=0.9, arrow=arrow(length = unit(3,"mm")), colour="grey40") +
+    annotate("segment", x='RR', xend='RR', y=ss, yend=rr, size=0.9, arrow=arrow(length = unit(3,"mm")), colour="grey40") +
     #dotted horizontal lines showing calculations
-    annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour = "blue") +
-    annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "blue") +
+    annotate("segment", x='SS', xend='RR', y=ss, yend=ss, linetype="dotted", colour="navy") +
+    annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour="navy") +
     #dotted vertical for dominance
-    annotate("segment", x='SR', xend='SR', y=sr, yend=rr, linetype="dotted", colour = "blue") +    
+    annotate("segment", x='SR', xend='SR', y=sr, yend=rr, linetype="dotted", colour="navy") +    
     #ylab('fitness') +
     xlab('genotype') +
     ggtitle("not exposed to insecticide") + 
@@ -151,6 +154,7 @@ plot_fit_calc <- function ( effectiveness=0.75,
       axis.text.y = element_blank(),
       #axis.line.x = element_blank(),
       axis.ticks.y = element_blank(),
+      plot.title = element_text(colour = "navy"), #size = 40, face = "bold"),
       panel.grid.minor.y = element_blank(),
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank()
@@ -158,22 +162,28 @@ plot_fit_calc <- function ( effectiveness=0.75,
 
   if (!simple){
     gg2 <- gg2 +
+      scale_y_continuous(breaks=c(0,0.2,0.4,0.6,0.8,1), limits=c(0,1)) +
       # add 0,1 labels for dominance and cost
-      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="purple") +
-      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="purple") +
-      annotate("text", x = 'RR', y = 1, hjust=0, label = " 0", colour="purple") +
-      annotate("text", x = 'RR', y = 0, hjust=0, label = " 1", colour="purple")           
-  }
-
-  if (simple){
+      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="grey40") +
+      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="grey40") +
+      annotate("text", x = 'RR', y = 1, hjust=0, label = " 0", colour="grey40") +
+      annotate("text", x = 'RR', y = 0, hjust=0, label = " 1", colour="grey40") 
+    
+  } else if (simple){
+    
     gg2 <- gg2 +    
       #scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1), labels=c('low','','high')) +
       scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
   }    
   
-  grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85))  
-  #print(gg)
-  
+  if (is.null(title))
+  {
+    grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85))
+  } else
+  {
+    #fontface = "plain", "bold", "italic"
+    grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85), top=textGrob(title, gp=gpar(fontsize=15, fontface='plain'))) #col=
+  }    
   
    
 }
