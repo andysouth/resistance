@@ -18,8 +18,13 @@
 #' #see survival_from_genotype_livedead.xls
 #' #1 Kolaczinski2000 etofenprox (pyr), gives low eff 0.43, rr_ 0.63, dom 0.30
 #' inputs_from_gen_fit(RR=0.84, RS=0.65, SS=0.57)
+#' #Kolaczinski2000 etofenprox (pyr) including control mortality. eff 0.32, rr_ 1, dom 0.30
+#' inputs_from_gen_fit(RR=0.84, RS=0.65, SS=0.57, SS_noi=0.84)
 #' #Kolaczinski2000 Alpha-cypermethrin eff 0.41, rr_ 0.60, dom 0.52
 #' inputs_from_gen_fit(RR=0.84, RS=0.72, SS=0.59)
+#' #Kolaczinski2000 Alpha-cypermethrin with control mort eff 0.29, rr_ 1, dom 0.54, cost 0.19, domcost 1 (truncated from 2.06)
+#' inputs_from_gen_fit(RR=0.83, RS=0.72, SS=0.59, SS_noi=0.83) 
+#' inputs_from_gen_fit(RR=0.83, RS=0.72, SS=0.59, SS_noi=0.83, RS_noi = 0.5, RR_noi = 0.67) 
 #' #2 Essandoh2013 An. gambiae	bendiocarb	Ace1, eff 0.98, rr_ 0.84, dom 0.66
 #' inputs_from_gen_fit(RR=0.84, RS=0.56, SS=0.02)
 #' #Essandoh2013 An. coluzii	bendiocarb	Ace1, eff 0.94, rr_ 1, dom 0.36
@@ -33,25 +38,47 @@
 #' @return fitness values
 #' @export
 
-inputs_from_gen_fit <- function ( SSfit = 0.2,
-                                  RSfit = 0.4,
-                                  RRfit = 1)
+inputs_from_gen_fit <- function ( SS = 0.2,
+                                  RS = 0.4,
+                                  RR = 1,
+                                  SS_noi = NULL,
+                                  RS_noi = NULL,
+                                  RR_noi = NULL)
 {
   
-  dfin <- data.frame(eff=NA, rr_=NA, dom=NA)
+  dfin <- data.frame(eff=NA, rr_=NA, dom=NA, cost=NA, domcost=NA)
   
   #in insecticide
   # Effectiveness (1-SSfit)
   # Selection coefficient = RRfit-SSfit
   # Resistance restoration = selection coefficient / effectiveness
   # Dominance of restoration = (RSfit-SSfit)/(RRfit-SSfit)
+
+
   
-  dfin$eff <- (1-SSfit)
+  if (!is.null(SS_noi)) 
+  {
+    #rescaling everything so that SS_noi is effectively 1  
+    SS <- SS/SS_noi
+    RS <- RS/SS_noi
+    RR <- RR/SS_noi
+    
+    if (!is.null(RS_noi)) RS_noi <- RS_noi/SS_noi
+    if (!is.null(RR_noi)) RR_noi <- RR_noi/SS_noi
+  }
+
+    
+  dfin$eff <- (1-SS)
+  dfin$rr_ <- (RR-SS) / dfin$eff
+  dfin$dom <- (RS-SS) / (RR-SS)
   
-  dfin$rr_ <- (RRfit-SSfit) / dfin$eff
+  # calculate cost if there are data on fitness in absence of the insecticide
+  if (!is.null(RR_noi) & !is.null(RS_noi) & !is.null(SS_noi))
+  {
+    dfin$cost <- 1 - RR_noi
+    dfin$domcost <- (1 - RS_noi) / (1 - RR_noi)
+  }
   
-  dfin$dom <- (RSfit-SSfit)/(RRfit-SSfit)
-  
-  #a_fitloc   <- array_named( loci=c('SS1','RS1','RR1','SS2','RS2','RR2'), exposure=c('no','lo','hi') )
+
   return(dfin)
 }
