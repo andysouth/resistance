@@ -26,37 +26,54 @@ header-includes:
   #library(ggplot2)
 ```
 
-### Section demonstrating getting field data into the model, to be added to Malaria Journal paper.
+### to be added to Malaria Journal paper.
+### PUT THIS SECTION AT END OF RESULTS
 
-The main model inputs relating to properties of the mosquitoes and insecticides can be derived from data on the relative survival of the different genotypes (RR,RS,SS) Table x. 
+### Setting model inputs from field data
 
+The main model inputs quantifying properties of the mosquitoes and insecticides can be derived from data on the relative survival of the different genotypes (RR,SR,SS) as described in Table 5. 
 
-**Table x1. Calculating model inputs from field data.**
+**Table 5. Equations to calculate model input parameters from field data. Where RRfit, SRfit, SSfit are fitnesses of genotypes. Derived from [@Levick2017].**
 
-Parameter  | Calculation (where RRfit, RSfit, SSfit are fitnesses of genotypes)
+Parameter  | Calculation 
 ---------------------- | ----------------------------------------------------
 1. Effectiveness | 1 - SSfit in presence of insecticide
 2. Exposure | estimated
 3. Resistance restoration  | (RRfit-SSfit) / Effectiveness in presence of insecticide
-4. Dominance of restoration | (RSfit-SSfit)/(RRfit-SSfit) in presence of insecticide
+4. Dominance of restoration | (SRfit-SSfit)/(RRfit-SSfit) in presence of insecticide
 5. Frequency  | estimated
 6. Cost of resistance  |  1 - RRfit in absence of insecticide
-7. Dominance of cost  | (RSfit-RRfit)/(RRfit-SSfit) in absence of insecticide
+7. Dominance of cost  | (SRfit-RRfit)/(RRfit-SSfit) in absence of insecticide
 
-Exposure, the proportion of mosquitoes that are exposed to the insecticide, is a property of the location and will depend on the use of nets or IRS and mosquito behaviour. The frequency of resistance alleles can be measured, although when at low levels a large number of mnosquitos would need to be sampled to detect low frequencies.
+Exposure, the proportion of mosquitoes that are exposed to the insecticide, is a property of the location and will depend on the use of nets or IRS and mosquito behaviour. The frequency of resistance alleles can be measured, although when at low levels a large number of mosquitoes would need to be sampled to detect low frequencies.
 
-As an example of making these calculations we use data for Anopheles gambiae on pyrethroid (Etofenprox) resistance associated with the Kdr mutation [@Kolaczinski2000] and carbamate (Bendiocarb) resistance associated with the Ace1 mutation [@Essandoh2013].
+As an example of making these calculations we use data for _Anopheles gambiae_ on pyrethroid (Alpha-cypermethrin) resistance associated with the Kdr mutation [@Kolaczinski2000] and carbamate (Bendiocarb) resistance associated with the Ace1 mutation [@Essandoh2013]. This is not intended to be a definitive prediction of resistance evolution, sample sizes for some genotypes are low so fitnesses are approximate. It is intended to demonstrate how models of resistance evolution can be set to field data and hence bring the two approaches closer together.
 
-In both cases data were provided as numbers alive and dead by genotype. We used these to calculate genotype-specific survival values that we assume are a good indication of fitness and from that the values of our model inputs (Table x2).
+Data were provided as numbers alive and dead by genotype in both publications. We used these to calculate genotype-specific survival values as an indication of fitness. We used the non-exposed control data for the pyrethroid [@Kolaczinski2000] to estimate the cost of resistance and to rescale the fitness estimates on a scale of 0-1 where 1 is the fitness of the unexposed SS (i.e. we divided all pyrethroid survivals by that of the unexposed SS genotype, 0.83). In the absence of unexposed data for the carbamate [@Essandoh2013] we assumed no costs of resistance and that survival of the non-exposed SS would be 1. From these estimates we calculated the values of our model inputs (Table 6).
 
-Insecticide/Mutation|survival RR|survival RS|survival SS|Effectiveness|Resistance restoration|Dominance of restoration
----|---|---|---|---|---|---
-Pyrethroid/Kdr|0.84|0.65|0.57|0.43|0.63|0.30
-Carbamate/Ace1|0.84|0.56|0.02|0.98|0.84|0.66
+**Table 6. Model input parameters calculated from field data.**
 
-These input values can then be used in the model. In Figure x insecticide 1 and 2 are set to the pyrethroid (red) and carbamate (blue) respectively. Exposure is set to 0.5 and starting frequencies to 0.01.
+**Field data**|Pyrethroid / Kdr[@Kolaczinski2000]|rescaled Pyrethroid / Kdr[@Kolaczinski2000]|Carbamate /  Ace1[@Essandoh2013]
+------------------------------|-------|-------|-------
+exposed survival RR|0.83|1|0.84
+exposed survival SR|0.72|0.87|0.56
+exposed survival SS|0.59|0.71|0.02
+unexposed survival RR|0.67|0.81||-
+unexposed survival SR|0.50|0.60|-
+unexposed survival SS|0.83|1|-
+**Calculated model inputs**|    |    |
+Effectiveness|0.41|0.29|0.98
+Resistance restoration|0.60|1|0.84
+Dominance of restoration|0.52|0.54|0.66
+Cost of resistance|-|0.19|-
+Dominance of cost|-|1*|-
 
-```{r Fig10, eval=TRUE, echo=FALSE, fig.height=4, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Figure 10. Running the model using field data."}
+**For the pyrethroid the unexposed survival of the SR (0.5) was less than that for the RR (0.67) This indicates underdominance which is biologically unlikely for unexposed genotypes so we set dominance at 1 so that SR and RR genotypes have the same fitness costs. The authors indicated that suprisingly high mortality in the control huts may have been due to rough handling [@Kolaczinski2000] and this could contribute to the unexpected values here.* 
+
+The results of using these calculated inputs in one model example are shown in Figure 11. Remember that this is a demonstration exercise for setting model parameters from field data and not a definitive prediction for whether using a pyrethroid and a carbamate in a mixture or sequence is likely to be preferable. 
+
+
+```{r Fig11, eval=TRUE, echo=FALSE, fig.height=4, fig.width=7, fig.align='left', fig.cap="Figure 11. Time-to-resistance for a mixture and sequence using inputs derived from field studies as outlined in Table x2. Alpha-cypermethrin (pyrethroid) is shown in red and Bendiocarb (carbamate) is shown in blue. Exposure is set to 0.8 and starting frequencies to 0.01. Resistance to the carbamate (blue) increases very quickly in both the mixture and sequence due to it's high effectiveness. Resistance to the pyrethroid (red) increases more slowly due to low effectiveness and high cost of resistance. In a mixture the resistance frequency of the pyrethroid even declines when resistance to the carbamate is low. In this illustrative example resistance to both insecticides takes longer to evolve for a mixture than a sequence."}
 
 # add side panels for labels
 #layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
@@ -65,7 +82,10 @@ layout( matrix(c(1:2), byrow = TRUE), heights=c(1,0.15) )
 #plot margins
 par(mar=c(1.5, 0, 2, 0)) #b,l,t,r default c(5, 4, 4, 2)
 
-runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.3 , h.RS2_0B = 0.66 , exposure = 0.5 , phi.SS1_A0 = 0.43 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 0.63 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 ) 
+# runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.3 , h.RS2_0B = 0.66 , exposure = 0.5 , phi.SS1_A0 = 0.43 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 0.63 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 ) 
+
+# Alpha-cypermethrin (pyr) incl cost, exposure 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01, z.RR1_00 = 0.19, h.RS1_00 = 1,  h.RS1_A0 = 0.54 , h.RS2_0B = 0.66 , exposure = 0.8 , phi.SS1_A0 = 0.29 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 1 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 ) 
 
 #adding legend in lower panel
 #plot margins
@@ -77,7 +97,12 @@ legend( 'bottom', legend=c("pyrethroid alone   ", "pyrethroid in mix   ", "carba
 
 ```
 
-Resistance to the carbamate (blue) rises quickly because it has high effectiveness and dominance. The mixture performs better than the sequence because the carbamate with it's high effectiveness provides high protection to the pyrethroid.
+### PUT THIS SECTION IN DISCUSSION
+
+### Using field derived inputs
+
+Model behaviour when using the field derived inputs (Fig. 11) can be explained using the understanding developed from the preceeding runs. Resistance to the carbamate (blue) rises quickly partly because it has high effectiveness (0.98). Resistance to the pyrethroid (red) increases more slowly due to it's much lower effectiveness (0.29) and high cost of resistance. In the mixture the resistance to the pyrethroid declines at the start when resistance to the carbamate is low. This illustrates the protective effect of the insecticide with the higher effectiveness. That protective effect causes the mixture to out-perform the sequence in this example. Indeed, if exposure is set lower to 0.5 then resistance to the pyrethroid declines further and the resistance threshold is not reached. This is a combination of the low effectiveness creating a low selection pressure for the resistance and the high cost creating a selection pressure against it. The low effectiveness and high cost are partly due to the surprisingly high mortality in unexposed mosquitoes in the field data [@Kolaczinski2000].  
+
 
 #References
 
