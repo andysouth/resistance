@@ -8591,6 +8591,32 @@ runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01, z.RR1_00 = 0.19, h.RS1_00 =
 # etofenprox also declines to loss 
 runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01, z.RR1_00 = 0.19, h.RS1_00 = 1 , h.RS1_A0 = 0.3 , h.RS2_0B = 0.66 , exposure = 0.5 , phi.SS1_A0 = 0.43 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 0.63 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 )
  
+# Alpha-cypermethrin (pyr) incl cost, exposure 0.8
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01, z.RR1_00 = 0.19, h.RS1_00 = 1,  h.RS1_A0 = 0.54 , h.RS2_0B = 0.66 , exposure = 0.8 , phi.SS1_A0 = 0.29 , phi.SS2_0B = 0.98 , rr_restoration_ins1 = 1 , rr_restoration_ins2 = 0.84 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, addLegend=FALSE, labelMixSeqRatio = 1 ) 
+ 
+ 
+# old way of doing table
+Insecticide/Mutation|survival RR|survival RS|survival SS|Effectiveness|Resistance restoration|Dominance of restoration
+---|---|---|---|---|---|---
+Pyrethroid/Kdr|0.84|0.65|0.57|0.43|0.63|0.30
+Carbamate/Ace1|0.84|0.56|0.02|0.98|0.84|0.66
+ 
+*2/1/2018* 
+ 
+fig1new of the 9 genotypes
+
+create in word, copy image to powerpoint, save as tiff, reimport to Rmd (but can just submit tiff from ppt directly to journal)
+thought about trying to do with kable, probably possible but bit of a rush now ...
+
+*3/1/2018*
+
+Final discussion revisions.
+
+My summary of Gressel 2017 :
+In agriculture a switch to lower pesticide doses, driven largely by economics, led to progressive selection for quantitative resistance caused by accumulation of numerous mutations of small effect. When doses had been higher these mutations of small effect were insufficient to give higher survival and did not accumulate.
+
+
+ 
 # brief summary of my current understanding
 High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
 
@@ -8600,13 +8626,53 @@ Control of weeds in wheat crops in Australia using low doses of herbicides promp
 
 Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
 
+# state of play with resubmission 
 
 ### TO DO  
 
-~ decide what to do with field data - perhaps mention cost & dominance calculations and how they make the pyr decline in freq. ?
+# modifications to Rmd for resubmission
+done ~ add fig11 (field data)
+done ~ add text from field_data_in.Rmd
+done ~ add new fig 1, was made in word, I might need to paste into ppt to save as a tiff 
+done ~ renumber figs in legends
+done ~ renumber fig references in text
+done ~ renumber tables (new tables just added on end)
+done ~ deal with typos already sorted in word version
+done ~ sort intro to Fig 1 & mention of 9 genotypes
+done ~ add in new text sections
+done ~ italicise species names in references (probably in Mendeley), Bhatt & Tallebois
+done ~ add references to R packages 
 
-~ Put the new input field data & runs into an Rmd on it's own to send to Ian.
-done ~ Sort Fig  to go before fig1
+# letter to editor
+done ~ add in reviewers text & put responses in
+
+# mods in word post knitting before submission :
+done ~ delete figures
+done ~ Ctrl A, Page layout, line nums, double space.
+done ~ Insert, page number.
+done ~ check that tables and other sections don't cross pages but do not use page breaks in your manuscript
+done ~ modify any table column widths that need
+done ~ reduce font of footer to Table 6
+done ~ search for <i> in references and italicize species names
+done ~ save an accepted changes version
+FINAL READ THROUGH
+~ 'compare' to previous submitted version
+~ accept formatting changes
+
+~ recheck all (line numbers in the response to editors 
+
+Table titles (max 15 words) should be included above the table, and legends (max 300 words) should be included underneath the table.
+
+http://MALJ.edmgr.com/
+s.. w77
+Manuscript Number: MALJ-D-17-00632
+
+
+
+
+
+
+~ post paper 2 resubmission :
 
 ~ can I design data structures of resizeable arrays that could cope with changing number of insecticides ?
 
