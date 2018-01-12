@@ -8615,21 +8615,6 @@ Final discussion revisions.
 My summary of Gressel 2017 :
 In agriculture a switch to lower pesticide doses, driven largely by economics, led to progressive selection for quantitative resistance caused by accumulation of numerous mutations of small effect. When doses had been higher these mutations of small effect were insufficient to give higher survival and did not accumulate.
 
-
- 
-# brief summary of my current understanding
-High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
-
-Low doses of insecticide are likely to lead to polygenic resistance because small genetic changes provide some advantage over the sublethal effects and accumulate over time. With polygenic resistance lower insecticide doses allow the accumulation of mutations and promote the evolution of resistance.
-
-Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance.
-
-Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
-
-# state of play with resubmission 
-
-### TO DO  
-
 # modifications to Rmd for resubmission
 done ~ add fig11 (field data)
 done ~ add text from field_data_in.Rmd
@@ -8656,12 +8641,44 @@ done ~ reduce font of footer to Table 6
 done ~ search for <i> in references and italicize species names
 done ~ save an accepted changes version
 FINAL READ THROUGH
-~ 'compare' to previous submitted version
-~ accept formatting changes
+done ~ 'compare' to previous submitted version
+done ~ accept formatting changes
 
-~ recheck all (line numbers in the response to editors 
+ 
+# brief summary of my current understanding
+High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
 
-Table titles (max 15 words) should be included above the table, and legends (max 300 words) should be included underneath the table.
+Low doses of insecticide are likely to lead to polygenic resistance because small genetic changes provide some advantage over the sublethal effects and accumulate over time. With polygenic resistance lower insecticide doses allow the accumulation of mutations and promote the evolution of resistance.
+
+Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance.
+
+Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
+
+
+
+
+### TO DO  
+
+## to do for MJ paper
+~ finish converting 1st to 3rd person
+~ do I need to add plots for dominance of cost or remove it ?
+~ maybe create new UI on shinyapps with better name, incl. cost, maybe costRR & costRS
+~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide
+
+## to do for workshop
+~ UI with costRR and costRS
+~ prepare ppt (include field data table from paper2)
+~ include both Fig2 and one other annotated Fig from paper2 in workshop handout 
+~ remove shinyapps resistmob1
+~ check how many hours & concurrent users I have on shinyapps
+~ install resistance & rotations packages on Ians laptop
+~ maybe provide instructions for running offline for R users (github install package, then runUI()) BUT I might want to first move some of resistance package - prob not too much hassle
+
+
+~ check whether I have a UI with cost
+
+
+
 
 http://MALJ.edmgr.com/
 s.. w77
