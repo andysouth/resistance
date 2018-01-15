@@ -13,7 +13,8 @@
 # @param size text size for RS labels, default 4
 #' 
 #' #grid needed for title
-#' @import ggplot2 gridExtra grid
+#' @import ggplot2 grid
+#' @importFrom gridExtra grid.arrange 
 #' 
 #' @examples 
 #' plot_fit_calc(effectiveness=0.5, resistance_restoration=0.5, dominance=0.5)
@@ -178,11 +179,11 @@ plot_fit_calc <- function ( effectiveness=0.75,
   
   if (is.null(title))
   {
-    grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85))
+    gridExtra::grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85))
   } else
   {
     #fontface = "plain", "bold", "italic"
-    grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85), top=textGrob(title, gp=gpar(fontsize=15, fontface='plain'))) #col=
+    gridExtra::grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85), top=textGrob(title, gp=gpar(fontsize=15, fontface='plain'))) #col=
   }    
   
    
