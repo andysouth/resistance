@@ -96,7 +96,7 @@ runcurtis_f2 <- function( max_gen = 500,
                           main = "",
                           vlines = 'grey95',
                           maxX = NULL,
-                          labelMixSeqRatio = FALSE
+                          labelMixSeqRatio = NULL
                           )
 {
   
