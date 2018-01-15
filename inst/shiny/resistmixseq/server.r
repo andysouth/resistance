@@ -1,6 +1,6 @@
-#resistance/shiny/resistmob2/server.r
-#andy south 3/6/16
-#unmodified from MixSeqResist1, only changes in UI
+#resistance/shiny/resistmixseq/server.r
+#andy south 12/1/18
+#a mobile compatible app with cost, cited from Malaria Journal paper 2018
 
 
 library(shiny)
