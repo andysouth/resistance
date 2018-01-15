@@ -8645,22 +8645,60 @@ done ~ 'compare' to previous submitted version
 done ~ accept formatting changes
 
  
+*12/1/18*
+~ created new shiny app to include cost and to be cited from MJ paper : resistmixseq
+ 
+dominance of cost :
+#' @param h.RS1_00 Dominance coefficient locus1 in 00
+#' @param h.RS2_00 Dominance coefficient locus2 in 00
+ 
+h.RS2_00	=	0	,
+
+Ooooo ! by default they are set to 0, so that cost is completely recessive.
+Maybe I should set the default to 0.5. I wonder if this would make major diff. to the paper2 figs ??
+
+Try adding it to the UI now so I can explore.
+ 
+seems probably that dominance of cost doesn't have major effect. In which case for the paper I think I should just not mention results of dominance of cost ?
+ 
+*15/1/18* 
+Making last changes to MJ paper :
+Ians suggested add to Table 2 :
+A value of zero means the resistant allele is recessive (fitness of SR genotype is identical to that of SS) while a value of 1 indicated the resistance allele is dominant (fitness of SR is the same as RR)
+ 
+Reformatting references :
+New version of csl file downloaded from here :
+https://github.com/citation-style-language/styles/blob/master/biomed-central.csl
+ 
+e.g. it has et-al max as 6
+
+done ~ reknit
+done ~ copy refs 8 onwards into docx
+done ~ check for any <i>
+done ~ remove page numbers or doi
+~ add accessed date to web pages
+
+Modifying colour of hr() lines in shiny plots
+https://stackoverflow.com/questions/43592163/horizontal-rule-hr-in-r-shiny-sidebar
+ 
+ 
 # brief summary of my current understanding
 High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
 
 Low doses of insecticide are likely to lead to polygenic resistance because small genetic changes provide some advantage over the sublethal effects and accumulate over time. With polygenic resistance lower insecticide doses allow the accumulation of mutations and promote the evolution of resistance.
 
-Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance.
-
-Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
-
-
+Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance. Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
 
 
 ### TO DO  
 
+~ add a notes tab to the UI resistmixseq (can be after next submission)
+~ check resistmixseq on phone
+
+
+~ have a go at modifying UI to replace dominance of cost with costRR and costSS (will probably need to recalc dominance) (or not for the paper ?)
+
 ## to do for MJ paper
-~ finish converting 1st to 3rd person
 ~ do I need to add plots for dominance of cost or remove it ?
 ~ maybe create new UI on shinyapps with better name, incl. cost, maybe costRR & costRS
 ~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide
