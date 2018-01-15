@@ -2,7 +2,8 @@
 #' 
 #' I could try to get this to accept multiple scenarios & put them on the same graph.
 #' 
-#' @import ggplot2 cowplot
+#' @import ggplot2
+#' @importFrom cowplot plot_grid
 #' @importFrom tidyr gather
 #' @examples 
 #' input <- setInputOneScenario()
