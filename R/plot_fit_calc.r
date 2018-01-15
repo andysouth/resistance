@@ -51,7 +51,7 @@ plot_fit_calc <- function ( effectiveness=0.75,
 
   #set up different labels for dominance in simple & other plot
   if (simple) {dom_rest_lab <- dom_cost_lab <- " dominance"} else {
-               dom_rest_lab <- " dominance of\n  restoration"
+               dom_rest_lab <- " dominance of\n  resistance"
                dom_cost_lab <- " dominance of\n  cost" }
     
   
