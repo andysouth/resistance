@@ -17,10 +17,7 @@ Suggests:
     shiny,
     testthat,
     rpart,
-    reshape2,
-    cowplot,
-    grid,
-    gridExtra
+    reshape2
 License: GPL-3
 LazyData: true
 RoxygenNote: 6.0.1
