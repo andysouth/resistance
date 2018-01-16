@@ -3,7 +3,7 @@
 #a mobile compatible app with cost, cited from Malaria Journal paper 2018
 
 library(shiny)
-
+library(markdown)
 
 shinyUI(fluidPage( theme = "bootstrap_simplex.css",
 #shinyUI(fixedPage( theme = "bootstrap_simplex.css",

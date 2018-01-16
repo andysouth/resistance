@@ -3,6 +3,7 @@
 #' displays a user interface in the browser, allowing users to modify inputs and see how the frequency of resistance alleles responds
 
 #' @return nothing
+#' @import shiny markdown
 #' @export
 
 runUImix <- function() {
