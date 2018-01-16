@@ -8681,6 +8681,25 @@ done ~ remove page numbers or doi
 Modifying colour of hr() lines in shiny plots
 https://stackoverflow.com/questions/43592163/horizontal-rule-hr-in-r-shiny-sidebar
  
+fighting with cowplot error on shinyapps.io 
+Error in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]) : 
+  there is no package called �cowplot� 
+ 
+its not used in the app, but is used in plot_fit_variance.r
+???
+
+I tried resinstalling from Cran
+
+Is it related to the msg I get when building ?
+Warning message:
+replacing previous import ‘cowplot::ggsave’ by ‘ggplot2::ggsave’ when loading ‘resistance’
+
+removed an import in the roxygen for a function
+
+Aha now it has moved onto :
+gridExtra
+
+
  
 # brief summary of my current understanding
 High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
