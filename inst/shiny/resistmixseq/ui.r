@@ -43,8 +43,15 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
     ),  
      
   title = "resistance to insecticide mixtures",
+
+  #navbarPage sets up navbar, title appears on left
+  navbarPage("insecticide resistance evolution with mixtures and sequences", id="selectedTab",
+             
+    # tab UI
+    tabPanel("UI", 
+           
   
-  h6("Development of resistance to insecticides used in mixtures and sequence. Modify inputs and compare 2 scenarios. by @southmapr"),  
+  h6("Modify inputs, press Run button to generate plot for either scenario. Select About for outline."),  
   
   #fixedRow(
   fluidRow(
@@ -144,4 +151,10 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
     # )
   ) #end fixed row
 
+    ), # end tabPanel("UI")
+  # tab "About" ---------------------------
+  tabPanel("About", includeMarkdown("about.md"))
+  
+  ) # end navbarPage  
+  
 ))

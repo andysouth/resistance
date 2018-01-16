@@ -1,3 +1,28 @@
+#' run a shiny User Interface to display 2 scenarios allow user to modify both
+#' 
+#' displays a user interface in the browser, allowing users to modify inputs and see how the frequency of resistance alleles responds
+
+#' @return nothing
+#' @export
+
+runUImix <- function() {
+  
+  shiny::runApp(system.file('shiny/resistmixseq', package='resistance'))
+}
+
+#' run a shiny User Interface to display 2 scenarios allow user to modify both
+#' 
+#' displays a user interface in the browser, allowing users to modify inputs and see how the frequency of resistance alleles responds
+
+#' @return nothing
+#' @export
+
+runUImob <- function() {
+  
+  shiny::runApp(system.file('shiny/resistmob2', package='resistance'))
+}
+
+
 #' run a shiny User Interface to a simple version of the resistance model used by curtis
 #' 
 #' displays a user interface in the browser, allowing users to modify inputs and see how the frequency of resistance alleles responds
@@ -34,18 +59,6 @@ runUI3 <- function() {
   shiny::runApp(system.file('shiny/shinyFig2Curtis', package='resistance'))
 }
 
-
-#' run a shiny User Interface to display 2 scenarios allow user to modify both
-#' 
-#' displays a user interface in the browser, allowing users to modify inputs and see how the frequency of resistance alleles responds
-
-#' @return nothing
-#' @export
-
-runUI4 <- function() {
-  
-  shiny::runApp(system.file('shiny/resistmob2', package='resistance'))
-}
 
 #' run a shiny User Interface to display 2 scenarios allow user to modify both
 #' 

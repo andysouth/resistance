@@ -1,9 +1,10 @@
 name: resistmob2
+title:
 account: andysouth
 server: shinyapps.io
 appId: 108932
-bundleId: 493462
+bundleId: 1178272
 url: https://andysouth.shinyapps.io/resistmob2/
-when: 1467298756.01233
+when: 1516107320.20006
 asMultiple: FALSE
 asStatic: FALSE
