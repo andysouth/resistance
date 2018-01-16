@@ -14,10 +14,11 @@
 #' 
 #' #grid needed for title
 #' @import ggplot2 grid
+# in check: namespace dependency not required
 #' @importFrom gridExtra grid.arrange 
 #' 
 #' @examples 
-#' plot_fit_calc(effectiveness=0.5, resistance_restoration=0.5, dominance=0.5)
+#' plot_fit_calc(effectiveness=0.5, resistance_restoration=0.5, dominance_restoration=0.5)
 #' 
 #' 
 #' @return gtable plot object

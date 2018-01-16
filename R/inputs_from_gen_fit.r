@@ -4,9 +4,13 @@
 #' 
 #' new 2017_12
 
-#' @param SSfit fitness of SS with insecticide
-#' @param RSfit fitness of SR with insecticide
-#' @param RRfit fitness of RR with insecticide
+#' @param SS SS fitness with insecticide
+#' @param RS RS fitness with insecticide
+#' @param RR RR fitness with insecticide
+#' @param SS_noi SS fitness no insecticide
+#' @param RS_noi RS fitness no insecticide
+#' @param RR_noi RR fitness no insecticide
+#' 
 # @param plot whether to plot fitness
 #' 
 #' @examples 
@@ -31,10 +35,6 @@
 #' #vlow sample
 #' inputs_from_gen_fit(RR=1, RS=0.4, SS=0.06)
 
-
-
-
-
 #' @return fitness values
 #' @export
 
@@ -53,7 +53,6 @@ inputs_from_gen_fit <- function ( SS = 0.2,
   # Selection coefficient = RRfit-SSfit
   # Resistance restoration = selection coefficient / effectiveness
   # Dominance of restoration = (RSfit-SSfit)/(RRfit-SSfit)
-
 
   
   if (!is.null(SS_noi)) 

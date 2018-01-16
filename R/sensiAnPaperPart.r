@@ -15,9 +15,9 @@
 #' @param old_insecticide if set TRUE then freq of I2 is set to 0.5 to represent an existing insecticide that resistance has already developed
 #' 
 #' @examples
-#' listOutMix <- sensiAnPaperPart( 5, insecticideUsed = 'mixture' )
-#' listOutI1 <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide1' )
-#' listOutI2 <- sensiAnPaperPart( 5, insecticideUsed = 'insecticide2' )
+#' listOutMix <- sensiAnPaperPart( 3, insecticideUsed = 'mixture' )
+#' listOutI1 <- sensiAnPaperPart( 3, insecticideUsed = 'insecticide1' )
+#' listOutI2 <- sensiAnPaperPart( 3, insecticideUsed = 'insecticide2' )
 #' plotcurtis_f2_generic( listOutMix$results[[1]], listOutI2$results[[1]], listOutI1$results[[1]] )
 #' #colnames(inputAndResults)
 #' @return a list containing results and inputs

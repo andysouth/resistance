@@ -3,8 +3,8 @@
 #' I could try to get this to accept multiple scenarios & put them on the same graph.
 #' 
 #' @import ggplot2
-# taking out because causing shinyapps problem  
-# @importFrom cowplot plot_grid
+# if in here must be in imports too taking out because causing shinyapps problem  
+#' @importFrom cowplot plot_grid
 #' @importFrom tidyr gather
 #' @examples 
 #' input <- setInputOneScenario()
@@ -74,8 +74,8 @@ plot_fit_variance <- function ( listOut,
   {
     # to remove x axis label from top plot
     plotlist[[1]] <- plotlist[[1]] + xlab("")
-    warning("cowplot::plot_grid disabled to fix shinyapps problem")
-    #cowplot::plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(1,1), labels='AUTO')    
+    #warning("cowplot::plot_grid disabled to fix shinyapps problem")
+    cowplot::plot_grid( plotlist[[1]],plotlist[[2]],ncol=1, rel_heights=c(1,1), labels='AUTO')    
   } else
   {
     print(plotlist[[1]])

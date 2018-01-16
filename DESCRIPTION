@@ -12,7 +12,10 @@ Imports:
     ggplot2,
     stringr,
     tidyr,
-    ggrepel
+    ggrepel,
+    grid,
+    gridExtra,
+    cowplot
 Suggests:
     shiny,
     testthat,

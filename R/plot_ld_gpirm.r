@@ -1,10 +1,10 @@
 #' try to plot genotype frequencies to show linkage disequilibrium
 #' 
 #' as done in GPIRM p122
-#' BEWARE this initial version assumes dominance=1
+#' BEWARE this initial version assumes dominance of resistance=1
 
 #' @param genotype genotype frequencies by generation
-#' @param gen_num which generation to plot for
+#' @param gen which generation to plot for
 #' @param labgen whether to add label for generation number
 #' 
 #' @examples 
@@ -27,10 +27,10 @@
 #' listOut <- runModel2(input)
 #' plot_ld_gpirm(genotype=listOut$genotype[[1]], gen=seq(from = 5, to = 50, by =5))
 #' 
-#' TODO this seems to expose an error in my plotting routine
-#' OR can this plot idea not cope with our data ?
-#' is this caused by having different effectivenesses for each insecticide ?
-#' SEE whitespace between generations 20 & 40
+#' #TODO this seems to expose an error in my plotting routine
+#' #OR can this plot idea not cope with our data ?
+#' #is this caused by having different effectivenesses for each insecticide ?
+#' #SEE whitespace between generations 20 & 40
 #' #exposure 0.5, eff1 0.8, eff2 0.5, dominances 1
 #' a <- setExposure( exposure=0.5,  insecticideUsed = 'mixture' )
 #' input <- setInputOneScenario( a=a, phi.SS1_A0=0.8, phi.SS2_0B=0.5, h.RS1_A0=1, h.RS2_0B=1)
