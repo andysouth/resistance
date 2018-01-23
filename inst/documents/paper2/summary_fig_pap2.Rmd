@@ -1,0 +1,76 @@
+---
+title: "summary figure for malaria journal paper"
+output: 
+  pdf_document:
+
+#output: word_document
+author: "Andy South and Ian Hastings"
+date: "`r Sys.Date()`"
+---
+
+
+
+```{r, eval=TRUE, include=FALSE}
+#```{r, eval=FALSE, include=FALSE}
+# options to create final publication quality figures
+library(knitr)
+opts_chunk$set(dev="tiff",
+               dev.args=list(compression="lzw"),
+               dpi=300,
+               cache=FALSE,
+               fig.path='')
+```
+
+```{r,echo=FALSE,results='hide',warning=FALSE}
+  library(resistance)
+  library(ggplot2)
+```
+
+
+
+```{r summary_fig, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', fig.cap="Comparing time-to-resistance for mixtures and sequences  A. Resistance arises slower for the mixture, B. Resistance arises slower for the sequence. All inputs set to 0.5 except for starting frequency of resistance set to 0.01, and effectiveness of insecticide 1 set to 0.4 in A and 0.8 in B."}
+
+#2 panel fig A. sequence better, B. mix better
+
+#eff1  0.4  0.8
+
+# add side panels for labels
+#layout( matrix(c(1:6,0,7,7,0,8,9),4,3, byrow = TRUE), heights=c(1,1,0.15,0.2), widths=c(0.1,1,1) )
+# 2 side by side plus lower panl for legent
+#layout( matrix(c(1:2,3,3),2,2, byrow = TRUE), heights=c(1,0.04), widths=c(1,1) )
+#layout.show(n=3)
+# just 2 side by side plus lower panel for legent
+layout( matrix(c(1:2),2,2, byrow = TRUE), heights=c(1), widths=c(1,1) )
+
+
+#eff1 0.4 seq better
+
+#plot margins, high t just a bodge to get graphs down closer to legend
+par(mar=c(1.5, 4, 15, 0)) #b,l,t,r default c(5, 4, 4, 2)
+
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.4 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, addStrategyLabels = FALSE, xlabs = TRUE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 140, labelMixSeqRatio = NULL )
+
+mtext('A.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+#plot margins, hight t just a bodge to get graphs down closer to legend
+par(mar=c(1.5, 3, 15, 1)) #b,l,t,r default c(5, 4, 4, 2)
+
+#eff1 0.8 mix better
+runcurtis_f2( max_gen=500,  P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, addStrategyLabels = FALSE, ylab="", ylabs = FALSE, xlabs = TRUE, cex.axis = 0.8, addLegend=FALSE, main='', maxX = 140, labelMixSeqRatio = NULL )
+
+
+legend( 'bottomright', legend=c("insecticide1 alone", "insecticide1 in mix", "insecticide2 alone", "insecticide2 in mix"), col=c("red","red","blue","blue"), lty=c(2,1,2,1), pch=c(NA,NA,NA,NA), bty="n", cex=0.9 )    
+
+mtext('B.',side=3, adj=0, line=1, cex=0.9) #side=1b,2l,3t,4r
+
+
+#adding legend in lower panel
+
+# par(mar=c(0, 0, 0, 0), pty='m') #b,l,t,r default c(5, 4, 4, 2)
+# 
+# plot( 0, type="n", axes=FALSE, ann=FALSE, pty='m') 
+# 
+# legend( 'bottom', inset=0.1, legend=c("insecticide1 alone   ", "insecticide2 alone   ", "insecticide1 in mix   ", "insecticide2 in mix   "), col=c("red","blue","red","blue"), lty=c(2,2,1,1), pch=c(NA,NA,NA,NA), bty="n", cex=1.05, horiz =TRUE )
+
+
+```
