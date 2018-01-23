@@ -8699,27 +8699,109 @@ removed an import in the roxygen for a function
 Aha now it has moved onto :
 gridExtra
 
-
+solution was to have in Description:imports AND in namespace via roxygen import or importFrom
  
-# brief summary of my current understanding
-High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
+tweaked UIs
 
-Low doses of insecticide are likely to lead to polygenic resistance because small genetic changes provide some advantage over the sublethal effects and accumulate over time. With polygenic resistance lower insecticide doses allow the accumulation of mutations and promote the evolution of resistance.
+resistmixseq : choice to run 
 
-Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance. Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
+added About tab to resistmixseq
+
+Now why is shinyapp not working ?
+It makes wait a very long time and then :
+ERROR: An error has occurred. Check your logs or contact the app author for clarification
+
+The logs don't clarify.
+Does it need to reinstall the resistance package each time, in which case I should probably cut down examples etc. ?
+
+does install github work locally ?
+yes and runUImix works locally ??
+
+Aha!, Once logs refreshed :
+Warning: Error in loadNamespace: there is no package called ‘markdown’
+
+added this above runUImix()
+#' @import shiny markdown
+
+*18/1/2017*
+~ MJ paper copyedited version resubmitted
+http://MALJ.edmgr.com/
+s.. w77
+Manuscript Number: MALJ-D-17-00632
+
+*23/1/2017*
+
+I'm looking into rotations and mostly I find very little difference from sequences even with costs or refuges. In a sequence resistance builds up once and then declines, in rotations it builds up in steps and declines in between but the time-to-resistance is the same for both.  
+
+Then I refound this idea in GPIRM that costs of resistance are likely to decline when frequency of resistance gene has been high. 
+
+"Insecticide resistance management strategies must, however, be implemented before the resistance gene becomes common and stable in the population; otherwise, the resistant gene will not recede even if use of the insecticide causing selection pressure is discontinued. As demonstrated by a study of blowflies by McKenzie and Whitten in 1982 (3), fitness cost is not an intrinsic property of the gene. Therefore, if that gene is allowed sufficient time to become common in a population, the rest of the genome will adapt to incorporate it without a significant fitness cost. At this point, even if the selection pressure is removed, the resistance gene will remain in the population."
+
+If this was the case it would probably favour rotations over sequences.
+
+Do you have any thoughts ? Do you think it likely that costs will decline over time at high resistance frequencies ?
+
+I looked at the 1982 paper (attached) and I don't think it supports the idea that costs decline over time (but it does seem to have data on relative fitness of RR,RS,SS that we could use in the WoS paper, gives evidence for dominance changing over time and could be used to derive our model parameters.)
+
+Thanks Andy
+ 
+That results should put the cat amongst the pigeons i.e. little difference between sequences and rotations.
+ 
+There are examples of “compensatory” mutations offsetting the fitness cost of a mutation. Often from bacteria where populations can be very high and the population is asexual so that the mutation and modifier are always linked. It is less well studied in larger animals. There may be examples from IR but I am unaware. Often it is a post hoc explanation plucked out the air to explain why there is no apparent fitness effect i.e. “there were fitness effect, but they must have been modified”.
+ 
+I like the 1982 paper… I have put it in the WoS folder with a note to discuss it.
+
+Hi Ian, 
+
+I've been thinking about the link between the wos data and our modelling work.
+
+Is it right to say the following :
+
+In the WoS plots, where the mortality of the SS changes over time this is a change in insecticide effectiveness. Where the mortality of the RR changes over time (and the SS is not changing) this suggests a change in Resistance Restoration.
+
+Currently in our model both effectiveness and resistance restoration are kept constant over time and we don't talk about them changing. Is that something we want to think about ?
+
+Andy
+
+Hi Andy
+ 
+That is all true. Its why geneticists always stress their estimates are for a specific mutation in a specific environment, the latter being insecticide concentration in our case.
+ 
+But we can think of  fitness and restoration as being mean values i.e. averaged across the whole range of concentrations.
+ 
+Dos that sound reasonable?
+
+
+~ created simple annotated graphic of pap2 fig 6 (for tweeting & presentations) 
+see summary_fig_pap2_labelled.png, which is saved from the ppt after the graphic bit created in the similarly named Rmd.
+
+
+From Groeters 2000
+The most important practical implication of this
+study comes from simulation results showing that the
+ability of refuges to delay evolution of resistance is not
+inßuenced greatly by the relative contributions of
+major and minor genes for resistance (Fig. 5). Instead,
+under the assumptions of each of the four models of
+inheritance examined (i. e., models AÐD), refuges
+were more effective when selection was intense (1%
+survival) than when selection was weaker (10 or 50%
+survival) (Fig. 5). Thus, for predicting the success of
+refuges, understanding of selection intensity is critical,
+but knowledge of the number of loci and their relative
+contributions to resistance is not.
+
+
 
 
 ### TO DO  
 
-~ add a notes tab to the UI resistmixseq (can be after next submission)
-~ check resistmixseq on phone
+
 
 
 ~ have a go at modifying UI to replace dominance of cost with costRR and costSS (will probably need to recalc dominance) (or not for the paper ?)
 
-## to do for MJ paper
-~ do I need to add plots for dominance of cost or remove it ?
-~ maybe create new UI on shinyapps with better name, incl. cost, maybe costRR & costRS
+
 ~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide
 
 ## to do for workshop
@@ -8731,15 +8813,6 @@ Control of weeds in wheat crops in Australia using low doses of herbicides promp
 ~ install resistance & rotations packages on Ians laptop
 ~ maybe provide instructions for running offline for R users (github install package, then runUI()) BUT I might want to first move some of resistance package - prob not too much hassle
 
-
-~ check whether I have a UI with cost
-
-
-
-
-http://MALJ.edmgr.com/
-s.. w77
-Manuscript Number: MALJ-D-17-00632
 
 
 
@@ -8755,19 +8828,12 @@ Manuscript Number: MALJ-D-17-00632
 ~ do we definitely need the 3 niches ? we haven't really used yet.
 
 
-done ~ read Sudo 2017
-~ send Sudo2017 to Ian
-~ read Sternberg 2017
-~ read Ocampo 2016
-done ~ send Huijben2017 to IVCC including a quote saying how important this work is.
-
-~ reaqaint myself with resistance code and improve documentation and testing
+~ reaquaint myself with resistance code and improve documentation and testing
 
 ~ think about SSI code review grant, we could submit with what we want to change. While it's in review I could focus on rotations.
 
 ~ how can we represent a rotation within the existing resistance code ?
 ~ if it was sufficiently easy then maybe we should focus on that rather than the new method.
-
 
 
 ~ check plot_fit_variance() & what it would do if multiple scenarios
@@ -8893,15 +8959,7 @@ locusNum=c(1,2,3), exposure=c('no','lo','hi')
 
 ~ create a vignette explaining how fitness is calculated, so that it can be stored in the package in future, it can access my new fitness functions.
 
-Set up more ability to be able to see what is going on with fitnesses from the code.
-Maybe I could even add this to one of my UIs. The inputs will be the same.
-Could put the new outputs in together or in a separate UI.
-
 set up some unit tests for the fitness functions
-
-
-
-
 
 Scope out
 1) 6 subpop macro-mosaics
@@ -8924,45 +8982,14 @@ dominance (property of the gene)
 
 ~ write up why having correctDeploy of 0 equates to mosaics ? Effectively it means that half of expsoure is set to one insecticide and half to the other.
 
-~ future : would be cool to have a graphical description of the core model, e.g. effectiveness, exposure, selective advantage, fitness ...
-
-# best way to allow setting of multiple scenarios varying one param at a time ?
-
-# can I make any smaller components from get_resistance()
-
 ~ maybe delete or at least deprecate timeToFifty() & singlealleleFrequency()
 
 ~ check why when correctMixDeployProp is set to 0 that the curve for the first insecticide is not the same for the insecticide in single use ? Ian explained that this was as expected, but I need to confirm my understanding.
 
 
-
 Potential for me to look at in a later paper :
 Differential exposure of males & females. (I have shown exposure is important so this could have a big effect).
 
-Long Names (in text where space not an issue)
-Mixture (either insecticide)   
-Mixture (both insecticides)
-Adaptive mixture (both insecticides)
-Sequential (both insecticides)
-
-Medium Names (plot labels where medium space)
-mix either              
-mix both             
-mix adaptive
-sequential           
-
-Short Names (plot labels where v little space)
-mix1
-mix2
-adapt
-seq
-
-
-effectI2 from 1 to 0.85, & resistance arises faster for mix1 than seq
-runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.85 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
-
-effectI2 from 1 to 0.5, & resistance arises faster for mix2 than seq
-runcurtis_f2( P_1 = 0.01 , P_2 = 0.01 , h.RS1_A0 = 0.17 , h.RS2_0B = 0.0016 , exposure = 0.9 , phi.SS1_A0 = 0.73 , phi.SS2_0B = 0.5 , s.RR1_A0 = 0.23 , s.RR2_0B = 0.43 )
 
 ~ check code in findResistancePointsMixResponsive()
 
@@ -9002,7 +9029,11 @@ listOutMix$input[c('P_1','P_2'),] gives selected inputs
 # current best UIs
 https://andysouth.shinyapps.io/shinyMixSeqCompare1
 https://andysouth.shinyapps.io/shinyFig2Curtis
-https://andysouth.shinyapps.io/MixSeqResist1
+# works on mobile
+https://andysouth.shinyapps.io/resistmob2
+# includes cost, doesn't fit well on mobile
+https://andysouth.shinyapps.io/resistmixseq
+
 
 # Matt needs to do this each time to sync his fork to get updates from me
 git fetch upstream
@@ -9036,6 +9067,12 @@ this takes git back to before the last commit (from ohshitgit.com)
 1. runModel2.r          : runs model for the passed scenarios
 1. paper1_results_figs_slimmed_50_rr.Rmd : final figures for paper
 
+# brief summary of my current understanding
+High doses of insecticide are likely to lead to monogenic resistance because only a gene causing a major change can allow resistant individuals to survive. With monogenic resistance lower insecticide doses are likely to reduce selection presssure and delay the evolution of resistance.
+
+Low doses of insecticide are likely to lead to polygenic resistance because small genetic changes provide some advantage over the sublethal effects and accumulate over time. With polygenic resistance lower insecticide doses allow the accumulation of mutations and promote the evolution of resistance.
+
+Control of weeds in wheat crops in Australia using low doses of herbicides prompted evolution of polygenic metabolic resistance, whereas control of the same weeds in the US using high doses led to the evolution of monogenic target-site resistance. Similarly, low insecticide doses led to polygenic resistance in the Australian sheep blowfly, whereas a higher dose led to the evolution of monogenic resistance (McKenzie, 1994).
 
 
                               
