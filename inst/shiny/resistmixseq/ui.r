@@ -88,11 +88,11 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
            h5("Start Freq."),
            #numericInput("P_1", "locus1: 0.01", 0.01, min = 0.0001, max = 0.1, step = 0.001),
            #numericInput("P_2", "locus2: 0.01", 0.01, min = 0.0001, max = 0.1, step = 0.001)
-           sliderInput("frequency_A1", NULL, val=0.01, min = 0.0001, max = 0.1, step = 0.001, ticks=FALSE),
-           sliderInput("frequency_A2", NULL, val=0.01, min = 0.0001, max = 0.1, step = 0.001, ticks=FALSE),
+           sliderInput("frequency_A1", NULL, val=0.01, min = 0.0001, max = 1, step = 0.001, ticks=FALSE),
+           sliderInput("frequency_A2", NULL, val=0.01, min = 0.0001, max = 1, step = 0.001, ticks=FALSE),
            hr(),
-           sliderInput("frequency_B1", NULL, val=0.01, min = 0.0001, max = 0.1, step = 0.001, ticks=FALSE),
-           sliderInput("frequency_B2", NULL, val=0.01, min = 0.0001, max = 0.1, step = 0.001, ticks=FALSE)
+           sliderInput("frequency_B1", NULL, val=0.01, min = 0.0001, max = 1, step = 0.001, ticks=FALSE),
+           sliderInput("frequency_B2", NULL, val=0.01, min = 0.0001, max = 1, step = 0.001, ticks=FALSE)
            
     ),    
     column(1, offset = 0,
