@@ -5,7 +5,11 @@ An insecticide resistance population genetics model with 2 loci and 2 insecticid
 Development by Andy South, Ian Hastings and Beth Levick, 2015-8.
 
 The model is described here :
+
 Levick, B., South, A., & Hastings, I. M. (2017). A two-locus model of the evolution of insecticide resistance to inform and optimise public health insecticide deployment strategies. PLoS Computational Biology, 13, e1005327. [https://doi.org/10.1371/journal.pcbi.1005327](https://doi.org/10.1371/journal.pcbi.1005327).
+
+South, A., & Hastings, I. M. (in press). Insecticide resistance evolution with mixtures and sequences : a model-based explanation. Malaria Journal.
+
 
 The code is licensed GPL-3, please cite the paper above if you use it.
 
@@ -25,6 +29,10 @@ Running the code is slightly involved, you may want to explore the user interfac
     #install.packages("shiny")
     require(shiny) 
     
+##### UImix: allows 2 scenarios of mixture and sequential to be compared and modified   
+
+    runUImix()       
+    
 ##### UI1: single scenario, mixture, show all 4 loci    
     
     runUI1() 
@@ -37,9 +45,6 @@ Running the code is slightly involved, you may want to explore the user interfac
 
     runUI3()
    
-##### UI4: allows 2 scenarios of mixture and sequential to be compared and modified   
-
-    runUI4()   
     
 ### Main functions to run the model
 
@@ -49,8 +54,12 @@ Running the code is slightly involved, you may want to explore the user interfac
   
     # Recreate figure 2 of Curtis(1985), allows inputs to be tweaked
     runcurtis_f2()
+
+### Text and code for South & Hastings (2018)
+
+    # inst/documents/paper2/paper2_resistance_mechanisms_mixtures.Rmd
   
-### Sensitivity analysis for the first paper 
+### Sensitivity analysis for Levick, South & Hastings (2017) 
 
     # inst/documents/sensiAnPaper1All.Rmd
     # an rmarkdown file that runs all of the sensitivity analysis for paper1
@@ -64,4 +73,7 @@ Running the code is slightly involved, you may want to explore the user interfac
     # sensiAnPaperPart() contains hardcoded input ranges
     # it generates random numbers and repeatedly calls setInputOneScenario()
     # then it calls runModel2() to run the model using these inputs
+    
+    # all figures for Levick, South & Hastings (2017)
+    # inst/documents/paper1/paper1_results_figs_slimmed_50_rr.Rmd
   
