@@ -6,9 +6,9 @@ Development by Andy South, Ian Hastings and Beth Levick, 2015-8.
 
 The model is described here :
 
-Levick, B., South, A., & Hastings, I. M. (2017). A two-locus model of the evolution of insecticide resistance to inform and optimise public health insecticide deployment strategies. PLoS Computational Biology, 13, e1005327. [https://doi.org/10.1371/journal.pcbi.1005327](https://doi.org/10.1371/journal.pcbi.1005327).
+South, A., & Hastings, I. M. (2018). Insecticide resistance evolution with mixtures and sequences : a model-based explanation. Malaria Journal. [https://doi.org/10.1186/s12936-018-2203-y](https://doi.org/10.1186/s12936-018-2203-y)
 
-South, A., & Hastings, I. M. (in press). Insecticide resistance evolution with mixtures and sequences : a model-based explanation. Malaria Journal.
+Levick, B., South, A., & Hastings, I. M. (2017). A two-locus model of the evolution of insecticide resistance to inform and optimise public health insecticide deployment strategies. PLoS Computational Biology, 13, e1005327. [https://doi.org/10.1371/journal.pcbi.1005327](https://doi.org/10.1371/journal.pcbi.1005327).
 
 
 The code is licensed GPL-3, please cite the paper above if you use it.
@@ -55,9 +55,10 @@ Running the code is slightly involved, you may want to explore the user interfac
     # Recreate figure 2 of Curtis(1985), allows inputs to be tweaked
     runcurtis_f2()
 
-### Text and code for South & Hastings (2018)
+### Code to reproduce figures and text for South & Hastings (2018)
 
-    # inst/documents/paper2/paper2_resistance_mechanisms_mixtures.Rmd
+[South and Hastings 2018, reproducible.](https://github.com/AndySouth/resistance/blob/master/inst/documents/paper2/paper2_resistance_mechanisms_mixtures.Rmd)
+    
   
 ### Sensitivity analysis for Levick, South & Hastings (2017) 
 

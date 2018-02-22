@@ -45,13 +45,13 @@ shinyUI(fluidPage( theme = "bootstrap_simplex.css",
   title = "resistance to insecticide mixtures",
 
   #navbarPage sets up navbar, title appears on left
-  navbarPage("insecticide resistance evolution with mixtures and sequences", id="selectedTab",
+  navbarPage("insecticide resistance evolution with mixtures and sequences, exploring mechanisms", id="selectedTab",
              
     # tab UI
     tabPanel("UI", 
            
   
-  h6("Modify inputs, press Run button to generate plot for either scenario. Select About for outline."),  
+  h6("Warning! This is a research tool and not for making operational decisions.  Modify inputs, press Run button to generate plot for either scenario. Select About for outline."),  
   
   #fixedRow(
   fluidRow(

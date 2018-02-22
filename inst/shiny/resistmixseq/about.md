@@ -1,6 +1,9 @@
-A model to investigate the evolution of resistance to two insecticides used sequentially or in a mixture.
+A model to investigate the evolution of resistance to two insecticides used sequentially or in a mixture. Described in this [Malaria Journal](https://doi.org/10.1186/s12936-018-2203-y) article.
 
-Andy South (@southmapr) and Ian Hastings [2018]
+Warning! This is a research tool and not for making operational decisions.
+
+Andy South <a href="https://twitter.com/southmapr">(@southmapr)</a> and Ian Hastings [2018]
+
 
 **To use**
 * Select 'UI'  
@@ -22,11 +25,16 @@ Model Input      | Description
 7. Dominance of cost  | sets fitness of heterozygous (SR) insects between that of SS & RR in absence of insecticide    
 
 
-The research behind this model is described in a paper provisionally accepted to the Malaria Journal.
+**References**
 
+South, A., & Hastings, I. M. (2018). Insecticide resistance evolution with mixtures and sequences : a model-based explanation. Malaria Journal. [https://doi.org/10.1186/s12936-018-2203-y](https://doi.org/10.1186/s12936-018-2203-y)
 
-The code is hosted here : https://github.com/AndySouth/resistance
-
+Levick, B., South, A., & Hastings, I. M. (2017). A two-locus model of the evolution of insecticide resistance to inform and optimise public health insecticide deployment strategies. PLoS Computational Biology, 13, e1005327. [https://doi.org/10.1371/journal.pcbi.1005327](https://doi.org/10.1371/journal.pcbi.1005327).
+    
+**Code**   
+[repository](https://github.com/AndySouth/resistance)    
+[UI](https://github.com/AndySouth/resistance/tree/master/inst/shiny/resistmixseq)    
+[paper](https://github.com/AndySouth/resistance/blob/master/inst/documents/paper2/paper2_resistance_mechanisms_mixtures.Rmd)    
 
 
 

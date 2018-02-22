@@ -8791,11 +8791,199 @@ refuges, understanding of selection intensity is critical,
 but knowledge of the number of loci and their relative
 contributions to resistance is not.
 
+LSM is larval source management
+
+# 25/1/2018
+
+Anopheles sinensis genome database :
+http://www.asgdb.org/index.php/maps
+
+# 26/1/2018
+
+Kafy 2017, impact of IR in Sudan :
+
+A positive finding was modest evidence of retardation in the speed of evolution of insecticide resistance when two active ingredients with differing modes of actions were used in the LLIN + IRS arm. This is important for malaria control program managers as they struggle to develop plans for the monitoring and management of insecticide resistance in line with WHO GPIRM recommendations (6). Curiously, across our study site, there was a significant decrease in the Vgsc-1014F resistance marker frequency. While there are a number of instances of kdr markers sweeping rapidly to fixation (30–32), the obverse trend shown here has not been reported elsewhere. There are numerous studies showing that in An. arabiensis, Vgsc-1014F is a strong predictor of pyrethroid resistance (33), so this may suggest a decline in its importance in conferring a resistant phenotype due to the emergence of additional resistance mechanism(s). 
+
+
+*29/1/2018*
+
+after workshop
+Dave wheetman was concerned that Bayer had misinterpreted our results because pyrethroids are at very high starting frequencies.
+
+But when I tried setting starting frequency to 1 it does show that the pyrethroid still does provide some protection to the new AI.
+runcurtis_f2( max_gen=500,  P_1 = 1 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , z.RR1_00 = 0 , z.RR2_00 = 0 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+I should send that plot to Dave.
+
+
+runcurtis_f2( max_gen=500,  P_1 = 1 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.5 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , z.RR1_00 = 0 , z.RR2_00 = 0 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+
+plus I can change max starting freq from 0.1 to 1 in resistmixseq
+
+*31/1/2018*
+
+If you set frequency for an insecticide to 1 that insecticide can still protect the other in a mixture, unless you set resistance restoration to 1 too. In the later case no RR will be killed.
+
+runcurtis_f2( max_gen=500,  P_1 = 1 , P_2 = 1e-04 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 1 , rr_restoration_ins1 = 1 , rr_restoration_ins2 = 0.5 , z.RR1_00 = 0 , z.RR2_00 = 0 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
+
+Ah yes I get it. With resistance alleles at fixation the whole popn is RR for the one insecticide. Therefore when resistance restoration is 1, no RR are killed and it doesn't matter what the dominance level is (because there are no SR). In that case the effectiveness level probably makes no difference either.
+
+So when an allele is at fixation I would expect resistance restoration to be the key parameter in determining how much protection that old insecticide can provide to a new one. But is it OK to use a single gene representation for the old insecticide at fixation even if there are multiple genes ?
+
+In practice might including a pyrethroid within the mixture cause the resistance phenotype (intensity?) to increase over time as more genes are selected for.
+
+*12/2/18*
+Can the model do assortative mating ?
+For luca and following the Rowland1991 paper
+I think I would need to modify the createGametes() function.
+
+As a part of that he has to outline follow on funding and outlines a 5 year BBSRC fellowship application that includes : 
+
+4) development of a mathematical model merging fitness data, sub-lethal effects of insecticides, and parasite-vector interactions. The goal is to predict the vector role of populations having different insecticide resistance mechanisms and will be available as an open-source tool on the LSTM website; 
+
+I suggest he could replace that with : 
+4) incorporation of results on assortative mating and fitness costs into an existing population genetics model of the evolution of insecticide resistance; 
+
+
+Checking Malaria j. proofs :
+
+I need to improve refernces 32 & 34 :
+
+32. Gressel J. Catch 22: All doses select for resistance. When will this happen
+and how to slow evolution ? In: Pesticide dose: effects on the environment
+and target and non-target organisms. Washington, DC: American
+Chemical Society; 2017. p. 61–72.
+
+DOI:10.1021/bk-2017-1249.ch005
+
+
+34. Via S. Quantitative genetic models and the evolution of pesticide resistance.
+In: Pesticide resistance. Strategies and tactics for management.
+Washington, DC: National Academy Press; 1986. p. 222–35.
+
+This is template example 
+Wyllie AH, Kerr JFR, Currie AR. Cell death: the significance of apoptosis. In: Bourne GH, Danielli JF, Jeon KW, editors. International review of cytology. London: Academic; 1980. p. 251-306.
+
+so seems I need to put editors in, but 2nd one doesn't name editors :
+
+
+32. Gressel J. Catch 22: All doses select for resistance. When will this happen
+and how to slow evolution ? In: Duke SO, Kudsk P, Solomon K, editors. Pesticide dose: effects on the environment and target and non-target organisms. Washington, DC: American
+Chemical Society; 2017. p. 61–72.
+
+34 doesn't have named editors, they are indicated as :
+National Research Council; Board on Agriculture; Committee on Strategies for the Management of Pesticide Resistant Pest Populations. 
+
+DOI:10.1021/bk-2017-1249.ch005
+
+From Sternberg & Thomas 2017 insights from agriculture
+I think our model disagrees with the 2nd sentence that mixtures require resistance alleles to be rare and fully recessive.
+
+Co-formulations can be difficult to develop and mixtures only offer an advantage as
+long as the component insecticides both continue to work, such that
+the efficacy of mixtures for controlling resistance depends on the
+co-persistence of the component insecticides. Additionally, resistance
+alleles in the insects must be rare and fully recessive, to avoid
+strong selection for double heterozygous individuals and the rapid
+evolution of resistance to both insecticides (Curtis, 1985; Tabashnik,
+1989). Similar caveats exist for the use of mosaic and rotation strategies,
+and modeling efforts aimed at evaluating different strategies
+for insecticide resistance management have demonstrated that the
+outcomes are highly sensitive to parameters that are system specific
+(Lenormand & Raymond, 1998; Slater, Stratonovitch, Elias, Semenov,
+& Denholm, 2016), such that there is no universal best strategy.
+
+Because of the situation-specific nature of insecticide resistance
+management plans, public health may have an advantage over agriculture.
+Agricultural pest management is concerned with hundreds
+of species, and in many cases, detailed data are not available for each
+pest species (and potential nontarget organisms). Compared to agriculture,
+public health is concerned with a small number of insect
+species. This should enable a strongly data-driven approach to selecting resistance management strategies, but in reality, very little is
+currently known. 
+GPIRM does highlight the success of a rotation-based
+management strategy in one public health example: the West African
+Onchocerciasis Control Program (OCP).
+
+2.3 | Summary
+• Insecticide resistance management (IRM) strategies are urgently needed for vector control.
+
+• The feasibility of IRM depends on having multiple insecticides and
+vector control tools; vector control is currently dependent almost
+exclusively on a single insecticide class.
+
+• The success of an IRM strategy is highly dependent on ecological
+and biological specifics; there is not yet a solid evidence base of
+recommending one strategy over another.
+
+• If control is achieved via the use of multiple tools with diverse
+modes of action, not only will selection for insecticide resistance be
+reduced but also, the impact of resistance will likely be less severe.
+The pending resistance crisis creates an urgent need to develop and
+implement integrated, multitactic IVM strategies that parallel IPM
+in agriculture.
+
+Because it is so difficult to achieve adequate sensitivity, in many cases by the time resistance is detected, it will already be too late to implement resistance
+management measures and slow the spread of resistance.
+
+However, difficulties with monitoring resistance need not prevent the implementation of IRM strategies and it is possible, and perhaps even preferable, to implement strategies that do not rely on early detection of resistance. Although the OCP did conduct frequent entomological surveys on black flies, the program relied on set rotation
+program determined beforehand based on cost as well as other factors
+(Hougard et al., 1993). In other words, the decision on which insecticide
+to use was not based on the detection of resistance, other than the initial
+observation that control with a single insecticide was failing due to
+resistance (Curtis et al., 1993).
+
+The best strategy may be to use resistance monitoring to inform which insecticides
+can be used in a rotation, but not when they should be used.
+
+Perhaps the most effective persistence profile from a resistance management perspective is a sustained high dose with rapid decay—in other words, “hit them hard or not at all” (REX Consortium, 2013). 
+
+Efforts to develop long-lasting products for vector control might be counterproductive with regard to resistance management if the result is a long and shallow decay curve.
+The ideal persistence profile from a resistance management perspective
+needs to be balanced, however, with the need to provide continuous
+protection from disease. A product with rapid decay could leave
+people unprotected from disease if too much time elapses between treatments.
+
+In public health, population growth does not necessarily translate to more disease transmission. For example, increasing densities of vector populations might
+influence phenotypic traits that make better or worse disease vectors
+(Moller-Jacobs, Murdock, & Thomas, 2014; Russell et al., 2011;
+Shapiro, Murdock, Jacobs, Thomas, & Thomas, 2016).
+
+To our knowledge, there is only one field trial aimed specifically at testing
+resistance management strategies against malaria mosquitoes (Penilla
+et al., 2007). Perhaps worryingly, this trial revealed no clear benefit of
+either insecticide rotations or mosaics in slowing the spread of resistance
+when compared to monotherapy. However, these results do not
+necessarily mean that rotations or mosaics cannot be effective, but
+rather highlights a critical gap in understanding when, how, and why
+such strategies might work.
+
+Penilla, R. P., Rodríguez, A. D., Hemingway, J., Trejo, A., López, A. D.,
+& Rodríguez, M. H. (2007). Cytochrome P450-based resistance mechanism and pyrethroid resistance in the field Anopheles albimanus resistance management trial. Pesticide Biochemistry and Physiology, 89(2), 111–117. https://doi.org/10.1016/j.pestbp.2007.03.004.
+
+
+Field testing of IRM strategies is difficult but necessary. GPIRM makes numerous references to approaches such as rotations, mixtures, or mosaics, as if they are proven strategies and have equal merit. At present, there are no sound empirical data to inform the selection of any one strategy over another.
+
+Arguably, one of the most successful resistance management program
+in agriculture is the management of Bt resistance in genetically modified (GM) crop in the United States (Bates, Zhao, Roush, & Shelton, 2005; Tabashnik, Gassmann, Crowder, & Carriére, 2008; Tabashnik et al., 2003). This is a high-dose/ refuge strategy based on expression of high doses of Bt toxin within GM crops, combined with non-Bt refuges, which can be non-GM cotton or corn or even another plant used by the target pest. The high dose of Bt is designed to kill fully susceptible and heterozygote-resistant
+insects. Any homozygote-resistant individuals will be initially rare, and there is a high probability that they will mate with the numerically dominant susceptible individuals emerging from the non-Bt refuge. These matings result in heterozygotes
+that are functionally susceptible to the Bt crop, effectively
+clearing resistance alleles from the pest population. Factors that have
+likely contributed to the success of this strategy include low initial
+frequencies of resistance alleles, recessive inheritance of those resistance
+alleles, and fitness costs associated with resistance (Tabashnik et al., 2003).
+
+16/2/18
+Dengela 2018 PMI data : Multi-country assessment of residual bio-efficacy of insecticides used for indoor residual spraying in malaria control on different surface types: results from program monitoring in 17 PMI/USAID supported IRS countries
+
+Insecticide residual activity data collected using wild mosquito populations from areas of known or suspected resistance were not included in this report.
+
+Malaria journal paper out yesterday !
+https://doi.org/10.1186/s12936-018-2203-y
+
 
 
 
 ### TO DO  
-
 
 
 
@@ -9035,7 +9223,7 @@ https://andysouth.shinyapps.io/resistmob2
 https://andysouth.shinyapps.io/resistmixseq
 
 
-# Matt needs to do this each time to sync his fork to get updates from me
+# to sync a fork and get updates
 git fetch upstream
 git checkout master
 git merge upstream/master
