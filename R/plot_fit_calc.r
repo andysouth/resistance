@@ -9,6 +9,8 @@
 #' @param cost cost of resistance
 #' @param simple default FALSE whether to create a simpler plot e.g. for public health journal
 #' @param title optional title for the plot
+#' @param exposed_on_left whether to put exposed panel on left (TRUE) or right
+#' @param labels_numeric whether to add 0,1 labels for values of each input
 # @param yblank whether to remove y axis title & labels
 # @param size text size for RS labels, default 4
 #' 
@@ -31,7 +33,9 @@ plot_fit_calc <- function ( effectiveness=0.75,
                             dominance_cost=0.6, 
                             cost=0.2,
                             simple = FALSE,
-                            title = "Fitness calculation for each genotype in each generation for one insecticide"){
+                            title = "Fitness calculation for each genotype in each generation for one insecticide",
+                            exposed_on_left = TRUE,
+                            labels_numeric = TRUE){
     
   
   #library(gridExtra)
@@ -52,9 +56,16 @@ plot_fit_calc <- function ( effectiveness=0.75,
                     y2 = c(ss, sr, rr))
 
   #set up different labels for dominance in simple & other plot
-  if (simple) {dom_rest_lab <- dom_cost_lab <- " dominance"} else {
-               dom_rest_lab <- " dominance of\n  resistance"
-               dom_cost_lab <- " dominance of\n  cost" }
+  if (simple) 
+  {
+    dom_rest_lab <- dom_cost_lab <- " dominance"
+    sizelab <- 5
+  } else 
+  {
+    dom_rest_lab <- " dominance of\n  resistance"
+    dom_cost_lab <- " dominance of\n  cost" 
+    sizelab <- 3
+  }
     
   
   gg1 <- ggplot(dfg, aes(x = x2, y = y2)) +    
@@ -68,18 +79,18 @@ plot_fit_calc <- function ( effectiveness=0.75,
         annotate("segment", x='SR', xend='RR', y=rr, yend=rr, linetype="dotted", colour = "red4") +
         #dotted vertical for dominance
         annotate("segment", x='SR', xend='SR', y=sr, yend=rr, linetype="dotted", colour = "red4") +    
-        ylab('fitness') +
+        ylab('fitness or survival') +
         xlab('genotype') +
         ggtitle("exposed to insecticide") + #colour set in theme below
-        #to set ordering of x axis
+        #to sexposed_on_leftet ordering of x axis
         scale_x_discrete(limits = c('SS',  'SR',  'RR')) +
         #text annotations
         # annotate("text", x = 'SS', y = ss+(1-ss)/2, hjust=0, label = " effectiveness") +
         # annotate("text", x = 'SR', y = sr+(rr-sr)/2, hjust=0, label = " dominance") + 
         # annotate("text", x = 'RR', y = ss+(rr-ss)/2, hjust=0, label = " resistance\n  restoration") + 
-        annotate("label", x = 'SS', y = ss+(1-ss)/2, size=3, label = " effectiveness") +
-        annotate("label", x = 'SR', y = ss+(sr-ss)/2, size=3, label = dom_rest_lab) + 
-        annotate("label", x = 'RR', y = ss+(rr-ss)/2, size=3, label = " resistance\n  restoration") + 
+        annotate("label", x = 'SS', y = ss+(1-ss)/2, size=sizelab, label = " effectiveness") +
+        annotate("label", x = 'SR', y = ss+(sr-ss)/2, size=sizelab, label = dom_rest_lab) + 
+        annotate("label", x = 'RR', y = ss+(rr-ss)/2, size=sizelab, label = " resistance\n  restoration") + 
     
         theme_bw() +
         theme(
@@ -93,25 +104,41 @@ plot_fit_calc <- function ( effectiveness=0.75,
               panel.grid.major.x = element_blank(),
               panel.grid.minor.x = element_blank()
         )
+  
+  if (exposed_on_left)
+  {
+    gg1 <- gg1 +
+      ylab('fitness or survival')
+  } else
+  {
+    gg1 <- gg1 +
+      theme( axis.title.y = element_blank(),
+             axis.text.y = element_blank(),
+             axis.ticks.y = element_blank() )   
+  }
 
   if (!simple){
     gg1 <- gg1 +
-      scale_y_continuous(breaks=c(0,0.2,0.4,0.6,0.8,1), limits=c(0,1)) +
+      scale_y_continuous(breaks=c(0,0.2,0.4,0.6,0.8,1), limits=c(0,1)) 
+    
+  } else if (simple){
+    
+    gg1 <- gg1 +    
+      scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1), labels=c('low','','high')) 
+      #scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
+  }
+
+  if (labels_numeric)
+  {
+    gg1 <- gg1 +
       # add 0,1 labels for dominance and resistance restoration
       annotate("text", x = 'SS', y = 1, hjust=0, label = " 0", colour="grey40") +
       annotate("text", x = 'SS', y = 0, hjust=0, label = " 1", colour="grey40") +   
       annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="grey40") +
       annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="grey40") +
       annotate("text", x = 'RR', y = ss, hjust=0, label = " 0", colour="grey40") +
-      annotate("text", x = 'RR', y = 1, hjust=0, label = " 1", colour="grey40") 
-    
-  } else if (simple){
-    
-    gg1 <- gg1 +    
-      scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1), labels=c('low','','high')) +
-      scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
+      annotate("text", x = 'RR', y = 1, hjust=0, label = " 1", colour="grey40")     
   }
-  
   
   
   # insecticide absent
@@ -143,48 +170,75 @@ plot_fit_calc <- function ( effectiveness=0.75,
     ggtitle("not exposed to insecticide") + 
     #to set ordering of x axis
     scale_x_discrete(limits = c('SS',  'SR',  'RR')) +
-    #text annotations "label" creates box "text"doesn't
+    #text annotations "label" creates box "text" doesn't
     #annotate("text", x = 'SS', y = ss+(1-ss)/2, hjust=0, label = " effectiveness") +
-    annotate("label", x = 'SR', y = sr+(ss-sr)/2, size=3, label = dom_cost_lab) + 
-    annotate("label", x = 'RR', y = ss-(ss-rr)/2, size=3, label = " resistance\n  cost") + 
+    annotate("label", x = 'SR', y = sr+(ss-sr)/2, size=sizelab, label = dom_cost_lab) + 
+    annotate("label", x = 'RR', y = ss-(ss-rr)/2, size=sizelab, label = " resistance\n  cost") + 
     
     theme_bw() +
     theme(
+      axis.title.y = element_text(size = rel(1.5)),
       axis.text.x = element_text(size = rel(1.5)),
       #axis.title.x = element_blank(),
-      axis.title.y = element_blank(),
-      axis.text.y = element_blank(),
-      #axis.line.x = element_blank(),
-      axis.ticks.y = element_blank(),
+      #axis.title.y = element_blank(),
+      #axis.text.y = element_blank(),
+      #axis.ticks.y = element_blank(),
       plot.title = element_text(colour = "navy"), #size = 40, face = "bold"),
       panel.grid.minor.y = element_blank(),
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank()
     )  
 
+  if (!exposed_on_left)
+  {
+    gg2 <- gg2 +
+      ylab('fitness or survival')
+  } else
+  {
+    gg2 <- gg2 +
+      theme( axis.title.y = element_blank(),
+             axis.text.y = element_blank(),
+             axis.ticks.y = element_blank() )   
+  }  
+  
   if (!simple){
     gg2 <- gg2 +
-      scale_y_continuous(breaks=c(0,0.2,0.4,0.6,0.8,1), limits=c(0,1)) +
-      # add 0,1 labels for dominance and cost
-      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="grey40") +
-      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="grey40") +
-      annotate("text", x = 'RR', y = 1, hjust=0, label = " 0", colour="grey40") +
-      annotate("text", x = 'RR', y = 0, hjust=0, label = " 1", colour="grey40") 
+      scale_y_continuous(breaks=c(0,0.2,0.4,0.6,0.8,1), limits=c(0,1))
     
   } else if (simple){
     
     gg2 <- gg2 +    
-      #scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1), labels=c('low','','high')) +
-      scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
-  }    
+      scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1))
+      #scale_x_discrete(limits = c('SS',  'SR',  'RR'), labels = c('susceptible',  'SR',  'resistant'))
+      }    
+  
+  if (labels_numeric)
+  {
+    gg2 <- gg2 +
+      # add 0,1 labels for dominance and cost
+      annotate("text", x = 'SR', y = ss, hjust=0, label = " 0", colour="grey40") +
+      annotate("text", x = 'SR', y = rr, hjust=0, label = " 1", colour="grey40") +
+      annotate("text", x = 'RR', y = 1, hjust=0, label = " 0", colour="grey40") +
+      annotate("text", x = 'RR', y = 0, hjust=0, label = " 1", colour="grey40")   
+  }
+  
+  if (exposed_on_left)
+  {
+    boxleft <- gg1
+    boxright <- gg2
+  } else
+  {
+    boxleft <- gg2
+    boxright <- gg1    
+  }
   
   if (is.null(title))
   {
-    gridExtra::grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85))
+    gridExtra::grid.arrange(boxleft, boxright, nrow=1, widths=c(1,0.85))
   } else
   {
     #fontface = "plain", "bold", "italic"
-    gridExtra::grid.arrange(gg1, gg2, nrow=1, widths=c(1,0.85), top=textGrob(title, gp=gpar(fontsize=15, fontface='plain'))) #col=
+    gridExtra::grid.arrange(boxleft, boxright, nrow=1, widths=c(1,0.85), top=textGrob(title, gp=gpar(fontsize=15, fontface='plain'))) #col=
   }    
   
    
