@@ -8892,16 +8892,11 @@ outcomes are highly sensitive to parameters that are system specific
 (Lenormand & Raymond, 1998; Slater, Stratonovitch, Elias, Semenov,
 & Denholm, 2016), such that there is no universal best strategy.
 
-Because of the situation-specific nature of insecticide resistance
-management plans, public health may have an advantage over agriculture.
-Agricultural pest management is concerned with hundreds
-of species, and in many cases, detailed data are not available for each
-pest species (and potential nontarget organisms). Compared to agriculture,
-public health is concerned with a small number of insect
+Because of the situation-specific nature of insecticide resistance management plans, public health may have an advantage over agriculture.
+Agricultural pest management is concerned with hundreds of species, and in many cases, detailed data are not available for each
+pest species (and potential nontarget organisms). Compared to agriculture, public health is concerned with a small number of insect
 species. This should enable a strongly data-driven approach to selecting resistance management strategies, but in reality, very little is
-currently known. 
-GPIRM does highlight the success of a rotation-based
-management strategy in one public health example: the West African
+currently known. GPIRM does highlight the success of a rotation-based management strategy in one public health example: the West African
 Onchocerciasis Control Program (OCP).
 
 2.3 | Summary
@@ -8922,54 +8917,27 @@ The pending resistance crisis creates an urgent need to develop and
 implement integrated, multitactic IVM strategies that parallel IPM
 in agriculture.
 
-Because it is so difficult to achieve adequate sensitivity, in many cases by the time resistance is detected, it will already be too late to implement resistance
-management measures and slow the spread of resistance.
+Because it is so difficult to achieve adequate sensitivity, in many cases by the time resistance is detected, it will already be too late to implement resistance management measures and slow the spread of resistance.
 
-However, difficulties with monitoring resistance need not prevent the implementation of IRM strategies and it is possible, and perhaps even preferable, to implement strategies that do not rely on early detection of resistance. Although the OCP did conduct frequent entomological surveys on black flies, the program relied on set rotation
-program determined beforehand based on cost as well as other factors
-(Hougard et al., 1993). In other words, the decision on which insecticide
-to use was not based on the detection of resistance, other than the initial
-observation that control with a single insecticide was failing due to
-resistance (Curtis et al., 1993).
+However, difficulties with monitoring resistance need not prevent the implementation of IRM strategies and it is possible, and perhaps even preferable, to implement strategies that do not rely on early detection of resistance. Although the OCP did conduct frequent entomological surveys on black flies, the program relied on set rotation program determined beforehand based on cost as well as other factors
+(Hougard et al., 1993). In other words, the decision on which insecticide to use was not based on the detection of resistance, other than the initial observation that control with a single insecticide was failing due to resistance (Curtis et al., 1993).
 
-The best strategy may be to use resistance monitoring to inform which insecticides
-can be used in a rotation, but not when they should be used.
+The best strategy may be to use resistance monitoring to inform which insecticides can be used in a rotation, but not when they should be used.
 
 Perhaps the most effective persistence profile from a resistance management perspective is a sustained high dose with rapid decay—in other words, “hit them hard or not at all” (REX Consortium, 2013). 
 
-Efforts to develop long-lasting products for vector control might be counterproductive with regard to resistance management if the result is a long and shallow decay curve.
-The ideal persistence profile from a resistance management perspective
-needs to be balanced, however, with the need to provide continuous
-protection from disease. A product with rapid decay could leave
-people unprotected from disease if too much time elapses between treatments.
+Efforts to develop long-lasting products for vector control might be counterproductive with regard to resistance management if the result is a long and shallow decay curve. The ideal persistence profile from a resistance management perspective needs to be balanced, however, with the need to provide continuous protection from disease. A product with rapid decay could leave people unprotected from disease if too much time elapses between treatments.
 
-In public health, population growth does not necessarily translate to more disease transmission. For example, increasing densities of vector populations might
-influence phenotypic traits that make better or worse disease vectors
-(Moller-Jacobs, Murdock, & Thomas, 2014; Russell et al., 2011;
-Shapiro, Murdock, Jacobs, Thomas, & Thomas, 2016).
+In public health, population growth does not necessarily translate to more disease transmission. For example, increasing densities of vector populations might influence phenotypic traits that make better or worse disease vectors (Moller-Jacobs, Murdock, & Thomas, 2014; Russell et al., 2011; Shapiro, Murdock, Jacobs, Thomas, & Thomas, 2016).
 
-To our knowledge, there is only one field trial aimed specifically at testing
-resistance management strategies against malaria mosquitoes (Penilla
-et al., 2007). Perhaps worryingly, this trial revealed no clear benefit of
-either insecticide rotations or mosaics in slowing the spread of resistance
-when compared to monotherapy. However, these results do not
-necessarily mean that rotations or mosaics cannot be effective, but
-rather highlights a critical gap in understanding when, how, and why
-such strategies might work.
+To our knowledge, there is only one field trial aimed specifically at testing resistance management strategies against malaria mosquitoes (Penilla et al., 2007). Perhaps worryingly, this trial revealed no clear benefit of either insecticide rotations or mosaics in slowing the spread of resistance when compared to monotherapy. However, these results do not necessarily mean that rotations or mosaics cannot be effective, but rather highlights a critical gap in understanding when, how, and why such strategies might work.
 
 Penilla, R. P., Rodríguez, A. D., Hemingway, J., Trejo, A., López, A. D.,
 & Rodríguez, M. H. (2007). Cytochrome P450-based resistance mechanism and pyrethroid resistance in the field Anopheles albimanus resistance management trial. Pesticide Biochemistry and Physiology, 89(2), 111–117. https://doi.org/10.1016/j.pestbp.2007.03.004.
 
-
 Field testing of IRM strategies is difficult but necessary. GPIRM makes numerous references to approaches such as rotations, mixtures, or mosaics, as if they are proven strategies and have equal merit. At present, there are no sound empirical data to inform the selection of any one strategy over another.
 
-Arguably, one of the most successful resistance management program
-in agriculture is the management of Bt resistance in genetically modified (GM) crop in the United States (Bates, Zhao, Roush, & Shelton, 2005; Tabashnik, Gassmann, Crowder, & Carriére, 2008; Tabashnik et al., 2003). This is a high-dose/ refuge strategy based on expression of high doses of Bt toxin within GM crops, combined with non-Bt refuges, which can be non-GM cotton or corn or even another plant used by the target pest. The high dose of Bt is designed to kill fully susceptible and heterozygote-resistant
-insects. Any homozygote-resistant individuals will be initially rare, and there is a high probability that they will mate with the numerically dominant susceptible individuals emerging from the non-Bt refuge. These matings result in heterozygotes
-that are functionally susceptible to the Bt crop, effectively
-clearing resistance alleles from the pest population. Factors that have
-likely contributed to the success of this strategy include low initial
-frequencies of resistance alleles, recessive inheritance of those resistance
+Arguably, one of the most successful resistance management program in agriculture is the management of Bt resistance in genetically modified (GM) crop in the United States (Bates, Zhao, Roush, & Shelton, 2005; Tabashnik, Gassmann, Crowder, & Carriére, 2008; Tabashnik et al., 2003). This is a high-dose/ refuge strategy based on expression of high doses of Bt toxin within GM crops, combined with non-Bt refuges, which can be non-GM cotton or corn or even another plant used by the target pest. The high dose of Bt is designed to kill fully susceptible and heterozygote-resistant insects. Any homozygote-resistant individuals will be initially rare, and there is a high probability that they will mate with the numerically dominant susceptible individuals emerging from the non-Bt refuge. These matings result in heterozygotes that are functionally susceptible to the Bt crop, effectively clearing resistance alleles from the pest population. Factors that have likely contributed to the success of this strategy include low initial frequencies of resistance alleles, recessive inheritance of those resistance
 alleles, and fitness costs associated with resistance (Tabashnik et al., 2003).
 
 16/2/18
@@ -8979,6 +8947,62 @@ Insecticide residual activity data collected using wild mosquito populations fro
 
 Malaria journal paper out yesterday !
 https://doi.org/10.1186/s12936-018-2203-y
+
+
+Mathematical polygenic paper :
+Multi-gene-loci inheritance in resistance modeling
+DirkLangemann OttoRichter AntjeVollratha
+https://doi.org/10.1016/j.mbs.2012.11.010
+
+
+*14/3/18*
+
+Composing few paragraphs on IRM for the WHO insecticide resistance report.
+
+"If control is achieved via the use of multiple tools with diverse modes of action, not only will selection for insecticide resistance be
+reduced but also, the impact of resistance will likely be less severe." (Sternberg, 2017)
+
+"Field testing of IRM strategies is difficult but necessary. GPIRM makes numerous references to approaches such as rotations, mixtures, or mosaics, as if they are proven strategies and have equal merit. At present, there are no sound empirical data to inform the selection of any one strategy over another." (Sternberg, 2017)
+
+Rex consortium review
+
+REX Consortium. Heterogeneity of selection and the evolution of resistance.
+Trends Ecol Evol. 2013;28:110–8.
+
+Responding to Grahams request about Sudo 2017 :
+
+
+Hi Graham, Dave,
+
+Apologies for the delayed reply, I was in Peru last week doing some GIS training. I gave a short talk to the insecticide resistance group there about our work, first time I've talked about it in my rough Spanish. They were interested in potential solutions to the resistance issues they are facing. 
+
+Thanks for forwarding the Sudo 2017 paper on. We saw it just after we had submitted our Malaria Journal paper. We will refer to it when we are writing up our rotations work.
+
+There are some similarities to our work and some differences. Firstly in relation to rotations which we are working on now they use a tighter definition of rotation as changing every generation which is of less relevance for vector control.  
+"The rotation strategy, which uses one insecticide on one pest generation and a different one on the next"
+
+They use two patches, one treated and one a refuge as we do for rotations. They also look at pest suppression as well as the evolution of resistance which is interesting.
+
+Their model is more detailed than ours in terms of life history. This has advantages that they can change life history parameters, but disadvantages the model is more complicated and they have to specify parameter values for which there may be few data.
+
+They apply insecticides during juvenile and/or adult stages allowing them to represent larviciding and adult control.
+
+"In the general model, populations pass through eight events, sequentially, (I) juvenile selection, (II) densitydependent
+survival, (III) pre-mating dispersal, (IV) pre-mating selection, (V) mating, (VI) post-mating dispersal, (VII) post-mating selection, and (VIII) oviposition."
+
+In our mixtures papers we show insecticide effectiveness to be the most important input determining whether mixtures or sequences are favoured. It seems they only run their model with two values of effectiveness 1 and 0.9 (they express this as survival s of 0 and 0.1). At these high values of effectiveness it is consistent with our work that they find mixtures to be favoured most of the time.
+
+I'll look at this again in more detail when we have our rotation results. We may be able to look at Table 2 which specifies the different life histories and when insecticide selection occurs to work out which of their scenarios are most applicable to mosquitoes.
+
+Their code is available and I downloaded it a while ago for a quick look so we have the potential to run their model for comparison, however the code appears quite complicated and not very well documented so this may not be worthwhile.
+
+Best wishes,
+
+Andy
+
+
+
+
 
 
 
@@ -8991,19 +9015,6 @@ https://doi.org/10.1186/s12936-018-2203-y
 
 
 ~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide
-
-## to do for workshop
-~ UI with costRR and costRS
-~ prepare ppt (include field data table from paper2)
-~ include both Fig2 and one other annotated Fig from paper2 in workshop handout 
-~ remove shinyapps resistmob1
-~ check how many hours & concurrent users I have on shinyapps
-~ install resistance & rotations packages on Ians laptop
-~ maybe provide instructions for running offline for R users (github install package, then runUI()) BUT I might want to first move some of resistance package - prob not too much hassle
-
-
-
-
 
 
 
