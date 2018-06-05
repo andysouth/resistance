@@ -8334,12 +8334,10 @@ http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1002453
 resistance : malERA2017_updated-research-agenda-resistance-in-malaria.pdf
 
 "What are the benefits of insecticide rotations, mixtures, or spatial mosaics of different compounds?
-What is the impact of adding nonpyrethroid IRS where LLINs are already deployed
-at high coverage and quality? When should new insecticides be adopted? What is the ideal
-rotation period or mosaic configuration? How many insecticide classes are needed for effective
-rotation or mosaic strategies? Despite the absence of data to answer these questions, some
-countries have already developed operational frameworks for resistance management that
-could be adopted by other programmes.""
+What is the impact of adding nonpyrethroid IRS where LLINs are already deployed at high coverage and quality? When should new insecticides be adopted? What is the ideal rotation period or mosaic configuration? How many insecticide classes are needed for effective rotation or mosaic strategies? Despite the absence of data to answer these questions, some countries have already developed operational frameworks for resistance management that could be adopted by other programmes.""
+
+The malERA Refresh Consultative Panel on Insecticide and Drug Resistance (2017) malERA: An updated research agenda for insecticide and drug resistance in malaria elimination and eradication. PLoS Med 14(11): e1002450. https://doi.org/10.1371/journal.pmed.1002450 
+ 
  
 *12/12/17* 
  
@@ -8844,37 +8842,6 @@ I suggest he could replace that with :
 4) incorporation of results on assortative mating and fitness costs into an existing population genetics model of the evolution of insecticide resistance; 
 
 
-Checking Malaria j. proofs :
-
-I need to improve refernces 32 & 34 :
-
-32. Gressel J. Catch 22: All doses select for resistance. When will this happen
-and how to slow evolution ? In: Pesticide dose: effects on the environment
-and target and non-target organisms. Washington, DC: American
-Chemical Society; 2017. p. 61–72.
-
-DOI:10.1021/bk-2017-1249.ch005
-
-
-34. Via S. Quantitative genetic models and the evolution of pesticide resistance.
-In: Pesticide resistance. Strategies and tactics for management.
-Washington, DC: National Academy Press; 1986. p. 222–35.
-
-This is template example 
-Wyllie AH, Kerr JFR, Currie AR. Cell death: the significance of apoptosis. In: Bourne GH, Danielli JF, Jeon KW, editors. International review of cytology. London: Academic; 1980. p. 251-306.
-
-so seems I need to put editors in, but 2nd one doesn't name editors :
-
-
-32. Gressel J. Catch 22: All doses select for resistance. When will this happen
-and how to slow evolution ? In: Duke SO, Kudsk P, Solomon K, editors. Pesticide dose: effects on the environment and target and non-target organisms. Washington, DC: American
-Chemical Society; 2017. p. 61–72.
-
-34 doesn't have named editors, they are indicated as :
-National Research Council; Board on Agriculture; Committee on Strategies for the Management of Pesticide Resistant Pest Populations. 
-
-DOI:10.1021/bk-2017-1249.ch005
-
 From Sternberg & Thomas 2017 insights from agriculture
 I think our model disagrees with the 2nd sentence that mixtures require resistance alleles to be rare and fully recessive.
 
@@ -9014,7 +8981,13 @@ Andy
 ~ have a go at modifying UI to replace dominance of cost with costRR and costSS (will probably need to recalc dominance) (or not for the paper ?)
 
 
-~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide
+~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide :
+In conclusion, three dominance measures related to resistance have been used in insecticide resistance studies. These dominance measures reßect three different phenotypic traits: the insecticide concentration required to give a particular ML, theMLat a particular insecticide dose, and the Þtness in treated areas. To distinguish clearly among these dominance measures we refer to them as DLC, DML, and DWT, respectively. All these dominance measures can be estimated by the
+same general formula given above. Other dominance measures related to an insecticide resistance allele, such as the dominance of Þtness in untreated areas (DWNT) can also be calculated with this simple formula. All these dominance measures vary between 0 (complete recessivity) to 1 (complete dominance).
+...
+No study of the genetics of insecticide resistance has yet focused on calculation of
+the dominance measure DWT. We strongly suggest that the time has come to focus on the estimation of
+DWT and DWNT. We are aware that such estimations will be a difÞcult task notably in natural populations.
 
 
 
