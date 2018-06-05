@@ -73,6 +73,9 @@ get_resistance <- function(locus, listOut, truncate_at_1 = TRUE){
     #bind input columns on
     dfResist <- cbind(dfResist, dfIns)
     
+    #31/5/2018 add option to add a scenario column for windows of selection simulations
+    dfResist$scenario <- scenarioNum
+    
     #bind scenario rows on
     if ( scenarioNum == 1 ) dfResistAll <- dfResist
     else  dfResistAll <- rbind(dfResistAll, dfResist)
