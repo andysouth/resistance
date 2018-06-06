@@ -31,7 +31,7 @@ runModel2 <- function(input = NULL,
   ## Scenario loop : each scenario from 1 column of 'input'
   for (scen_num in 1:ncol( input ) ){
     
-    if (scen_num%%10==0) cat("in runModel2() scenario",scen_num,"/",ncol( input ),'\n')
+    if (scen_num%%10==0) message("in runModel2() scenario",scen_num,"/",ncol( input ),'\n')
     
     # calibrations - allows run to be modified : not used in new runs
     calibration <- input[1,scen_num]
