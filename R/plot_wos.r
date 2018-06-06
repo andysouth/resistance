@@ -2,7 +2,7 @@
 #' 
 #' mortality over time or declining concentration for RR,SR,SS
 #' 
-#' @param conc_n number of x intervals default 100, will influence smoothness of lines, converted to 0-1
+#' @param conc_n number of x intervals default 50, will influence smoothness of lines, converted to 0-1
 #' @param conc_rr_mort0 concentration killing none of rr
 #' @param conc_ss_mort0 concentration killing none of ss
 #' @param mort_slope = 3 slope of mortality curves
@@ -10,6 +10,9 @@
 #' @param dom_resistance dominance of resistance 0-1 determines position of sr between rr & ss but it's not really dominance
 #' @param rr_cost cost of resistance to rr (simply added to rr mort)
 #' @param dom_cost dominance of cost
+#' @param exposure proportion of popn exposed to insecticide only used in the simulations
+#' @param max_gen maximum generations to use in the simulations
+#' @param startfreq starting frequency to use in the simulations
 #' @param title title for ggplot
 #' @param addwindow whether to add dotted lines for opening and shutting of window
 #' @param addshading whether to shade window
@@ -29,7 +32,7 @@
 #' @export
 
 
-plot_wos <- function( conc_n = 100,
+plot_wos <- function( conc_n = 50,
                       #conc_rr_mort1 <- 0.7 # concentration killing all of rr
                       #conc_ss_mort1 <- 0.3 # concentration killing all of ss
                       #or try mort 0 because fits better in y=mx+c
@@ -40,6 +43,9 @@ plot_wos <- function( conc_n = 100,
                       dom_resistance = 0.5, #1 # dominance of resistance 0-1, it's not really dominance
                       rr_cost = 0.1, #cost of resistance to rr (simply added to rr mort)
                       dom_cost = 0, #dominance of cost
+                      exposure = 0.5, #only used in the simulation
+                      max_gen = 1000, #used in simulations
+                      startfreq = 0.001, 
                       title = "Window of selection",
                       addwindow = TRUE,
                       addshading = TRUE,
@@ -123,8 +129,8 @@ plot_wos <- function( conc_n = 100,
     #make plot cleaner
     theme( legend.position = legendpos,
            #panel.grid = element_blank(),
-           #axis.text.x = element_blank(),
-           plot.title = element_text(hjust = 0.5),
+           axis.text.x = element_blank(),
+           #plot.title = element_text(hjust = 0.5),
            panel.background = element_rect(colour = 'grey60', fill=NA, size=0.5))
   
   #shading window of selection, i'm not sure whether helpful to shade between
@@ -153,8 +159,6 @@ plot_wos <- function( conc_n = 100,
   }
   
   if (xreverse) gg <- gg + scale_x_continuous(trans='reverse')
-  
-  if (plot) plot(gg)
   
   # add calculations of inputs for resistance model
   # not quite sure how I'm going to get out yet ...
@@ -193,16 +197,25 @@ plot_wos <- function( conc_n = 100,
     # NO sensiAnPaperPart() actually runs model (although  I could add an arg to stop that)
     #input <- sensiAnPaperPart( nScenarios=nrow(dfout), insecticideUsed='insecticide1')
     # todo maybe put these bits into a function to make it easier to do multiple runs
-    input <- matrix( ncol=nrow(dfout), nrow=53 )
-    input[5,] <- 0.001	        # P_1 locus 1 frequency of resistance allele
+    #input <- matrix( ncol=nrow(dfout), nrow=53 )
+    #input[5,] <- 0.001	        # P_1 locus 1 frequency of resistance allele
     
     #oooo or seems I may be able to add an arg to setInputOneScenario() to make it do multiple scenarios
     #but might want to avoid changing setInputOneScenario() because it has a trickiness about num args
     #Aha! I already wrote something like this a long time ago
-    #although I do say that it is deprecated
     #This will use all defaults from setInputOneScenario()
     #beware currently you have to set at least one range or it fails
-    input <- setInputSensiScenarios( nScenarios = nrow(dfout), max_gen=c(500,500) )
+    #arg! can't specify args as variables 
+    #input <- setInputSensiScenarios( nScenarios = nrow(dfout), max_gen=c(max_gen,max_gen) )
+    input <- setInputSensiScenarios( nScenarios = nrow(dfout), P_2=c(0,0) )
+        
+    #TODO I will need to change some other inputs from the defaults in setInputOneScenario()
+    input[2,] <- max_gen           # max_gen
+    input[5,] <- startfreq           # P_1    
+    #e.g. is exposure being done correctly ? Seems that default is 0.9
+    input[8:25,] <- 0
+    input[c(10,19),] <- exposure #mA0, fA0
+    input[c(8,17),] <- 1-exposure #m00, f00
     
     #set the rows for the variable inputs from dfout
     #see setInputOneScenario() and createInputMatrix() for reference
@@ -217,11 +230,50 @@ plot_wos <- function( conc_n = 100,
     ## run the model for all of the input scenarios    
     listOut <- runModel2(input, produce.plots = FALSE) 
     
+    # 
+    resistPoints <- findResistancePoints(listOut, locus=1, criticalPoints = 0.5)
+    #transpose
+    resistPoints <- t(resistPoints)
+    #replace 999 which is used to indicate resistance not reached with NA
+    resistPoints <- ifelse(resistPoints==999,NA,resistPoints)
+    dfout$time_to_resistance0.5 <- resistPoints
     
-    #invisible(dfout) 
-    invisible(listOut)
+    #plot simulation results
+    gg_timetor <- dfout %>%
+      
+      ggplot(aes(x=conc, y=time_to_resistance0.5))+
+      geom_point() +
+      #geom_line(lwd=2,alpha=0.6) +
+      theme_minimal() +
+      theme(axis.text.x = element_blank()) +
+      labs(title = paste0("Simulation using inputs from above, exposure=",exposure," startfreq=",startfreq)) +
+      scale_y_continuous(limits=c(0,NA)) +
+      labs(x='Time or declining insecticide concentration')
+    if (xreverse) gg_timetor <- gg_timetor + scale_x_continuous(trans='reverse')
+    
+    # have a go at a small plot of dominance
+    gg_dom <- dfout %>%
+      ggplot(aes(x=conc, y=dom_resist))+
+      geom_point(shape=1) + #open circle
+      theme_minimal() +
+      theme(axis.text.x = element_blank()) +      
+      #ggtitle("dominance") +
+      scale_y_continuous(limits=c(0,1), breaks=c(0,1)) +
+      labs(y='dominance',x='')
+    if (xreverse) gg_dom <- gg_dom + scale_x_continuous(trans='reverse')    
+    
+    library(patchwork)
+    #plot(gg / gg_timetor)
+
+    plot(gg / gg_dom/ gg_timetor + plot_layout(ncol = 1, heights = c(5,1,5)))
+        
+    invisible(dfout) 
+    #invisible(listOut)
+    #invisible(resistPoints)
   } else 
   {
+    if (plot) plot(gg)
+    
     invisible(gg)    
   }
 
