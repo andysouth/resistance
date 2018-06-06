@@ -22,7 +22,7 @@
 #' @param outtoresistance whether to calculate and output resistance model inputs
 #' @param xreverse whether to reverse x axis for declining concentration
 #' 
-#' @import ggplot2 tidyverse
+#' @import ggplot2 tidyverse patchwork
 #' 
 #' @examples 
 #' plot_wos(mort_slope=3, dom_resist=0.9)
@@ -262,7 +262,7 @@ plot_wos <- function( conc_n = 50,
       labs(y='dominance',x='')
     if (xreverse) gg_dom <- gg_dom + scale_x_continuous(trans='reverse')    
     
-    library(patchwork)
+    #library(patchwork)
     #plot(gg / gg_timetor)
 
     plot(gg / gg_dom/ gg_timetor + plot_layout(ncol = 1, heights = c(5,1,5)))

@@ -8967,8 +8967,17 @@ Best wishes,
 
 Andy
 
+*5/6/2018*
 
+adding plot_wos() to generate idealised diagrams of windows of selection
 
+want to use it to generate inputs for single insecticide resistance runs to calculate time-to-resistance.
+
+paper: Brooke2010
+Major effect genes or loose confederations? The development of insecticide resistance in the malaria vector Anopheles gambiae
+Good clear summary of evidence about single v multi-gene & costs & dominance in An gambiae
+
+In An. gambiae, insecticide resistance phenotypes usually develop under the control of single major genetic factors. Those factors involving mutations in target site loci are likelier to reduce fitness and are only advantageous to carriers in the presence of insecticide. Selection generally acts against these alleles and they tend to drift out of populations in the absence of insecticide. However, a combination of factors producing a single resistance phenotype also occurs in some instances. These factors invariably involve metabolic detoxification, are less likely to reduce reproductive and physiological fitness in carriers, and tend to be stable over time, even in the absence of insecticide selection.
 
 
 

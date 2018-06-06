@@ -5,6 +5,7 @@
 #' You need to pass a range for which parameters you want, as c(min,max).
 #' Scenarios will be created by selecting from a uniform distribution specified by this range.
 #' Any parameters not specified will be set to their default values.
+#' TODO it fails if no param ranges are passed i.e. you can't just create a matrix of repeated default scenarios
 #' 
 #' @param nScenarios number of scenarios to generate 
 #' @param ... parameter ranges to run, passed as name=c(min,max)
