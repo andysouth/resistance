@@ -1,9 +1,8 @@
 #' inputs_from_gen_fit calculate single locus model inputs from genotype fitnesses
 #' 
-#' not component of the model but useful to calc model inputs from mosquito data
-#' 
-#' new 2017_12
-
+#' not a component of the model but useful to calc model inputs from mosquito data. Can accept multiple rows.
+#' Be careful that this needs fitness values, use 1-mortality if you have mortality data.
+#'
 #' @param SS SS fitness with insecticide
 #' @param RS RS fitness with insecticide
 #' @param RR RR fitness with insecticide
@@ -19,6 +18,8 @@
 #' inputs_from_gen_fit(SS=0.27, RS=0.31, RR=0.5)
 #' #curtis85 HCH
 #' inputs_from_gen_fit(SS=0, RS=0.0007, RR=0.43)
+#' #multiple rows
+#' inputs_from_gen_fit(SS=c(0,0.1), RS=c(0.0007,0.1), RR=c(0.43,0.5))
 #' #see survival_from_genotype_livedead.xls
 #' #1 Kolaczinski2000 etofenprox (pyr), gives low eff 0.43, rr_ 0.63, dom 0.30
 #' inputs_from_gen_fit(RR=0.84, RS=0.65, SS=0.57)
@@ -46,7 +47,7 @@ inputs_from_gen_fit <- function ( SS = 0.2,
                                   RR_noi = NULL)
 {
   
-  dfin <- data.frame(eff=NA, rr_=NA, dom=NA, cost=NA, domcost=NA)
+  dfin <- data.frame(eff=rep(NA,length(SS)), rr_=NA, dom=NA, cost=NA, domcost=NA)
   
   #in insecticide
   # Effectiveness (1-SSfit)
