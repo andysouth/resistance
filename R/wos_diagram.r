@@ -25,14 +25,14 @@
 #' @import ggplot2 tidyverse patchwork
 #' 
 #' @examples 
-#' plot_wos(mort_slope=3, dom_resist=0.9)
-#' dfout <- plot_wos(out=TRUE, rr_cost=0)
+#' wos_diagram(mort_slope=3, dom_resist=0.9)
+#' dfout <- wos_diagram(out=TRUE, rr_cost=0)
 #' 
 #' @return ggplot object
 #' @export
 
 
-plot_wos <- function( conc_n = 50,
+wos_diagram <- function( conc_n = 50,
                       #conc_rr_mort1 <- 0.7 # concentration killing all of rr
                       #conc_ss_mort1 <- 0.3 # concentration killing all of ss
                       #or try mort 0 because fits better in y=mx+c
@@ -130,8 +130,10 @@ plot_wos <- function( conc_n = 50,
     theme( legend.position = legendpos,
            #panel.grid = element_blank(),
            axis.text.x = element_blank(),
+           axis.line.x = element_line(arrow = arrow(length = unit(0.1, "inches"))),
            #plot.title = element_text(hjust = 0.5),
-           panel.background = element_rect(colour = 'grey60', fill=NA, size=0.5))
+           axis.line.y = element_line())
+           #panel.background = element_rect(colour = 'grey60', fill=NA, size=0.5))
   
   #shading window of selection, i'm not sure whether helpful to shade between
   #the curves or vertically
@@ -171,102 +173,67 @@ plot_wos <- function( conc_n = 50,
   # 4. Dominance of resistance | (SR-SS)/(RR-SS) 
   if (out)
   {
-    dfout <- data_frame( conc = c(concs),
-                         mort_rr = mort_rr,
-                         mort_sr = mort_sr,
-                         mort_ss = mort_ss,
-                         fit_rr = 1-mort_rr,
-                         fit_sr = 1-mort_sr,
-                         fit_ss = 1-mort_ss,  
-                         effectiveness = mort_ss,
-                         resist_restor = (fit_rr-fit_ss)/effectiveness,
-                         dom_resist = (fit_sr-fit_ss)/(fit_rr-fit_ss) )
     
-    #resist_restor & dom_resist are sometimes NaN
-    #try setting to 0
-    dfout$resist_restor=ifelse(dfout$resist_restor=='NaN',0,dfout$resist_restor)
-    dfout$dom_resist=ifelse(dfout$dom_resist=='NaN',0,dfout$dom_resist)
+    dfout <- wos_sim(concs = c(1:5),
+                 mort_rr = c(0,0,0,0.5,1),
+                 mort_sr =c(0,0,0.5,1,1),
+                 mort_ss = c(0,0.5,1,1,1))
     
-    # to run resistance model for all these inputs
-    # probably shouldn't go here but a start
-    # todo move into a function
+    gg_timetor <- wos_plot_timetor(dfout)
     
-    # create a default input matrix one column per scenario
-    # how to set default input params across all scenarios ?
-    # may be easiest to use sensiAnPaperPart() and then overwrite variable inputs
-    # NO sensiAnPaperPart() actually runs model (although  I could add an arg to stop that)
-    #input <- sensiAnPaperPart( nScenarios=nrow(dfout), insecticideUsed='insecticide1')
-    # todo maybe put these bits into a function to make it easier to do multiple runs
-    #input <- matrix( ncol=nrow(dfout), nrow=53 )
-    #input[5,] <- 0.001	        # P_1 locus 1 frequency of resistance allele
+    gg_dom <- wos_plot_input(dfout, input='dom_resist', label='dominance')
     
-    #oooo or seems I may be able to add an arg to setInputOneScenario() to make it do multiple scenarios
-    #but might want to avoid changing setInputOneScenario() because it has a trickiness about num args
-    #Aha! I already wrote something like this a long time ago
-    #This will use all defaults from setInputOneScenario()
-    #beware currently you have to set at least one range or it fails
-    #arg! can't specify args as variables 
-    #input <- setInputSensiScenarios( nScenarios = nrow(dfout), max_gen=c(max_gen,max_gen) )
-    input <- setInputSensiScenarios( nScenarios = nrow(dfout), P_2=c(0,0) )
-        
-    #TODO I will need to change some other inputs from the defaults in setInputOneScenario()
-    input[2,] <- max_gen           # max_gen
-    input[5,] <- startfreq           # P_1    
-    #e.g. is exposure being done correctly ? Seems that default is 0.9
-    input[8:25,] <- 0
-    input[c(10,19),] <- exposure #mA0, fA0
-    input[c(8,17),] <- 1-exposure #m00, f00
-    
-    #set the rows for the variable inputs from dfout
-    #see setInputOneScenario() and createInputMatrix() for reference
-    #this done a bit weirdly because I want to set all scenarios at once rather than one by one
-    #effectiveness of insecticide on SS, phi.SS1_A0
-    input[27,] <- dfout$effectiveness
-    # because the model needs selection coefficient
-    input[39,] <-	dfout$resist_restor * dfout$effectiveness
-    input[34,] <- dfout$dom_resist	# h.RS1_A0 Dominance coefficient locus1 in A0
-    
-    
-    ## run the model for all of the input scenarios    
-    listOut <- runModel2(input, produce.plots = FALSE) 
-    
-    # 
-    resistPoints <- findResistancePoints(listOut, locus=1, criticalPoints = 0.5)
-    #transpose
-    resistPoints <- t(resistPoints)
-    #replace 999 which is used to indicate resistance not reached with NA
-    resistPoints <- ifelse(resistPoints==999,NA,resistPoints)
-    dfout$time_to_resistance0.5 <- resistPoints
-    
-    #plot simulation results
-    gg_timetor <- dfout %>%
-      
-      ggplot(aes(x=conc, y=time_to_resistance0.5))+
-      geom_point() +
-      #geom_line(lwd=2,alpha=0.6) +
-      theme_minimal() +
-      theme(axis.text.x = element_blank()) +
-      labs(title = paste0("Simulation using inputs from above, exposure=",exposure," startfreq=",startfreq)) +
-      scale_y_continuous(limits=c(0,NA)) +
-      labs(x='Time or declining insecticide concentration')
-    if (xreverse) gg_timetor <- gg_timetor + scale_x_continuous(trans='reverse')
-    
-    # have a go at a small plot of dominance
+    # plot dominance
     gg_dom <- dfout %>%
       ggplot(aes(x=conc, y=dom_resist))+
-      geom_point(shape=1) + #open circle
+      #geom_point(shape=1, size=0.6) + #open circle
+      geom_line(linetype=4) +
       theme_minimal() +
-      theme(axis.text.x = element_blank()) +      
-      #ggtitle("dominance") +
+      theme(axis.text.x = element_blank(),
+            axis.title.y = element_text(size = rel(0.7))) +      
+      ggtitle("selected simulation inputs") +
       scale_y_continuous(limits=c(0,1), breaks=c(0,1)) +
+      #labs(y='',x='')
       labs(y='dominance',x='')
     if (xreverse) gg_dom <- gg_dom + scale_x_continuous(trans='reverse')    
+    
+    # plot resistance restoration
+    gg_rr <- dfout %>%
+      ggplot(aes(x=conc, y=resist_restor))+
+      #geom_point(shape=3, size=0.6) + #shape=3 cross
+      geom_line(linetype=3) +
+      theme_minimal() +
+      theme(axis.text.x = element_blank(),
+            axis.title.y = element_text(size = rel(0.7)),
+            plot.title = element_text(size = rel(0.5))) +    
+      #ggtitle("resistance restoration") +
+      scale_y_continuous(limits=c(0,1), breaks=c(0,1)) +
+      #labs(y='',x='')
+      labs(y='resistance\nrestoration',x='')
+    if (xreverse) gg_rr <- gg_rr + scale_x_continuous(trans='reverse')  
+ 
+    # plot effectiveness
+    gg_ef <- dfout %>%
+      ggplot(aes(x=conc, y=effectiveness))+
+      #geom_point(shape=3, size=0.6) + #shape=3 cross
+      geom_line(linetype=2) +
+      theme_minimal() +
+      theme(axis.text.x = element_blank(),
+            axis.title.y = element_text(size = rel(0.7)),
+            plot.title = element_text(size = rel(0.5))) +    
+      #ggtitle("effectiveness") +
+      scale_y_continuous(limits=c(0,1), breaks=c(0,1)) +
+      #labs(y='',x='')
+      labs(y='effectiveness',x='')
+    if (xreverse) gg_ef <- gg_ef + scale_x_continuous(trans='reverse')         
     
     #library(patchwork)
     #plot(gg / gg_timetor)
 
-    plot(gg / gg_dom/ gg_timetor + plot_layout(ncol = 1, heights = c(5,1,5)))
-        
+    #plot(gg / gg_dom/ gg_timetor + plot_layout(ncol = 1, heights = c(5,1,5)))
+    
+    plot(gg / gg_timetor / gg_dom / gg_rr / gg_ef + plot_layout(ncol = 1, heights = c(5,5,1,1,1)))
+            
     invisible(dfout) 
     #invisible(listOut)
     #invisible(resistPoints)

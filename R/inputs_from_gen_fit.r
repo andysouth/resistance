@@ -47,13 +47,15 @@ inputs_from_gen_fit <- function ( SS = 0.2,
                                   RR_noi = NULL)
 {
   
-  dfin <- data.frame(eff=rep(NA,length(SS)), rr_=NA, dom=NA, cost=NA, domcost=NA)
+  #put the input data into outfile, aids checking and allows it to accept vectors
+  dfin <- data.frame(SS=SS, SR=SR, RR=RR,
+    eff=NA, rr_=NA, dom=NA, cost=NA, domcost=NA)
   
   #in insecticide
   # Effectiveness (1-SSfit)
   # Selection coefficient = RRfit-SSfit
   # Resistance restoration = selection coefficient / effectiveness
-  # Dominance of restoration = (SRfit-SSfit)/(RRfit-SSfit)
+  # Dominance of resistance = (SRfit-SSfit)/(RRfit-SSfit)
 
   
   if (!is.null(SS_noi)) 

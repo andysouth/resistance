@@ -8979,15 +8979,30 @@ Good clear summary of evidence about single v multi-gene & costs & dominance in 
 
 In An. gambiae, insecticide resistance phenotypes usually develop under the control of single major genetic factors. Those factors involving mutations in target site loci are likelier to reduce fitness and are only advantageous to carriers in the presence of insecticide. Selection generally acts against these alleles and they tend to drift out of populations in the absence of insecticide. However, a combination of factors producing a single resistance phenotype also occurs in some instances. These factors invariably involve metabolic detoxification, are less likely to reduce reproductive and physiological fitness in carriers, and tend to be stable over time, even in the absence of insecticide selection.
 
+*11/6/2018*
 
+Ian concerned that resistance thresholds aren't reached almost immediately when mortality of SS & SR is 100% (i.e. on left of wos plots).
 
+I reran with exposure set to 0.99 and then indeed the time-to-resistance is super-quick for the whole of the window of selection.
+
+(Note that the sim fails if exposure set to 1)
+First warning is :
+In selection(a_gtypes = a_gtypes, a_fitgen = a_fitgen, calibration = calibration) :
+  m genotype frequencies after selection total != 1 NaN
+
+reorganising plot_wos()
+
+wos_diagram()
+dfout <- wos_sim()
+wos_plot_timetor(dfout)
+wos_plot_input(dfout, input='dom_resist', label='dominance')
 
 
 ### TO DO  
 
-
-
-~ have a go at modifying UI to replace dominance of cost with costRR and costSS (will probably need to recalc dominance) (or not for the paper ?)
+~ finish reorg of wos* functions
+~ replace plot_wos() in spray data scripts
+~ run wos plots for the field data
 
 
 ~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide :
