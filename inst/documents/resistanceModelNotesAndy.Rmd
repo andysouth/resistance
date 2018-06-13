@@ -8980,7 +8980,6 @@ Good clear summary of evidence about single v multi-gene & costs & dominance in 
 In An. gambiae, insecticide resistance phenotypes usually develop under the control of single major genetic factors. Those factors involving mutations in target site loci are likelier to reduce fitness and are only advantageous to carriers in the presence of insecticide. Selection generally acts against these alleles and they tend to drift out of populations in the absence of insecticide. However, a combination of factors producing a single resistance phenotype also occurs in some instances. These factors invariably involve metabolic detoxification, are less likely to reduce reproductive and physiological fitness in carriers, and tend to be stable over time, even in the absence of insecticide selection.
 
 *11/6/2018*
-
 Ian concerned that resistance thresholds aren't reached almost immediately when mortality of SS & SR is 100% (i.e. on left of wos plots).
 
 I reran with exposure set to 0.99 and then indeed the time-to-resistance is super-quick for the whole of the window of selection.
@@ -8997,13 +8996,70 @@ dfout <- wos_sim()
 wos_plot_timetor(dfout)
 wos_plot_input(dfout, input='dom_resist', label='dominance')
 
+*12/6/2018*
+reorganising wos_diagram()
+
+*13/6/2018*
+Code from Ian to calculate selective advantage for WoS paper :
+
+#user-defined inputs
+exposed=0.5# The proportion exposed
+R_freq=0.001; #frequency of the resistance allele. this will affect results if resistance is recessive beacuse it determines the proportion of R allelels in RR genotypes
+fitness_RR=0.9
+fitness_RS=0.2
+fitness_SS=0.1
+
+# now the calculations:
+
+R_next_gen=exposed*(R_freq*R_freq*fitness_RR+2*R_freq*(1-R_freq)*0.5*fitness_RS)+
+  (1-exposed)*(R_freq*R_freq+2*R_freq*(1-R_freq)*0.5);
+
+S_next_gen=exposed*(2*R_freq*(1-R_freq)*0.5*fitness_RS+(1-R_freq)*(1-R_freq)*fitness_SS)+
+  (1-exposed)*(2*R_freq*(1-R_freq)*0.5+(1-R_freq)*(1-R_freq));
+
+R_freq_next_gen=R_next_gen/(R_next_gen+S_next_gen)
+
+selective_advantage=(R_freq_next_gen/R_freq)-1 #so if no increase, advantage=0
+
+wos_advantage()
+
+Now within wos_diagram() I could offer to call wos_advantage() instead (or in addition) to wos_sim()
+
+(and I could generalise wos_plot_timetor() to be able to plot advantage)
+
+aha, wos_plot_timetor() is already generalised to accept x & y
+
+plotting log selective advantage gives clearer mirror image of time-to-resistance at startfreq 0.01 but not very good at 0.001.
+
+
 
 ### TO DO  
 
-~ finish reorg of wos* functions
-~ replace plot_wos() in spray data scripts
-~ run wos plots for the field data
+~ be slightly careful seems 2 potential ways of getting sim inputs for the field data
 
+~ run wos plots for the field data
+~ need to pass field data mortalities to wos_sim()
+~ wos_sim wants :
+#' @param concs concentration or time
+#' @param mort_rr rr mortalities
+#' @param mort_sr sr mortalities
+#' @param mort_ss ss mortalities
+~ should be fairly easy to get these
+~ aha yes I do it already in wos-plots from other data
+~ indeed I calc some model inputs there ...
+~ *choose which way to go
+RR <- filter(df_gt,genotype=='RR') %>% select(mort_assumed) %>% unlist(use.names=FALSE)
+SR <- filter(df_gt,genotype=='SR') %>% select(mort_assumed) %>% unlist(use.names=FALSE)
+SS <- filter(df_gt,genotype=='SS') %>% select(mort_assumed) %>% unlist(use.names=FALSE)
+#beware function expects fitness 0-1
+model_inputs <- resistance::inputs_from_gen_fit(SS=(100-SS)/100, SR=(100-SR)/100, RR=(100-RR)/100)
+
+
+
+
+~ what exposure value should we use for wos ? Remember that male_proportion is prob set to 1 by default, maybe set male to 0 ? and what paper did Ellie recomend ? Griffin et al 2010 PLOS.
+
+~ for the field data where we don't have heterozygotes can we show upper and lower limits for time-to-resistance at dominance 1 and 0.
 
 ~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide :
 In conclusion, three dominance measures related to resistance have been used in insecticide resistance studies. These dominance measures reßect three different phenotypic traits: the insecticide concentration required to give a particular ML, theMLat a particular insecticide dose, and the Þtness in treated areas. To distinguish clearly among these dominance measures we refer to them as DLC, DML, and DWT, respectively. All these dominance measures can be estimated by the

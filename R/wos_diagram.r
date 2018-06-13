@@ -19,14 +19,14 @@
 #' @param addlabels whether to add labels
 #' @param legendpos where to add legend
 #' @param plot whether to plot
-#' @param outtoresistance whether to calculate and output resistance model inputs
+#' @param out whether to calculate and output resistance model inputs
 #' @param xreverse whether to reverse x axis for declining concentration
 #' 
 #' @import ggplot2 tidyverse patchwork
 #' 
 #' @examples 
 #' wos_diagram(mort_slope=3, dom_resist=0.9)
-#' dfout <- wos_diagram(out=TRUE, rr_cost=0)
+#' dfsim <- wos_diagram(out=TRUE, rr_cost=0)
 #' 
 #' @return ggplot object
 #' @export
@@ -53,6 +53,7 @@ wos_diagram <- function( conc_n = 50,
                       legendpos = 'bottom', #'right'
                       plot = TRUE,
                       out = FALSE,
+                      adv = FALSE,
                       xreverse = TRUE
 ) {
   
@@ -173,68 +174,55 @@ wos_diagram <- function( conc_n = 50,
   # 4. Dominance of resistance | (SR-SS)/(RR-SS) 
   if (out)
   {
-    
-    dfout <- wos_sim(concs = c(1:5),
-                 mort_rr = c(0,0,0,0.5,1),
-                 mort_sr =c(0,0,0.5,1,1),
-                 mort_ss = c(0,0.5,1,1,1))
-    
-    gg_timetor <- wos_plot_timetor(dfout)
-    
-    gg_dom <- wos_plot_input(dfout, input='dom_resist', label='dominance')
-    
-    # plot dominance
-    gg_dom <- dfout %>%
-      ggplot(aes(x=conc, y=dom_resist))+
-      #geom_point(shape=1, size=0.6) + #open circle
-      geom_line(linetype=4) +
-      theme_minimal() +
-      theme(axis.text.x = element_blank(),
-            axis.title.y = element_text(size = rel(0.7))) +      
-      ggtitle("selected simulation inputs") +
-      scale_y_continuous(limits=c(0,1), breaks=c(0,1)) +
-      #labs(y='',x='')
-      labs(y='dominance',x='')
-    if (xreverse) gg_dom <- gg_dom + scale_x_continuous(trans='reverse')    
-    
-    # plot resistance restoration
-    gg_rr <- dfout %>%
-      ggplot(aes(x=conc, y=resist_restor))+
-      #geom_point(shape=3, size=0.6) + #shape=3 cross
-      geom_line(linetype=3) +
-      theme_minimal() +
-      theme(axis.text.x = element_blank(),
-            axis.title.y = element_text(size = rel(0.7)),
-            plot.title = element_text(size = rel(0.5))) +    
-      #ggtitle("resistance restoration") +
-      scale_y_continuous(limits=c(0,1), breaks=c(0,1)) +
-      #labs(y='',x='')
-      labs(y='resistance\nrestoration',x='')
-    if (xreverse) gg_rr <- gg_rr + scale_x_continuous(trans='reverse')  
- 
-    # plot effectiveness
-    gg_ef <- dfout %>%
-      ggplot(aes(x=conc, y=effectiveness))+
-      #geom_point(shape=3, size=0.6) + #shape=3 cross
-      geom_line(linetype=2) +
-      theme_minimal() +
-      theme(axis.text.x = element_blank(),
-            axis.title.y = element_text(size = rel(0.7)),
-            plot.title = element_text(size = rel(0.5))) +    
-      #ggtitle("effectiveness") +
-      scale_y_continuous(limits=c(0,1), breaks=c(0,1)) +
-      #labs(y='',x='')
-      labs(y='effectiveness',x='')
-    if (xreverse) gg_ef <- gg_ef + scale_x_continuous(trans='reverse')         
+    #temp to stop sim running if just want advantage
+    if (!adv | plot) dfsim <- wos_sim(concs = concs,
+                     mort_rr = mort_rr,
+                     mort_sr = mort_sr,
+                     mort_ss = mort_ss,
+                     exposure = exposure,
+                     max_gen = max_gen,
+                     startfreq = startfreq
+                     )
+
+    dfadv <- wos_advantage(concs = concs,
+                     mort_rr = mort_rr,
+                     mort_sr = mort_sr,
+                     mort_ss = mort_ss,
+                     exposure = exposure,
+                     #max_gen = max_gen,
+                     startfreq = startfreq)     
+        
     
     #library(patchwork)
-    #plot(gg / gg_timetor)
 
     #plot(gg / gg_dom/ gg_timetor + plot_layout(ncol = 1, heights = c(5,1,5)))
-    
-    plot(gg / gg_timetor / gg_dom / gg_rr / gg_ef + plot_layout(ncol = 1, heights = c(5,5,1,1,1)))
+    if (plot)
+    {
+      gg_timetor <- wos_plot_timetor(dfsim,
+                                     title=paste0("simulation, exposure=",exposure," starting resistance frequency=",startfreq),
+                                     plot=FALSE)
+      
+      #selective advantage
+      gg_adv <- wos_plot_timetor(dfadv, x='conc', y='selective_advantage', ylab='selective\nadvantage', 
+                                     title=paste0("selective advantage, exposure=",exposure," starting resistance frequency=",startfreq),
+                                     plot=FALSE)
+      #log selective advantage
+      gg_adv <- gg_adv + scale_y_continuous(trans='log')
+      
+      gg_dom <- wos_plot_input(dfsim, y='dom_resist', ylab='dominance', plot=FALSE)
+      gg_rr <- wos_plot_input(dfsim, y='resist_restor', ylab='resistance restoration', title=NULL, plot=FALSE)
+      gg_ef <- wos_plot_input(dfsim, y='effectiveness', ylab='effectiveness', title=NULL, plot=FALSE)
+      
+      #plot(gg / gg_timetor / gg_dom / gg_rr / gg_ef + plot_layout(ncol = 1, heights = c(5,5,1,1,1)))
+      #plot(gg / gg_timetor / gg_adv / gg_dom / gg_rr / gg_ef + plot_layout(ncol = 1, heights = c(5,5,5,1,1,1)))      
+
+      #missing out input plots for now
+      plot(gg / gg_timetor / gg_adv + plot_layout(ncol = 1, heights = c(5,5,5)))        
             
-    invisible(dfout) 
+    }
+            
+    if (adv) invisible(dfadv)
+    else invisible(dfsim) 
     #invisible(listOut)
     #invisible(resistPoints)
   } else 
