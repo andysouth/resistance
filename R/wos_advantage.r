@@ -52,9 +52,12 @@ wos_advantage <- function( concs = c(1:5),
     
              
     mutate(freq_next_gen = r_next_gen/(r_next_gen+s_next_gen)) %>%
+    
+    mutate(relative_fitness=(freq_next_gen/freq)) %>%
              
     mutate(selective_advantage=(freq_next_gen/freq)-1) #so if no increase, advantage=0         
 
+  
   # exposed=0.5# The proportion exposed
   # R_freq=0.001; #frequency of the resistance allele. this will affect results if resistance is recessive beacuse it determines the proportion of R allelels in RR genotypes
   # fitness_RR=1.0

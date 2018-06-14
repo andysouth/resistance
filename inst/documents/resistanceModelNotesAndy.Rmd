@@ -9031,31 +9031,28 @@ aha, wos_plot_timetor() is already generalised to accept x & y
 
 plotting log selective advantage gives clearer mirror image of time-to-resistance at startfreq 0.01 but not very good at 0.001.
 
+*14/6/2018*
+
+Ian suggested relative fitness, but log of that goes back to not giving a good prediction of time-to-resistance at startfreq 0.01
+
+remember that when rr_cost > 0 this can cause runModel2 to crash
+
+~ run wos plots for the field data
+
+wow sorted tidyeval :
+enquo : to quote a passed unquoted variable within a function 
+!! : to unquote a quoted variable for dplyr
+
+wow2 : ggplot theme vars can be accessed and applied to other objects using theme_update
+gg_gt$theme$legend.position
 
 
 ### TO DO  
 
-~ be slightly careful seems 2 potential ways of getting sim inputs for the field data
-
-~ run wos plots for the field data
-~ need to pass field data mortalities to wos_sim()
-~ wos_sim wants :
-#' @param concs concentration or time
-#' @param mort_rr rr mortalities
-#' @param mort_sr sr mortalities
-#' @param mort_ss ss mortalities
-~ should be fairly easy to get these
-~ aha yes I do it already in wos-plots from other data
-~ indeed I calc some model inputs there ...
-~ *choose which way to go
-RR <- filter(df_gt,genotype=='RR') %>% select(mort_assumed) %>% unlist(use.names=FALSE)
-SR <- filter(df_gt,genotype=='SR') %>% select(mort_assumed) %>% unlist(use.names=FALSE)
-SS <- filter(df_gt,genotype=='SS') %>% select(mort_assumed) %>% unlist(use.names=FALSE)
-#beware function expects fitness 0-1
-model_inputs <- resistance::inputs_from_gen_fit(SS=(100-SS)/100, SR=(100-SR)/100, RR=(100-RR)/100)
 
 
 
+~ ?add some checks into runModel2()
 
 ~ what exposure value should we use for wos ? Remember that male_proportion is prob set to 1 by default, maybe set male to 0 ? and what paper did Ellie recomend ? Griffin et al 2010 PLOS.
 

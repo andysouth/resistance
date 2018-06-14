@@ -20,6 +20,8 @@
 #' @param legendpos where to add legend
 #' @param plot whether to plot
 #' @param out whether to calculate and output resistance model inputs
+#' @param adv whether to calculate and output selective advantage
+#' @param logadv whether to use log scale in selective advantage plots
 #' @param xreverse whether to reverse x axis for declining concentration
 #' 
 #' @import ggplot2 tidyverse patchwork
@@ -41,7 +43,7 @@ wos_diagram <- function( conc_n = 50,
                       mort_slope = 3, #0.5 # slope of mortality curves
                       sr = TRUE, # whether to include heterozygotes
                       dom_resistance = 0.5, #1 # dominance of resistance 0-1, it's not really dominance
-                      rr_cost = 0.1, #cost of resistance to rr (simply added to rr mort)
+                      rr_cost = 0, #.1, #cost of resistance to rr (simply added to rr mort)
                       dom_cost = 0, #dominance of cost
                       exposure = 0.5, #only used in the simulation
                       max_gen = 1000, #used in simulations
@@ -54,8 +56,11 @@ wos_diagram <- function( conc_n = 50,
                       plot = TRUE,
                       out = FALSE,
                       adv = FALSE,
+                      logadv = TRUE,
                       xreverse = TRUE
 ) {
+  
+  if (rr_cost > 0 & out) warning('running simulation with rr_cost>0 can cause it to crash') 
   
   concs <- seq(0,1,length=conc_n)
   #trying (and failing) to base directly on helps2017
@@ -95,7 +100,7 @@ wos_diagram <- function( conc_n = 50,
   sr_win_opens <- concs[max(which(mort_ss > mort_sr))]
   sr_win_closes <- concs[min(which(mort_ss > mort_sr))]
   
-  dfdiag <- data_frame( conc = c(concs,concs,concs),
+  dfdiag <- dplyr::data_frame( conc = c(concs,concs,concs),
                         genotype = c(rep('rr',conc_n),
                                      rep('ss',conc_n),
                                      rep('sr',conc_n)),
@@ -181,7 +186,8 @@ wos_diagram <- function( conc_n = 50,
                      mort_ss = mort_ss,
                      exposure = exposure,
                      max_gen = max_gen,
-                     startfreq = startfreq
+                     startfreq = startfreq,
+                     plot = FALSE
                      )
 
     dfadv <- wos_advantage(concs = concs,
@@ -203,11 +209,12 @@ wos_diagram <- function( conc_n = 50,
                                      plot=FALSE)
       
       #selective advantage
-      gg_adv <- wos_plot_timetor(dfadv, x='conc', y='selective_advantage', ylab='selective\nadvantage', 
-                                     title=paste0("selective advantage, exposure=",exposure," starting resistance frequency=",startfreq),
+      #gg_adv <- wos_plot_timetor(dfadv, x='conc', y='selective_advantage', ylab='selective\nadvantage', 
+      gg_adv <- wos_plot_timetor(dfadv, x='conc', y='relative_fitness', ylab='relative\nfitness',                                  
+                                     title=paste0("relative fitness, exposure=",exposure," starting resistance frequency=",startfreq),
                                      plot=FALSE)
       #log selective advantage
-      gg_adv <- gg_adv + scale_y_continuous(trans='log')
+      if (logadv) gg_adv <- gg_adv + scale_y_continuous(trans='log')
       
       gg_dom <- wos_plot_input(dfsim, y='dom_resist', ylab='dominance', plot=FALSE)
       gg_rr <- wos_plot_input(dfsim, y='resist_restor', ylab='resistance restoration', title=NULL, plot=FALSE)
