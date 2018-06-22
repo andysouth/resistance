@@ -8804,7 +8804,6 @@ A positive finding was modest evidence of retardation in the speed of evolution 
 
 
 *29/1/2018*
-
 after workshop
 Dave wheetman was concerned that Bayer had misinterpreted our results because pyrethroids are at very high starting frequencies.
 
@@ -8818,7 +8817,6 @@ runcurtis_f2( max_gen=500,  P_1 = 1 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0
 plus I can change max starting freq from 0.1 to 1 in resistmixseq
 
 *31/1/2018*
-
 If you set frequency for an insecticide to 1 that insecticide can still protect the other in a mixture, unless you set resistance restoration to 1 too. In the later case no RR will be killed.
 
 runcurtis_f2( max_gen=500,  P_1 = 1 , P_2 = 1e-04 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 1 , phi.SS2_0B = 1 , rr_restoration_ins1 = 1 , rr_restoration_ins2 = 0.5 , z.RR1_00 = 0 , z.RR2_00 = 0 , addCombinedStrategy = FALSE, strategyLabels = c('seq','','adapt','mix2') )
@@ -8968,7 +8966,6 @@ Best wishes,
 Andy
 
 *5/6/2018*
-
 adding plot_wos() to generate idealised diagrams of windows of selection
 
 want to use it to generate inputs for single insecticide resistance runs to calculate time-to-resistance.
@@ -9035,6 +9032,8 @@ plotting log selective advantage gives clearer mirror image of time-to-resistanc
 
 Ian suggested relative fitness, but log of that goes back to not giving a good prediction of time-to-resistance at startfreq 0.01
 
+for selective advantage and relative fitness see wos_diagram(adv=TRUE)
+
 remember that when rr_cost > 0 this can cause runModel2 to crash
 
 ~ run wos plots for the field data
@@ -9047,7 +9046,33 @@ wow2 : ggplot theme vars can be accessed and applied to other objects using them
 gg_gt$theme$legend.position
 
 
+*19/6/2018*
+done ~ get wos_sim() and wos_advantage() working better together
+done ~ get wos_advantage() to work when no SR
+
+*20/6/2018*
+see recent paper suggesting costs leading to loss of pyrethroid resistance in 10 generations in Aedes : Grossman2018
+phenotypic susceptibility can be restored in a highly resistant field-derived strain of Aedes aegypti in only 10 generations through rearing them in the absence of insecticide.
+They also investigate frequency of different kdr mutations, picture is not starightforward, seems there may be a cost to just one.
+
+
+
+
+*21/6/2018*
+
+
+
+
+
 ### TO DO  
+
+~ get wos_plot_sim() to accept two columns so that can put starting frequency on same plot
+
+
+
+
+
+
 
 
 
@@ -9060,7 +9085,7 @@ gg_gt$theme$legend.position
 
 ~ see p1593 in Bourguet2000 Dwt dominance in presence of insecticide, Dwnt dominance in absence of insecticide :
 In conclusion, three dominance measures related to resistance have been used in insecticide resistance studies. These dominance measures reßect three different phenotypic traits: the insecticide concentration required to give a particular ML, theMLat a particular insecticide dose, and the Þtness in treated areas. To distinguish clearly among these dominance measures we refer to them as DLC, DML, and DWT, respectively. All these dominance measures can be estimated by the
-same general formula given above. Other dominance measures related to an insecticide resistance allele, such as the dominance of Þtness in untreated areas (DWNT) can also be calculated with this simple formula. All these dominance measures vary between 0 (complete recessivity) to 1 (complete dominance).
+same general formula given above. Other dominance measures related to an insecticide resistance allele, such as the dominance of fitness in untreated areas (DWNT) can also be calculated with this simple formula. All these dominance measures vary between 0 (complete recessivity) to 1 (complete dominance).
 ...
 No study of the genetics of insecticide resistance has yet focused on calculation of
 the dominance measure DWT. We strongly suggest that the time has come to focus on the estimation of

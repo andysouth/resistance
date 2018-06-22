@@ -1,5 +1,8 @@
 #' wos_sim run a series of resistance evolution simulations to illustrate 'windows of selection'
 #' 
+#' requires either a dataframe with columns for genotype, x (e.g. time) and y (e.g.mortality)
+#' or vectors of x, and yrr,ysr,yss
+#' 
 #' @param dfmortbygen dataframe of mortality by genotype, an alternative way of initialising function, needs genotype column
 #' @param x column name of x in dfmortbygen
 #' @param y column name of y in dfmortbygen 
@@ -9,35 +12,44 @@
 #' @param mort_ss ss mortalities 0-1
 #' @param exposure proportion of popn exposed to insecticide only used in the simulations
 #' @param max_gen maximum generations to use in the simulations
+#' @param no_thresh what to return as time-to-resistance if threshold not reached
 #' @param startfreq starting frequency to use in the simulations
+#' @param dominances only if there are no SR values which dominances to run
 #' @param plot whether to plot
 #' 
 #' @examples 
-#' wos_sim()
-#' wos_sim(dfmortbygen=data_frame(conc=rep(c(1,2),3),
+#' dfsim <- wos_sim()
+#' dfsim <- wos_sim(dfmortbygen=data_frame(conc=rep(c(1,2),3),
 #'                                genotype=rep(c('RR','SR','SS'),each=2),
 #'                                mort=c(0,0.2,0.4,0.6,0.8,1)),
 #'         x='conc',y='mort')
-#'         
+#' #with no sr data runs dom0,0.1&1         
+#' dfsim <- wos_sim(dfmortbygen=data_frame(conc=rep(c(1,2),2),
+#'                                genotype=rep(c('RR','SS'),each=2),
+#'                                mort=c(0,0.2,0.8,1)),
+#'         x='conc',y='mort')         
 #' 
 #' @return dataframe of simulation outputs
 #' @export
 
 
 wos_sim <- function( dfmortbygen = NULL,
-                     x = NULL,
-                     y = NULL,
+                     x = 'concentration',
+                     y = 'mortality',
                      concs = c(1:5),
                      mort_rr = c(0,0,0,0.5,1),
                      mort_sr =c(0,0,0.5,1,1),
                      mort_ss = c(0,0.5,1,1,1),
-                     exposure = 0.5, #only used in the simulation
-                     max_gen = 1000, #used in simulations
+                     exposure = 0.5, 
+                     max_gen = 1000,
+                     no_thresh = max_gen,
                      startfreq = 0.001,
+                     dominances = c(0,0.1,1),
                      plot = TRUE
+
 ) {
  
-   
+# if the input data are provided in a dataframe   
 if (!is.null(dfmortbygen))
 {
   #removes blank rows and comments
@@ -46,18 +58,41 @@ if (!is.null(dfmortbygen))
   #!! unquotes a variable name
   dfmortbygen <- filter(dfmortbygen, !is.na(!!x))
   
+  #assumes that concs are the same and repeatd for rr,sr,ss
   concs <- filter(dfmortbygen,genotype=='RR') %>% select(!!x) %>% unlist(use.names=FALSE) 
   mort_rr <- filter(dfmortbygen,genotype=='RR') %>% select(!!y) %>% unlist(use.names=FALSE)
-  mort_sr <- filter(dfmortbygen,genotype=='SR') %>% select(!!y) %>% unlist(use.names=FALSE)
+  # if no sr data
+  if (nrow(filter(dfmortbygen,genotype=='SR'))==0)
+  { 
+    mort_sr <- NULL 
+  } else
+  {
+    mort_sr <- filter(dfmortbygen,genotype=='SR') %>% select(!!y) %>% unlist(use.names=FALSE)    
+  }
   mort_ss <- filter(dfmortbygen,genotype=='SS') %>% select(!!y) %>% unlist(use.names=FALSE)
   
-  #BEWARE this assumes that same numvars for rr,sr,ss
-  if(! (length(mort_rr)==length(mort_sr) & length(mort_sr) == length(mort_ss))) stop('need same num rr,sr,ss')
+  #testing this assumes that same numvars for rr,sr,ss (or sr=NULL)
+  if(! (length(mort_rr)==length(mort_ss) & 
+        (is.null(mort_sr) | length(mort_sr) == length(mort_ss)))) stop('need same num rr,sr,ss')
 }
 
-if(any(mort_rr>1) | any(mort_sr>1) | any(mort_sr>1)) 
-  warning("mortality values should be between 0 & 1")
-    
+if(any(mort_rr>1) | any(mort_sr>1) | any(mort_rr>1)) 
+{
+  warning("mortality values should be between 0 & 1, truncating at 1")
+  mort_rr <- ifelse(mort_rr>1,1,mort_rr)
+  mort_sr <- ifelse(mort_sr>1,1,mort_sr)
+  mort_ss <- ifelse(mort_ss>1,1,mort_ss)
+}
+
+  
+# if there are no heterozygote data, then run simulations for dominance 0&1
+# expected result must be between these extremes
+# can do that by just replicating dfsim, one version with dom0 the other dom1
+no_sr <- FALSE  
+if(is.null(mort_sr)){
+  no_sr <- TRUE
+  mort_sr <- mort_rr #setting mort_sr to mort_rr makes dominance 1
+}  
   
 dfsim <- data_frame( conc = c(concs),
                      mort_rr = mort_rr,
@@ -68,7 +103,35 @@ dfsim <- data_frame( conc = c(concs),
                      fit_ss = 1-mort_ss,  
                      effectiveness = mort_ss,
                      resist_restor = (fit_rr-fit_ss)/effectiveness,
-                     dom_resist = (fit_sr-fit_ss)/(fit_rr-fit_ss) )
+                     dom_resist = (fit_sr-fit_ss)/(fit_rr-fit_ss),
+                     start_frequency = startfreq )
+
+#if no_sr create a copy, set dominance to 0 and bind back on
+#will prompt simulation to be run for dominance 1 and 0
+if(no_sr){
+  #record the dominance1 version
+  dfsim1 <- dfsim
+  #for(dom in c(0,0.1))
+  for(dom in dominances[which(dominances!=1)])    
+  {
+    #beware this is a bit tricky
+    #copy from the ver with just dominance1
+    dfsim2 <- dfsim1
+    dfsim2$dom_resist <- dom
+    #just so other inputs are consistent
+    dfsim2$mort_sr <- dfsim2$mort_ss + dom*(dfsim2$mort_rr-dfsim2$mort_ss)
+    dfsim2$fit_sr <- 1-dfsim2$mort_sr
+    #bind back onto incremental version
+    dfsim <- rbind(dfsim, dfsim2)    
+  }
+  #just running 0&1
+  # dfsim2 <- dfsim
+  # dfsim2$dom_resist <- 0
+  # #just so other inputs are consistent
+  # dfsim2$mort_sr <- dfsim2$mort_ss
+  # dfsim2$fit_sr <- 1-dfsim2$mort_sr  
+  # dfsim <- rbind(dfsim, dfsim2)
+} 
 
 #resist_restor & dom_resist are sometimes NaN
 #try setting to 0
@@ -120,11 +183,14 @@ resistPoints <- findResistancePoints(listOut, locus=1, criticalPoints = 0.5)
 #transpose
 resistPoints <- t(resistPoints)
 #replace 999 which is used to indicate resistance not reached with NA
-resistPoints <- ifelse(resistPoints==999,NA,resistPoints)
+#resistPoints <- ifelse(resistPoints==999,NA,resistPoints)
+# now a passed arg defaulting to max_gen alows other things to be passed
+resistPoints <- ifelse(resistPoints==999, no_thresh, resistPoints)
+
 dfsim$time_to_resistance0.5 <- resistPoints
 
 #just uses defaults other options are available by calling func direct
-if (plot) wos_plot_timetor(dfsim)
+if (plot) wos_plot_sim(dfsim)
 
 invisible(dfsim)
 }

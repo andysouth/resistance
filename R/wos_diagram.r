@@ -204,13 +204,13 @@ wos_diagram <- function( conc_n = 50,
     #plot(gg / gg_dom/ gg_timetor + plot_layout(ncol = 1, heights = c(5,1,5)))
     if (plot)
     {
-      gg_timetor <- wos_plot_timetor(dfsim,
+      gg_timetor <- wos_plot_sim(dfsim,
                                      title=paste0("simulation, exposure=",exposure," starting resistance frequency=",startfreq),
                                      plot=FALSE)
       
       #selective advantage
-      #gg_adv <- wos_plot_timetor(dfadv, x='conc', y='selective_advantage', ylab='selective\nadvantage', 
-      gg_adv <- wos_plot_timetor(dfadv, x='conc', y='relative_fitness', ylab='relative\nfitness',                                  
+      #gg_adv <- wos_plot_sim(dfadv, x='conc', y='selective_advantage', ylab='selective\nadvantage', 
+      gg_adv <- wos_plot_sim(dfadv, x='conc', y='relative_fitness', ylab='relative\nfitness',                                  
                                      title=paste0("relative fitness, exposure=",exposure," starting resistance frequency=",startfreq),
                                      plot=FALSE)
       #log selective advantage
