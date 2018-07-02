@@ -19,16 +19,17 @@
 #' @param addlabels whether to add labels
 #' @param legendpos where to add legend
 #' @param plot whether to plot
-#' @param out whether to calculate and output resistance model inputs
+#' @param sim whether to run simulation across the window of selection
 #' @param adv whether to calculate and output selective advantage
 #' @param logadv whether to use log scale in selective advantage plots
-#' @param xreverse whether to reverse x axis for declining concentration
+#' @param lab_dom whether to add labels of dominance values
+# @param xreverse whether to reverse x axis for declining concentration
 #' 
 #' @import ggplot2 tidyverse patchwork
 #' 
 #' @examples 
 #' wos_diagram(mort_slope=3, dom_resist=0.9)
-#' dfsim <- wos_diagram(out=TRUE, rr_cost=0)
+#' dfsim <- wos_diagram(sim=TRUE, rr_cost=0)
 #' 
 #' @return ggplot object
 #' @export
@@ -54,13 +55,14 @@ wos_diagram <- function( conc_n = 50,
                       addlabels = TRUE,
                       legendpos = 'bottom', #'right'
                       plot = TRUE,
-                      out = FALSE,
+                      sim = FALSE,
                       adv = FALSE,
                       logadv = TRUE,
-                      xreverse = TRUE
+                      lab_dom = FALSE
+                      #xreverse = TRUE now xreverse is fixed
 ) {
   
-  if (rr_cost > 0 & out) warning('running simulation with rr_cost>0 can cause it to crash') 
+  if (rr_cost > 0 & sim) warning('running simulation with rr_cost>0 can cause it to crash') 
   
   concs <- seq(0,1,length=conc_n)
   #trying (and failing) to base directly on helps2017
@@ -108,6 +110,12 @@ wos_diagram <- function( conc_n = 50,
                         mortality = c(mort_rr,
                                       mort_ss,
                                       mort_sr))
+  # calc dominance
+  #  # 4. Dominance of resistance | (SR-SS)/(RR-SS) 
+  #beware this relies on being same number of RR,SR,SS all in same order
+  #just fills for RR
+  dfdiag$dominance <- NA
+  dfdiag$dominance[1:length(mort_rr)] <- (mort_sr-mort_ss)/(mort_rr-mort_ss)
   
   #to allow window polygon plotting
   win_indices <- which(mort_ss > mort_rr)
@@ -129,13 +137,25 @@ wos_diagram <- function( conc_n = 50,
     geom_line(lwd=2,alpha=0.6) +
     theme_minimal() +
     labs(title = title) +
-    labs(x='Time or declining insecticide concentration') +
-    #scale_x_continuous(trans='log')
+    #labs(x='Time or declining insecticide concentration') +
+    scale_x_continuous(trans = 'reverse',
+                       breaks = c(0.2,0.8),
+                       labels = c('Low concentration\nLong time after application',
+                                  'High concentration\nShort time after application')) +
+    scale_y_continuous( limits = c(0,1),
+                        breaks = c(0,0.5,1)) +
+                        #labels = c(0,50,100)) +
     
     #make plot cleaner
     theme( legend.position = legendpos,
+           legend.title = element_text(size = rel(1.3)),
+           legend.text = element_text(size = rel(1.3)),
+           legend.key.size = unit(1, "cm"),
            #panel.grid = element_blank(),
-           axis.text.x = element_blank(),
+           #axis.text.x = element_blank(),
+           axis.text.x = element_text(size = rel(1.3)),
+           axis.ticks.length = unit(0.5, "cm"), #move labels away from axis
+           axis.title.x = element_blank(),
            axis.line.x = element_line(arrow = arrow(length = unit(0.1, "inches"))),
            #plot.title = element_text(hjust = 0.5),
            axis.line.y = element_line())
@@ -143,7 +163,7 @@ wos_diagram <- function( conc_n = 50,
   
   #shading window of selection, i'm not sure whether helpful to shade between
   #the curves or vertically
-  #experimenting with chnaging dfwindow above just to show sr window
+  #experimenting with changing dfwindow above just to show sr window
   if (addshading) gg <- gg + geom_ribbon(data=dfwindow,aes(x=conc, ymin=rr, ymax=ss),inherit.aes=FALSE, fill = "orange", alpha = .1, show.legend = FALSE)
   #polygon way didn't work
   #geom_polygon(data=filter(dfdiag,genotype!='sr' & conc<=win_opens & conc>=win_closes),aes(x=conc, y=mortality),inherit.aes=FALSE, fill = "orange", alpha = .1, show.legend = FALSE) +
@@ -166,18 +186,29 @@ wos_diagram <- function( conc_n = 50,
     #annotate("text", x = win_closes-0.1, y = 0.07, label = "selection against\nresistance (if\na cost)", cex=2.5)
   }
   
-  if (xreverse) gg <- gg + scale_x_continuous(trans='reverse')
+  if (lab_dom)
+  {
+    #may need to sort lab_dom pos depenedent on xreverse, but xreverse may not be needed for wos_diagram
+    #if (xreverse)
+    
+    gg <- gg +scale_y_continuous( limits=c(0,1.2), breaks=c(0,0.5,1)) +
+    #adding dominance values as text
+    geom_text(aes(y=1.1, label=signif(dominance,1), col=NULL), size=2.6, col='grey40', angle=45, show.legend=FALSE) +
+    annotate("text", x=Inf, y=1.2, hjust=0, label = "dominance", cex=2.6, col='grey40')  
+  }
+  
+  #if (xreverse) gg <- gg + scale_x_continuous(trans='reverse') 
   
   # add calculations of inputs for resistance model
   # not quite sure how I'm going to get out yet ...
   # effectivess, resistance_restoraion and dominance
   # if I do for all elements of conc that will facilitate creating a time-to-resistance plot on same scale
-  # these eqs from paper2 based on fitness so need 1-mort
+  # these eqs from paper2 based on fitness so need 1-mort, but for dom at least -ves cancel & give same result
   # 1. Effectiveness | 1 - SS
   # 2. Exposure, can't be claculated will need to be provided
   # 3. Resistance restoration  | (RR-SS) / Effectiveness 
   # 4. Dominance of resistance | (SR-SS)/(RR-SS) 
-  if (out)
+  if (sim)
   {
     #temp to stop sim running if just want advantage
     if (!adv | plot) dfsim <- wos_sim(concs = concs,

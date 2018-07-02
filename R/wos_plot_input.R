@@ -13,7 +13,7 @@
 #' @import ggplot2 tidyverse patchwork
 #' 
 #' @examples 
-#' dfsim <- wos_diagram(out=TRUE, rr_cost=0, plot=FALSE)
+#' dfsim <- wos_diagram(sim=TRUE, rr_cost=0, plot=FALSE)
 #' wos_plot_input(dfsim, y='dom_resist', ylab='dominance')
 #' 
 #' @return ggplot object

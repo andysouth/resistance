@@ -31,7 +31,7 @@ wos_advantage <- function( dfmortbygen = NULL,
                      mort_rr = c(0,0,0,0.5,1),
                      mort_sr =c(0,0,0.5,1,1),
                      mort_ss = c(0,0.5,1,1,1),
-                     exposure = 0.5, #only used in the simulation
+                     exposure = 0.5,
                      #max_gen = 1000, #used in simulations
                      startfreq = 0.001
 ) {

@@ -17,7 +17,7 @@
 #' @import ggplot2 tidyverse patchwork scales
 #' 
 #' @examples 
-#' dfsim <- wos_diagram(out=TRUE, conc_n = 10, rr_cost=0, plot=FALSE)
+#' dfsim <- wos_diagram(sim=TRUE, conc_n=10, rr_cost=0, plot=FALSE)
 #' wos_plot_sim(dfsim)
 #' 
 #' @return ggplot object

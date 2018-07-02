@@ -42,7 +42,7 @@ wos_sim <- function( dfmortbygen = NULL,
                      mort_ss = c(0,0.5,1,1,1),
                      exposure = 0.5, 
                      max_gen = 1000,
-                     no_thresh = max_gen,
+                     no_thresh = NA, #max_gen,
                      startfreq = 0.001,
                      dominances = c(0,0.1,1),
                      plot = TRUE
@@ -59,6 +59,7 @@ if (!is.null(dfmortbygen))
   dfmortbygen <- filter(dfmortbygen, !is.na(!!x))
   
   #assumes that concs are the same and repeatd for rr,sr,ss
+  #TODO sort that named concs here but could be time 
   concs <- filter(dfmortbygen,genotype=='RR') %>% select(!!x) %>% unlist(use.names=FALSE) 
   mort_rr <- filter(dfmortbygen,genotype=='RR') %>% select(!!y) %>% unlist(use.names=FALSE)
   # if no sr data
@@ -124,13 +125,6 @@ if(no_sr){
     #bind back onto incremental version
     dfsim <- rbind(dfsim, dfsim2)    
   }
-  #just running 0&1
-  # dfsim2 <- dfsim
-  # dfsim2$dom_resist <- 0
-  # #just so other inputs are consistent
-  # dfsim2$mort_sr <- dfsim2$mort_ss
-  # dfsim2$fit_sr <- 1-dfsim2$mort_sr  
-  # dfsim <- rbind(dfsim, dfsim2)
 } 
 
 #resist_restor & dom_resist are sometimes NaN
