@@ -3822,10 +3822,11 @@ This has some good stuff about IRM strategies :
 http://www.slideshare.net/srinivasnaik52643/insecticide-resistance-management-strategy 
  
 Curtis et al 1993, potential IRM strategies :
-~ moderation : preserve susceptible genes by limiting selection pressure
+Georghiou1994 potential IRM strategies :
+~ moderation : preserve susceptible genes, e.g. reduce mortality of SS by low dose or refugia
 ~ saturation : high dose so that heterozygous resistants are killed
-~ multiple attack : independently acting pressures neither of which is strong enough to lead to resistance
-Georghiou1994 
+~ multiple attack : independently acting pressures neither of which is strong enough to lead to resistance e.g. mixture rotation
+ 
  
 Mani GS. Evolution of resistance in the presence of two insecticides. Genetics 1985;109(4):761–83.
  

@@ -7,7 +7,7 @@
 #' @param conc_ss_mort0 concentration killing none of ss
 #' @param mort_slope = 3 slope of mortality curves
 #' @param sr whether to include heterozygotes
-#' @param dom_resistance dominance of resistance 0-1 determines position of sr between rr & ss but it's not really dominance
+#' @param win_dom_strt dominance of resistance 0-1 determines position of sr between rr & ss but it's not really dominance
 #' @param rr_cost cost of resistance to rr (simply added to rr mort)
 #' @param dom_cost dominance of cost
 #' @param exposure proportion of popn exposed to insecticide only used in the simulations
@@ -28,8 +28,9 @@
 #' @import ggplot2 tidyverse patchwork
 #' 
 #' @examples 
-#' wos_diagram(mort_slope=3, dom_resist=0.9)
+#' wos_diagram(mort_slope=3, win_dom_strt=0.9)
 #' dfsim <- wos_diagram(sim=TRUE, rr_cost=0)
+#' wos_diagram(adv=TRUE,win_dom_strt=0.1)
 #' 
 #' @return ggplot object
 #' @export
@@ -43,7 +44,7 @@ wos_diagram <- function( conc_n = 50,
                       conc_ss_mort0 = 0.1, # concentration killing none of ss
                       mort_slope = 3, #0.5 # slope of mortality curves
                       sr = TRUE, # whether to include heterozygotes
-                      dom_resistance = 0.5, #1 # dominance of resistance 0-1, it's not really dominance
+                      win_dom_strt = 0.5, #1 # dominance of resistance 0-1, it's not really dominance
                       rr_cost = 0, #.1, #cost of resistance to rr (simply added to rr mort)
                       dom_cost = 0, #dominance of cost
                       exposure = 0.5, #only used in the simulation
@@ -81,14 +82,13 @@ wos_diagram <- function( conc_n = 50,
   mort_rr <- mort_rr + rr_cost*(1-mort_rr)
   
   #sr
-  #set where it crosses mort0 to be between ss & rr according to dominance
-  #(although the dominance param isn't really dominance)
-  conc_sr_mort0 <- conc_ss_mort0 + dom_resistance*(conc_rr_mort0-conc_ss_mort0)
+  #set where it crosses mort0 to be between ss & rr according to win_dom_strt
+  conc_sr_mort0 <- conc_ss_mort0 + win_dom_strt*(conc_rr_mort0-conc_ss_mort0)
   mort_sr <- mort_slope * (concs-conc_sr_mort0) #+0 #y=m(x-x1)+y1 slope and a point where y=0
   mort_sr <- ifelse(mort_sr>1,1,ifelse(mort_sr<0,0,mort_sr))
   #this creates a different pattern from the science paper when dom=0.5
   #i.e. the SR crosses mort1 at same position as RR and mort0 as SS
-  #mort_sr <- (dom_resistance*mort_rr)+((1-dom_resistance)*mort_ss)
+  #mort_sr <- (win_dom_strt*mort_rr)+((1-win_dom_strt)*mort_ss)
   
   #remember selection is greatest when heterozygotes survive
   
@@ -208,10 +208,37 @@ wos_diagram <- function( conc_n = 50,
   # 2. Exposure, can't be claculated will need to be provided
   # 3. Resistance restoration  | (RR-SS) / Effectiveness 
   # 4. Dominance of resistance | (SR-SS)/(RR-SS) 
+  
+  #to allow adv to be run without sim (adv is always added to sim)
+  if (adv | sim)
+  {
+    dfadv <- wos_advantage(concs = concs,
+                           mort_rr = mort_rr,
+                           mort_sr = mort_sr,
+                           mort_ss = mort_ss,
+                           exposure = exposure,
+                           #max_gen = max_gen,
+                           startfreq = startfreq)  
+    if (plot)
+    {
+      #selective advantage
+      # gg_adv <- wos_plot_sim(dfadv, x='conc', y='relative_fitness', ylab='relative\nfitness',                                  
+      #                        title=paste0("relative fitness, exposure=",exposure," starting resistance frequency=",startfreq),
+      #                        plot=FALSE)
+      gg_adv <- wos_plot_sim(dfadv, x='conc', y='selective_advantage', ylab='log selective\nadvantage',
+                             xreverse=TRUE, xlog=FALSE, ylog=TRUE, xtxt=FALSE,plot=FALSE,
+                             title=paste0("selective advantage, exposure=",exposure," starting resistance frequency=",startfreq))
+                             #title=paste0("selective advantage")) #, shape='start_frequency')
+      
+      #log selective advantage
+      if (logadv) gg_adv <- gg_adv + scale_y_continuous(trans='log')
+    }
+    
+  }
+  
   if (sim)
   {
-    #temp to stop sim running if just want advantage
-    if (!adv | plot) dfsim <- wos_sim(concs = concs,
+     dfsim <- wos_sim(concs = concs,
                      mort_rr = mort_rr,
                      mort_sr = mort_sr,
                      mort_ss = mort_ss,
@@ -221,31 +248,11 @@ wos_diagram <- function( conc_n = 50,
                      plot = FALSE
                      )
 
-    dfadv <- wos_advantage(concs = concs,
-                     mort_rr = mort_rr,
-                     mort_sr = mort_sr,
-                     mort_ss = mort_ss,
-                     exposure = exposure,
-                     #max_gen = max_gen,
-                     startfreq = startfreq)     
-        
-    
-    #library(patchwork)
-
-    #plot(gg / gg_dom/ gg_timetor + plot_layout(ncol = 1, heights = c(5,1,5)))
     if (plot)
     {
       gg_timetor <- wos_plot_sim(dfsim,
                                      title=paste0("simulation, exposure=",exposure," starting resistance frequency=",startfreq),
                                      plot=FALSE)
-      
-      #selective advantage
-      #gg_adv <- wos_plot_sim(dfadv, x='conc', y='selective_advantage', ylab='selective\nadvantage', 
-      gg_adv <- wos_plot_sim(dfadv, x='conc', y='relative_fitness', ylab='relative\nfitness',                                  
-                                     title=paste0("relative fitness, exposure=",exposure," starting resistance frequency=",startfreq),
-                                     plot=FALSE)
-      #log selective advantage
-      if (logadv) gg_adv <- gg_adv + scale_y_continuous(trans='log')
       
       gg_dom <- wos_plot_input(dfsim, y='dom_resist', ylab='dominance', plot=FALSE)
       gg_rr <- wos_plot_input(dfsim, y='resist_restor', ylab='resistance restoration', title=NULL, plot=FALSE)
@@ -258,12 +265,19 @@ wos_diagram <- function( conc_n = 50,
       plot(gg / gg_timetor / gg_adv + plot_layout(ncol = 1, heights = c(5,5,5)))        
             
     }
-            
-    if (adv) invisible(dfadv)
-    else invisible(dfsim) 
-    #invisible(listOut)
-    #invisible(resistPoints)
-  } else 
+    return(dfsim) 
+  }
+  
+  if (adv) 
+  {
+    if (plot) plot(gg / gg_adv)
+    
+    #beware having invisible here caused problem with null getting returned
+    return(dfadv)
+  }
+
+  
+  if ( !adv & !sim )
   {
     if (plot) plot(gg)
     
