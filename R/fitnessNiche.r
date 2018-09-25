@@ -78,7 +78,7 @@ fitnessNiche <- function ( a_fitloc = NULL,
             ###########################################################################
             #6/1/16 i think ians new insecticide interaction parameter can just go here
             #does in need to be just one param or 4 ?
-            #ΛAB, ΛAb, ΛaB or Λab 
+            #AB, Ab, aB or ab 
             #a_fitnic[locus1,locus2,niche1,niche2] <- interaction * a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
             a_fitnic[locus1,locus2,niche1,niche2] <- a_fitloc[locus1,exposure1] * a_fitloc[locus2,exposure2]
           }
