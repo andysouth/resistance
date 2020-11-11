@@ -3,7 +3,7 @@
   output: pdf_document
   #output: word_document
   author: "Andy South"
-  date: "`r Sys.Date()`"
+  date: "originally from 2017, rerun:`r Sys.Date()`"
 ---
 
 ### documenting whats happening with linkage disequilibrium  after review of paper2
@@ -16,7 +16,7 @@
 
 ### fig 8D in paper2 with a new & old insecticide, mix slower
 
-```{r Fig8, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left'}
+```{r Fig8, eval=TRUE, echo=FALSE, fig.height=7, fig.width=7, fig.show='hold', fig.align='left', warning=FALSE}
 
 listOut <- runcurtis_f2( recomb_rate=0.5, max_gen=500,  P_1 = 0.001 , P_2 = 0.01 , h.RS1_A0 = 0.5 , h.RS2_0B = 0.5 , exposure = 0.5 , phi.SS1_A0 = 0.8 , phi.SS2_0B = 0.5 , rr_restoration_ins1 = 0.5 , rr_restoration_ins2 = 0.5 , addCombinedStrategy = FALSE, strategyLabels = c('s','','a','m'), cex.axis = 0.8, maxX = 150, labelMixSeqRatio = 1 )
 ```
